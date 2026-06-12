@@ -10,6 +10,8 @@ from transformers.generation.logits_process import (
     LogitsProcessorList,
 )
 
+MAX_ITEMS_IN_ROW = 100_000
+
 
 # --- grammar recognizer (llguidance) -----------------------------------------
 
@@ -21,10 +23,15 @@ class GrammarRecognizer:
     def __init__(self, grammar_str: str, tokenizer):
         ll_grammar = llguidance.grammar_from("grammar", grammar_str)
         self.ll_tokenizer = llguidance.hf.from_tokenizer(tokenizer)
-        err = llguidance.LLMatcher.validate_grammar(ll_grammar, self.ll_tokenizer)
+        limits = llguidance.LLParserLimits(max_items_in_row=MAX_ITEMS_IN_ROW)
+        err = llguidance.LLMatcher.validate_grammar(
+            ll_grammar, self.ll_tokenizer, limits=limits
+        )
         if err:
             raise ValueError(f"Grammar error: {err}")
-        self.ll_matcher = llguidance.LLMatcher(self.ll_tokenizer, ll_grammar)
+        self.ll_matcher = llguidance.LLMatcher(
+            self.ll_tokenizer, ll_grammar, limits=limits
+        )
         self.index = 0
         self._bitmask = llguidance.torch.allocate_token_bitmask(
             1, self.ll_tokenizer.vocab_size
@@ -42,6 +49,8 @@ class GrammarRecognizer:
                 and self.ll_matcher.is_accepting()):
             r = 1  # consume a trailing EOS manually once the matcher accepts
         self.index += r
+        if self.ll_matcher.is_error():
+            return False
         return r == len(new)
 
     def is_accepting(self) -> bool:
@@ -90,9 +99,6 @@ class GrammarAlignedLogitsProcessor(LogitsProcessor):
         self.tokenizer = tokenizer
         self.grammar = grammar
         self.device = device
-        # The model's lm_head is wider than the real vocab (Qwen pads it); the
-        # grammar bitmask only covers real tokens, so reserved ids past this bound
-        # must be forbidden explicitly or they can be sampled and break the parser.
         self.vocab_size = grammar.ll_tokenizer.vocab_size
         self.root = TrieNode()
         self.reset()
@@ -133,12 +139,6 @@ class GrammarAlignedLogitsProcessor(LogitsProcessor):
             scores = scores.clone() + self.node.log_theta.to(self.device)
         else:
             scores = scores.clone()
-        # Reserved/padding ids past the real vocab are never valid, but CARS only
-        # constrains the first token (adjust), so the log_theta mask above is not
-        # applied on first-visit continuations. Forbid them unconditionally here,
-        # so they can never be sampled and choke the parser ("token id out of
-        # range"). Keeping them -inf in log_theta too keeps the trie's mass
-        # accounting from counting probability that can never be realized.
         scores[:, self.vocab_size :] = -float("inf")
         return scores
 
