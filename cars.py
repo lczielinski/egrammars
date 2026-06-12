@@ -90,6 +90,10 @@ class GrammarAlignedLogitsProcessor(LogitsProcessor):
         self.tokenizer = tokenizer
         self.grammar = grammar
         self.device = device
+        # The model's lm_head is wider than the real vocab (Qwen pads it); the
+        # grammar bitmask only covers real tokens, so reserved ids past this bound
+        # must be forbidden explicitly or they can be sampled and break the parser.
+        self.vocab_size = grammar.ll_tokenizer.vocab_size
         self.root = TrieNode()
         self.reset()
 
@@ -119,6 +123,7 @@ class GrammarAlignedLogitsProcessor(LogitsProcessor):
             xgrammar.apply_token_bitmask_inplace(
                 self.node.log_theta, self.grammar.filter_vocab()
             )
+            self.node.log_theta[0, self.vocab_size :] = -float("inf")  # see below
             self.recompute_needed = True
             adjust = is_root  # constrain only the first token on a first visit
         else:
@@ -126,6 +131,15 @@ class GrammarAlignedLogitsProcessor(LogitsProcessor):
 
         if adjust:
             scores = scores.clone() + self.node.log_theta.to(self.device)
+        else:
+            scores = scores.clone()
+        # Reserved/padding ids past the real vocab are never valid, but CARS only
+        # constrains the first token (adjust), so the log_theta mask above is not
+        # applied on first-visit continuations. Forbid them unconditionally here,
+        # so they can never be sampled and choke the parser ("token id out of
+        # range"). Keeping them -inf in log_theta too keeps the trie's mass
+        # accounting from counting probability that can never be realized.
+        scores[:, self.vocab_size :] = -float("inf")
         return scores
 
     def generation_ended(self, input_ids: torch.LongTensor) -> None:
@@ -149,9 +163,14 @@ class GrammarAlignedLogitsProcessor(LogitsProcessor):
     def _fail(self):
         """Mark the dead-end token impossible, propagate the change up the trie,
         and reject this sample."""
+        self.exclude_generated()
+        raise ValueError(self.generated)
+
+    def exclude_generated(self) -> None:
+        """Subtract the just-finished sequence from the oracle trie so future draws
+        avoid it: forbid its final token and propagate the freed mass up the trie."""
         self.node.log_theta[0, self.generated[-1]] = -float("inf")
         self._recompute()
-        raise ValueError(self.generated)
 
     def _recompute(self) -> None:
         node, depth = self.node, self.depth
@@ -190,7 +209,8 @@ class ConstrainedModel:
     @torch.no_grad()
     def generate(self, prompt_ids: torch.LongTensor, max_new_tokens: int):
         """One constrained generation; returns the generated token ids, or raises
-        ValueError if the sample left the grammar (a rejection)."""
+        ValueError if the sample left the grammar (a rejection). On success the
+        accepted sequence is subtracted from the trie so it is never drawn again."""
         self.processor.reset()
         config = GenerationConfig(
             max_new_tokens=max_new_tokens,
@@ -210,6 +230,7 @@ class ConstrainedModel:
             logits_processor=processors,
         )
         self.processor.generation_ended(sequences)  # raises ValueError if rejected
+        self.processor.exclude_generated()  # never draw this exact program again
         return sequences[0, prompt_ids.size(1) :]
 
 
@@ -220,20 +241,27 @@ def sample_programs(
     n_steps: int,
     max_new_tokens: int,
 ) -> list[str]:
-    """Draw up to `n_programs` grammar-valid completions, making at most `n_steps`
-    generation attempts. Returns the decoded strings (duplicates included)."""
+    """Draw up to `n_programs` distinct grammar-valid completions, making at most
+    `n_steps` generation attempts. Each accepted program is subtracted from the
+    trie so it is not drawn again; the `seen` set is a backstop for the rare case
+    where two token sequences decode to the same string."""
     text = model.format_prompt(prompt)
     prompt_ids = model.tokenizer.encode(
         text, return_tensors="pt", add_special_tokens=False
     ).to(model.model.device)
 
     programs: list[str] = []
+    seen: set[str] = set()
     for _ in range(n_steps):
         try:
             ids = model.generate(prompt_ids, max_new_tokens)
         except ValueError:
             continue  # rejected; the trie has learned to avoid this prefix
-        programs.append(model.tokenizer.decode(ids, skip_special_tokens=True).strip())
+        program = model.tokenizer.decode(ids, skip_special_tokens=True).strip()
+        if program in seen:
+            continue  # same string via a different tokenization
+        seen.add(program)
+        programs.append(program)
         print(f"[{len(programs)}/{n_programs}] {programs[-1]}", flush=True)
         if len(programs) >= n_programs:
             break

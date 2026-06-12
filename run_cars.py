@@ -39,17 +39,6 @@ def ensure_artifacts(benchmark: str, out_dir: Path) -> tuple[Path, Path]:
     return grammar_path, prompt_path
 
 
-def dedupe(programs: list[str]) -> list[str]:
-    """Distinct programs, preserving first-seen order."""
-    seen: set[str] = set()
-    distinct = []
-    for p in programs:
-        if p and p not in seen:
-            seen.add(p)
-            distinct.append(p)
-    return distinct
-
-
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -81,8 +70,8 @@ def main() -> None:
     print(f"target {args.samples} programs, <= {args.steps} attempts\n")
 
     model = ConstrainedModel(MODEL_ID, grammar, dtype=dtype)
-    programs = dedupe(
-        sample_programs(model, prompt, args.samples, args.steps, args.max_new_tokens)
+    programs = sample_programs(
+        model, prompt, args.samples, args.steps, args.max_new_tokens
     )
 
     parts = prompt.split("The original program is:\n", 1)
