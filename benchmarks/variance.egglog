@@ -1,0 +1,27 @@
+;; sqrt (((a - ((a+b+c)/3)) * (a - ((a+b+c)/3))) + ((b - ((a+b+c)/3)) * (b - ((a+b+c)/3))) + ((c - ((a+b+c)/3)) * (c - ((a+b+c)/3)))) / 3
+
+(let a (Var "a"))
+(let b (Var "b"))
+(let c (Var "c"))
+
+(let start
+  (Div
+    (Sqrt
+      (Add
+        (Add
+          (Mul
+            (Sub a
+              (Div (Add (Add a b) c) (Num 3)))
+            (Sub a
+              (Div (Add (Add a b) c) (Num 3))))
+          (Mul
+            (Sub b
+              (Div (Add (Add a b) c) (Num 3)))
+            (Sub b
+              (Div (Add (Add a b) c) (Num 3)))))
+        (Mul
+          (Sub c
+            (Div (Add (Add a b) c) (Num 3)))
+          (Sub c
+            (Div (Add (Add a b) c) (Num 3))))))
+    (Num 3)))
