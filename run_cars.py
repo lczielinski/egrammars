@@ -50,6 +50,9 @@ def main() -> None:
                         help="cap on generation attempts; sampling stops here even "
                              "if fewer programs were accepted (default 200)")
     parser.add_argument("--max-new-tokens", type=int, default=512)
+    parser.add_argument("--temperature", type=float, default=1.3,
+                        help="sampling temperature; >1 flattens the distribution "
+                             "for more diverse programs (default 1.3)")
     parser.add_argument("--dtype", default="bfloat16",
                         help="torch dtype for the model (default bfloat16)")
     parser.add_argument("--out", type=Path, default=HERE / "out")
@@ -66,12 +69,13 @@ def main() -> None:
     dtype = getattr(torch, args.dtype)
     print(f"benchmark: {args.benchmark}")
     print(f"grammar:   {grammar_path} ({grammar.count(chr(10))} rules)")
-    print(f"model:     {MODEL_ID} ({dtype})")
+    print(f"model:     {MODEL_ID} ({dtype}, T={args.temperature})")
     print(f"target {args.samples} programs, <= {args.steps} attempts\n")
 
     model = ConstrainedModel(MODEL_ID, grammar, dtype=dtype)
     programs = sample_programs(
-        model, prompt, args.samples, args.steps, args.max_new_tokens
+        model, prompt, args.samples, args.steps, args.max_new_tokens,
+        args.temperature,
     )
 
     parts = prompt.split("The original program is:\n", 1)

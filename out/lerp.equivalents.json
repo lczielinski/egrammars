@@ -3,6 +3,25 @@
   "reference": "start + (end - start) * scale",
   "model": "Qwen/Qwen2.5-14B-Instruct",
   "programs": [
-    "(FPCore (end scale start) (+ start (* scale (- end start))))"
+    "(FPCore (end scale start) (+ start (* scale (- end start))))",
+    "(FPCore (end scale start) (+ start (* (- end start) scale)))",
+    "(FPCore (end scale start) (+ start (* scale (+ end (- start)))))",
+    "(FPCore (end scale start) (+ (* (- end start) scale) start))",
+    "(FPCore (end scale start) (+ (* scale (- end start)) start))",
+    "(FPCore (end scale start) (+ start (- (* end scale) (* start scale))))",
+    "(FPCore (end scale start) (+ start (+ (* end scale) (* (- start) scale))))",
+    "(FPCore (end scale start) (+ (+ start (* end scale)) (- 0 (* start scale))))",
+    "(FPCore (end scale start) (+ start (+ (* end scale) (* (- 0 start) scale))))",
+    "(FPCore (end scale start) (+ (* (+ end (- start)) scale) start))",
+    "(FPCore (end scale start) (+ (+ start (* end scale)) (- (* start scale))))",
+    "(FPCore (end scale start) (+ start (* (+ end (- start)) scale)))",
+    "(FPCore (end scale start) (+ (+ start (* end scale)) (* (- start) scale)))",
+    "(FPCore (end scale start) (+ start (+ (* end scale) (- (* start scale)))))",
+    "(FPCore (end scale start) (+ (- (* end scale) (* start scale)) start))",
+    "(FPCore (end scale start) (+ start (* (+ (- end start) 0) scale)))",
+    "(FPCore (end scale start) (+ start (- (* scale end) (* scale start))))",
+    "(FPCore (end scale start) (+ (* scale (+ end (- start))) start))",
+    "(FPCore (end scale start) (+ (+ (* end scale) (* (- start) scale)) start))",
+    "(FPCore (end scale start) (+ start (* (+ (+ end (- start)) 0) scale)))"
   ]
 }

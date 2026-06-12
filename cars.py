@@ -207,7 +207,9 @@ class ConstrainedModel:
         )
 
     @torch.no_grad()
-    def generate(self, prompt_ids: torch.LongTensor, max_new_tokens: int):
+    def generate(
+        self, prompt_ids: torch.LongTensor, max_new_tokens: int, temperature: float
+    ):
         """One constrained generation; returns the generated token ids, or raises
         ValueError if the sample left the grammar (a rejection). On success the
         accepted sequence is subtracted from the trie so it is never drawn again."""
@@ -215,6 +217,7 @@ class ConstrainedModel:
         config = GenerationConfig(
             max_new_tokens=max_new_tokens,
             do_sample=True,
+            temperature=temperature,
             top_k=None,
             eos_token_id=self.tokenizer.eos_token_id,
             pad_token_id=self.tokenizer.eos_token_id,
@@ -240,11 +243,13 @@ def sample_programs(
     n_programs: int,
     n_steps: int,
     max_new_tokens: int,
+    temperature: float = 1.0,
 ) -> list[str]:
     """Draw up to `n_programs` distinct grammar-valid completions, making at most
     `n_steps` generation attempts. Each accepted program is subtracted from the
     trie so it is not drawn again; the `seen` set is a backstop for the rare case
-    where two token sequences decode to the same string."""
+    where two token sequences decode to the same string. Accepted programs print as
+    `[i/n] ...` and rejected (off-grammar) draws print as `[reject] ...`."""
     text = model.format_prompt(prompt)
     prompt_ids = model.tokenizer.encode(
         text, return_tensors="pt", add_special_tokens=False
@@ -254,9 +259,13 @@ def sample_programs(
     seen: set[str] = set()
     for _ in range(n_steps):
         try:
-            ids = model.generate(prompt_ids, max_new_tokens)
-        except ValueError:
-            continue  # rejected; the trie has learned to avoid this prefix
+            ids = model.generate(prompt_ids, max_new_tokens, temperature)
+        except ValueError as rejection:
+            # _fail raises ValueError(self.generated): the off-grammar token path.
+            (rejected_ids,) = rejection.args
+            rejected = model.tokenizer.decode(rejected_ids, skip_special_tokens=True)
+            print(f"[reject] {rejected.strip()}", flush=True)
+            continue  # the trie has learned to avoid this prefix
         program = model.tokenizer.decode(ids, skip_special_tokens=True).strip()
         if program in seen:
             continue  # same string via a different tokenization
