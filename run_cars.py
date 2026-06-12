@@ -80,7 +80,7 @@ def main() -> None:
     print(f"model:     {MODEL_ID} ({dtype})")
     print(f"target {args.samples} programs, <= {args.steps} attempts\n")
 
-    model = ConstrainedModel(MODEL_ID, grammar, torch_dtype=dtype)
+    model = ConstrainedModel(MODEL_ID, grammar, dtype=dtype)
     programs = dedupe(
         sample_programs(model, prompt, args.samples, args.steps, args.max_new_tokens)
     )

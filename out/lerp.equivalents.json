@@ -1,0 +1,8 @@
+{
+  "benchmark": "lerp",
+  "reference": "start + (end - start) * scale",
+  "model": "Qwen/Qwen2.5-14B-Instruct",
+  "programs": [
+    "(FPCore (end scale start) (+ start (* scale (- end start))))"
+  ]
+}

@@ -204,6 +204,7 @@ class ConstrainedModel:
         )
         sequences = self.model.generate(
             prompt_ids,
+            attention_mask=torch.ones_like(prompt_ids),
             generation_config=config,
             tokenizer=self.tokenizer,
             logits_processor=processors,
