@@ -111,7 +111,7 @@ def intersect(root: str, eclasses: dict[str, set[ENode]]) -> str:
         (terminal,) = {enode.op for enode in eclasses[eclass]}
         return terminal
 
-    // e.g. Add(e1, e2) --> "(+ " e1 " " e2 ")"
+    # e.g. Add(e1, e2) --> "(+ " e1 " " e2 ")"
     def production(enode: ENode) -> str:
         if enode.op in ("Var", "Num"):
             return f'"{leaf(enode.children[0])}"'
