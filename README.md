@@ -69,7 +69,7 @@ It samples with `Qwen/Qwen2.5-14B-Instruct` and writes `out/<benchmark>.equivale
 
 The sampler is [cars.py](cars.py) — a self-contained port of CARS (Constrained
 Adaptive Rejection Sampling), trimmed to the single "cars" style (learn level 3,
-constrained first token; see the [paper](https://arxiv.org/pdf/2506.05754)). The
+grammar mask applied every step; see the [paper](https://arxiv.org/pdf/2506.05754)). The
 `cars` extra (in `pyproject.toml`) pulls in its deps — torch, transformers,
 llguidance, xgrammar; the base install stays egglog-only, and egglog is needed only
 on a cache miss.

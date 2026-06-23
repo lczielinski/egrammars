@@ -49,7 +49,7 @@ def main() -> None:
     parser.add_argument("--steps", type=int, default=200,
                         help="cap on generation attempts; sampling stops here even "
                              "if fewer programs were accepted (default 200)")
-    parser.add_argument("--max-new-tokens", type=int, default=512)
+    parser.add_argument("--max-new-tokens", type=int, default=1024)
     parser.add_argument("--temperature", type=float, default=1.3,
                         help="sampling temperature; >1 flattens the distribution "
                              "for more diverse programs (default 1.3)")

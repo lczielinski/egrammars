@@ -86,8 +86,9 @@ class TrieNode:
 
 
 class GrammarAlignedLogitsProcessor(LogitsProcessor):
-    """Per-step logit adjustment for CARS (learn level 3, constrained first token):
-    mask grammar-illegal tokens and, across generations, subtract the mass of
+    """Per-step logit adjustment for CARS (learn level 3): mask grammar-illegal
+    tokens every step (zeroes only impossible tokens, so the distribution over
+    valid strings is preserved) and, across generations, subtract the mass of
     dead-end prefixes. The oracle trie persists between generations (the
     "learning"); reset() rewinds the cursor without clearing it.
     """
@@ -98,6 +99,7 @@ class GrammarAlignedLogitsProcessor(LogitsProcessor):
         self.device = device
         self.vocab_size = grammar.ll_tokenizer.vocab_size
         self.root = TrieNode()
+        self.temperature = 1.0  # set per-generation; see generate()
         self.reset()
 
     def reset(self) -> None:
@@ -120,22 +122,27 @@ class GrammarAlignedLogitsProcessor(LogitsProcessor):
             self.node = self.node.child(self.generated[-1].item())
             self.depth += 1
 
-        if self.node.raw_logprob is None:  # first visit: record probs + grammar mask
-            self.node.raw_logprob = torch.log_softmax(scores, dim=-1).cpu()
+        if self.node.raw_logprob is None:  # first visit: record raw probs + grammar mask
+            # Record log-probs at the sampling temperature so the trie's mass
+            # accounting (_recompute) is in the same space as what is actually
+            # sampled. Generation itself runs at T=1 (see generate()), so the
+            # temperature is applied exactly once, here.
+            self.node.raw_logprob = torch.log_softmax(
+                scores / self.temperature, dim=-1
+            ).cpu()
             self.node.log_theta = torch.zeros(1, scores.size(1))
             xgrammar.apply_token_bitmask_inplace(
                 self.node.log_theta, self.grammar.filter_vocab()
             )
             self.node.log_theta[0, self.vocab_size :] = -float("inf")  # forbid ids past real vocab
             self.recompute_needed = True
-            adjust = is_root  # constrain only the first token on a first visit
-        else:
-            adjust = True  # revisits apply the accumulated adjustment
 
-        if adjust:
-            scores = scores.clone() + self.node.log_theta.to(self.device)
-        else:
-            scores = scores.clone()
+        # Return temperature-scaled log-probs plus log_theta. log_theta is -inf for
+        # tokens with no valid continuation (so this only drops impossible tokens)
+        # and carries the learned dead-end adjustment on revisits. Because the
+        # temperature is already baked into raw_logprob and generation runs at T=1,
+        # log_theta is no longer divided by T downstream — the bug this fixes.
+        scores = self.node.raw_logprob.to(self.device) + self.node.log_theta.to(self.device)
         scores[:, self.vocab_size :] = -float("inf")
         return scores
 
@@ -210,10 +217,11 @@ class ConstrainedModel:
         ValueError on a rejection (left the grammar). On success the sequence is
         subtracted from the trie so it is never drawn again."""
         self.processor.reset()
+        self.processor.temperature = temperature  # applied inside the processor
         config = GenerationConfig(
             max_new_tokens=max_new_tokens,
             do_sample=True,
-            temperature=temperature,
+            temperature=1.0,  # T is baked into the processor's log-probs, not re-applied here
             top_k=None,
             eos_token_id=self.tokenizer.eos_token_id,
             pad_token_id=self.tokenizer.eos_token_id,
