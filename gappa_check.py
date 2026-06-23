@@ -7,7 +7,8 @@ Gappa's infix syntax, and over a fixed interval box computes, per program:
   - abs_err:    certified worst-case |rounded - exact| in IEEE-754 double (ne)
   - rel_err:    certified worst-case |(rounded - exact) / exact|
 
-Results are written to out/<benchmark>.gappa.json.
+Reads out/equivalents/<benchmark>-NNN.json (latest run by default, or --run N)
+and writes out/gappa/<benchmark>-NNN.json, reusing the same run number.
 
 The default interval box is deliberately NARROW: Gappa's interval arithmetic
 cannot prove b - sqrt(b*b - 4ac) > 0 for a wide b (it loses the correlation and
@@ -16,8 +17,12 @@ undischargeable division. Narrow ranges keep every denominator provably bounded
 away from zero. The accuracy ranking is only valid within this box (b > 0, no
 genuine cancellation); other regions can reorder the programs.
 
+Requires the `gappa` binary on PATH. No Python deps beyond the stdlib, so it runs
+in the base (egglog-only) environment — no `--extra cars` needed.
+
 Usage:
-    python3 gappa_check.py quadratic
+    uv run gappa_check.py quadratic
+    uv run gappa_check.py quadratic --run 2
 """
 
 import argparse
@@ -25,6 +30,8 @@ import json
 import re
 import subprocess
 from pathlib import Path
+
+import runpaths
 
 HERE = Path(__file__).resolve().parent
 EPS = 2.0 ** -52  # double-precision ulp, for the ulp estimate
@@ -101,10 +108,18 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("benchmark", nargs="?", default="quadratic")
+    ap.add_argument("--run", type=int, default=None,
+                    help="equivalents run number to analyze (default: latest)")
     ap.add_argument("--out", type=Path, default=HERE / "out")
     args = ap.parse_args()
 
-    src = args.out / f"{args.benchmark}.equivalents.json"
+    equiv_dir, gappa_dir = args.out / "equivalents", args.out / "gappa"
+    if args.run is not None:
+        n, src = args.run, runpaths.path_for(equiv_dir, args.benchmark, args.run)
+    else:
+        n, src = runpaths.latest(equiv_dir, args.benchmark)
+    if src is None or not src.exists():
+        ap.error(f"no equivalents file for {args.benchmark!r} in {equiv_dir}")
     data = json.loads(src.read_text())
     programs = data["programs"]
     hyp = " /\\ ".join(f"{v} in {iv}" for v, iv in INTERVALS.items())
@@ -118,7 +133,8 @@ def main() -> None:
         print(f"[{i:2d}] abs={r['abs_err']:.3e}  rel={r['rel_err']:.3e}  "
               f"(~{r['rel_err_ulps']:.0f} ulp)")
 
-    dst = args.out / f"{args.benchmark}.gappa.json"
+    gappa_dir.mkdir(parents=True, exist_ok=True)
+    dst = runpaths.path_for(gappa_dir, args.benchmark, n)
     dst.write_text(json.dumps({
         "benchmark": args.benchmark,
         "reference": data.get("reference"),
@@ -129,7 +145,7 @@ def main() -> None:
                 "within it (b > 0, no genuine cancellation).",
         "results": results,
     }, indent=2))
-    print(f"\nwrote {len(results)} results to {dst}")
+    print(f"\nread {src}\nwrote {len(results)} results to {dst}")
 
 
 if __name__ == "__main__":

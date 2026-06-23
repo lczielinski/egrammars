@@ -65,7 +65,24 @@ uv run --extra cars run_cars.py quadratic                  # 20 programs
 uv run --extra cars run_cars.py quadratic --samples 50 --steps 500
 ```
 
-It samples with `Qwen/Qwen2.5-14B-Instruct` and writes `out/<benchmark>.equivalents.json`.
+It samples with `Qwen/Qwen2.5-14B-Instruct` and writes a numbered run file
+`out/equivalents/<benchmark>-NNN.json` (each run gets the next number, so repeated
+runs don't overwrite each other).
+
+### Bound the rounding error
+
+[gappa_check.py](gappa_check.py) bounds the floating-point rounding error of each
+harvested program with [Gappa](https://gappa.gitlabpages.inria.fr/) (requires the
+`gappa` binary on PATH; no Python deps beyond the stdlib, so no `--extra cars`):
+
+```bash
+uv run gappa_check.py quadratic            # analyzes the latest equivalents run
+uv run gappa_check.py quadratic --run 2    # a specific run
+```
+
+It reads `out/equivalents/<benchmark>-NNN.json` and writes the matching
+`out/gappa/<benchmark>-NNN.json`: per program, the exact real-valued enclosure plus
+certified worst-case absolute and relative rounding error in IEEE-754 double.
 
 The sampler is [cars.py](cars.py) — a self-contained port of CARS (Constrained
 Adaptive Rejection Sampling), trimmed to the single "cars" style (learn level 3,

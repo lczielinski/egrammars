@@ -20,6 +20,8 @@ import argparse
 import json
 from pathlib import Path
 
+import runpaths
+
 HERE = Path(__file__).resolve().parent
 MODEL_ID = "Qwen/Qwen2.5-14B-Instruct"
 
@@ -88,7 +90,7 @@ def main() -> None:
     for i, program in enumerate(programs):
         print(f"{i:3d}  {program}")
 
-    summary = out_dir / f"{args.benchmark}.equivalents.json"
+    _, summary = runpaths.next_path(out_dir / "equivalents", args.benchmark)
     summary.write_text(json.dumps(
         {"benchmark": args.benchmark, "reference": reference,
          "model": MODEL_ID, "programs": programs},
