@@ -10,20 +10,20 @@ where `body` is an expression built from:
 - unary negation `(- a)`;
 - `(sqrt a)`.
 
-There is no other function application and no variable bindings: the ONLY operators are `+ - * / sqrt`. There is no exponentiation operator — write a square as a product, e.g. `(* b b)`, not `(pow b 2)`. Use exactly the variables that appear in the original program; do not introduce new ones.
+There is no other function application and no variable bindings: the ONLY operators are `+ - * / sqrt`. Use exactly the variables that appear in the original program; do not introduce new ones.
+
+Output the program on a single line, with a single space separating every operator and operand and no other whitespace — exactly as shown in the examples below. Do not add line breaks or indentation.
 
 As examples, syntactically valid programs would include:
 
 ```
-(FPCore (x)
-  (- (* (sqrt x) (sqrt x)) 3))
+(FPCore (x) (- (* (sqrt x) (sqrt x)) 3))
 ```
 
 and
 
 ```
-(FPCore (x y)
-  (+ (* x x) (* y y)))
+(FPCore (x y) (+ (* x x) (* y y)))
 ```
 
 Your job is to refactor programs into *equivalent* ones that evaluate with *different floating-point behavior* — that is, the same value in exact real arithmetic, but a different result once rounding is taken into account. Prefer these kinds of rewrites, which are the ones that change rounding:
@@ -37,15 +37,13 @@ Your job is to refactor programs into *equivalent* ones that evaluate with *diff
 A worked example of why this matters numerically: consider
 
 ```
-(FPCore (a b c)
-  (* a (- b c)))
+(FPCore (a b c) (* a (- b c)))
 ```
 
 Distributing the product gives the algebraically identical
 
 ```
-(FPCore (a b c)
-  (- (* a b) (* a c)))
+(FPCore (a b c) (- (* a b) (* a c)))
 ```
 
 but these round differently. The original subtracts first, so it rounds once. The distributed form computes two separate products `a*b` and `a*c`, each rounded, and then subtracts them — so when `b` and `c` are close, `a*b` and `a*c` are nearly equal and their difference loses most of its significant digits to catastrophic cancellation.
@@ -53,15 +51,13 @@ but these round differently. The original subtracts first, so it rounds once. Th
 A second worked example, of conjugate rationalization — the most valuable rewrite because it changes the program's rounding behavior the most. In
 
 ```
-(FPCore (x y)
-  (/ (+ (- y) (sqrt x)) 3))
+(FPCore (x y) (/ (+ (- y) (sqrt x)) 3))
 ```
 
 the numerator `(+ (- y) (sqrt x))` suffers catastrophic cancellation when `y` is close to `(sqrt x)`. Multiplying the numerator and denominator by the conjugate `(- (- y) (sqrt x))` turns the numerator into `(- (* y y) x)` — a difference of the *squared* quantities, which does not cancel — and moves the conjugate into the denominator:
 
 ```
-(FPCore (x y)
-  (/ (- (* y y) x) (* 3 (- (- y) (sqrt x)))))
+(FPCore (x y) (/ (- (* y y) x) (* 3 (- (- y) (sqrt x)))))
 ```
 
 When the new numerator simplifies further — for instance when `x` is itself a difference whose first term is `(* y y)`, so that `(- (* y y) x)` collapses by cancellation — write the simplified numerator, and cancel any factor it shares with the denominator.
@@ -89,4 +85,4 @@ a * (b - c) => a*b - a*c
 (-a) * (-a) => a * a
 a + sqrt(d) => (a*a - d) / (a - sqrt(d))
 
-Never introduce features not in the language (in particular, no `let` bindings — output a single arithmetic expression). Never include comments or explanations. ONLY output code, then IMMEDIATELY stop. Use only the variables from the original program.
+Never introduce features not in the language (in particular, no `let` bindings — output a single arithmetic expression). Never include comments or explanations. ONLY output the single-line `(FPCore (...) ...)` program with single-space spacing, then IMMEDIATELY stop. Use only the variables from the original program.

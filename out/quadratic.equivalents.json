@@ -1,6 +1,0 @@
-{
-  "benchmark": "quadratic",
-  "reference": "(-b + sqrt ((b * b) - 4 * a * c)) / (2 * a)",
-  "model": "Qwen/Qwen2.5-14B-Instruct",
-  "programs": []
-}

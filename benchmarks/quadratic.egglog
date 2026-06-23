@@ -7,7 +7,7 @@
 (let start
   (Div
     (Add
-      (Sub (Num 0) b)
+      (Neg b)
       (Sqrt
         (Sub
           (Mul b b)

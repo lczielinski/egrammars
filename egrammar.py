@@ -2,10 +2,11 @@
 
 Given a benchmark (a reference program plus egglog rewrite rules), this:
   1. builds the e-graph
-  2. intersects it with the simple FPCore syntax grammar
+  2. removes identity padding and non-minimal cyclic spellings
+  3. intersects it with the simple FPCore syntax grammar
 
-The resulting grammar's language is exactly the set of FPCore programs equivalent
-to the reference (under the rules, up to the saturation cap)
+The resulting grammar's language is a cleaned subset of FPCore programs equivalent
+to the reference (under the rules, up to the saturation cap).
 
 Usage:
     uv run egrammar.py quadratic            # writes out/quadratic.lark + .txt
@@ -33,6 +34,9 @@ class ENode:
     children: tuple[str, ...]  # e-class ids
 
 
+EClassMapping = dict[str, set[ENode]]
+
+
 def saturate(benchmark_source: str) -> EGraph:
     source = (HERE / "rules.egglog").read_text()
     source += benchmark_source
@@ -44,7 +48,7 @@ def saturate(benchmark_source: str) -> EGraph:
     return egraph
 
 
-def extract(egraph: EGraph) -> tuple[str, dict[str, set[ENode]]]:
+def extract(egraph: EGraph) -> tuple[str, EClassMapping]:
     """Read the e-graph back out: the root e-class and eclass -> set of e-nodes."""
     nodes = json.loads(egraph.serialize([]).to_json())["nodes"]
     root = None
@@ -60,7 +64,151 @@ def extract(egraph: EGraph) -> tuple[str, dict[str, set[ENode]]]:
     return root, dict(eclasses)
 
 
-# --- step 2: the simple grammar ----------------------------------------------
+# --- step 2: clean the e-graph ----------------------------------------------
+
+
+def strip_identity_enodes(eclasses: EClassMapping) -> EClassMapping:
+    """Remove identity-padding enodes and non-minimal cyclic spellings."""
+
+    def has_num(eclass: str, literal: str) -> bool:
+        return any(
+            enode.op == "Num"
+            and any(
+                leaf.op == literal and not leaf.children
+                for leaf in eclasses.get(enode.children[0], ())
+            )
+            for enode in eclasses.get(eclass, ())
+            if enode.children
+        )
+
+    zeroish = {eclass for eclass in eclasses if has_num(eclass, "0")}
+    oneish = {eclass for eclass in eclasses if has_num(eclass, "1")}
+
+    def denotes_zero(enode: ENode) -> bool:
+        match enode.op, enode.children:
+            case ("Neg" | "Sqrt", (a,)):
+                return a in zeroish
+            case ("Mul", (a, b)):
+                return a in zeroish or b in zeroish
+            case ("Add", (a, b)):
+                return a in zeroish and b in zeroish
+            case ("Sub", (a, b)):
+                return a == b or (a in zeroish and b in zeroish)
+            case ("Div", (a, _)):
+                return a in zeroish
+        return False
+
+    def denotes_one(enode: ENode) -> bool:
+        match enode.op, enode.children:
+            case ("Sqrt", (a,)):
+                return a in oneish
+            case ("Mul", (a, b)):
+                return a in oneish and b in oneish
+            case ("Div", (a, b)):
+                return a == b or (a in oneish and b in oneish)
+        return False
+
+    changed = True
+    while changed:
+        changed = False
+        for eclass, enodes in eclasses.items():
+            if eclass not in zeroish and any(denotes_zero(e) for e in enodes):
+                zeroish.add(eclass)
+                changed = True
+            if eclass not in oneish and any(denotes_one(e) for e in enodes):
+                oneish.add(eclass)
+                changed = True
+
+    def is_identity(enode: ENode) -> bool:
+        if len(enode.children) != 2:
+            return False
+        a, b = enode.children
+        match enode.op:
+            case "Mul":
+                return a in oneish or b in oneish or a in zeroish or b in zeroish
+            case "Add":
+                return a in zeroish or b in zeroish
+            case "Sub":
+                return a == b or a in zeroish or b in zeroish
+            case "Div":
+                return a == b or b in oneish or a in zeroish
+        return False
+
+    stripped: EClassMapping = {}
+    for eclass, enodes in eclasses.items():
+        non_identity = {enode for enode in enodes if not is_identity(enode)}
+        stripped[eclass] = non_identity or set(enodes)
+
+    min_depth = {eclass: float("inf") for eclass in stripped}
+
+    def enode_depth(enode: ENode) -> float:
+        return 1 + max(
+            (min_depth.get(child, float("inf")) for child in enode.children),
+            default=0,
+        )
+
+    changed = True
+    while changed:
+        changed = False
+        for eclass, enodes in stripped.items():
+            best = min((enode_depth(e) for e in enodes), default=float("inf"))
+            if best < min_depth[eclass]:
+                min_depth[eclass] = best
+                changed = True
+
+    graph: dict[str, set[str]] = {eclass: set() for eclass in stripped}
+    for eclass, enodes in stripped.items():
+        for enode in enodes:
+            graph[eclass].update(enode.children)
+            for child in enode.children:
+                graph.setdefault(child, set())
+
+    scc_of: dict[str, int] = {}
+    index = 0
+    stack: list[str] = []
+    indices: dict[str, int] = {}
+    lowlinks: dict[str, int] = {}
+    on_stack: set[str] = set()
+
+    def connect(node: str) -> None:
+        nonlocal index
+        indices[node] = index
+        lowlinks[node] = index
+        index += 1
+        stack.append(node)
+        on_stack.add(node)
+
+        for child in graph[node]:
+            if child not in indices:
+                connect(child)
+                lowlinks[node] = min(lowlinks[node], lowlinks[child])
+            elif child in on_stack:
+                lowlinks[node] = min(lowlinks[node], indices[child])
+
+        if lowlinks[node] == indices[node]:
+            while True:
+                member = stack.pop()
+                on_stack.remove(member)
+                scc_of[member] = lowlinks[node]
+                if member == node:
+                    break
+
+    for eclass in graph:
+        if eclass not in indices:
+            connect(eclass)
+
+    return {
+        eclass: {
+            enode
+            for enode in enodes
+            if enode_depth(enode) <= min_depth[eclass]
+            or all(scc_of.get(child) != scc_of[eclass] for child in enode.children)
+        }
+        for eclass, enodes in stripped.items()
+    }
+
+
+# --- step 3: the simple grammar ----------------------------------------------
 
 # Concrete FPCore spelling of each operator the rules know about. This *is* the
 # simple grammar: expr -> "(+ " expr " " expr ")" | ... | VARIABLE | INTEGER,
@@ -71,10 +219,10 @@ SPELLING = {
 }
 
 
-# --- step 3: intersection -----------------------------------------------------
+# --- step 4: intersection -----------------------------------------------------
 
 
-def reachable(root: str, eclasses: dict[str, set[ENode]]) -> list[str]:
+def reachable(root: str, eclasses: EClassMapping) -> list[str]:
     """E-classes reachable from the root, in BFS order (= grammar rule order).
 
     Var/Num children are string/number leaves that get inlined into their
@@ -95,7 +243,7 @@ def reachable(root: str, eclasses: dict[str, set[ENode]]) -> list[str]:
     return order
 
 
-def intersect(root: str, eclasses: dict[str, set[ENode]]) -> str:
+def intersect(root: str, eclasses: EClassMapping) -> str:
     """The FPCore syntax grammar restricted to the e-graph, as a lark grammar.
 
     The syntax grammar's one `expr` nonterminal splits into one nonterminal per
@@ -134,11 +282,12 @@ def intersect(root: str, eclasses: dict[str, set[ENode]]) -> str:
 
 def build(benchmark: str) -> tuple[str, str]:
     """Compile a benchmark into (reference, grammar): the original program text and
-    the lark grammar whose language is exactly the programs equivalent to it."""
+    a lark grammar of cleaned equivalent programs."""
     content = (HERE / "benchmarks" / f"{benchmark}.egglog").read_text()
     reference = content.splitlines()[0].removeprefix(";; ")
 
     root, eclasses = extract(saturate(content))
+    eclasses = strip_identity_enodes(eclasses)
     grammar = intersect(root, eclasses)
     return reference, grammar
 
