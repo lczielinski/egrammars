@@ -10,12 +10,14 @@ Gappa's infix syntax, and over a fixed interval box computes, per program:
 Reads out/equivalents/<benchmark>-NNN.json (latest run by default, or --run N)
 and writes out/gappa/<benchmark>-NNN.json, reusing the same run number.
 
-The default interval box is deliberately NARROW: Gappa's interval arithmetic
-cannot prove b - sqrt(b*b - 4ac) > 0 for a wide b (it loses the correlation and
-sees the denominator straddle zero), which makes several programs fail with an
-undischargeable division. Narrow ranges keep every denominator provably bounded
-away from zero. The accuracy ranking is only valid within this box (b > 0, no
-genuine cancellation); other regions can reorder the programs.
+Each benchmark has its own interval box (INTERVALS below). The boxes are
+deliberately NARROW: Gappa's interval arithmetic loses variable correlations (it
+cannot, e.g., prove b - sqrt(b*b - 4ac) > 0 for a wide b, and sees the denominator
+straddle zero), so wide ranges make programs fail with an undischargeable division.
+Narrow ranges keep every denominator provably bounded away from zero. Bounds are
+certified only within the chosen box, and the accuracy ranking can reorder in other
+regions (e.g. the sign of b for quadratic, or large x for sqrtminus), so pick a
+representative regime per benchmark.
 
 Requires the `gappa` binary on PATH. No Python deps beyond the stdlib, so it runs
 in the base (egglog-only) environment — no `--extra cars` needed.
@@ -36,8 +38,12 @@ import runpaths
 HERE = Path(__file__).resolve().parent
 EPS = 2.0 ** -52  # double-precision ulp, for the ulp estimate
 
-# easy interval box; see module docstring for why it is narrow.
-INTERVALS = {"a": "[1,1.01]", "b": "[10,10.01]", "c": "[6,6.01]"}
+# Per-benchmark interval boxes; see module docstring for why they are narrow and
+# regime-specific. Add an entry (variable -> Gappa interval) for each new benchmark.
+INTERVALS = {
+    "quadratic": {"a": "[1,1.01]", "b": "[10,10.01]", "c": "[6,6.01]"},
+    "sqrtminus": {"x": "[1,1]"},
+}
 
 
 def tokenize(s):
@@ -120,9 +126,13 @@ def main() -> None:
         n, src = runpaths.latest(equiv_dir, args.benchmark)
     if src is None or not src.exists():
         ap.error(f"no equivalents file for {args.benchmark!r} in {equiv_dir}")
+    box = INTERVALS.get(args.benchmark)
+    if box is None:
+        ap.error(f"no interval box configured for {args.benchmark!r}; add one to "
+                 f"INTERVALS (have: {', '.join(sorted(INTERVALS))})")
     data = json.loads(src.read_text())
     programs = data["programs"]
-    hyp = " /\\ ".join(f"{v} in {iv}" for v, iv in INTERVALS.items())
+    hyp = " /\\ ".join(f"{v} in {iv}" for v, iv in box.items())
 
     results = []
     for i, p in enumerate(programs):
@@ -140,9 +150,9 @@ def main() -> None:
         "reference": data.get("reference"),
         "model": data.get("model"),
         "rounding": "ieee_64, ne (round-to-nearest double)",
-        "intervals": INTERVALS,
-        "note": "Certified worst-case bounds over the interval box; valid only "
-                "within it (b > 0, no genuine cancellation).",
+        "intervals": box,
+        "note": "Certified worst-case bounds over this interval box; valid only "
+                "within it. The accuracy ranking can reorder in other regions.",
         "results": results,
     }, indent=2))
     print(f"\nread {src}\nwrote {len(results)} results to {dst}")

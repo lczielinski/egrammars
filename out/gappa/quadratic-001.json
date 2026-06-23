@@ -8,7 +8,7 @@
     "b": "[10,10.01]",
     "c": "[6,6.01]"
   },
-  "note": "Certified worst-case bounds over the interval box; valid only within it (b > 0, no genuine cancellation).",
+  "note": "Certified worst-case bounds over this interval box; valid only within it. The accuracy ranking can reorder in other regions.",
   "results": [
     {
       "gappa_expr": "(((-(b)) + sqrt(((b * b) - (4 * (a * c))))) / (2 * a))",
@@ -17,8 +17,8 @@
         -0.629076
       ],
       "abs_err": 1.11761e-15,
-      "rel_err": 1.713e-15,
-      "rel_err_ulps": 7.71466616168566,
+      "rel_err": 1.70849e-15,
+      "rel_err_ulps": 7.694354927366219,
       "program": "(FPCore (a b c) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)))"
     },
     {
@@ -28,8 +28,8 @@
         -0.629076
       ],
       "abs_err": 1.12056e-15,
-      "rel_err": 1.70849e-15,
-      "rel_err_ulps": 7.694354927366219,
+      "rel_err": 1.713e-15,
+      "rel_err_ulps": 7.71466616168566,
       "program": "(FPCore (a b c) (/ (+ (sqrt (- (* b b) (* 4 (* a c)))) (- b)) (* 2 a)))"
     },
     {
@@ -38,7 +38,7 @@
         -0.64915,
         -0.634026
       ],
-      "abs_err": 4.5244e-16,
+      "abs_err": 4.53578e-16,
       "rel_err": 7.00766e-16,
       "rel_err_ulps": 3.155969496473913,
       "program": "(FPCore (a b c) (* (- (/ (- (* c (* 4 a))) 2)) (/ 1 (* a (+ (- b) (- (sqrt (- (* b b) (* 4 (* a c))))))))))"
@@ -49,7 +49,7 @@
         -0.68768,
         -0.596884
       ],
-      "abs_err": 3.10305e-15,
+      "abs_err": 3.10389e-15,
       "rel_err": 4.54264e-15,
       "rel_err_ulps": 20.45823181127831,
       "program": "(FPCore (a b c) (/ (- (* (- b) (/ (- b) (* 2 a))) (* (- (* b b) (* 4 (* a c))) (/ 1 (* 2 a)))) (- (* 4 (* (* a c) (/ 1 (+ (- (sqrt (- (* b b) (* 4 (* a c))))) b)))))))"
@@ -61,8 +61,8 @@
         -0.629076
       ],
       "abs_err": 1.12336e-15,
-      "rel_err": 1.76456e-15,
-      "rel_err_ulps": 7.9468717584728825,
+      "rel_err": 1.78573e-15,
+      "rel_err_ulps": 8.042212962584316,
       "program": "(FPCore (a b c) (* (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (/ 1 (* 2 a))))"
     },
     {
@@ -71,7 +71,7 @@
         -0.697227,
         -0.585862
       ],
-      "abs_err": 2.53923e-15,
+      "abs_err": 2.55025e-15,
       "rel_err": 3.6577e-15,
       "rel_err_ulps": 16.472816357033064,
       "program": "(FPCore (a b c) (/ (+ (* (- b) (/ 1 a)) (/ (sqrt (- (* b b) (* 4 (* a c)))) a)) 2))"
@@ -116,8 +116,8 @@
         -0.513952
       ],
       "abs_err": 1.01287e-14,
-      "rel_err": 1.57704e-14,
-      "rel_err_ulps": 71.02356756348367,
+      "rel_err": 1.56956e-14,
+      "rel_err_ulps": 70.68669831135635,
       "program": "(FPCore (a b c) (+ (/ (- (* b (- b))) (* 2 (* a (- (* 4 (* (* a c) (/ 1 (- b (sqrt (- (* b b) (* 4 (* a c)))))))))))) (/ (- (- (* b b) (* 4 (* a c)))) (* 2 (* a (- (* 4 (* (* a c) (/ 1 (- b (sqrt (- (* b b) (* 4 (* a c))))))))))))))"
     },
     {
@@ -126,7 +126,7 @@
         -0.654499,
         -0.62874
       ],
-      "abs_err": 9.86337e-16,
+      "abs_err": 9.85533e-16,
       "rel_err": 1.51104e-15,
       "rel_err_ulps": 6.805119180941914,
       "program": "(FPCore (a b c) (* (/ (+ (- (* b b) (* 4 (* a c))) (* (- b) b)) (+ b (sqrt (- (* b b) (* 4 (* a c)))))) (/ 1 (* 2 a))))"
@@ -148,9 +148,9 @@
         -0.692468,
         -0.592856
       ],
-      "abs_err": 3.91278e-15,
-      "rel_err": 6.53495e-15,
-      "rel_err_ulps": 29.430798384884824,
+      "abs_err": 3.92045e-15,
+      "rel_err": 6.56859e-15,
+      "rel_err_ulps": 29.582299476349565,
       "program": "(FPCore (a b c) (- (/ (* (/ (* (- b) (- b)) a) a) (+ (* (* 2 a) (- b)) (* (* 2 a) (- (sqrt (- (* b b) (* 4 (* a c)))))))) (/ (* (- (* (/ 1 a) (* (- b) (- b))) (* 4 c)) a) (+ (* (* 2 a) (- b)) (* (* 2 a) (- (sqrt (- (* b b) (* 4 (* a c))))))))))"
     },
     {
@@ -159,7 +159,7 @@
         -0.65415,
         -0.629076
       ],
-      "abs_err": 1.04793e-15,
+      "abs_err": 1.04498e-15,
       "rel_err": 1.60197e-15,
       "rel_err_ulps": 7.214631495058714,
       "program": "(FPCore (a b c) (* (/ (+ (sqrt (- (* b b) (* 4 (* a c)))) (- b)) a) (/ 1 2)))"
@@ -170,7 +170,7 @@
         -0.730734,
         -0.553629
       ],
-      "abs_err": 7.26725e-15,
+      "abs_err": 7.26647e-15,
       "rel_err": 1.27121e-14,
       "rel_err_ulps": 57.25020882309648,
       "program": "(FPCore (a b c) (+ (/ (- (- (* b b) (* 4 (* a c)))) (* 2 (* a (- (- b) (sqrt (- (* b b) (* 4 (* a c)))))))) (/ (* (* (- b) (- b)) (/ 1 (* 2 (- (* a (* (* 4 c) (/ 1 (- b (sqrt (- (* b b) (* 4 (* a c)))))))))))) a)))"
@@ -192,9 +192,9 @@
         -0.678561,
         -0.604526
       ],
-      "abs_err": 2.43376e-15,
-      "rel_err": 3.81142e-15,
-      "rel_err_ulps": 17.165109691752455,
+      "abs_err": 2.42471e-15,
+      "rel_err": 3.79847e-15,
+      "rel_err_ulps": 17.10678807657801,
       "program": "(FPCore (a b c) (+ (/ (- (* b (- b))) (* 2 (* a (- (- b) (sqrt (- (* b b) (* 4 (* a c)))))))) (/ (- (- (* b b) (* 4 (* a c)))) (* 2 (* a (- (- b) (sqrt (- (* b b) (* 4 (* a c))))))))))"
     },
     {
@@ -203,9 +203,9 @@
         -0.64915,
         -0.634026
       ],
-      "abs_err": 4.6438e-16,
-      "rel_err": 7.18125e-16,
-      "rel_err_ulps": 3.2341474824054375,
+      "abs_err": 4.64486e-16,
+      "rel_err": 7.17961e-16,
+      "rel_err_ulps": 3.2334088920665485,
       "program": "(FPCore (a b c) (* (/ (- (* c (* 4 a))) (+ b (sqrt (- (* b b) (* 4 (* a c)))))) (/ 1 (* 2 a))))"
     },
     {
@@ -225,7 +225,7 @@
         -0.678561,
         -0.604526
       ],
-      "abs_err": 2.42549e-15,
+      "abs_err": 2.43376e-15,
       "rel_err": 3.80691e-15,
       "rel_err_ulps": 17.144798457433016,
       "program": "(FPCore (a b c) (+ (/ (- (- (* b b) (* 4 (* a c)))) (* 2 (* a (- (- b) (sqrt (- (* b b) (* 4 (* a c)))))))) (/ (* (- b) (- b)) (* 2 (* a (- (- b) (sqrt (- (* b b) (* 4 (* a c))))))))))"
