@@ -17,7 +17,9 @@ straddle zero), so wide ranges make programs fail with an undischargeable divisi
 Narrow ranges keep every denominator provably bounded away from zero. Bounds are
 certified only within the chosen box, and the accuracy ranking can reorder in other
 regions (e.g. the sign of b for quadratic, or large x for sqrtminus), so pick a
-representative regime per benchmark.
+representative regime per benchmark. For a wider box, pass --subdiv N: Gappa then
+bisects each variable into N pieces, recovering the lost correlations (at N^(#vars)
+cost). Bounds it cannot prove are reported as "n/a" rather than crashing.
 
 Requires the `gappa` binary on PATH. No Python deps beyond the stdlib, so it runs
 in the base (egglog-only) environment — no `--extra cars` needed.
@@ -25,6 +27,7 @@ in the base (egglog-only) environment — no `--extra cars` needed.
 Usage:
     uv run gappa_check.py quadratic
     uv run gappa_check.py quadratic --run 2
+    uv run gappa_check.py sqrtminus --subdiv 64   # wide box; subdivide to bound it
 """
 
 import argparse
@@ -42,7 +45,7 @@ EPS = 2.0 ** -52  # double-precision ulp, for the ulp estimate
 # regime-specific. Add an entry (variable -> Gappa interval) for each new benchmark.
 INTERVALS = {
     "quadratic": {"a": "[1,1.01]", "b": "[10,10.01]", "c": "[6,6.01]"},
-    "sqrtminus": {"x": "[1,1]"},
+    "sqrtminus": {"x": "[1,2]"},
 }
 
 
@@ -94,11 +97,11 @@ def worst_magnitude(decs):
     return max(abs(x) for x in decs) if decs else None
 
 
-def analyze(expr: str, hyp: str) -> dict:
+def analyze(expr: str, hyp: str, hint: str = "") -> dict:
     rounded = f"@rnd = float<ieee_64, ne>;\nMe rnd= {expr};\nRe = {expr};\n"
-    encl_raw, encl_dec = enclosure(run_gappa(f"Re = {expr};\n{{ {hyp} -> Re in ? }}\n"))
-    _, abs_dec = enclosure(run_gappa(rounded + f"{{ {hyp} -> (Me - Re) in ? }}\n"))
-    _, rel_dec = enclosure(run_gappa(rounded + f"{{ {hyp} -> (Me - Re) / Re in ? }}\n"))
+    _, encl_dec = enclosure(run_gappa(f"Re = {expr};\n{{ {hyp} -> Re in ? }}\n{hint}"))
+    _, abs_dec = enclosure(run_gappa(rounded + f"{{ {hyp} -> (Me - Re) in ? }}\n{hint}"))
+    _, rel_dec = enclosure(run_gappa(rounded + f"{{ {hyp} -> (Me - Re) / Re in ? }}\n{hint}"))
     abs_err = worst_magnitude(abs_dec)
     rel_err = worst_magnitude(rel_dec)
     return {
@@ -116,6 +119,11 @@ def main() -> None:
     ap.add_argument("benchmark", nargs="?", default="quadratic")
     ap.add_argument("--run", type=int, default=None,
                     help="equivalents run number to analyze (default: latest)")
+    ap.add_argument("--subdiv", type=int, default=0, metavar="N",
+                    help="subdivide each interval variable into N pieces (Gappa "
+                         "bisection hint). Needed for wide boxes where cancellation "
+                         "makes a denominator/value straddle zero under naive "
+                         "interval arithmetic. Cost scales as N^(#vars). Default 0.")
     ap.add_argument("--out", type=Path, default=HERE / "out")
     args = ap.parse_args()
 
@@ -133,15 +141,18 @@ def main() -> None:
     data = json.loads(src.read_text())
     programs = data["programs"]
     hyp = " /\\ ".join(f"{v} in {iv}" for v, iv in box.items())
+    hint = "".join(f"$ {v} in {args.subdiv};\n" for v in box) if args.subdiv else ""
 
     results = []
     for i, p in enumerate(programs):
         expr = to_gappa(parse(tokenize(p)))
-        r = analyze(expr, hyp)
+        r = analyze(expr, hyp, hint)
         r["program"] = p
         results.append(r)
-        print(f"[{i:2d}] abs={r['abs_err']:.3e}  rel={r['rel_err']:.3e}  "
-              f"(~{r['rel_err_ulps']:.0f} ulp)")
+        fmt = lambda v, u="": f"{v:.3e}{u}" if v is not None else "n/a"
+        ulp = (f"~{r['rel_err_ulps']:.0f} ulp" if r["rel_err_ulps"] is not None
+               else "gappa could not bound rel err (value not provably nonzero)")
+        print(f"[{i:2d}] abs={fmt(r['abs_err'])}  rel={fmt(r['rel_err'])}  ({ulp})")
 
     gappa_dir.mkdir(parents=True, exist_ok=True)
     dst = runpaths.path_for(gappa_dir, args.benchmark, n)
@@ -151,6 +162,7 @@ def main() -> None:
         "model": data.get("model"),
         "rounding": "ieee_64, ne (round-to-nearest double)",
         "intervals": box,
+        "subdivisions": args.subdiv,
         "note": "Certified worst-case bounds over this interval box; valid only "
                 "within it. The accuracy ranking can reorder in other regions.",
         "results": results,

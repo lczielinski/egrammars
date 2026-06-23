@@ -78,11 +78,17 @@ harvested program with [Gappa](https://gappa.gitlabpages.inria.fr/) (requires th
 ```bash
 uv run gappa_check.py quadratic            # analyzes the latest equivalents run
 uv run gappa_check.py quadratic --run 2    # a specific run
+uv run gappa_check.py sqrtminus --subdiv 64 # wide box; subdivide to bound it
 ```
 
 It reads `out/equivalents/<benchmark>-NNN.json` and writes the matching
 `out/gappa/<benchmark>-NNN.json`: per program, the exact real-valued enclosure plus
-certified worst-case absolute and relative rounding error in IEEE-754 double.
+certified worst-case absolute and relative rounding error in IEEE-754 double. The
+interval box is per-benchmark (`INTERVALS` in the script) and deliberately narrow,
+because Gappa's interval arithmetic loses variable correlations on a wide box (it
+can't prove a cancelling denominator/value is nonzero). For a wider box, `--subdiv N`
+makes Gappa bisect each variable into `N` pieces to recover those correlations, at
+`N^(#vars)` cost; bounds it still can't prove are reported as `n/a`.
 
 The sampler is [cars.py](cars.py) — a self-contained port of CARS (Constrained
 Adaptive Rejection Sampling), trimmed to the single "cars" style (learn level 3,
