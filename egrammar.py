@@ -41,7 +41,7 @@ def saturate(benchmark_source: str) -> EGraph:
     source = (HERE / "rules.egglog").read_text()
     source += benchmark_source
     source += f"\n(run {SATURATION_RUNS})"
-    # Mark the benchmark's `start` expression so we can find its e-class later.
+    # Mark `start` so we can find its e-class after saturation.
     source += f"\n(relation {START} (Math))\n({START} start)"
     egraph = EGraph(record=True)
     egraph.run_program(*egraph.parse_program(source))
@@ -67,152 +67,199 @@ def extract(egraph: EGraph) -> tuple[str, EClassMapping]:
 # --- step 2: clean the e-graph ----------------------------------------------
 
 
-def strip_identity_enodes(eclasses: EClassMapping) -> EClassMapping:
-    """Remove identity-padding enodes and non-minimal cyclic spellings."""
+def _zero_one_classes(eclasses: EClassMapping) -> tuple[set[str], set[str]]:
+    """The e-classes that provably denote 0 and 1, by fixpoint over the operators."""
 
-    def has_num(eclass: str, literal: str) -> bool:
+    def is_literal(eclass: str, value: str) -> bool:
         return any(
             enode.op == "Num"
             and any(
-                leaf.op == literal and not leaf.children
+                leaf.op == value and not leaf.children
                 for leaf in eclasses.get(enode.children[0], ())
             )
             for enode in eclasses.get(eclass, ())
             if enode.children
         )
 
-    zeroish = {eclass for eclass in eclasses if has_num(eclass, "0")}
-    oneish = {eclass for eclass in eclasses if has_num(eclass, "1")}
+    zero = {eclass for eclass in eclasses if is_literal(eclass, "0")}
+    one = {eclass for eclass in eclasses if is_literal(eclass, "1")}
 
     def denotes_zero(enode: ENode) -> bool:
         match enode.op, enode.children:
             case ("Neg" | "Sqrt", (a,)):
-                return a in zeroish
+                return a in zero
             case ("Mul", (a, b)):
-                return a in zeroish or b in zeroish
+                return a in zero or b in zero
             case ("Add", (a, b)):
-                return a in zeroish and b in zeroish
+                return a in zero and b in zero
             case ("Sub", (a, b)):
-                return a == b or (a in zeroish and b in zeroish)
+                return a == b or (a in zero and b in zero)
             case ("Div", (a, _)):
-                return a in zeroish
+                return a in zero
         return False
 
     def denotes_one(enode: ENode) -> bool:
         match enode.op, enode.children:
             case ("Sqrt", (a,)):
-                return a in oneish
+                return a in one
             case ("Mul", (a, b)):
-                return a in oneish and b in oneish
+                return a in one and b in one
             case ("Div", (a, b)):
-                return a == b or (a in oneish and b in oneish)
+                return a == b or (a in one and b in one)
         return False
 
     changed = True
     while changed:
         changed = False
         for eclass, enodes in eclasses.items():
-            if eclass not in zeroish and any(denotes_zero(e) for e in enodes):
-                zeroish.add(eclass)
+            if eclass not in zero and any(denotes_zero(e) for e in enodes):
+                zero.add(eclass)
                 changed = True
-            if eclass not in oneish and any(denotes_one(e) for e in enodes):
-                oneish.add(eclass)
+            if eclass not in one and any(denotes_one(e) for e in enodes):
+                one.add(eclass)
+                changed = True
+    return zero, one
+
+
+def strip_identity_enodes(
+    root: str, eclasses: EClassMapping
+) -> tuple[str, EClassMapping]:
+    """Clean the saturated e-graph (three steps below): alias identity-only
+    classes to the value they equal, strip identity spellings from the rest, and
+    prune non-minimal cyclic respellings. Returns the remapped root and mapping."""
+    zero, one = _zero_one_classes(eclasses)
+
+    # --- step 1: alias identity-only classes into the operand they equal ------
+    # An identity-only class equals an operand (x*1, x+0, x/1, x-0 == x; x*0 ==
+    # 0); union it there. Iterate: collapsing one can expose its parent.
+    parent = {eclass: eclass for eclass in eclasses}
+
+    def find(x: str) -> str:
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]  # path halving
+            x = parent[x]
+        return x
+
+    def reduces_to(enode: ENode) -> str | None:
+        """The operand this enode equals, or None if it is not an identity.
+        Note `(- 0 b)` is `-b`, not an identity, so it is excluded."""
+        match enode.op, enode.children:
+            case ("Mul", (a, b)):
+                return a if a in zero else b if b in zero or a in one else (
+                    a if b in one else None
+                )
+            case ("Add", (a, b)):
+                return b if a in zero else a if b in zero else None
+            case ("Sub", (a, b)):
+                return a if b in zero else None
+            case ("Div", (a, b)):
+                return a if b in one or a in zero else None
+
+    def resolve(enodes: set[ENode]) -> set[ENode]:
+        return {ENode(e.op, tuple(find(c) for c in e.children)) for e in enodes}
+
+    changed = True
+    while changed:
+        changed = False
+        merged: defaultdict[str, set[ENode]] = defaultdict(set)
+        for eclass, enodes in eclasses.items():
+            merged[find(eclass)] |= resolve(enodes)
+        zero, one = {find(z) for z in zero}, {find(o) for o in one}
+        for rep, enodes in merged.items():
+            targets = {reduces_to(e) for e in enodes}
+            if None in targets:  # has a genuine (non-identity) spelling
+                continue
+            targets = {find(t) for t in targets} - {rep}
+            if targets:
+                parent[rep] = min(targets)
                 changed = True
 
-    def is_identity(enode: ENode) -> bool:
-        if len(enode.children) != 2:
-            return False
-        a, b = enode.children
-        match enode.op:
-            case "Mul":
-                return a in oneish or b in oneish or a in zeroish or b in zeroish
-            case "Add":
-                return a in zeroish or b in zeroish
-            case "Sub":
-                return a == b or a in zeroish or b in zeroish
-            case "Div":
-                return a == b or b in oneish or a in zeroish
+    cleaned: defaultdict[str, set[ENode]] = defaultdict(set)
+    for eclass, enodes in eclasses.items():
+        cleaned[find(eclass)] |= resolve(enodes)
+    root, zero, one = find(root), {find(z) for z in zero}, {find(o) for o in one}
+
+    # --- step 2: drop identity *spellings* where a real spelling remains ------
+    def is_padding(enode: ENode) -> bool:
+        match enode.op, enode.children:
+            case ("Mul", (a, b)):
+                return a in one or b in one or a in zero or b in zero
+            case ("Add", (a, b)):
+                return a in zero or b in zero
+            case ("Sub", (a, b)):
+                return a == b or a in zero or b in zero
+            case ("Div", (a, b)):
+                return a == b or b in one or a in zero
         return False
 
     stripped: EClassMapping = {}
-    for eclass, enodes in eclasses.items():
-        non_identity = {enode for enode in enodes if not is_identity(enode)}
-        stripped[eclass] = non_identity or set(enodes)
+    for eclass, enodes in cleaned.items():
+        stripped[eclass] = {e for e in enodes if not is_padding(e)} or enodes
 
+    # --- step 3: prune non-minimal cyclic spellings ---------------------------
+    # Keep an e-node only if it is a shortest spelling, or does not recurse into
+    # its own cycle: drops deep "reshuffle" respellings, keeps acyclic variety.
     min_depth = {eclass: float("inf") for eclass in stripped}
 
-    def enode_depth(enode: ENode) -> float:
-        return 1 + max(
-            (min_depth.get(child, float("inf")) for child in enode.children),
-            default=0,
-        )
+    def depth(enode: ENode) -> float:
+        return 1 + max((min_depth[c] for c in enode.children), default=0)
 
     changed = True
     while changed:
         changed = False
         for eclass, enodes in stripped.items():
-            best = min((enode_depth(e) for e in enodes), default=float("inf"))
-            if best < min_depth[eclass]:
-                min_depth[eclass] = best
-                changed = True
+            if (best := min(depth(e) for e in enodes)) < min_depth[eclass]:
+                min_depth[eclass], changed = best, True
 
-    graph: dict[str, set[str]] = {eclass: set() for eclass in stripped}
-    for eclass, enodes in stripped.items():
-        for enode in enodes:
-            graph[eclass].update(enode.children)
-            for child in enode.children:
-                graph.setdefault(child, set())
-
-    scc_of: dict[str, int] = {}
-    index = 0
-    stack: list[str] = []
-    indices: dict[str, int] = {}
-    lowlinks: dict[str, int] = {}
-    on_stack: set[str] = set()
-
-    def connect(node: str) -> None:
-        nonlocal index
-        indices[node] = index
-        lowlinks[node] = index
-        index += 1
-        stack.append(node)
-        on_stack.add(node)
-
-        for child in graph[node]:
-            if child not in indices:
-                connect(child)
-                lowlinks[node] = min(lowlinks[node], lowlinks[child])
-            elif child in on_stack:
-                lowlinks[node] = min(lowlinks[node], indices[child])
-
-        if lowlinks[node] == indices[node]:
-            while True:
-                member = stack.pop()
-                on_stack.remove(member)
-                scc_of[member] = lowlinks[node]
-                if member == node:
-                    break
-
-    for eclass in graph:
-        if eclass not in indices:
-            connect(eclass)
-
-    return {
+    scc = _strongly_connected_components(stripped)
+    return root, {
         eclass: {
-            enode
-            for enode in enodes
-            if enode_depth(enode) <= min_depth[eclass]
-            or all(scc_of.get(child) != scc_of[eclass] for child in enode.children)
+            e
+            for e in enodes
+            if depth(e) <= min_depth[eclass]
+            or all(scc[c] != scc[eclass] for c in e.children)
         }
         for eclass, enodes in stripped.items()
     }
 
 
+def _strongly_connected_components(eclasses: EClassMapping) -> dict[str, str]:
+    """Tarjan's SCC: eclass -> a shared id for the classes in each cycle. The
+    e-graph is wide but shallow, so plain recursion stays well under the limit."""
+    order: dict[str, int] = {}
+    low: dict[str, int] = {}
+    scc: dict[str, str] = {}
+    stack: list[str] = []
+    on_stack: set[str] = set()
+
+    def connect(node: str) -> None:
+        order[node] = low[node] = len(order)
+        stack.append(node)
+        on_stack.add(node)
+        for child in {c for e in eclasses[node] for c in e.children}:
+            if child not in order:
+                connect(child)
+                low[node] = min(low[node], low[child])
+            elif child in on_stack:
+                low[node] = min(low[node], order[child])
+        if low[node] == order[node]:  # root of an SCC
+            while True:
+                member = stack.pop()
+                on_stack.discard(member)
+                scc[member] = node
+                if member == node:
+                    break
+
+    for eclass in eclasses:
+        if eclass not in order:
+            connect(eclass)
+    return scc
+
+
 # --- step 3: the simple grammar ----------------------------------------------
 
-# Concrete FPCore spelling of each operator the rules know about. This *is* the
-# simple grammar: expr -> "(+ " expr " " expr ")" | ... | VARIABLE | INTEGER,
-# wrapped as "(FPCore (" args ") " expr ")".
+# FPCore spelling of each operator — the "simple grammar":
+# expr -> "(+ " expr " " expr ")" | ... | VARIABLE | INTEGER.
 SPELLING = {
     "Add": "+", "Sub": "-", "Mul": "*", "Div": "/",  # binary
     "Neg": "-", "Sqrt": "sqrt",                      # unary
@@ -223,11 +270,8 @@ SPELLING = {
 
 
 def reachable(root: str, eclasses: EClassMapping) -> list[str]:
-    """E-classes reachable from the root, in BFS order (= grammar rule order).
-
-    Var/Num children are string/number leaves that get inlined into their
-    production, so they are not visited (they would be useless rules).
-    """
+    """E-classes reachable from root, in BFS order (= grammar rule order).
+    Var/Num children are inlined leaves, so they are not visited."""
     order, queue = [], [root]
     seen = {root}
     while queue:
@@ -244,13 +288,9 @@ def reachable(root: str, eclasses: EClassMapping) -> list[str]:
 
 
 def intersect(root: str, eclasses: EClassMapping) -> str:
-    """The FPCore syntax grammar restricted to the e-graph, as a lark grammar.
-
-    The syntax grammar's one `expr` nonterminal splits into one nonterminal per
-    e-class; each e-node becomes the production spelling it. Whitespace is fixed
-    to one canonical style (single spaces) so the grammar is plain string
-    literals — same language up to formatting, much simpler.
-    """
+    """The FPCore syntax grammar restricted to the e-graph, as a lark grammar:
+    one nonterminal per e-class, one production per e-node. Whitespace is fixed
+    to single spaces so productions are plain string literals."""
     order = reachable(root, eclasses)
     name = {eclass: f"e{i}" for i, eclass in enumerate(order)}
 
@@ -287,7 +327,7 @@ def build(benchmark: str) -> tuple[str, str]:
     reference = content.splitlines()[0].removeprefix(";; ")
 
     root, eclasses = extract(saturate(content))
-    eclasses = strip_identity_enodes(eclasses)
+    root, eclasses = strip_identity_enodes(root, eclasses)
     grammar = intersect(root, eclasses)
     return reference, grammar
 

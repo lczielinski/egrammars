@@ -65,7 +65,8 @@
 (rewrite (Div (Neg a) (Neg b))
   (Div a b))
 
-;; Identity eliminations (merge-only, no growth)
+;; Identity eliminations: canonicalize during saturation so other rules match
+;; the bare term; strip_identity_enodes (egrammar.py) drops the padded spellings.
 (rewrite (Mul (Num 1) x)
   x)
 (rewrite (Div x (Num 1))
@@ -83,5 +84,3 @@
   (Div x y))
 (rewrite (Div (Mul a x) a)
   x)
-(rewrite (Mul (Num 4) x)
-  (Mul (Num 2) (Mul (Num 2) x)))

@@ -30,7 +30,7 @@ def ensure_artifacts(benchmark: str, out_dir: Path) -> tuple[Path, Path]:
     prompt_path = out_dir / f"{benchmark}.txt"
     if not (grammar_path.exists() and prompt_path.exists()):
         print(f"Compiling grammar for {benchmark!r} (no cached artifacts in {out_dir})")
-        import egrammar  # local; pulls in egglog, only needed on a cache miss
+        import egrammar  # egglog, only needed on a cache miss
 
         reference, grammar = egrammar.build(benchmark)
         egrammar.write_artifacts(

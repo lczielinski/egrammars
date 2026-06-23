@@ -17,8 +17,8 @@ MAX_ITEMS_IN_ROW = 100_000
 
 
 class GrammarRecognizer:
-    """Tracks how far a token sequence parses against the grammar, and exposes the
-    tokens allowed next as a vocabulary bitmask."""
+    """How far a token sequence parses, plus the tokens allowed next as a vocab
+    bitmask."""
 
     def __init__(self, grammar_str: str, tokenizer):
         ll_grammar = llguidance.grammar_from("grammar", grammar_str)
@@ -65,9 +65,8 @@ class GrammarRecognizer:
 
 
 class TrieNode:
-    """One generated-prefix position. `raw_logprob` is the model's log-softmax at
-    this node; `log_theta` is the accumulated CARS adjustment (-inf for tokens that
-    are illegal or led only to dead ends)."""
+    """One generated-prefix position. `raw_logprob`: the model's log-softmax here;
+    `log_theta`: the accumulated CARS adjustment (-inf for illegal/dead-end tokens)."""
 
     __slots__ = ("children", "parent", "raw_logprob", "log_theta")
 
@@ -87,12 +86,10 @@ class TrieNode:
 
 
 class GrammarAlignedLogitsProcessor(LogitsProcessor):
-    """Per-step logit adjustment implementing CARS (learn level 3, constrained
-    first token): mask grammar-illegal tokens and, across repeated generations,
-    subtract the probability mass of prefixes that turned out to be dead ends.
-
-    The oracle trie persists between generations (that is what "learns"); call
-    reset() before each generation to rewind the cursor without clearing it.
+    """Per-step logit adjustment for CARS (learn level 3, constrained first token):
+    mask grammar-illegal tokens and, across generations, subtract the mass of
+    dead-end prefixes. The oracle trie persists between generations (the
+    "learning"); reset() rewinds the cursor without clearing it.
     """
 
     def __init__(self, tokenizer, grammar: GrammarRecognizer, device):
@@ -115,7 +112,7 @@ class GrammarAlignedLogitsProcessor(LogitsProcessor):
         self._set_generated(input_ids)
         is_root = len(self.generated) == 0
 
-        # Advance the parser over the most recent token; an illegal one is rejected.
+        # Advance the parser over the latest token; reject if illegal.
         if not self.grammar.try_advance(self.generated):
             self._fail()
 
@@ -129,7 +126,7 @@ class GrammarAlignedLogitsProcessor(LogitsProcessor):
             xgrammar.apply_token_bitmask_inplace(
                 self.node.log_theta, self.grammar.filter_vocab()
             )
-            self.node.log_theta[0, self.vocab_size :] = -float("inf")  # see below
+            self.node.log_theta[0, self.vocab_size :] = -float("inf")  # forbid ids past real vocab
             self.recompute_needed = True
             adjust = is_root  # constrain only the first token on a first visit
         else:
@@ -143,8 +140,8 @@ class GrammarAlignedLogitsProcessor(LogitsProcessor):
         return scores
 
     def generation_ended(self, input_ids: torch.LongTensor) -> None:
-        """Validate a finished generation; raises ValueError if it does not parse
-        to an accepting state. Call once after model.generate()."""
+        """Validate a finished generation (raises ValueError if it does not reach an
+        accepting state). Call once after model.generate()."""
         self._set_generated(input_ids)
         if not self.grammar.try_advance(self.generated):
             self._fail()
@@ -161,14 +158,13 @@ class GrammarAlignedLogitsProcessor(LogitsProcessor):
         self.generated = input_ids[0, self.start_index :]
 
     def _fail(self):
-        """Mark the dead-end token impossible, propagate the change up the trie,
-        and reject this sample."""
+        """Mark the dead-end token impossible, propagate up the trie, reject the sample."""
         self.exclude_generated()
         raise ValueError(self.generated)
 
     def exclude_generated(self) -> None:
-        """Subtract the just-finished sequence from the oracle trie so future draws
-        avoid it: forbid its final token and propagate the freed mass up the trie."""
+        """Subtract the finished sequence from the trie so future draws avoid it:
+        forbid its final token and propagate the freed mass upward."""
         self.node.log_theta[0, self.generated[-1]] = -float("inf")
         self._recompute()
 
@@ -210,9 +206,9 @@ class ConstrainedModel:
     def generate(
         self, prompt_ids: torch.LongTensor, max_new_tokens: int, temperature: float
     ):
-        """One constrained generation; returns the generated token ids, or raises
-        ValueError if the sample left the grammar (a rejection). On success the
-        accepted sequence is subtracted from the trie so it is never drawn again."""
+        """One constrained generation: returns the generated token ids, or raises
+        ValueError on a rejection (left the grammar). On success the sequence is
+        subtracted from the trie so it is never drawn again."""
         self.processor.reset()
         config = GenerationConfig(
             max_new_tokens=max_new_tokens,
@@ -245,11 +241,10 @@ def sample_programs(
     max_new_tokens: int,
     temperature: float = 1.0,
 ) -> list[str]:
-    """Draw up to `n_programs` distinct grammar-valid completions, making at most
-    `n_steps` generation attempts. Each accepted program is subtracted from the
-    trie so it is not drawn again; the `seen` set is a backstop for the rare case
-    where two token sequences decode to the same string. Accepted programs print as
-    `[i/n] ...` and rejected (off-grammar) draws print as `[reject] ...`."""
+    """Draw up to `n_programs` distinct grammar-valid completions in at most
+    `n_steps` attempts. Accepted programs are subtracted from the trie so they are
+    not redrawn; `seen` is a backstop for two token sequences decoding to the same
+    string. Prints accepted as `[i/n] ...`, rejected (off-grammar) as `[reject] ...`."""
     text = model.format_prompt(prompt)
     prompt_ids = model.tokenizer.encode(
         text, return_tensors="pt", add_special_tokens=False
@@ -261,7 +256,7 @@ def sample_programs(
         try:
             ids = model.generate(prompt_ids, max_new_tokens, temperature)
         except ValueError as rejection:
-            # _fail raises ValueError(self.generated): the off-grammar token path.
+            # _fail raised ValueError(self.generated) on the off-grammar path.
             (rejected_ids,) = rejection.args
             rejected = model.tokenizer.decode(rejected_ids, skip_special_tokens=True)
             print(f"[reject] {rejected.strip()}", flush=True)
