@@ -44,7 +44,6 @@ def ensure_artifacts(benchmark: str) -> tuple[str, str, str]:
 
 
 def distinct(results) -> list[str]:
-    """Deduplicated program texts from a list of casa SamplingResults, order kept."""
     seen: set[str] = set()
     programs: list[str] = []
     for r in results:

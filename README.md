@@ -41,12 +41,9 @@ uv run src/egrammar.py quadratic        # writes lark/quadratic.lark
 
 ### Compile *and* sample in one step
 
-[run_cars.py](src/run_cars.py) compiles the grammar (reusing `lark/<benchmark>.lark` if
-present), then drives one of casa's grammar-constrained samplers over a language
+[run_cars.py](src/run_cars.py) compiles the grammar then drives one of casa's grammar-constrained samplers over a language
 model to harvest a *variety* of distinct programs, printing each program live as it
-is accepted or rejected. Since the grammar's language is exactly the programs
-provably equivalent to the reference, every accepted sample is equivalent by
-construction — a deduplicated set of alternative spellings of the same computation.
+is accepted or rejected. 
 
 ```bash
 uv run src/run_cars.py quadratic                       # 20 programs, CARS sampler
@@ -55,8 +52,7 @@ uv run src/run_cars.py quadratic --sampler mcmc-restart --steps 20
 ```
 
 It samples with `Qwen/Qwen2.5-14B-Instruct` and writes a numbered run file
-`equivalents/<benchmark>-NNN.json` (each run gets the next number, so repeated runs
-don't overwrite each other). `--sampler` selects either a casa rejection-family
+`equivalents/<benchmark>-NNN.json`. `--sampler` selects either a casa rejection-family
 sampler — `cars` (default), `ars`, `rsft`, `rs` (tuned with `--max-attempts`) — or an
 MCMC variant — `mcmc-uniform`, `mcmc-priority`, `mcmc-restart` (tuned with `--steps`,
 which runs that many MCMC steps per chain and keeps each chain's final program). The
@@ -74,10 +70,7 @@ uv run src/gappa_check.py quadratic --run 2    # a specific run
 uv run src/gappa_check.py sqrtminus --subdiv 64 # wide box; subdivide to bound it
 ```
 
-It reads `equivalents/<benchmark>-NNN.json` and writes the matching
-`gappa/<benchmark>-NNN.json`: per program, the exact real-valued enclosure plus
-certified worst-case absolute and relative rounding error in IEEE-754 double. The
-interval box is per-benchmark (`INTERVALS` in the script) and deliberately narrow,
+The interval box is per-benchmark (`INTERVALS` in the script) and deliberately narrow,
 because Gappa's interval arithmetic loses variable correlations on a wide box (it
 can't prove a cancelling denominator/value is nonzero). For a wider box, `--subdiv N`
 makes Gappa bisect each variable into `N` pieces to recover those correlations, at
@@ -89,23 +82,6 @@ library, which implements CARS (Constrained Adaptive Rejection Sampling; see the
 rejection samplers. casa pulls in the sampling runtime (torch, transformers,
 llguidance, xgrammar, accelerate); egglog is needed only to compile a grammar that
 is not already cached in `lark/`.
-
-## Caveats
-
-- **Saturation cap**: like chopchop, equivalence is "reachable within 6 egglog runs",
-  not full algebraic equivalence (`SATURATION_RUNS`).
-- **No identity padding**: `strip_identity_enodes` removes the trivial respellings
-  (`(* x 1)`, `(+ x 0)`, `(- x x)`, `(/ a a)`, …) egglog's merges leave behind, so the
-  grammar won't pass off `(* 1 original)` as new. It works semantically (the
-  denotes-0/1 fixpoint), catching derived identities, and aliases fully-padding
-  classes rather than keeping one as a fallback. The `(* 4 x) → (* 2 (* 2 x))` rule is
-  also dropped from [rules.egglog](rules.egglog) — ×2 is exact, so it only gave an
-  FP-identical respelling.
-- **Cyclic reshuffles are pruned**: the SCC + min-depth pass drops non-minimal cyclic
-  spellings like `4ac` as `(* (* (* (* c a) (/ 1 a)) a) 4)`, matching chopchop's checker.
-- **Fixed argument list and spacing**: the grammar pins the argument list (sorted) and
-  one whitespace style, so the model has no formatting freedom — keeps productions
-  plain string literals.
 
 ## Grammar sizes (rules ≈ e-classes reachable from the root)
 
