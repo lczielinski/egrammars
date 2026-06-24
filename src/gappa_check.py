@@ -1,5 +1,5 @@
 """Bound the rounding error of egrammar-harvested equivalent programs with Gappa.
-Requires the `gappa` binary on PATH; stdlib-only otherwise.
+Requires the `gappa` binary on PATH.
 
 Usage:
     uv run src/gappa_check.py quadratic
@@ -16,8 +16,6 @@ import paths
 
 EPS = 2.0 ** -52  # double-precision ulp, for the ulp estimate
 
-# Per-benchmark interval boxes; see module docstring for why they are narrow and
-# regime-specific. Add an entry (variable -> Gappa interval) for each new benchmark.
 INTERVALS = {
     "quadratic": {"a": "[1,1.01]", "b": "[10,10.01]", "c": "[6,6.01]"},
     "sqrtminus": {"x": "[1,2]"},

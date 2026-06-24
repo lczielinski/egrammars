@@ -41,14 +41,14 @@ uv run src/egrammar.py quadratic        # writes lark/quadratic.lark
 
 ### Compile *and* sample in one step
 
-[run_cars.py](src/run_cars.py) compiles the grammar then drives one of casa's grammar-constrained samplers over a language
+[run.py](src/run.py) compiles the grammar then drives one of casa's grammar-constrained samplers over a language
 model to harvest a *variety* of distinct programs, printing each program live as it
 is accepted or rejected. 
 
 ```bash
-uv run src/run_cars.py quadratic                       # 20 programs, CARS sampler
-uv run src/run_cars.py quadratic --samples 50 --sampler ars
-uv run src/run_cars.py quadratic --sampler mcmc-restart --steps 20
+uv run src/run.py quadratic                       # 20 programs, CARS sampler
+uv run src/run.py quadratic --samples 50 --sampler ars
+uv run src/run.py quadratic --sampler mcmc-restart --steps 20
 ```
 
 It samples with `Qwen/Qwen2.5-14B-Instruct` and writes a numbered run file
@@ -56,7 +56,7 @@ It samples with `Qwen/Qwen2.5-14B-Instruct` and writes a numbered run file
 sampler — `cars` (default), `ars`, `rsft`, `rs` (tuned with `--max-attempts`) — or an
 MCMC variant — `mcmc-uniform`, `mcmc-priority`, `mcmc-restart` (tuned with `--steps`,
 which runs that many MCMC steps per chain and keeps each chain's final program). The
-full option list is in the [run_cars.py](src/run_cars.py) module docstring.
+full option list is in the [run.py](src/run.py) module docstring.
 
 ### Bound the rounding error
 

@@ -13,10 +13,9 @@ Options:
                            mcmc-restart    MCMC, always resample from the start
     --max-attempts N     rejection samplers: cap on attempts per sample (default 200)
     --steps N            mcmc samplers: MCMC steps per chain (default 10)
-    --max-new-tokens N   generation length cap (default 1024)
 
 Examples:
-    uv run src/run_cars.py quadratic --sampler mcmc-restart --steps 20
+    uv run src/run.py quadratic --sampler mcmc-restart --steps 20
 """
 
 import argparse
@@ -63,7 +62,6 @@ def main() -> None:
     parser.add_argument("--sampler", choices=SAMPLERS, default="cars")
     parser.add_argument("--max-attempts", type=int, default=200)
     parser.add_argument("--steps", type=int, default=10)
-    parser.add_argument("--max-new-tokens", type=int, default=1024)
     args = parser.parse_args()
 
     grammar_str, prompt, reference = ensure_artifacts(args.benchmark)
@@ -84,16 +82,13 @@ def main() -> None:
 
     # casa prints each program live (verbose=True) as it is accepted/rejected.
     if args.sampler in REJECTION:
-        sampler = getattr(casa, args.sampler.upper())(
-            llm, grammar, max_new_tokens=args.max_new_tokens, verbose=True
-        )
+        sampler = getattr(casa, args.sampler.upper())(llm, grammar, verbose=True)
         results = sampler.sample(
             prompt, n_samples=args.samples, max_attempts=args.max_attempts
         )
     else:  # mcmc-<variant>
         sampler = casa.MCMC(
-            llm, grammar, variant=args.sampler.split("-", 1)[1],
-            max_new_tokens=args.max_new_tokens, verbose=True,
+            llm, grammar, variant=args.sampler.split("-", 1)[1], verbose=True,
         )
         results = sampler.sample(
             prompt, n_samples=args.samples, n_steps=args.steps, return_steps=False
