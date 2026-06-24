@@ -1,17 +1,4 @@
 """Bound the rounding error of egrammar-harvested equivalent programs with Gappa.
-
-Reads equivalents/<benchmark>-NNN.json (latest run by default, or --run N),
-converts each FPCore s-expression to Gappa's infix syntax, and over a fixed
-interval box (INTERVALS below) certifies, per program: the exact real-valued
-enclosure, and the worst-case absolute/relative rounding error in IEEE-754 double.
-Writes gappa/<benchmark>-NNN.json, reusing the same run number.
-
-The boxes are deliberately narrow: Gappa's interval arithmetic loses variable
-correlations on a wide box (it can't prove a cancelling denominator is nonzero),
-so bounds are certified only within the box and the ranking can reorder elsewhere.
---subdiv N bisects each variable into N pieces to recover those correlations (at
-N^(#vars) cost); bounds it still can't prove are reported as "n/a".
-
 Requires the `gappa` binary on PATH; stdlib-only otherwise.
 
 Usage:

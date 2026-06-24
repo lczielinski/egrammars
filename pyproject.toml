@@ -9,4 +9,4 @@ dependencies = [
 ]
 
 [tool.uv.sources]
-casa = { git = "https://github.com/large-loris-models/casa.git" }
+casa = { path = "../casa", editable = true }

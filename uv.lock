@@ -132,7 +132,7 @@ wheels = [
 [[package]]
 name = "casa"
 version = "0.1.0"
-source = { git = "https://github.com/large-loris-models/casa.git#d3cc45bf90658ea25b49d164689ec9536043d47d" }
+source = { editable = "../casa" }
 dependencies = [
     { name = "accelerate" },
     { name = "llguidance" },
@@ -141,6 +141,23 @@ dependencies = [
     { name = "torch" },
     { name = "transformers" },
     { name = "xgrammar" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "accelerate", specifier = ">=1.10.1" },
+    { name = "llguidance", specifier = ">=0.7.0" },
+    { name = "numpy", specifier = ">=1.24.0" },
+    { name = "rich", specifier = ">=14.1.0" },
+    { name = "torch", specifier = ">=2.0.0" },
+    { name = "transformers", specifier = ">=4.30.0" },
+    { name = "xgrammar", specifier = ">=0.1.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=7.0.0" },
+    { name = "ruff", specifier = ">=0.0.260" },
 ]
 
 [[package]]
@@ -312,7 +329,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "casa", git = "https://github.com/large-loris-models/casa.git" },
+    { name = "casa", editable = "../casa" },
     { name = "egglog", specifier = "==13.2.0" },
 ]
 
