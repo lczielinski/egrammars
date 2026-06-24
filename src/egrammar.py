@@ -9,18 +9,18 @@ The resulting grammar's language is a cleaned subset of FPCore programs equivale
 to the reference (under the rules, up to the saturation cap).
 
 Usage:
-    uv run egrammar.py quadratic            # writes out/quadratic.lark + .txt
+    uv run src/egrammar.py quadratic        # writes lark/quadratic.lark
 """
+
+from __future__ import annotations
 
 import argparse
 import json
 from collections import defaultdict
 from dataclasses import dataclass
-from pathlib import Path
 
-from egglog.bindings import EGraph
+import paths
 
-HERE = Path(__file__).resolve().parent
 SATURATION_RUNS = 6
 START = "__start__"
 
@@ -37,8 +37,10 @@ class ENode:
 EClassMapping = dict[str, set[ENode]]
 
 
-def saturate(benchmark_source: str) -> EGraph:
-    source = (HERE / "rules.egglog").read_text()
+def saturate(benchmark_source: str) -> "EGraph":
+    from egglog.bindings import EGraph
+
+    source = (paths.ROOT / "rules.egglog").read_text()
     source += benchmark_source
     source += f"\n(run {SATURATION_RUNS})"
     # Mark `start` so we can find its e-class after saturation.
@@ -124,14 +126,9 @@ def _zero_one_classes(eclasses: EClassMapping) -> tuple[set[str], set[str]]:
 def strip_identity_enodes(
     root: str, eclasses: EClassMapping
 ) -> tuple[str, EClassMapping]:
-    """Clean the saturated e-graph (three steps below): alias identity-only
-    classes to the value they equal, strip identity spellings from the rest, and
-    prune non-minimal cyclic respellings. Returns the remapped root and mapping."""
     zero, one = _zero_one_classes(eclasses)
 
     # --- step 1: alias identity-only classes into the operand they equal ------
-    # An identity-only class equals an operand (x*1, x+0, x/1, x-0 == x; x*0 ==
-    # 0); union it there. Iterate: collapsing one can expose its parent.
     parent = {eclass: eclass for eclass in eclasses}
 
     def find(x: str) -> str:
@@ -198,7 +195,7 @@ def strip_identity_enodes(
 
     # --- step 3: prune non-minimal cyclic spellings ---------------------------
     # Keep an e-node only if it is a shortest spelling, or does not recurse into
-    # its own cycle: drops deep "reshuffle" respellings, keeps acyclic variety.
+    # its own cycle
     min_depth = {eclass: float("inf") for eclass in stripped}
 
     def depth(enode: ENode) -> float:
@@ -270,8 +267,7 @@ SPELLING = {
 
 
 def reachable(root: str, eclasses: EClassMapping) -> list[str]:
-    """E-classes reachable from root, in BFS order (= grammar rule order).
-    Var/Num children are inlined leaves, so they are not visited."""
+    """E-classes reachable from root, in BFS order."""
     order, queue = [], [root]
     seen = {root}
     while queue:
@@ -289,13 +285,11 @@ def reachable(root: str, eclasses: EClassMapping) -> list[str]:
 
 def intersect(root: str, eclasses: EClassMapping) -> str:
     """The FPCore syntax grammar restricted to the e-graph, as a lark grammar:
-    one nonterminal per e-class, one production per e-node. Whitespace is fixed
-    to single spaces so productions are plain string literals."""
+    one nonterminal per e-class, one production per e-node."""
     order = reachable(root, eclasses)
     name = {eclass: f"e{i}" for i, eclass in enumerate(order)}
 
     def leaf(eclass: str) -> str:
-        """The variable name or integer literal stored in a Var/Num child class."""
         (terminal,) = {enode.op for enode in eclasses[eclass]}
         return terminal
 
@@ -320,10 +314,13 @@ def intersect(root: str, eclasses: EClassMapping) -> str:
 # --- entry point ---------------------------------------------------------------
 
 
+def read_reference(benchmark: str) -> str:
+    content = (paths.BENCHMARKS / f"{benchmark}.egglog").read_text()
+    return content.splitlines()[0].removeprefix(";; ")
+
+
 def build(benchmark: str) -> tuple[str, str]:
-    """Compile a benchmark into (reference, grammar): the original program text and
-    a lark grammar of cleaned equivalent programs."""
-    content = (HERE / "benchmarks" / f"{benchmark}.egglog").read_text()
+    content = (paths.BENCHMARKS / f"{benchmark}.egglog").read_text()
     reference = content.splitlines()[0].removeprefix(";; ")
 
     root, eclasses = extract(saturate(content))
@@ -333,42 +330,31 @@ def build(benchmark: str) -> tuple[str, str]:
 
 
 def make_prompt(reference: str) -> str:
-    """The user prompt handed to the sampler alongside the grammar."""
     return (
-        (HERE / "prompt_header.md").read_text()
+        (paths.ROOT / "prompt_header.md").read_text()
         + f"\n\nThe original program is:\n{reference}\n\n"
         "Produce one complete FPCore program that is algebraically equivalent to "
         "the original but evaluates with different floating-point behavior."
     )
 
 
-def write_artifacts(
-    benchmark: str, grammar: str, prompt: str, out_dir: Path
-) -> tuple[Path, Path]:
-    """Write the grammar (.lark) and prompt (.txt), returning their paths."""
-    out_dir.mkdir(exist_ok=True)
-    grammar_path = out_dir / f"{benchmark}.lark"
-    prompt_path = out_dir / f"{benchmark}.txt"
+def write_grammar(benchmark: str, grammar: str) -> Path:
+    paths.LARK.mkdir(exist_ok=True)
+    grammar_path = paths.LARK / f"{benchmark}.lark"
     grammar_path.write_text(grammar)
-    prompt_path.write_text(prompt)
-    return grammar_path, prompt_path
+    return grammar_path
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("benchmark", help="benchmark name, e.g. quadratic")
-    parser.add_argument("--out", type=Path, default=HERE / "out")
     args = parser.parse_args()
 
     reference, grammar = build(args.benchmark)
-    prompt = make_prompt(reference)
-    grammar_path, prompt_path = write_artifacts(
-        args.benchmark, grammar, prompt, args.out
-    )
+    grammar_path = write_grammar(args.benchmark, grammar)
 
     print(f"reference: {reference}")
     print(f"grammar:   {grammar_path} ({grammar.count(chr(10))} rules)")
-    print(f"prompt:    {prompt_path}")
 
 
 if __name__ == "__main__":

@@ -1,44 +1,32 @@
-"""Run Gappa on egrammar-harvested equivalent programs.
+"""Bound the rounding error of egrammar-harvested equivalent programs with Gappa.
 
-Reads out/<benchmark>.equivalents.json, converts each FPCore s-expression to
-Gappa's infix syntax, and over a fixed interval box computes, per program:
+Reads equivalents/<benchmark>-NNN.json (latest run by default, or --run N),
+converts each FPCore s-expression to Gappa's infix syntax, and over a fixed
+interval box (INTERVALS below) certifies, per program: the exact real-valued
+enclosure, and the worst-case absolute/relative rounding error in IEEE-754 double.
+Writes gappa/<benchmark>-NNN.json, reusing the same run number.
 
-  - enclosure:  the exact real-valued range of the expression
-  - abs_err:    certified worst-case |rounded - exact| in IEEE-754 double (ne)
-  - rel_err:    certified worst-case |(rounded - exact) / exact|
+The boxes are deliberately narrow: Gappa's interval arithmetic loses variable
+correlations on a wide box (it can't prove a cancelling denominator is nonzero),
+so bounds are certified only within the box and the ranking can reorder elsewhere.
+--subdiv N bisects each variable into N pieces to recover those correlations (at
+N^(#vars) cost); bounds it still can't prove are reported as "n/a".
 
-Reads out/equivalents/<benchmark>-NNN.json (latest run by default, or --run N)
-and writes out/gappa/<benchmark>-NNN.json, reusing the same run number.
-
-Each benchmark has its own interval box (INTERVALS below). The boxes are
-deliberately NARROW: Gappa's interval arithmetic loses variable correlations (it
-cannot, e.g., prove b - sqrt(b*b - 4ac) > 0 for a wide b, and sees the denominator
-straddle zero), so wide ranges make programs fail with an undischargeable division.
-Narrow ranges keep every denominator provably bounded away from zero. Bounds are
-certified only within the chosen box, and the accuracy ranking can reorder in other
-regions (e.g. the sign of b for quadratic, or large x for sqrtminus), so pick a
-representative regime per benchmark. For a wider box, pass --subdiv N: Gappa then
-bisects each variable into N pieces, recovering the lost correlations (at N^(#vars)
-cost). Bounds it cannot prove are reported as "n/a" rather than crashing.
-
-Requires the `gappa` binary on PATH. No Python deps beyond the stdlib, so it runs
-in the base (egglog-only) environment — no `--extra cars` needed.
+Requires the `gappa` binary on PATH; stdlib-only otherwise.
 
 Usage:
-    uv run gappa_check.py quadratic
-    uv run gappa_check.py quadratic --run 2
-    uv run gappa_check.py sqrtminus --subdiv 64   # wide box; subdivide to bound it
+    uv run src/gappa_check.py quadratic
+    uv run src/gappa_check.py quadratic --run 2
+    uv run src/gappa_check.py sqrtminus --subdiv 64
 """
 
 import argparse
 import json
 import re
 import subprocess
-from pathlib import Path
 
-import runpaths
+import paths
 
-HERE = Path(__file__).resolve().parent
 EPS = 2.0 ** -52  # double-precision ulp, for the ulp estimate
 
 # Per-benchmark interval boxes; see module docstring for why they are narrow and
@@ -124,16 +112,14 @@ def main() -> None:
                          "bisection hint). Needed for wide boxes where cancellation "
                          "makes a denominator/value straddle zero under naive "
                          "interval arithmetic. Cost scales as N^(#vars). Default 0.")
-    ap.add_argument("--out", type=Path, default=HERE / "out")
     args = ap.parse_args()
 
-    equiv_dir, gappa_dir = args.out / "equivalents", args.out / "gappa"
     if args.run is not None:
-        n, src = args.run, runpaths.path_for(equiv_dir, args.benchmark, args.run)
+        n, src = args.run, paths.path_for(paths.EQUIVALENTS, args.benchmark, args.run)
     else:
-        n, src = runpaths.latest(equiv_dir, args.benchmark)
+        n, src = paths.latest(paths.EQUIVALENTS, args.benchmark)
     if src is None or not src.exists():
-        ap.error(f"no equivalents file for {args.benchmark!r} in {equiv_dir}")
+        ap.error(f"no equivalents file for {args.benchmark!r} in {paths.EQUIVALENTS}")
     box = INTERVALS.get(args.benchmark)
     if box is None:
         ap.error(f"no interval box configured for {args.benchmark!r}; add one to "
@@ -154,8 +140,8 @@ def main() -> None:
                else "gappa could not bound rel err (value not provably nonzero)")
         print(f"[{i:2d}] abs={fmt(r['abs_err'])}  rel={fmt(r['rel_err'])}  ({ulp})")
 
-    gappa_dir.mkdir(parents=True, exist_ok=True)
-    dst = runpaths.path_for(gappa_dir, args.benchmark, n)
+    paths.GAPPA.mkdir(parents=True, exist_ok=True)
+    dst = paths.path_for(paths.GAPPA, args.benchmark, n)
     dst.write_text(json.dumps({
         "benchmark": args.benchmark,
         "reference": data.get("reference"),

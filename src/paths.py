@@ -1,8 +1,10 @@
-"""Numbered per-run output paths, so repeated runs don't overwrite each other.
+"""Repository directory layout and numbered per-run output paths.
 
-Layout under out/:
-    out/equivalents/<benchmark>-NNN.json   (written by run_cars.py)
-    out/gappa/<benchmark>-NNN.json         (written by gappa_check.py)
+Four sibling folders, one role each (the prompt is built in memory, not cached):
+    benchmarks/   input:  <name>.egglog   (reference program + rewrite rules)
+    lark/         output: <name>.lark     (compiled equivalence grammar)
+    equivalents/  output: <name>-NNN.json (one sampling run's programs)
+    gappa/        output: <name>-NNN.json (rounding-error bounds for that run)
 
 A gappa file reuses the run number of the equivalents file it analyzed, so the
 two stay linked. NNN is zero-padded to 3 digits.
@@ -13,14 +15,19 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+ROOT = Path(__file__).resolve().parent.parent
+BENCHMARKS = ROOT / "benchmarks"
+LARK = ROOT / "lark"
+EQUIVALENTS = ROOT / "equivalents"
+GAPPA = ROOT / "gappa"
+
 
 def _run_numbers(folder: Path, benchmark: str) -> list[int]:
     if not folder.exists():
         return []
     nums = []
     for p in folder.glob(f"{benchmark}-*.json"):
-        m = re.fullmatch(rf"{re.escape(benchmark)}-(\d+)", p.stem)
-        if m:
+        if m := re.fullmatch(rf"{re.escape(benchmark)}-(\d+)", p.stem):
             nums.append(int(m.group(1)))
     return sorted(nums)
 
@@ -38,7 +45,6 @@ def next_path(folder: Path, benchmark: str) -> tuple[int, Path]:
 
 
 def latest(folder: Path, benchmark: str) -> tuple[int | None, Path | None]:
-    """The highest existing run number and its path, or (None, None)."""
     runs = _run_numbers(folder, benchmark)
     if not runs:
         return None, None

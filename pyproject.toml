@@ -1,18 +1,12 @@
 [project]
 name = "egrammar"
 version = "0.1.0"
-description = "Compile an e-graph of equivalent programs into a CFG for constrained sampling (CARS)"
-requires-python = ">=3.11"
-dependencies = ["egglog==13.2.0"]
-
-# Runtime dependencies for the vendored CARS sampler (cars.py / run_cars.py).
-# Install with `uv run --extra cars run_cars.py ...`. Kept out of the base so
-# plain grammar compilation stays a lightweight egglog-only install.
-[project.optional-dependencies]
-cars = [
-    "torch",
-    "transformers",
-    "accelerate",
-    "llguidance",
-    "xgrammar",
+description = "Compile an e-graph of equivalent programs into a CFG for constrained sampling"
+requires-python = ">=3.12"
+dependencies = [
+    "casa",
+    "egglog==13.2.0",
 ]
+
+[tool.uv.sources]
+casa = { git = "https://github.com/large-loris-models/casa.git" }
