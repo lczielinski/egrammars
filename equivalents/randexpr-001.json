@@ -1,0 +1,14 @@
+{
+  "benchmark": "randexpr",
+  "reference": "(((sqrt((2 + z)) + 5) * sqrt((z + sqrt(y)))) / ((sqrt((x * z)) * (z / sqrt(z))) / ((x * sqrt(2)) + 4)))",
+  "model": "Qwen/Qwen2.5-14B-Instruct",
+  "sampler": "mcmc-restart",
+  "temperature": 1.3,
+  "programs": [
+    "(FPCore (x y z) (/ (* (+ (sqrt (+ 2 z)) 5) (sqrt (+ z (sqrt y)))) (/ (* (sqrt (* x z)) (/ z (sqrt z))) (+ (* x (sqrt 2)) 4))))"
+  ],
+  "energy_temperature": 1.5,
+  "rel_err_ulps": [
+    5.521503215148775
+  ]
+}

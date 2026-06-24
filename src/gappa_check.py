@@ -21,6 +21,7 @@ EPS = 2.0 ** -52  # double-precision ulp, for the ulp estimate
 INTERVALS = {
     "quadratic": {"a": "[1,1.01]", "b": "[10,10.01]", "c": "[6,6.01]"},
     "sqrtminus": {"x": "[1,2]"},
+    "randexpr": {"x": "[1,2]", "y": "[1,2]", "z": "[1,2]"},
 }
 
 

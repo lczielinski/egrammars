@@ -1,0 +1,36 @@
+;; (((sqrt((2 + z)) + 5) * sqrt((z + sqrt(y)))) / ((sqrt((x * z)) * (z / sqrt(z))) / ((x * sqrt(2)) + 4)))
+
+(let x (Var "x"))
+(let y (Var "y"))
+(let z (Var "z"))
+
+(let start
+  (Div
+    (Mul
+      (Add
+        (Sqrt
+          (Add
+            (Num 2)
+            (Var "z")))
+        (Num 5))
+      (Sqrt
+        (Add
+          (Var "z")
+          (Sqrt
+            (Var "y")))))
+    (Div
+      (Mul
+        (Sqrt
+          (Mul
+            (Var "x")
+            (Var "z")))
+        (Div
+          (Var "z")
+          (Sqrt
+            (Var "z"))))
+      (Add
+        (Mul
+          (Var "x")
+          (Sqrt
+            (Num 2)))
+        (Num 4)))))
