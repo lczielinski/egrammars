@@ -94,33 +94,28 @@ def analyze(expr: str, hyp: str, hint: str = "") -> dict:
     }
 
 
-def main() -> None:
-    ap = argparse.ArgumentParser(description=__doc__,
-                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("benchmark", nargs="?", default="quadratic")
-    ap.add_argument("--run", type=int, default=None,
-                    help="equivalents run number to analyze (default: latest)")
-    ap.add_argument("--subdiv", type=int, default=0, metavar="N",
-                    help="subdivide each interval variable into N pieces (Gappa "
-                         "bisection hint). Needed for wide boxes where cancellation "
-                         "makes a denominator/value straddle zero under naive "
-                         "interval arithmetic. Cost scales as N^(#vars). Default 0.")
-    args = ap.parse_args()
+def check(benchmark: str, run: int = None, subdiv: int = 0):
+    """Bound the rounding error of one equivalents run and write the results.
 
-    if args.run is not None:
-        n, src = args.run, paths.path_for(paths.EQUIVALENTS, args.benchmark, args.run)
+    Returns the output path. Raises FileNotFoundError if the equivalents file is
+    missing and KeyError if no interval box is configured for the benchmark.
+    """
+    if run is not None:
+        n, src = run, paths.path_for(paths.EQUIVALENTS, benchmark, run)
     else:
-        n, src = paths.latest(paths.EQUIVALENTS, args.benchmark)
+        n, src = paths.latest(paths.EQUIVALENTS, benchmark)
     if src is None or not src.exists():
-        ap.error(f"no equivalents file for {args.benchmark!r} in {paths.EQUIVALENTS}")
-    box = INTERVALS.get(args.benchmark)
+        raise FileNotFoundError(
+            f"no equivalents file for {benchmark!r} in {paths.EQUIVALENTS}")
+    box = INTERVALS.get(benchmark)
     if box is None:
-        ap.error(f"no interval box configured for {args.benchmark!r}; add one to "
-                 f"INTERVALS (have: {', '.join(sorted(INTERVALS))})")
+        raise KeyError(f"no interval box configured for {benchmark!r}; add one to "
+                       f"INTERVALS (have: {', '.join(sorted(INTERVALS))})")
+
     data = json.loads(src.read_text())
     programs = data["programs"]
     hyp = " /\\ ".join(f"{v} in {iv}" for v, iv in box.items())
-    hint = "".join(f"$ {v} in {args.subdiv};\n" for v in box) if args.subdiv else ""
+    hint = "".join(f"$ {v} in {subdiv};\n" for v in box) if subdiv else ""
 
     results = []
     for i, p in enumerate(programs):
@@ -133,19 +128,38 @@ def main() -> None:
         print(f"[{i:2d}] abs={fmt(r['abs_err'])}  rel={fmt(r['rel_err'])}  ({ulp})")
 
     paths.GAPPA.mkdir(parents=True, exist_ok=True)
-    dst = paths.path_for(paths.GAPPA, args.benchmark, n)
+    dst = paths.path_for(paths.GAPPA, benchmark, n)
     dst.write_text(json.dumps({
-        "benchmark": args.benchmark,
+        "benchmark": benchmark,
         "reference": data.get("reference"),
         "model": data.get("model"),
         "rounding": "ieee_64, ne (round-to-nearest double)",
         "intervals": box,
-        "subdivisions": args.subdiv,
+        "subdivisions": subdiv,
         "note": "Certified worst-case bounds over this interval box; valid only "
                 "within it. The accuracy ranking can reorder in other regions.",
         "results": results,
     }, indent=2))
     print(f"\nread {src}\nwrote {len(results)} results to {dst}")
+    return dst
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("benchmark", nargs="?", default="quadratic")
+    ap.add_argument("--run", type=int, default=None,
+                    help="equivalents run number to analyze (default: latest)")
+    ap.add_argument("--subdiv", type=int, default=0, metavar="N",
+                    help="subdivide each interval variable into N pieces (Gappa "
+                         "bisection hint). Needed for wide boxes where cancellation "
+                         "makes a denominator/value straddle zero under naive "
+                         "interval arithmetic. Cost scales as N^(#vars). Default 0.")
+    args = ap.parse_args()
+    try:
+        check(args.benchmark, args.run, args.subdiv)
+    except (FileNotFoundError, KeyError) as e:
+        ap.error(str(e))
 
 
 if __name__ == "__main__":

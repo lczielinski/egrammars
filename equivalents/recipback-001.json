@@ -1,0 +1,11 @@
+{
+  "benchmark": "recipback",
+  "reference": "1/(x - 1) - 1/x",
+  "model": "Qwen/Qwen2.5-14B-Instruct",
+  "sampler": "asap",
+  "programs": [
+    "(FPCore (x) (/ (/ 1 x) (- x 1)))",
+    "(FPCore (x) (/ (/ 1 x) (+ x -1)))",
+    "(FPCore (x) (/ (/ 1 x) (+ -1 x)))"
+  ]
+}

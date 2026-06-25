@@ -3,7 +3,7 @@
 Options:
     benchmark            benchmark name, e.g. quadratic (positional, required)
     --samples N          distinct programs to collect / chains to run (default 20)
-    --sampler NAME       which casa sampler (default cars); one of:
+    --sampler NAME       which casa sampler (default asap); one of:
                            cars   rejection + first-token constraint + learning
                            asap   cars + grammar mask every step (no rejects)
                            gcd    grammar-constrained decoding (masked, no learning)
@@ -63,7 +63,7 @@ def main() -> None:
     )
     parser.add_argument("benchmark", help="benchmark name, e.g. quadratic")
     parser.add_argument("--samples", type=int, default=20)
-    parser.add_argument("--sampler", choices=SAMPLERS, default="cars")
+    parser.add_argument("--sampler", choices=SAMPLERS, default="asap")
     parser.add_argument("--max-attempts", type=int, default=200)
     parser.add_argument("--steps", type=int, default=10)
     parser.add_argument("--temperature", type=float, default=1.0)
@@ -111,13 +111,27 @@ def main() -> None:
     for i, program in enumerate(programs):
         print(f"{i:3d}  {program}")
 
-    _, summary = paths.next_path(paths.EQUIVALENTS, args.benchmark)
+    n, summary = paths.next_path(paths.EQUIVALENTS, args.benchmark)
     summary.write_text(json.dumps(
         {"benchmark": args.benchmark, "reference": reference,
          "model": MODEL_ID, "sampler": args.sampler, "programs": programs},
         indent=2,
     ))
     print(f"\nwrote {len(programs)} distinct equivalent programs to {summary}")
+
+    if programs:
+        import gappa_check
+        print(f"\n{'=' * 70}\ngappa rounding-error analysis\n{'=' * 70}")
+        try:
+            gappa_check.check(args.benchmark, run=n)
+        except KeyError:
+            print(f"skipping gappa: no interval box configured for "
+                  f"{args.benchmark!r} (add one to INTERVALS in gappa_check.py)")
+        except FileNotFoundError as e:
+            # Either the equivalents file (shouldn't happen) or the gappa binary.
+            msg = "gappa binary not found on PATH" if "gappa" in str(e).lower() \
+                else str(e)
+            print(f"skipping gappa: {msg}")
 
 
 if __name__ == "__main__":
