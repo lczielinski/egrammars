@@ -5,6 +5,8 @@ Options:
     --samples N          distinct programs to collect / chains to run (default 20)
     --sampler NAME       which casa sampler (default cars); one of:
                            cars   rejection + first-token constraint + learning
+                           asap   cars + grammar mask every step (no rejects)
+                           gcd    grammar-constrained decoding (masked, no learning)
                            ars    rejection + learning (no first-token constraint)
                            rsft   rejection + first-token constraint
                            rs     plain rejection sampling
@@ -26,7 +28,7 @@ import json
 import paths
 
 MODEL_ID = "Qwen/Qwen2.5-14B-Instruct"
-REJECTION = ("rs", "ars", "rsft", "cars")
+REJECTION = ("rs", "ars", "rsft", "cars", "asap", "gcd")
 MCMC_VARIANTS = ("uniform", "priority", "restart")
 SAMPLERS = REJECTION + tuple(f"mcmc-{v}" for v in MCMC_VARIANTS)
 

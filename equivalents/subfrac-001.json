@@ -1,9 +1,0 @@
-{
-  "benchmark": "subfrac",
-  "reference": "1/(x+1) - 1/x",
-  "model": "Qwen/Qwen2.5-14B-Instruct",
-  "sampler": "cars",
-  "programs": [
-    "(FPCore (x) (- (/ 1 (+ x 1)) (/ 1 x)))"
-  ]
-}
