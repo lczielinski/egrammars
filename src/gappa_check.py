@@ -57,25 +57,27 @@ def run_gappa(script: str) -> str:
     return (res.stdout + res.stderr).strip()
 
 
-def enclosure(out: str):
-    """Pull the '[lo, hi]' enclosure and its decimal bounds out of Gappa output."""
+def enclosure_bounds(out: str):
+    """Decimal bounds of the '[lo, hi]' enclosure in Gappa output (or [])."""
     m = re.search(r"in (\[[^\]]*\])", out)
     if not m:
-        return None, None
-    raw = m.group(1)
-    decs = [float(x) for x in re.findall(r"\{(-?[0-9.eE+-]+)", raw)]
-    return raw, decs
+        return []
+    return [float(x) for x in re.findall(r"\{(-?[0-9.eE+-]+)", m.group(1))]
 
 
 def worst_magnitude(decs):
     return max(abs(x) for x in decs) if decs else None
 
 
+def fmt(v):
+    return f"{v:.3e}" if v is not None else "n/a"
+
+
 def analyze(expr: str, hyp: str, hint: str = "") -> dict:
     rounded = f"@rnd = float<ieee_64, ne>;\nMe rnd= {expr};\nRe = {expr};\n"
-    _, encl_dec = enclosure(run_gappa(f"Re = {expr};\n{{ {hyp} -> Re in ? }}\n{hint}"))
-    _, abs_dec = enclosure(run_gappa(rounded + f"{{ {hyp} -> (Me - Re) in ? }}\n{hint}"))
-    _, rel_dec = enclosure(run_gappa(rounded + f"{{ {hyp} -> (Me - Re) / Re in ? }}\n{hint}"))
+    encl_dec = enclosure_bounds(run_gappa(f"Re = {expr};\n{{ {hyp} -> Re in ? }}\n{hint}"))
+    abs_dec = enclosure_bounds(run_gappa(rounded + f"{{ {hyp} -> (Me - Re) in ? }}\n{hint}"))
+    rel_dec = enclosure_bounds(run_gappa(rounded + f"{{ {hyp} -> (Me - Re) / Re in ? }}\n{hint}"))
     abs_err = worst_magnitude(abs_dec)
     rel_err = worst_magnitude(rel_dec)
     return {
@@ -121,7 +123,6 @@ def main() -> None:
         r = analyze(expr, hyp, hint)
         r["program"] = p
         results.append(r)
-        fmt = lambda v, u="": f"{v:.3e}{u}" if v is not None else "n/a"
         ulp = (f"~{r['rel_err_ulps']:.0f} ulp" if r["rel_err_ulps"] is not None
                else "gappa could not bound rel err (value not provably nonzero)")
         print(f"[{i:2d}] abs={fmt(r['abs_err'])}  rel={fmt(r['rel_err'])}  ({ulp})")

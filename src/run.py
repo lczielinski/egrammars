@@ -13,6 +13,8 @@ Options:
                            mcmc-restart    MCMC, always resample from the start
     --max-attempts N     rejection samplers: cap on attempts per sample (default 200)
     --steps N            mcmc samplers: MCMC steps per chain (default 10)
+    --temperature T      sampling temperature applied to the model (default 1.0);
+                         T<1 sharpens, T>1 flattens the grammar-constrained model
 
 Examples:
     uv run src/run.py quadratic --sampler mcmc-restart --steps 20
@@ -62,6 +64,7 @@ def main() -> None:
     parser.add_argument("--sampler", choices=SAMPLERS, default="cars")
     parser.add_argument("--max-attempts", type=int, default=200)
     parser.add_argument("--steps", type=int, default=10)
+    parser.add_argument("--temperature", type=float, default=1.0)
     args = parser.parse_args()
 
     grammar_str, prompt, reference = ensure_artifacts(args.benchmark)
@@ -75,6 +78,7 @@ def main() -> None:
           f"({grammar_str.count(chr(10))} rules)")
     print(f"model:     {MODEL_ID}")
     print(f"sampler:   {args.sampler}")
+    print(f"temp:      {args.temperature}")
     print(f"target {args.samples} programs, {budget}\n")
 
     llm = casa.LLM.from_pretrained(MODEL_ID)
@@ -82,13 +86,16 @@ def main() -> None:
 
     # casa prints each program live (verbose=True) as it is accepted/rejected.
     if args.sampler in REJECTION:
-        sampler = getattr(casa, args.sampler.upper())(llm, grammar, verbose=True)
+        sampler = getattr(casa, args.sampler.upper())(
+            llm, grammar, verbose=True, temperature=args.temperature
+        )
         results = sampler.sample(
             prompt, n_samples=args.samples, max_attempts=args.max_attempts
         )
     else:  # mcmc-<variant>
         sampler = casa.MCMC(
             llm, grammar, variant=args.sampler.split("-", 1)[1], verbose=True,
+            temperature=args.temperature,
         )
         results = sampler.sample(
             prompt, n_samples=args.samples, n_steps=args.steps, return_steps=False
