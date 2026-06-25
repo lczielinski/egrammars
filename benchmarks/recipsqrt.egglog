@@ -1,0 +1,9 @@
+;; 1/(x + sqrt(x)) - 1/x
+;; = -sqrt(x) / (x * (x + sqrt(x)))   [reciprocal difference; avoids cancellation for large x]
+
+(let x (Var "x"))
+
+(let start
+  (Sub
+    (Div (Num 1) (Add x (Sqrt x)))
+    (Div (Num 1) x)))

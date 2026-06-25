@@ -1,0 +1,9 @@
+;; sqrt(x + 4) - 2
+;; = x / (sqrt(x + 4) + 2)   [conjugate; avoids cancellation near x = 0]
+
+(let x (Var "x"))
+
+(let start
+  (Sub
+    (Sqrt (Add x (Num 4)))
+    (Num 2)))

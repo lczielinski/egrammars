@@ -19,8 +19,12 @@ EPS = 2.0 ** -52  # double-precision ulp, for the ulp estimate
 INTERVALS = {
     "quadratic": {"a": "[1,1.01]", "b": "[10,10.01]", "c": "[6,6.01]"},
     "sqrtminus": {"x": "[1,2]"},
-    "randexpr": {"x": "[1,2]", "y": "[1,2]", "z": "[1,2]"},
-    "subfrac": {"x": "[1,1.01]"}
+    "randexpr": {"x": "[1,1.01]", "y": "[1,1.01]", "z": "[1,1.01]"},
+    "subfrac": {"x": "[1,1.01]"},
+    "sqrtshift": {"x": "[0.01,0.02]"},    # cancellation as x -> 0 (sqrt(x+4) -> 2)
+    "sqrtquad": {"x": "[1000,1000.01]"},  # cancellation as x grows (sqrt(x*x+x) -> x)
+    "recipsqrt": {"x": "[1000,1000.01]"}, # cancellation as x grows (both terms -> 1/x)
+    "recipback": {"x": "[1000,1000.01]"}, # cancellation as x grows (both terms -> 1/x)
 }
 
 

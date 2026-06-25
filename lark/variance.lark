@@ -1,4 +1,4 @@
-start: "(FPCore (a b c) " e0 ")" "\n"?
+start: "(FPCore (a b c) " e0 ")"
 e0: "(* " e1 " " e3 ")" | "(* " e3 " " e1 ")" | "(/ " e1 " " e2 ")"
 e1: "(sqrt " e4 ")"
 e2: "3"

@@ -304,7 +304,7 @@ def intersect(root: str, eclasses: EClassMapping) -> str:
     variables = sorted(
         {leaf(e.children[0]) for ec in order for e in eclasses[ec] if e.op == "Var"}
     )
-    lines = [f'start: "(FPCore ({" ".join(variables)}) " {name[root]} ")" "\\n"?']
+    lines = [f'start: "(FPCore ({" ".join(variables)}) " {name[root]} ")"']
     for eclass in order:
         productions = sorted({production(enode) for enode in eclasses[eclass]})
         lines.append(f"{name[eclass]}: {' | '.join(productions)}")

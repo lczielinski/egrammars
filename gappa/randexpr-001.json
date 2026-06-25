@@ -1,0 +1,212 @@
+{
+  "benchmark": "randexpr",
+  "reference": "(((sqrt((2 + z)) + 5) * sqrt((z + sqrt(y)))) / ((sqrt((x * z)) * (z / sqrt(z))) / ((x * sqrt(2)) + 4)))",
+  "model": "Qwen/Qwen2.5-14B-Instruct",
+  "rounding": "ieee_64, ne (round-to-nearest double)",
+  "intervals": {
+    "x": "[1,1.01]",
+    "y": "[1,1.01]",
+    "z": "[1,1.01]"
+  },
+  "subdivisions": 0,
+  "note": "Certified worst-case bounds over this interval box; valid only within it. The accuracy ranking can reorder in other regions.",
+  "results": [
+    {
+      "gappa_expr": "(((sqrt((2 + z)) + 5) * sqrt((z + sqrt(y)))) / ((sqrt((x * z)) * (z / sqrt(z))) / ((x * sqrt(2)) + 4)))",
+      "enclosure": [
+        50.5307,
+        52.1553
+      ],
+      "abs_err": 5.80721e-14,
+      "rel_err": 1.11341e-15,
+      "rel_err_ulps": 5.014352861110584,
+      "program": "(FPCore (x y z) (/ (* (+ (sqrt (+ 2 z)) 5) (sqrt (+ z (sqrt y)))) (/ (* (sqrt (* x z)) (/ z (sqrt z))) (+ (* x (sqrt 2)) 4))))"
+    },
+    {
+      "gappa_expr": "(((sqrt((2 + z)) + 5) * sqrt((z + sqrt(y)))) / (((sqrt((x * z)) * (1 / sqrt(z))) / ((x * sqrt(2)) + 4)) * z))",
+      "enclosure": [
+        50.5307,
+        52.1553
+      ],
+      "abs_err": 5.90258e-14,
+      "rel_err": 1.13392e-15,
+      "rel_err_ulps": 5.106721689467953,
+      "program": "(FPCore (x y z) (/ (* (+ (sqrt (+ 2 z)) 5) (sqrt (+ z (sqrt y)))) (* (/ (* (sqrt (* x z)) (/ 1 (sqrt z))) (+ (* x (sqrt 2)) 4)) z)))"
+    },
+    {
+      "gappa_expr": "((((sqrt(((1 / (z + (-(sqrt(y))))) * ((z * z) + (-(y))))) * sqrt((2 + z))) / (sqrt((x * z)) * (z / sqrt(z)))) + ((sqrt((z + sqrt(y))) * 5) / ((sqrt((x * z)) * z) / sqrt(z)))) * (1 / (1 / ((x * sqrt(2)) + 4))))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x y z) (* (+ (/ (* (sqrt (* (/ 1 (+ z (- (sqrt y)))) (+ (* z z) (- y)))) (sqrt (+ 2 z))) (* (sqrt (* x z)) (/ z (sqrt z)))) (/ (* (sqrt (+ z (sqrt y))) 5) (/ (* (sqrt (* x z)) z) (sqrt z)))) (/ 1 (/ 1 (+ (* x (sqrt 2)) 4)))))"
+    },
+    {
+      "gappa_expr": "(((sqrt(((1 / ((-(sqrt(y))) + z)) * ((z * z) + (-(y))))) * sqrt((2 + z))) + (5 * sqrt((z + sqrt(y))))) * ((((1 / sqrt((x * z))) * (1 / (1 / sqrt(z)))) * (1 / (1 / ((x * sqrt(2)) + 4)))) / z))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x y z) (* (+ (* (sqrt (* (/ 1 (+ (- (sqrt y)) z)) (+ (* z z) (- y)))) (sqrt (+ 2 z))) (* 5 (sqrt (+ z (sqrt y))))) (/ (* (* (/ 1 (sqrt (* x z))) (/ 1 (/ 1 (sqrt z)))) (/ 1 (/ 1 (+ (* x (sqrt 2)) 4)))) z)))"
+    },
+    {
+      "gappa_expr": "((((sqrt(((1 / (z + (-(sqrt(y))))) * ((z * z) + (-(y))))) * 5) + (sqrt((z + sqrt(y))) * sqrt((2 + z)))) / sqrt((x * z))) * (((1 / (1 / sqrt(z))) * (1 / (1 / ((x * sqrt(2)) + 4)))) / z))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x y z) (* (/ (+ (* (sqrt (* (/ 1 (+ z (- (sqrt y)))) (+ (* z z) (- y)))) 5) (* (sqrt (+ z (sqrt y))) (sqrt (+ 2 z)))) (sqrt (* x z))) (/ (* (/ 1 (/ 1 (sqrt z))) (/ 1 (/ 1 (+ (* x (sqrt 2)) 4)))) z)))"
+    },
+    {
+      "gappa_expr": "(((sqrt((2 + z)) / sqrt((x * z))) + (5 / sqrt((x * z)))) * (sqrt((z + sqrt(y))) / (z / ((sqrt(z) * (x * sqrt(2))) + (4 * sqrt(z))))))",
+      "enclosure": [
+        50.5307,
+        52.1553
+      ],
+      "abs_err": 4.99215e-14,
+      "rel_err": 9.6128e-16,
+      "rel_err_ulps": 4.32922024979871,
+      "program": "(FPCore (x y z) (* (+ (/ (sqrt (+ 2 z)) (sqrt (* x z))) (/ 5 (sqrt (* x z)))) (/ (sqrt (+ z (sqrt y))) (/ z (+ (* (sqrt z) (* x (sqrt 2))) (* 4 (sqrt z)))))))"
+    },
+    {
+      "gappa_expr": "(((sqrt((2 + z)) + 5) * sqrt((z + sqrt(y)))) / ((sqrt((x * z)) * (z / sqrt(z))) * (1 / ((x * sqrt(2)) + 4))))",
+      "enclosure": [
+        50.5307,
+        52.1553
+      ],
+      "abs_err": 6.18853e-14,
+      "rel_err": 1.18875e-15,
+      "rel_err_ulps": 5.353654057036677,
+      "program": "(FPCore (x y z) (/ (* (+ (sqrt (+ 2 z)) 5) (sqrt (+ z (sqrt y)))) (* (* (sqrt (* x z)) (/ z (sqrt z))) (/ 1 (+ (* x (sqrt 2)) 4)))))"
+    },
+    {
+      "gappa_expr": "(((sqrt((2 + z)) / (sqrt((x * z)) * (z / sqrt(z)))) + (5 / (sqrt((x * z)) * (z / sqrt(z))))) * (sqrt((z + sqrt(y))) / (1 / ((x * sqrt(2)) + 4))))",
+      "enclosure": [
+        50.5307,
+        52.1553
+      ],
+      "abs_err": 6.05343e-14,
+      "rel_err": 1.16321e-15,
+      "rel_err_ulps": 5.238632122553635,
+      "program": "(FPCore (x y z) (* (+ (/ (sqrt (+ 2 z)) (* (sqrt (* x z)) (/ z (sqrt z)))) (/ 5 (* (sqrt (* x z)) (/ z (sqrt z))))) (/ (sqrt (+ z (sqrt y))) (/ 1 (+ (* x (sqrt 2)) 4)))))"
+    },
+    {
+      "gappa_expr": "(((sqrt((2 + z)) + 5) * sqrt((z + sqrt(y)))) / (((sqrt((x * z)) * z) / sqrt(z)) / ((x * sqrt(2)) + 4)))",
+      "enclosure": [
+        50.5307,
+        52.1553
+      ],
+      "abs_err": 5.80721e-14,
+      "rel_err": 1.11341e-15,
+      "rel_err_ulps": 5.014352861110584,
+      "program": "(FPCore (x y z) (/ (* (+ (sqrt (+ 2 z)) 5) (sqrt (+ z (sqrt y)))) (/ (/ (* (sqrt (* x z)) z) (sqrt z)) (+ (* x (sqrt 2)) 4))))"
+    },
+    {
+      "gappa_expr": "(((sqrt((z + 2)) + 5) * sqrt((z + sqrt(y)))) / ((sqrt((x * z)) * (z / sqrt(z))) / ((x * sqrt(2)) + 4)))",
+      "enclosure": [
+        50.5307,
+        52.1553
+      ],
+      "abs_err": 5.80721e-14,
+      "rel_err": 1.11345e-15,
+      "rel_err_ulps": 5.014533005095679,
+      "program": "(FPCore (x y z) (/ (* (+ (sqrt (+ z 2)) 5) (sqrt (+ z (sqrt y)))) (/ (* (sqrt (* x z)) (/ z (sqrt z))) (+ (* x (sqrt 2)) 4))))"
+    },
+    {
+      "gappa_expr": "(((sqrt((2 + z)) + 5) * sqrt((z + sqrt(y)))) / (((sqrt((x * z)) * z) / sqrt(z)) * (1 / ((x * sqrt(2)) + 4))))",
+      "enclosure": [
+        50.5307,
+        52.1553
+      ],
+      "abs_err": 6.18869e-14,
+      "rel_err": 1.18878e-15,
+      "rel_err_ulps": 5.353789165025498,
+      "program": "(FPCore (x y z) (/ (* (+ (sqrt (+ 2 z)) 5) (sqrt (+ z (sqrt y)))) (* (/ (* (sqrt (* x z)) z) (sqrt z)) (/ 1 (+ (* x (sqrt 2)) 4)))))"
+    },
+    {
+      "gappa_expr": "((5 + sqrt((2 + z))) * (sqrt((z + sqrt(y))) / ((sqrt((x * z)) * (z / sqrt(z))) / ((x * sqrt(2)) + 4))))",
+      "enclosure": [
+        50.5307,
+        52.1553
+      ],
+      "abs_err": 5.60795e-14,
+      "rel_err": 1.07932e-15,
+      "rel_err_ulps": 4.8608251498135235,
+      "program": "(FPCore (x y z) (* (+ 5 (sqrt (+ 2 z))) (/ (sqrt (+ z (sqrt y))) (/ (* (sqrt (* x z)) (/ z (sqrt z))) (+ (* x (sqrt 2)) 4)))))"
+    },
+    {
+      "gappa_expr": "((((1 / (sqrt((x * z)) * (z / sqrt(z)))) * sqrt((2 + z))) + (5 / ((z * sqrt((z * x))) / sqrt(z)))) * (sqrt((z + sqrt(y))) / (1 / ((x * sqrt(2)) + 4))))",
+      "enclosure": [
+        50.5307,
+        52.1553
+      ],
+      "abs_err": 6.1913e-14,
+      "rel_err": 1.19271e-15,
+      "rel_err_ulps": 5.371488311561064,
+      "program": "(FPCore (x y z) (* (+ (* (/ 1 (* (sqrt (* x z)) (/ z (sqrt z)))) (sqrt (+ 2 z))) (/ 5 (/ (* z (sqrt (* z x))) (sqrt z)))) (/ (sqrt (+ z (sqrt y))) (/ 1 (+ (* x (sqrt 2)) 4)))))"
+    },
+    {
+      "gappa_expr": "(((sqrt((2 + z)) + 5) * sqrt((z + sqrt(y)))) / ((sqrt((x * z)) / sqrt(z)) * ((1 / ((x * sqrt(2)) + 4)) * z)))",
+      "enclosure": [
+        50.5307,
+        52.1553
+      ],
+      "abs_err": 6.00256e-14,
+      "rel_err": 1.15309e-15,
+      "rel_err_ulps": 5.193055694324645,
+      "program": "(FPCore (x y z) (/ (* (+ (sqrt (+ 2 z)) 5) (sqrt (+ z (sqrt y)))) (* (/ (sqrt (* x z)) (sqrt z)) (* (/ 1 (+ (* x (sqrt 2)) 4)) z))))"
+    },
+    {
+      "gappa_expr": "(((sqrt((2 + z)) + 5) / ((sqrt((x * z)) * (z / sqrt(z))) / ((x * sqrt(2)) + 4))) * sqrt((z + sqrt(y))))",
+      "enclosure": [
+        50.5307,
+        52.1553
+      ],
+      "abs_err": 5.81039e-14,
+      "rel_err": 1.11959e-15,
+      "rel_err_ulps": 5.042185106807733,
+      "program": "(FPCore (x y z) (* (/ (+ (sqrt (+ 2 z)) 5) (/ (* (sqrt (* x z)) (/ z (sqrt z))) (+ (* x (sqrt 2)) 4))) (sqrt (+ z (sqrt y)))))"
+    },
+    {
+      "gappa_expr": "((((-(((2 / (5 + (-(sqrt((z + 2)))))) + ((1 / ((-(sqrt((z + 2)))) + 5)) * z)))) * sqrt((z + sqrt(y)))) + (sqrt((((z * z) + (-(y))) * (1 / ((-(sqrt(y))) + z)))) * ((1 / ((-(sqrt((z + 2)))) + 5)) * (5 * 5)))) / (sqrt((x * z)) * (z / ((4 * sqrt(z)) + (sqrt(z) * (x * sqrt(2)))))))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x y z) (/ (+ (* (- (+ (/ 2 (+ 5 (- (sqrt (+ z 2))))) (* (/ 1 (+ (- (sqrt (+ z 2))) 5)) z))) (sqrt (+ z (sqrt y)))) (* (sqrt (* (+ (* z z) (- y)) (/ 1 (+ (- (sqrt y)) z)))) (* (/ 1 (+ (- (sqrt (+ z 2))) 5)) (* 5 5)))) (* (sqrt (* x z)) (/ z (+ (* 4 (sqrt z)) (* (sqrt z) (* x (sqrt 2))))))))"
+    },
+    {
+      "gappa_expr": "(((sqrt((z + 2)) + 5) * sqrt((z + sqrt(y)))) / (((sqrt((x * z)) * (1 / sqrt(z))) / ((x * sqrt(2)) + 4)) * z))",
+      "enclosure": [
+        50.5307,
+        52.1553
+      ],
+      "abs_err": 5.90241e-14,
+      "rel_err": 1.13389e-15,
+      "rel_err_ulps": 5.106586581479132,
+      "program": "(FPCore (x y z) (/ (* (+ (sqrt (+ z 2)) 5) (sqrt (+ z (sqrt y)))) (* (/ (* (sqrt (* x z)) (/ 1 (sqrt z))) (+ (* x (sqrt 2)) 4)) z)))"
+    },
+    {
+      "gappa_expr": "(((sqrt((z + 2)) / sqrt((x * z))) + (5 / sqrt((x * z)))) * (sqrt((z + sqrt(y))) / (z / ((4 * sqrt(z)) + (sqrt(z) * (x * sqrt(2)))))))",
+      "enclosure": [
+        50.5307,
+        52.1553
+      ],
+      "abs_err": 5.00217e-14,
+      "rel_err": 9.6128e-16,
+      "rel_err_ulps": 4.32922024979871,
+      "program": "(FPCore (x y z) (* (+ (/ (sqrt (+ z 2)) (sqrt (* x z))) (/ 5 (sqrt (* x z)))) (/ (sqrt (+ z (sqrt y))) (/ z (+ (* 4 (sqrt z)) (* (sqrt z) (* x (sqrt 2))))))))"
+    },
+    {
+      "gappa_expr": "(((5 + sqrt((2 + z))) * sqrt((z + sqrt(y)))) / ((sqrt((x * z)) * (z / sqrt(z))) / ((x * sqrt(2)) + 4)))",
+      "enclosure": [
+        50.5307,
+        52.1553
+      ],
+      "abs_err": 5.80704e-14,
+      "rel_err": 1.11345e-15,
+      "rel_err_ulps": 5.014533005095679,
+      "program": "(FPCore (x y z) (/ (* (+ 5 (sqrt (+ 2 z))) (sqrt (+ z (sqrt y)))) (/ (* (sqrt (* x z)) (/ z (sqrt z))) (+ (* x (sqrt 2)) 4))))"
+    }
+  ]
+}
