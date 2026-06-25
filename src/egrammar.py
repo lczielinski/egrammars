@@ -25,9 +25,6 @@ SATURATION_RUNS = 6
 START = "__start__"
 
 
-# --- step 1: build the e-graph ----------------------------------------------
-
-
 @dataclass(frozen=True, order=True)
 class ENode:
     op: str
@@ -64,9 +61,6 @@ def extract(egraph: EGraph) -> tuple[str, EClassMapping]:
             eclasses[node["eclass"]].add(ENode(op, children))
     assert root is not None, "benchmark must define a `start` expression"
     return root, dict(eclasses)
-
-
-# --- step 2: clean the e-graph ----------------------------------------------
 
 
 def _zero_one_classes(eclasses: EClassMapping) -> tuple[set[str], set[str]]:
@@ -128,7 +122,7 @@ def strip_identity_enodes(
 ) -> tuple[str, EClassMapping]:
     zero, one = _zero_one_classes(eclasses)
 
-    # --- step 1: alias identity-only classes into the operand they equal ------
+    # Alias identity-only classes into the operand they equal.
     parent = {eclass: eclass for eclass in eclasses}
 
     def find(x: str) -> str:
@@ -176,7 +170,7 @@ def strip_identity_enodes(
         cleaned[find(eclass)] |= resolve(enodes)
     root, zero, one = find(root), {find(z) for z in zero}, {find(o) for o in one}
 
-    # --- step 2: drop identity *spellings* where a real spelling remains ------
+    # Drop identity *spellings* where a real spelling remains.
     def is_padding(enode: ENode) -> bool:
         match enode.op, enode.children:
             case ("Mul", (a, b)):
@@ -193,9 +187,8 @@ def strip_identity_enodes(
     for eclass, enodes in cleaned.items():
         stripped[eclass] = {e for e in enodes if not is_padding(e)} or enodes
 
-    # --- step 3: prune non-minimal cyclic spellings ---------------------------
-    # Keep an e-node only if it is a shortest spelling, or does not recurse into
-    # its own cycle
+    # Prune non-minimal cyclic spellings: keep an e-node only if it is a shortest
+    # spelling, or does not recurse into its own cycle.
     min_depth = {eclass: float("inf") for eclass in stripped}
 
     def depth(enode: ENode) -> float:
@@ -253,17 +246,12 @@ def _strongly_connected_components(eclasses: EClassMapping) -> dict[str, str]:
     return scc
 
 
-# --- step 3: the simple grammar ----------------------------------------------
-
 # FPCore spelling of each operator — the "simple grammar":
 # expr -> "(+ " expr " " expr ")" | ... | VARIABLE | INTEGER.
 SPELLING = {
-    "Add": "+", "Sub": "-", "Mul": "*", "Div": "/",  # binary
-    "Neg": "-", "Sqrt": "sqrt",                      # unary
+    "Add": "+", "Sub": "-", "Mul": "*", "Div": "/",
+    "Neg": "-", "Sqrt": "sqrt",
 }
-
-
-# --- step 4: intersection -----------------------------------------------------
 
 
 def reachable(root: str, eclasses: EClassMapping) -> list[str]:
@@ -309,9 +297,6 @@ def intersect(root: str, eclasses: EClassMapping) -> str:
         productions = sorted({production(enode) for enode in eclasses[eclass]})
         lines.append(f"{name[eclass]}: {' | '.join(productions)}")
     return "\n".join(lines) + "\n"
-
-
-# --- entry point ---------------------------------------------------------------
 
 
 def read_reference(benchmark: str) -> str:
