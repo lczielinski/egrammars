@@ -1,1 +1,5 @@
 __pycache__/
+
+# FPTaylor scratch output, written into the cwd on every run
+log/
+tmp/
