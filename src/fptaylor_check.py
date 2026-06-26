@@ -36,6 +36,7 @@ TIMEOUT = 120  # s/program; the optimizer can grind on cancellation-heavy rewrit
 #   sqrtquad    sqrt(x*x + x) - x                need x >= 0
 #   recipsqrt   1/(x + sqrt(x)) - 1/x            need x > 0
 #   recipback   1/(x - 1) - 1/x                  need x != 0, 1
+#   heron       sqrt(s(s-a)(s-b)(s-c)),s=(a+b+c)/2  need s,s-a,s-b,s-c > 0 (triangle ineqs)
 INTERVALS = {
     "quadratic": {"a": "[1,1.01]", "b": "[10,10.01]", "c": "[6,6.01]"},
     "sqrtminus": {"x": "[1,2]"},
@@ -45,6 +46,8 @@ INTERVALS = {
     "sqrtquad": {"x": "[1000,1000.01]"},  # cancellation as x grows (sqrt(x*x+x) -> x)
     "recipsqrt": {"x": "[1000,1000.01]"}, # cancellation as x grows (both terms -> 1/x)
     "recipback": {"x": "[1000,1000.01]"}, # cancellation as x grows (both terms -> 1/x)
+    # thin triangle (a ~ b+c): s-a ~ 0.08 cancels hard, but area stays > 0
+    "heron": {"a": "[9.8,9.85]", "b": "[5,5.01]", "c": "[5,5.01]"},
 }
 
 
