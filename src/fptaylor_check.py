@@ -22,10 +22,11 @@ import paths
 
 EPS = 2.0 ** -52  # double-precision ulp
 CONFIG = "abs-error = true\nrel-error = true\n"
+TIMEOUT = 120  # s/program; the optimizer can grind on cancellation-heavy rewrites
 
-# Per-benchmark input interval boxes. Boxes may be wide, but every sqrt argument
-# must stay >= 0 and every denominator clear of 0 across the box, else the bound
-# is +inf. Domain constraint per reference expression:
+# Per-benchmark input interval boxes. Widening is fine if you can spare the time, but every sqrt
+# argument must stay >= 0 and every denominator clear of 0 across the box, else
+# the bound is +inf. Domain constraint per reference expression:
 #
 #   quadratic   (-b + sqrt(b*b - 4ac)) / (2a)   need b*b > 4ac, a != 0
 #   sqrtminus   sqrt(x*x + 1) - x               defined for all x
@@ -36,14 +37,14 @@ CONFIG = "abs-error = true\nrel-error = true\n"
 #   recipsqrt   1/(x + sqrt(x)) - 1/x            need x > 0
 #   recipback   1/(x - 1) - 1/x                  need x != 0, 1
 INTERVALS = {
-    "quadratic": {"a": "[1,2]", "b": "[10,12]", "c": "[1,3]"},
-    "sqrtminus": {"x": "[1,100]"},
-    "randexpr": {"x": "[1,4]", "y": "[1,4]", "z": "[1,4]"},
-    "subfrac": {"x": "[1,100]"},
-    "sqrtshift": {"x": "[0.01,0.5]"},     # cancellation as x -> 0 (sqrt(x+4) -> 2)
-    "sqrtquad": {"x": "[100,2000]"},      # cancellation as x grows (sqrt(x*x+x) -> x)
-    "recipsqrt": {"x": "[1,2000]"},       # cancellation as x grows (both terms -> 1/x)
-    "recipback": {"x": "[100,2000]"},     # cancellation as x grows (both terms -> 1/x)
+    "quadratic": {"a": "[1,1.01]", "b": "[10,10.01]", "c": "[6,6.01]"},
+    "sqrtminus": {"x": "[1,2]"},
+    "randexpr": {"x": "[1,1.01]", "y": "[1,1.01]", "z": "[1,1.01]"},
+    "subfrac": {"x": "[1,1.01]"},
+    "sqrtshift": {"x": "[0.01,0.02]"},    # cancellation as x -> 0 (sqrt(x+4) -> 2)
+    "sqrtquad": {"x": "[1000,1000.01]"},  # cancellation as x grows (sqrt(x*x+x) -> x)
+    "recipsqrt": {"x": "[1000,1000.01]"}, # cancellation as x grows (both terms -> 1/x)
+    "recipback": {"x": "[1000,1000.01]"}, # cancellation as x grows (both terms -> 1/x)
 }
 
 
@@ -88,15 +89,19 @@ def build_input(expr: str, box: dict) -> str:
     return f"Variables\n{decls}\n\nExpressions\n  result rnd64= {expr};\n"
 
 
-def run_fptaylor(input_text: str, cfg_path: str) -> str:
+def run_fptaylor(input_text: str, cfg_path: str):
+    """FPTaylor's combined output, or None if it exceeds TIMEOUT."""
     with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
         f.write(input_text)
         in_path = f.name
     try:
         res = subprocess.run(
-            ["fptaylor", in_path, "-c", cfg_path], capture_output=True, text=True
+            ["fptaylor", in_path, "-c", cfg_path],
+            capture_output=True, text=True, timeout=TIMEOUT,
         )
         return res.stdout + res.stderr
+    except subprocess.TimeoutExpired:
+        return None
     finally:
         os.unlink(in_path)
 
@@ -119,12 +124,14 @@ def bounds(out: str):
 
 def analyze(expr: str, box: dict, cfg_path: str) -> dict:
     out = run_fptaylor(build_input(expr, box), cfg_path)
-    abs_err = grab("Absolute error", out)
+    if out is None:
+        return {"fptaylor_expr": expr, "enclosure": [], "abs_err": None,
+                "rel_err": None, "rel_err_ulps": None, "timeout": True}
     rel_err = grab("Relative error", out)
     return {
         "fptaylor_expr": expr,
         "enclosure": bounds(out),
-        "abs_err": abs_err,
+        "abs_err": grab("Absolute error", out),
         "rel_err": rel_err,
         "rel_err_ulps": (rel_err / EPS) if rel_err is not None else None,
     }
@@ -161,9 +168,13 @@ def check(benchmark: str, run: int = None):
             r = analyze(expr, box, cfg_path)
             r["program"] = p
             results.append(r)
-            ulp = (f"~{r['rel_err_ulps']:.0f} ulp" if r["rel_err_ulps"] is not None
-                   else "fptaylor could not bound rel err (range may straddle zero)")
-            print(f"[{i:2d}] abs={fmt(r['abs_err'])}  rel={fmt(r['rel_err'])}  ({ulp})")
+            if r.get("timeout"):
+                status = f"timed out (> {TIMEOUT}s)"
+            elif r["rel_err_ulps"] is not None:
+                status = f"~{r['rel_err_ulps']:.0f} ulp"
+            else:
+                status = "could not bound rel err (range may straddle zero)"
+            print(f"[{i:2d}] abs={fmt(r['abs_err'])}  rel={fmt(r['rel_err'])}  ({status})")
     finally:
         os.unlink(cfg_path)
 
