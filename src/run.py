@@ -17,9 +17,11 @@ Options:
     --steps N            mcmc samplers: MCMC steps per chain (default 10)
     --temperature T      sampling temperature applied to the model (default 1.0);
                          T<1 sharpens, T>1 flattens the grammar-constrained model
+    --model ID           HuggingFace model id to load (default Qwen2.5-14B-Instruct)
 
 Examples:
     uv run src/run.py quadratic --sampler mcmc-restart --steps 20
+    uv run src/run.py quadratic --model openai/gpt-oss-120b
 """
 
 import argparse
@@ -67,6 +69,7 @@ def main() -> None:
     parser.add_argument("--max-attempts", type=int, default=200)
     parser.add_argument("--steps", type=int, default=10)
     parser.add_argument("--temperature", type=float, default=1.0)
+    parser.add_argument("--model", default=MODEL_ID)
     args = parser.parse_args()
 
     grammar_str, prompt, reference = ensure_artifacts(args.benchmark)
@@ -78,12 +81,15 @@ def main() -> None:
     print(f"benchmark: {args.benchmark}")
     print(f"grammar:   {paths.LARK / f'{args.benchmark}.lark'} "
           f"({grammar_str.count(chr(10))} rules)")
-    print(f"model:     {MODEL_ID}")
+    print(f"model:     {args.model}")
     print(f"sampler:   {args.sampler}")
     print(f"temp:      {args.temperature}")
     print(f"target {args.samples} programs, {budget}\n")
 
-    llm = casa.LLM.from_pretrained(MODEL_ID)
+    # gpt-oss ships in MXFP4; "auto" keeps that native quant (forcing bf16 would
+    # dequantize to ~2x the memory). Other models default to bf16 as before.
+    load_kwargs = {"dtype": "auto"} if "gpt-oss" in args.model.lower() else {}
+    llm = casa.LLM.from_pretrained(args.model, **load_kwargs)
     grammar = casa.Grammar.from_string(grammar_str, llm.tokenizer)
 
     # casa prints each program live (verbose=True) as it is accepted/rejected.
@@ -114,7 +120,7 @@ def main() -> None:
     n, summary = paths.next_path(paths.EQUIVALENTS, args.benchmark)
     summary.write_text(json.dumps(
         {"benchmark": args.benchmark, "reference": reference,
-         "model": MODEL_ID, "sampler": args.sampler, "programs": programs},
+         "model": args.model, "sampler": args.sampler, "programs": programs},
         indent=2,
     ))
     print(f"\nwrote {len(programs)} distinct equivalent programs to {summary}")
