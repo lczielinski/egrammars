@@ -127,12 +127,22 @@ def analyze(expr: str, box: dict, cfg_path: str) -> dict:
     if out is None:
         return {"fptaylor_expr": expr, "enclosure": [], "abs_err": None,
                 "rel_err": None, "rel_err_ulps": None, "timeout": True}
+    abs_err = grab("Absolute error", out)
     rel_err = grab("Relative error", out)
+    encl = bounds(out)
+    # FPTaylor often omits relative error through divisions even when the value
+    # is far from zero. When it does, fall back to abs_err / min|value| from the
+    # value range -- a sound (looser) bound, valid only when the range avoids 0.
+    derived = False
+    if rel_err is None and abs_err is not None and encl and (encl[0] > 0 or encl[1] < 0):
+        rel_err = abs_err / min(abs(encl[0]), abs(encl[1]))
+        derived = True
     return {
         "fptaylor_expr": expr,
-        "enclosure": bounds(out),
-        "abs_err": grab("Absolute error", out),
+        "enclosure": encl,
+        "abs_err": abs_err,
         "rel_err": rel_err,
+        "rel_err_derived": derived,
         "rel_err_ulps": (rel_err / EPS) if rel_err is not None else None,
     }
 
@@ -171,9 +181,10 @@ def check(benchmark: str, run: int = None):
             if r.get("timeout"):
                 status = f"timed out (> {TIMEOUT}s)"
             elif r["rel_err_ulps"] is not None:
-                status = f"~{r['rel_err_ulps']:.0f} ulp"
+                tag = " (from abs/range)" if r.get("rel_err_derived") else ""
+                status = f"~{r['rel_err_ulps']:.0f} ulp{tag}"
             else:
-                status = "could not bound rel err (range may straddle zero)"
+                status = "no rel err: value range straddles zero"
             print(f"[{i:2d}] abs={fmt(r['abs_err'])}  rel={fmt(r['rel_err'])}  ({status})")
     finally:
         os.unlink(cfg_path)
