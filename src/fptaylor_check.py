@@ -1,10 +1,10 @@
 """Bound the rounding error of egrammar-harvested equivalent programs with FPTaylor.
 Requires the `fptaylor` binary on PATH.
 
-FPTaylor models the same thing the gappa checker does: inputs are exact doubles
-in the given interval box, every operation is rounded to IEEE-754 double
-(round-to-nearest), and we report the worst-case error of the rounded program
-against the ideal real-valued one over the box.
+Inputs are treated as exact doubles in the given interval box, every operation
+is rounded to IEEE-754 double (round-to-nearest, via rnd64=), and we report the
+worst-case error of the rounded program against the ideal real-valued one over
+the box.
 
 Usage:
     uv run src/fptaylor_check.py quadratic
@@ -20,22 +20,31 @@ import tempfile
 
 import paths
 
-EPS = 2.0 ** -52  # double-precision ulp, for the ulp estimate
-
-# Same interval boxes as the gappa checker; FPTaylor wants bare "lo, hi".
-INTERVALS = {
-    "quadratic": {"a": "[1,1.01]", "b": "[10,10.01]", "c": "[6,6.01]"},
-    "sqrtminus": {"x": "[1,2]"},
-    "randexpr": {"x": "[1,1.01]", "y": "[1,1.01]", "z": "[1,1.01]"},
-    "subfrac": {"x": "[1,1.01]"},
-    "sqrtshift": {"x": "[0.01,0.02]"},    # cancellation as x -> 0 (sqrt(x+4) -> 2)
-    "sqrtquad": {"x": "[1000,1000.01]"},  # cancellation as x grows (sqrt(x*x+x) -> x)
-    "recipsqrt": {"x": "[1000,1000.01]"}, # cancellation as x grows (both terms -> 1/x)
-    "recipback": {"x": "[1000,1000.01]"}, # cancellation as x grows (both terms -> 1/x)
-}
-
-# rel-error is off in FPTaylor by default; abs-error is on. Turn both on.
+EPS = 2.0 ** -52  # double-precision ulp
 CONFIG = "abs-error = true\nrel-error = true\n"
+
+# Per-benchmark input interval boxes. Boxes may be wide, but every sqrt argument
+# must stay >= 0 and every denominator clear of 0 across the box, else the bound
+# is +inf. Domain constraint per reference expression:
+#
+#   quadratic   (-b + sqrt(b*b - 4ac)) / (2a)   need b*b > 4ac, a != 0
+#   sqrtminus   sqrt(x*x + 1) - x               defined for all x
+#   randexpr    ... sqrt(x*z), z/sqrt(z) ...     need x, y, z > 0
+#   subfrac     1/(x+1) - 1/x                    need x != 0, -1
+#   sqrtshift   sqrt(x + 4) - 2                  need x > -4; keep x > 0 (rel err)
+#   sqrtquad    sqrt(x*x + x) - x                need x >= 0
+#   recipsqrt   1/(x + sqrt(x)) - 1/x            need x > 0
+#   recipback   1/(x - 1) - 1/x                  need x != 0, 1
+INTERVALS = {
+    "quadratic": {"a": "[1,2]", "b": "[10,12]", "c": "[1,3]"},
+    "sqrtminus": {"x": "[1,100]"},
+    "randexpr": {"x": "[1,4]", "y": "[1,4]", "z": "[1,4]"},
+    "subfrac": {"x": "[1,100]"},
+    "sqrtshift": {"x": "[0.01,0.5]"},     # cancellation as x -> 0 (sqrt(x+4) -> 2)
+    "sqrtquad": {"x": "[100,2000]"},      # cancellation as x grows (sqrt(x*x+x) -> x)
+    "recipsqrt": {"x": "[1,2000]"},       # cancellation as x grows (both terms -> 1/x)
+    "recipback": {"x": "[100,2000]"},     # cancellation as x grows (both terms -> 1/x)
+}
 
 
 def tokenize(s):
@@ -48,15 +57,19 @@ def parse(toks):
         lst = []
         while toks[0] != ")":
             lst.append(parse(toks))
-        toks.pop(0)  # ")"
+        toks.pop(0)
         return lst
     return t
 
 
+def fmt(v):
+    return f"{v:.3e}" if v is not None else "n/a"
+
+
 def to_fptaylor(n):
-    """FPCore s-expression -> FPTaylor infix string (same surface as Gappa infix)."""
+    """FPCore s-expression -> FPTaylor infix string."""
     if isinstance(n, str):
-        return n  # number or variable
+        return n
     head = n[0]
     if head == "FPCore":
         return to_fptaylor(n[2])  # (FPCore (args) <expr>)
@@ -110,15 +123,11 @@ def analyze(expr: str, box: dict, cfg_path: str) -> dict:
     rel_err = grab("Relative error", out)
     return {
         "fptaylor_expr": expr,
-        "enclosure": bounds(out),  # [lo, hi] real-valued range
+        "enclosure": bounds(out),
         "abs_err": abs_err,
         "rel_err": rel_err,
         "rel_err_ulps": (rel_err / EPS) if rel_err is not None else None,
     }
-
-
-def fmt(v):
-    return f"{v:.3e}" if v is not None else "n/a"
 
 
 def check(benchmark: str, run: int = None):
