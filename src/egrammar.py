@@ -16,13 +16,12 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 from collections import defaultdict
 from dataclasses import dataclass
 
 import paths
 
-SATURATION_RUNS = int(os.environ.get("EGRAMMAR_SATURATION_RUNS", "6"))
+SATURATION_RUNS = 6
 START = "__start__"
 
 
@@ -35,12 +34,12 @@ class ENode:
 EClassMapping = dict[str, set[ENode]]
 
 
-def saturate(benchmark_source: str) -> "EGraph":
+def saturate(benchmark_source: str, runs: int = SATURATION_RUNS) -> "EGraph":
     from egglog.bindings import EGraph
 
     source = (paths.ROOT / "rules.egglog").read_text()
     source += benchmark_source
-    source += f"\n(run {SATURATION_RUNS})"
+    source += f"\n(run {runs})"
     # Mark `start` so we can find its e-class after saturation.
     source += f"\n(relation {START} (Math))\n({START} start)"
     egraph = EGraph(record=True)
@@ -305,11 +304,11 @@ def read_reference(benchmark: str) -> str:
     return content.splitlines()[0].removeprefix(";; ")
 
 
-def build(benchmark: str) -> tuple[str, str]:
+def build(benchmark: str, runs: int = SATURATION_RUNS) -> tuple[str, str]:
     content = (paths.BENCHMARKS / f"{benchmark}.egglog").read_text()
     reference = content.splitlines()[0].removeprefix(";; ")
 
-    root, eclasses = extract(saturate(content))
+    root, eclasses = extract(saturate(content, runs))
     root, eclasses = strip_identity_enodes(root, eclasses)
     grammar = intersect(root, eclasses)
     return reference, grammar
@@ -334,9 +333,13 @@ def write_grammar(benchmark: str, grammar: str) -> Path:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("benchmark", help="benchmark name, e.g. quadratic")
+    parser.add_argument("--saturation", type=int, default=SATURATION_RUNS,
+                        help=f"rewrite-rule iterations (default {SATURATION_RUNS}); "
+                             "lower it for symmetry-heavy expressions whose grammar "
+                             "explodes")
     args = parser.parse_args()
 
-    reference, grammar = build(args.benchmark)
+    reference, grammar = build(args.benchmark, args.saturation)
     grammar_path = write_grammar(args.benchmark, grammar)
 
     print(f"reference: {reference}")

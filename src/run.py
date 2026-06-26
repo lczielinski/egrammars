@@ -23,6 +23,9 @@ Options:
                          into the prompt before grammar-constrained sampling. Lets
                          a reasoning model (e.g. gpt-oss) actually think first.
     --reason-tokens N    token budget for the reasoning phase (default 1024)
+    --saturation N       rewrite-rule iterations when compiling a grammar (default
+                         6; only used if not cached). Lower it for symmetry-heavy
+                         expressions whose grammar explodes (e.g. heron: 4)
 
 Examples:
     uv run src/run.py quadratic --sampler mcmc-restart --steps 20
@@ -40,15 +43,16 @@ MCMC_VARIANTS = ("uniform", "priority", "restart")
 SAMPLERS = REJECTION + tuple(f"mcmc-{v}" for v in MCMC_VARIANTS)
 
 
-def ensure_artifacts(benchmark: str) -> tuple[str, str, str]:
+def ensure_artifacts(benchmark: str, saturation: int) -> tuple[str, str, str]:
     import egrammar
 
     grammar_path = paths.LARK / f"{benchmark}.lark"
     if grammar_path.exists():
         reference, grammar = egrammar.read_reference(benchmark), grammar_path.read_text()
     else:
-        print(f"Compiling grammar for {benchmark!r} (no cached grammar)")
-        reference, grammar = egrammar.build(benchmark)
+        print(f"Compiling grammar for {benchmark!r} (no cached grammar, "
+              f"saturation={saturation})")
+        reference, grammar = egrammar.build(benchmark, saturation)
         egrammar.write_grammar(benchmark, grammar)
     return grammar, egrammar.make_prompt(reference), reference
 
@@ -115,9 +119,13 @@ def main() -> None:
     parser.add_argument("--model", default=MODEL_ID)
     parser.add_argument("--reason", action="store_true")
     parser.add_argument("--reason-tokens", type=int, default=1024)
+    parser.add_argument("--saturation", type=int, default=6,
+                        help="rewrite-rule iterations when compiling a grammar "
+                             "(only used if not already cached; lower it for "
+                             "symmetry-heavy expressions like heron)")
     args = parser.parse_args()
 
-    grammar_str, prompt, reference = ensure_artifacts(args.benchmark)
+    grammar_str, prompt, reference = ensure_artifacts(args.benchmark, args.saturation)
 
     import casa
 
