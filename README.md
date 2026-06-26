@@ -1,4 +1,4 @@
-# egrammar
+# egrammars
 
 Compile an e-graph of equivalent programs into a context-free grammar, then sample
 from it with grammar-constrained sampling via the
