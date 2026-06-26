@@ -86,8 +86,6 @@ def main() -> None:
     print(f"temp:      {args.temperature}")
     print(f"target {args.samples} programs, {budget}\n")
 
-    # gpt-oss ships in MXFP4; "auto" keeps that native quant (forcing bf16 would
-    # dequantize to ~2x the memory). Other models default to bf16 as before.
     load_kwargs = {"dtype": "auto"} if "gpt-oss" in args.model.lower() else {}
     llm = casa.LLM.from_pretrained(args.model, **load_kwargs)
     grammar = casa.Grammar.from_string(grammar_str, llm.tokenizer)
