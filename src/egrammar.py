@@ -16,12 +16,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from collections import defaultdict
 from dataclasses import dataclass
 
 import paths
 
-SATURATION_RUNS = 6
+SATURATION_RUNS = int(os.environ.get("EGRAMMAR_SATURATION_RUNS", "6"))
 START = "__start__"
 
 
