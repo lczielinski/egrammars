@@ -124,18 +124,18 @@ def main() -> None:
     print(f"\nwrote {len(programs)} distinct equivalent programs to {summary}")
 
     if programs:
-        import gappa_check
-        print(f"\n{'=' * 70}\ngappa rounding-error analysis\n{'=' * 70}")
+        import fptaylor_check
+        print(f"\n{'=' * 70}\nfptaylor rounding-error analysis\n{'=' * 70}")
         try:
-            gappa_check.check(args.benchmark, run=n)
+            fptaylor_check.check(args.benchmark, run=n)
         except KeyError:
-            print(f"skipping gappa: no interval box configured for "
-                  f"{args.benchmark!r} (add one to INTERVALS in gappa_check.py)")
+            print(f"skipping fptaylor: no interval box configured for "
+                  f"{args.benchmark!r} (add one to INTERVALS in fptaylor_check.py)")
         except FileNotFoundError as e:
-            # Either the equivalents file (shouldn't happen) or the gappa binary.
-            msg = "gappa binary not found on PATH" if "gappa" in str(e).lower() \
+            # Either the equivalents file (shouldn't happen) or the fptaylor binary.
+            msg = "fptaylor binary not found on PATH" if "fptaylor" in str(e).lower() \
                 else str(e)
-            print(f"skipping gappa: {msg}")
+            print(f"skipping fptaylor: {msg}")
 
 
 if __name__ == "__main__":

@@ -4,10 +4,11 @@ Four sibling folders, one role each (the prompt is built in memory, not cached):
     benchmarks/   input:  <name>.egglog   (reference program + rewrite rules)
     lark/         output: <name>.lark     (compiled equivalence grammar)
     equivalents/  output: <name>-NNN.json (one sampling run's programs)
-    gappa/        output: <name>-NNN.json (rounding-error bounds for that run)
+    gappa/        output: <name>-NNN.json (rounding-error bounds, Gappa)
+    fptaylor/     output: <name>-NNN.json (rounding-error bounds, FPTaylor)
 
-A gappa file reuses the run number of the equivalents file it analyzed, so the
-two stay linked. NNN is zero-padded to 3 digits.
+An analysis file reuses the run number of the equivalents file it analyzed, so
+the two stay linked. NNN is zero-padded to 3 digits.
 """
 
 from __future__ import annotations
@@ -20,6 +21,7 @@ BENCHMARKS = ROOT / "benchmarks"
 LARK = ROOT / "lark"
 EQUIVALENTS = ROOT / "equivalents"
 GAPPA = ROOT / "gappa"
+FPTAYLOR = ROOT / "fptaylor"
 
 
 def _run_numbers(folder: Path, benchmark: str) -> list[int]:
