@@ -18,10 +18,15 @@ Options:
     --temperature T      sampling temperature applied to the model (default 1.0);
                          T<1 sharpens, T>1 flattens the grammar-constrained model
     --model ID           HuggingFace model id to load (default Qwen2.5-14B-Instruct)
+    --reason             two-phase: let the model reason (unconstrained) about
+                         which rewrites improve accuracy, then fold that reasoning
+                         into the prompt before grammar-constrained sampling. Lets
+                         a reasoning model (e.g. gpt-oss) actually think first.
+    --reason-tokens N    token budget for the reasoning phase (default 1024)
 
 Examples:
     uv run src/run.py quadratic --sampler mcmc-restart --steps 20
-    uv run src/run.py quadratic --model openai/gpt-oss-120b
+    uv run src/run.py quadratic --model openai/gpt-oss-120b --reason
 """
 
 import argparse
@@ -59,6 +64,44 @@ def distinct(results) -> list[str]:
     return programs
 
 
+def reasoning_prompt(reference: str) -> str:
+    """Phase-1 prompt: same header/reference, but ask the model to analyze where
+    this expression loses accuracy instead of emitting a program."""
+    return (
+        (paths.ROOT / "prompt_header.md").read_text()
+        + f"\n\nThe original program is:\n{reference}\n\n"
+        "Think step by step about THIS expression's floating-point behavior: where "
+        "does it lose accuracy (catastrophic cancellation, division by a near-zero "
+        "or near-equal quantity, growth of intermediate magnitudes), and which of "
+        "the rewrites above would most improve its worst-case rounding error? "
+        "Reason in prose; do NOT write any FPCore program yet."
+    )
+
+
+def generate_reasoning(llm, reference: str, max_new_tokens: int,
+                       temperature: float) -> str:
+    """Run the model unconstrained on the reasoning prompt; return its text."""
+    import torch
+
+    text = llm.format_prompt(reasoning_prompt(reference))
+    ids = llm.tokenizer.encode(
+        text, return_tensors="pt", add_special_tokens=False
+    ).to(llm.device)
+    gen_kwargs = dict(max_new_tokens=max_new_tokens,
+                      pad_token_id=llm.tokenizer.pad_token_id)
+    if temperature and temperature > 0:
+        gen_kwargs.update(do_sample=True, temperature=temperature)
+    with torch.no_grad():
+        out = llm.model.generate(ids, **gen_kwargs)
+    return llm.tokenizer.decode(out[0][ids.shape[1]:], skip_special_tokens=True).strip()
+
+
+def prompt_with_reasoning(base_prompt: str, reasoning: str) -> str:
+    """Fold phase-1 reasoning into the phase-2 (grammar-constrained) prompt."""
+    return (f"{base_prompt}\n\nYour analysis of this expression:\n{reasoning}\n\n"
+            "Using that analysis, produce the program.")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -70,6 +113,8 @@ def main() -> None:
     parser.add_argument("--steps", type=int, default=10)
     parser.add_argument("--temperature", type=float, default=1.0)
     parser.add_argument("--model", default=MODEL_ID)
+    parser.add_argument("--reason", action="store_true")
+    parser.add_argument("--reason-tokens", type=int, default=1024)
     args = parser.parse_args()
 
     grammar_str, prompt, reference = ensure_artifacts(args.benchmark)
@@ -84,11 +129,20 @@ def main() -> None:
     print(f"model:     {args.model}")
     print(f"sampler:   {args.sampler}")
     print(f"temp:      {args.temperature}")
+    print(f"reason:    {args.reason}")
     print(f"target {args.samples} programs, {budget}\n")
 
     load_kwargs = {"dtype": "auto"} if "gpt-oss" in args.model.lower() else {}
     llm = casa.LLM.from_pretrained(args.model, **load_kwargs)
     grammar = casa.Grammar.from_string(grammar_str, llm.tokenizer)
+
+    reasoning = None
+    if args.reason:
+        print(f"{'=' * 70}\nreasoning phase (unconstrained)\n{'=' * 70}")
+        reasoning = generate_reasoning(llm, reference, args.reason_tokens,
+                                       args.temperature)
+        print(f"{reasoning}\n{'=' * 70}\n")
+        prompt = prompt_with_reasoning(prompt, reasoning)
 
     # casa prints each program live (verbose=True) as it is accepted/rejected.
     if args.sampler in REJECTION:
@@ -118,7 +172,8 @@ def main() -> None:
     n, summary = paths.next_path(paths.EQUIVALENTS, args.benchmark)
     summary.write_text(json.dumps(
         {"benchmark": args.benchmark, "reference": reference,
-         "model": args.model, "sampler": args.sampler, "programs": programs},
+         "model": args.model, "sampler": args.sampler,
+         "reasoning": reasoning, "programs": programs},
         indent=2,
     ))
     print(f"\nwrote {len(programs)} distinct equivalent programs to {summary}")
