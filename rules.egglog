@@ -84,3 +84,23 @@
   (Div x y))
 (rewrite (Div (Mul a x) a)
   x)
+
+;; --- General identities (high fan-out: combined with the forward rules above
+;; they grow the e-graph fast, so keep --saturation low for big expressions) ---
+
+;; Factoring: the reverse of the (Mul a (Add/Sub ...)) distribution rules. Always
+;; valid; lets the e-graph reach factored forms (e.g. Heron's binomial product).
+(rewrite (Add (Mul a b) (Mul a c))
+  (Mul a (Add b c)))
+(rewrite (Sub (Mul a b) (Mul a c))
+  (Mul a (Sub b c)))
+
+;; sqrt distributes over product and quotient (nonnegative operands, as in the
+;; benchmark domains): moves factors in and out of a square root.
+(birewrite (Sqrt (Mul a b))
+  (Mul (Sqrt a) (Sqrt b)))
+(birewrite (Sqrt (Div a b))
+  (Div (Sqrt a) (Sqrt b)))
+;; sqrt(a) * sqrt(a) = a
+(rewrite (Mul (Sqrt a) (Sqrt a))
+  a)
