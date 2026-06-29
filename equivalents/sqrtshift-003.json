@@ -1,0 +1,29 @@
+{
+  "benchmark": "sqrtshift",
+  "reference": "sqrt(x + 4) - 2",
+  "model": "openai/gpt-oss-120b",
+  "sampler": "asap",
+  "reasoning": "analysisWe need to think step by step about the expression sqrt(x + 4) - 2. The user asks: \"Think step by step about THIS expression's floating-point behavior: where does it lose accuracy (catastrophic cancellation, division by a near-zero or near-equal quantity, growth of intermediate magnitudes), and which of the rewrites above would most improve its worst-case rounding error? Reason in prose; do NOT write any FPCore program yet.\"\n\nSo we need to discuss floating point issues: sqrt(x+4) - 2 can suffer cancellation when sqrt(x+4) is close to 2, i.e., when x+4 \u2248 4 => x\u22480. So near x=0, sqrt(x+4) \u2248 2 + x/4 (first order). Subtracting 2 yields small result ~x/4, but the subtraction may cause loss of significance. So we can rationalize by using identity: sqrt(a) - b = (a - b^2) / (sqrt(a) + b). Here a = x+4, b=2 => sqrt(x+4) - 2 = (x+4 - 4) / (sqrt(x+4) + 2) = x / (sqrt(x+4) + 2). That's a classic trick to avoid cancellation. This is similar to conjugate rationalization: Multiply numerator and denominator by sqrt(x+4)+2, giving (x) / (sqrt(x+4)+2). That expression uses division but no subtraction near equal. The denominator is near 4 when x\u22480, so stable. So rewrite: (/ x (+ (sqrt (+ x 4)) 2)). That could be expressed with / and +.\n\nThus the best rewrite is rationalizing the difference sqrt(x+4) - 2 via conjugate: multiply numerator and denominator by sqrt(x+4)+2. That yields x/(sqrt(x+4)+2). This reduces catastrophic cancellation.\n\nWe can also note possible other rewrites: maybe rewrite as /(* x 1) ... but main beneficial rewrite is rationalization.\n\nSo answer: discuss loss of accuracy near x=0 due to cancellation; best rewrite is using conjugate rationalization to get x/(sqrt(x+4)+2). Could also apply / as multiplication by reciprocal, but the main is rationalization.\n\nWe should respond in prose, not output FPCore.assistantfinalThe expression  \n\n```\nsqrt(x + 4) - 2\n```  \n\ncomputes the difference between two numbers that can be almost equal.  \nWhen **x \u2248 0**, the argument of the square\u2011root is close to 4, so  \n\n```\nsqrt(x + 4) \u2248 2 + x/4   (first\u2011order Taylor expansion)\n```  \n\nand the subtraction  \n\n```\nsqrt(x + 4) - 2 \u2248 x/4\n```  \n\nproduces a small result that is obtained by canceling the leading\u2011order term (the \u201c2\u201d). In floating\u2011point arithmetic the two large, nearly identical operands are each rounded before the subtraction, so the leading digits cancel and only the lower\u2011significance bits survive. This **catastrophic cancellation** can cause a loss of many bits of precision, especially when |x| is much smaller than 4.\n\nThe expression contains no division, so there is no danger of overflow/underflow from a large intermediate, and the only potentially unsafe operation is the subtraction itself. The square\u2011root is well\u2011conditioned (its relative error is about half that of its argument), so the main source of inaccuracy is the final `- 2`.\n\n### How to improve the rounding\n\nThe standard way to eliminate the cancellation is to **rationalize the difference** using the conjugate of the numerator:\n\n```\nsqrt(x + 4) - 2\n= (sqrt(x + 4) - 2) * (sqrt(x + 4) + 2) / (sqrt(x + 4) + 2)\n= ( (x + 4) - 4 ) / (sqrt(x + 4) + 2)\n= x / (sqrt(x + 4) + 2)\n```\n\nNow the numerator is just `x`, which is already small when the original result is small, but it is **not** subject to cancellation. The denominator is `sqrt(x+4)+2`, which is near 4 for small `x` and never approaches zero, so the division is numerically stable. The rewrite therefore replaces a subtraction between nearly equal numbers with a single division by a well\u2011scaled quantity, dramatically reducing the worst\u2011case rounding error.\n\nAmong the permitted rewrites, this is precisely the *conjugate rationalization* pattern:\n\n```\na - b   \u2192   (a\u00b2 - b\u00b2) / (a + b)   when a = sqrt(...), b =",
+  "programs": [
+    "(FPCore (x) (/ x (+ (sqrt (+ x 4)) 2)))",
+    "(FPCore (x) (/ (+ (* 2 2) (- (+ x 4))) (+ (- (sqrt (+ x 4))) (- 2))))",
+    "(FPCore (x) (* (/ 1 (+ (- (sqrt (+ x 4))) (- 2))) (+ (- (* 2 -2)) (- (+ 4 x)))))",
+    "(FPCore (x) (- (sqrt (+ x 4)) 2))",
+    "(FPCore (x) (/ (- x) (+ (- (sqrt (+ x 4))) (- 2))))",
+    "(FPCore (x) (/ x (+ (sqrt (+ 4 x)) 2)))",
+    "(FPCore (x) (/ (+ (* -2 -2) (- (+ x 4))) (+ (- (sqrt (+ x 4))) (- 2))))",
+    "(FPCore (x) (+ (/ (+ x (* -2 (- 2))) (+ (sqrt (+ x 4)) 2)) (* -2 (* -2 (/ 1 (+ (- (sqrt (+ x 4))) (- 2)))))))",
+    "(FPCore (x) (/ x (+ 2 (sqrt (+ x 4)))))",
+    "(FPCore (x) (/ (+ 4 (- (+ x 4))) (+ (- (sqrt (+ x 4))) (- 2))))",
+    "(FPCore (x) (/ (- (* 2 2) (+ (* 2 2) x)) (+ (- (sqrt (+ x 4))) (- 2))))",
+    "(FPCore (x) (- (/ x (+ (- (sqrt (+ x 4))) (- 2)))))",
+    "(FPCore (x) (/ (+ (* -2 (- 2)) (- (+ 4 x))) (+ (- 2) (- (sqrt (+ 4 x))))))",
+    "(FPCore (x) (/ (+ (* (- 2) (- 2)) (- (+ x 4))) (+ (- 2) (- (sqrt (+ x 4))))))",
+    "(FPCore (x) (+ (/ 4 (- (- 2) (sqrt (+ x 4)))) (/ (- (+ x 4)) (- (- 2) (sqrt (+ x 4))))))",
+    "(FPCore (x) (+ (* (/ 1 (+ (- 2) (- (sqrt (+ x 4))))) (- (* -2 2))) (- (/ (+ (* -2 (- 2)) x) (+ (- (sqrt (+ x 4))) -2)))))",
+    "(FPCore (x) (/ x (+ (sqrt (+ x (* 2 2))) 2)))",
+    "(FPCore (x) (/ x (+ (sqrt (+ (* 2 2) x)) 2)))",
+    "(FPCore (x) (+ (- (* (/ 1 (+ (- (sqrt (+ x 4))) (- 2))) (+ (* -2 -2) x))) (/ (* -2 (- 2)) (+ (- (sqrt (+ x 4))) (- 2)))))",
+    "(FPCore (x) (/ (+ (- (* 2 -2)) (- (+ x 4))) (+ (- (sqrt (+ x 4))) -2)))"
+  ]
+}
