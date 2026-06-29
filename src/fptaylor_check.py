@@ -152,7 +152,7 @@ def analyze(expr: str, box: dict, cfg_path: str) -> dict:
     }
 
 
-def check(benchmark: str, run: int = None):
+def check(benchmark: str, run: int | None = None):
     """Bound the rounding error of one equivalents run and write the results."""
     if run is not None:
         n, src = run, paths.path_for(paths.EQUIVALENTS, benchmark, run)

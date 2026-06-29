@@ -18,6 +18,7 @@ import argparse
 import json
 from collections import defaultdict
 from dataclasses import dataclass
+from pathlib import Path
 
 import paths
 
