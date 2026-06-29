@@ -2,7 +2,7 @@
 
 Options:
     benchmark            benchmark name, e.g. quadratic (positional, required)
-    --samples N          distinct programs to collect / chains to run (default 20)
+    --samples N          distinct programs to collect (default 20)
     --sampler NAME       which casa sampler (default asap); one of:
                            cars   rejection + first-token constraint + learning
                            asap   cars + grammar mask every step (no rejects)
@@ -25,7 +25,7 @@ Options:
     --reason-tokens N    token budget for the reasoning phase (default 1024)
     --saturation N       rewrite-rule iterations when compiling a grammar (default
                          6; only used if not cached). Lower it for symmetry-heavy
-                         expressions whose grammar explodes (e.g. heron: 4)
+                         expressions whose grammar explodes 
 
 Examples:
     uv run src/run.py quadratic --sampler mcmc-restart --steps 20
@@ -69,8 +69,6 @@ def distinct(results) -> list[str]:
 
 
 def reasoning_prompt(reference: str) -> str:
-    """Phase-1 prompt: same header/reference, but ask the model to analyze where
-    this expression loses accuracy instead of emitting a program."""
     return (
         (paths.ROOT / "prompt_header.md").read_text()
         + f"\n\nThe original program is:\n{reference}\n\n"
@@ -101,7 +99,6 @@ def generate_reasoning(llm, reference: str, max_new_tokens: int,
 
 
 def prompt_with_reasoning(base_prompt: str, reasoning: str) -> str:
-    """Fold phase-1 reasoning into the phase-2 (grammar-constrained) prompt."""
     return (f"{base_prompt}\n\nYour analysis of this expression:\n{reasoning}\n\n"
             "Using that analysis, produce the program.")
 

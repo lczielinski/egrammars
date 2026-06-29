@@ -1,0 +1,11 @@
+{
+  "benchmark": "sqrtshift",
+  "reference": "sqrt(x + 4) - 2",
+  "model": "Qwen/Qwen2.5-14B-Instruct",
+  "sampler": "asap",
+  "reasoning": null,
+  "programs": [
+    "(FPCore (x) (- (/ (- (* (- 2) 2)) (+ (- 2) (- (sqrt (+ x 4))))) (/ (+ (* (- 2) (- 2)) x) (+ (- 2) (- (sqrt (+ x 4)))))))",
+    "(FPCore (x) (- (/ (- (* (- 2) 2)) (- (+ 2 (sqrt (+ x 4))))) (+ (/ (* 2 2) (- (+ 2 (sqrt (+ x 4))))) (/ x (- (+ 2 (sqrt (+ x 4))))))))"
+  ]
+}

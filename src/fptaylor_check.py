@@ -22,14 +22,11 @@ import paths
 
 EPS = 2.0 ** -52  # double-precision ulp
 CONFIG = "abs-error = true\nrel-error = true\n"
-TIMEOUT = 120  # s/program; the optimizer can grind on cancellation-heavy rewrites
+TIMEOUT = 120
 
-# Per-benchmark input interval boxes. Widening is fine if you can spare the time, but every sqrt
-# argument must stay >= 0 and every denominator clear of 0 across the box, else
-# the bound is +inf. Domain constraint per reference expression:
-#
-#   quadratic   (-b + sqrt(b*b - 4ac)) / (2a)   need b*b > 4ac, a != 0
-#   sqrtminus   sqrt(x*x + 1) - x               defined for all x
+# Per-benchmark input interval boxes
+#   quadratic   (-b + sqrt(b*b - 4ac)) / (2a)    need b*b > 4ac, a != 0
+#   sqrtminus   sqrt(x*x + 1) - x                defined for all x
 #   randexpr    ... sqrt(x*z), z/sqrt(z) ...     need x, y, z > 0
 #   subfrac     1/(x+1) - 1/x                    need x != 0, -1
 #   sqrtshift   sqrt(x + 4) - 2                  need x > -4; keep x > 0 (rel err)
@@ -68,6 +65,11 @@ def parse(toks):
 
 def fmt(v):
     return f"{v:.3e}" if v is not None else "n/a"
+
+
+def rank_key(r: dict):
+    rel = r.get("rel_err")
+    return (rel is None, rel if rel is not None else 0.0)
 
 
 def to_fptaylor(n):
@@ -151,11 +153,7 @@ def analyze(expr: str, box: dict, cfg_path: str) -> dict:
 
 
 def check(benchmark: str, run: int = None):
-    """Bound the rounding error of one equivalents run and write the results.
-
-    Returns the output path. Raises FileNotFoundError if the equivalents file is
-    missing and KeyError if no interval box is configured for the benchmark.
-    """
+    """Bound the rounding error of one equivalents run and write the results."""
     if run is not None:
         n, src = run, paths.path_for(paths.EQUIVALENTS, benchmark, run)
     else:
@@ -192,6 +190,18 @@ def check(benchmark: str, run: int = None):
     finally:
         os.unlink(cfg_path)
 
+    ranked = sorted(results, key=rank_key)
+    print(f"\n{'=' * 70}\nranked by relative error, best first "
+          f"(* = derived from value range)\n{'=' * 70}")
+    for rank, r in enumerate(ranked):
+        if r.get("timeout"):
+            label = "timeout"
+        elif r["rel_err_ulps"] is not None:
+            label = f"{r['rel_err_ulps']:.1f} ulp{'*' if r.get('rel_err_derived') else ''}"
+        else:
+            label = "unbounded"
+        print(f"{rank:2d}. {label:>13}  abs={fmt(r['abs_err'])}  {r['program']}")
+
     paths.FPTAYLOR.mkdir(parents=True, exist_ok=True)
     dst = paths.path_for(paths.FPTAYLOR, benchmark, n)
     dst.write_text(json.dumps({
@@ -201,8 +211,9 @@ def check(benchmark: str, run: int = None):
         "rounding": "float64, round-to-nearest (rnd64=)",
         "intervals": box,
         "note": "Certified worst-case bounds over this interval box; valid only "
-                "within it. The accuracy ranking can reorder in other regions.",
-        "results": results,
+                "within it. The accuracy ranking can reorder in other regions. "
+                "results are ordered best-first by relative error.",
+        "results": ranked,
     }, indent=2))
     print(f"\nread {src}\nwrote {len(results)} results to {dst}")
     return dst
