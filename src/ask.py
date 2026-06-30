@@ -22,7 +22,7 @@ would you rewrite it to avoid the cancellation?
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--model", default="openai/gpt-oss-20b")
+    ap.add_argument("--model", default="openai/gpt-oss-120b")
     ap.add_argument("--effort", default="high", choices=["low", "medium", "high"],
                     help="gpt-oss reasoning effort (default high)")
     ap.add_argument("--max-new-tokens", type=int, default=4096)
