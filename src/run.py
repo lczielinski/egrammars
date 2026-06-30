@@ -33,27 +33,23 @@ Examples:
 
 import argparse
 import json
-
+import os
 import paths
+
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 
 MODEL_ID = "Qwen/Qwen2.5-14B-Instruct"
 REJECTION = ("rs", "ars", "rsft", "cars", "asap", "gcd")
 MCMC_VARIANTS = ("uniform", "priority", "restart")
 SAMPLERS = REJECTION + tuple(f"mcmc-{v}" for v in MCMC_VARIANTS)
 
-def reasoning_goal(n_samples: int) -> str:
-    """Steer the (shared) reasoning phase to plan the whole batch of distinct
-    rewrites up front, so each constrained sample draws from that plan instead of
-    orbiting a single champion."""
-    return (
-        f"\n\nYou will produce {n_samples} DISTINCT programs for this expression, "
-        "collected one at a time. Before writing any, use your reasoning to plan "
-        f"the full set: enumerate up to {n_samples} genuinely different accuracy-"
-        "improving rewrites -- re-association, distribution, fraction splitting, "
-        "conjugate rationalization -- and the input regime where each is most "
-        "accurate. Favour rewrites that change rounding, not minor reorderings. "
-        "Then output one program; you'll be asked for the rest."
-    )
+REASONING_GOAL = (
+    "\n\nThink about a few different ways to rewrite this expression for better "
+    "floating-point accuracy -- re-association, distribution, fraction splitting, "
+    "conjugate rationalization -- and the input regime where each helps. Sketch "
+    "several ideas; there's no fixed number and you don't need to pick a single "
+    "best. Then output one program."
+)
 
 
 def ensure_artifacts(benchmark: str, saturation: int) -> tuple[str, str, str]:
@@ -189,12 +185,15 @@ def main() -> None:
     if args.sampler in REJECTION and channel_ids(llm.tokenizer):
         print(f"{'=' * 70}\nreasoning phase\n{'=' * 70}")
         prompt_ids, reasoning, opened = think_then_handoff(
-            llm, prompt + reasoning_goal(args.samples), args.temperature)
+            llm, prompt + REASONING_GOAL, args.temperature)
         print(f"\n{'=' * 70}\n")
         if not opened:
             print("warning: model hit the context limit without opening its "
                   "final channel; sampling without reasoning.\n")
             prompt_ids = None
+        import torch
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
     # casa prints each program live (verbose=True) as it is accepted/rejected.
     if args.sampler in REJECTION:
