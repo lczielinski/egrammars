@@ -45,14 +45,21 @@ REJECTION = ("rs", "ars", "rsft", "cars", "asap", "gcd")
 MCMC_VARIANTS = ("uniform", "priority", "restart")
 SAMPLERS = REJECTION + tuple(f"mcmc-{v}" for v in MCMC_VARIANTS)
 
-# Asks the reasoning phase for a menu of distinct rewrite ideas (not a program);
-# each idea then conditions its own batch of constrained samples.
-IDEAS_GOAL = (
-    "\n\nFirst reason about where this expression loses floating-point accuracy. "
-    "Then, instead of writing a program, list several distinct rewrite ideas that "
-    "would improve accuracy -- one per line, numbered, each naming the rewrite and "
-    "the input regime where it helps. Do not write an FPCore program."
-)
+def ideas_prompt(reference: str) -> str:
+    """Standalone prompt for the menu phase. Deliberately omits make_prompt's
+    'output one program' rules -- mixing the two makes the model agonize over
+    whether to emit a program or a list of ideas."""
+    return (
+        "The following expression is evaluated in IEEE-754 double precision:\n\n"
+        f"    {reference}\n\n"
+        "It is built from + - * / and sqrt over its variables. Reason about where "
+        "it loses floating-point accuracy -- catastrophic cancellation, division "
+        "by a near-zero quantity, growth of intermediate magnitudes. Then list "
+        "several distinct algebraic rewrites that keep the same exact value but "
+        "round differently and improve accuracy: one per line, numbered, each "
+        "naming the rewrite and the input regime where it helps. List ideas only; "
+        "do not write a program."
+    )
 
 
 def ensure_artifacts(benchmark: str, saturation: int) -> tuple[str, str, str]:
@@ -109,12 +116,12 @@ def parse_ideas(text: str) -> list[str]:
     return ideas
 
 
-def propose_ideas(llm, prompt, temperature, effort="high"):
+def propose_ideas(llm, reference, temperature, effort="high"):
     """Reason once and return the model's menu of distinct rewrite ideas."""
     import torch
     from transformers import TextStreamer
 
-    full = prompt + IDEAS_GOAL
+    full = ideas_prompt(reference)
     try:
         text = llm.tokenizer.apply_chat_template(
             [{"role": "user", "content": full}],
@@ -189,7 +196,7 @@ def main() -> None:
     ideas = []
     if args.sampler in REJECTION and channel_ids(llm.tokenizer):
         print(f"{'=' * 70}\nreasoning phase (proposing rewrite ideas)\n{'=' * 70}")
-        ideas = propose_ideas(llm, prompt, args.temperature)
+        ideas = propose_ideas(llm, reference, args.temperature)
         print(f"\n{'=' * 70}\nproposed {len(ideas)} rewrite idea(s)\n{'=' * 70}")
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
