@@ -62,7 +62,9 @@ def main() -> None:
     ap.add_argument("--model", default="openai/gpt-oss-120b")
     ap.add_argument("--effort", default="high", choices=["low", "medium", "high"],
                     help="gpt-oss reasoning effort (default high)")
-    ap.add_argument("--max-new-tokens", type=int, default=4096)
+    ap.add_argument("--max-new-tokens", type=int, default=None,
+                    help="cap on generated tokens (default: fill the context "
+                         "window, so reasoning isn't cut off before the answer)")
     ap.add_argument("--temperature", type=float, default=0.0)
     args = ap.parse_args()
 
@@ -81,7 +83,9 @@ def main() -> None:
         text, return_tensors="pt", add_special_tokens=False
     ).to(llm.device)
 
-    gen_kwargs = dict(max_new_tokens=args.max_new_tokens,
+    max_ctx = getattr(llm.model.config, "max_position_embeddings", None) or 8192
+    max_new = args.max_new_tokens or max(256, max_ctx - ids.shape[1] - 64)
+    gen_kwargs = dict(max_new_tokens=max_new,
                       attention_mask=torch.ones_like(ids),
                       pad_token_id=llm.tokenizer.pad_token_id,
                       streamer=TextStreamer(llm.tokenizer, skip_prompt=True,
