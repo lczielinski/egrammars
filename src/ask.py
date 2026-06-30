@@ -26,16 +26,22 @@ A large condition number means small rounding errors in the inputs are magnified
 in the result. So + and - lose accuracy exactly when their operands nearly cancel;
 * and / never amplify relative error."""
 
+# The expression to analyze -- swap which EXPR is active:
+EXPR = "(-b + sqrt(b*b - 4*a*c)) / (2*a)"  # quadratic root: two cancellation sites
+                                           # (-b + sqrt when b > 0, and b*b - 4*a*c
+                                           # when b*b ~= 4*a*c); branch on sign of b
+# EXPR = "sqrt(x + 1) - sqrt(x)"           # near-equal sqrts; cancels for large x
+
 PROMPT = f"""\
 {CONDITION_RULES}
 
 The expression below is evaluated in IEEE-754 double precision:
 
-    sqrt(x + 1) - sqrt(x)
+    {EXPR}
 
 Use the condition numbers to find the input region(s) where it loses accuracy,
 and an algebraically equivalent rewrite that is well-conditioned there. Then
-produce one program (an S-expression) that branches on the input so each region 
+produce one program (an S-expression) that branches on the input so each region
 uses its accurate form."""
 
 
