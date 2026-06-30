@@ -1,5 +1,4 @@
-;; sqrt(x*x + x) - x
-;; = x / (sqrt(x*x + x) + x)   [conjugate; avoids cancellation for large x]
+;; (FPCore (x) (- (sqrt (+ (* x x) x)) x))
 
 (let x (Var "x"))
 

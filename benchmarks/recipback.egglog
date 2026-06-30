@@ -1,5 +1,4 @@
-;; 1/(x - 1) - 1/x
-;; = 1 / (x * (x - 1))   [reciprocal difference; avoids cancellation for large x]
+;; (FPCore (x) (- (/ 1 (- x 1)) (/ 1 x)))
 
 (let x (Var "x"))
 

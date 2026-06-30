@@ -1,5 +1,4 @@
-;; sqrt(x + 4) - 2
-;; = x / (sqrt(x + 4) + 2)   [conjugate; avoids cancellation near x = 0]
+;; (FPCore (x) (- (sqrt (+ x 4)) 2))
 
 (let x (Var "x"))
 

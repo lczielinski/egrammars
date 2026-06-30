@@ -1,4 +1,4 @@
-;; sqrt ((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
+;; (FPCore (x1 x2 y1 y2) (sqrt (+ (* (- x1 x2) (- x1 x2)) (* (- y1 y2) (- y1 y2)))))
 
 (let x1 (Var "x1"))
 (let x2 (Var "x2"))

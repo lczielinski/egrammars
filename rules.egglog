@@ -89,7 +89,7 @@
 ;; they grow the e-graph fast, so keep --saturation low for big expressions) ---
 
 ;; Factoring: the reverse of the (Mul a (Add/Sub ...)) distribution rules. Always
-;; valid; lets the e-graph reach factored forms (e.g. Heron's binomial product).
+;; valid; lets the e-graph reach factored forms.
 (rewrite (Add (Mul a b) (Mul a c))
   (Mul a (Add b c)))
 (rewrite (Sub (Mul a b) (Mul a c))

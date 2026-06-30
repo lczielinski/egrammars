@@ -6,10 +6,7 @@ Given a benchmark (a reference program plus egglog rewrite rules), this:
   3. intersects it with the simple FPCore syntax grammar
 
 The resulting grammar's language is a cleaned subset of FPCore programs equivalent
-to the reference (under the rules, up to the saturation cap).
-
-Used as a module by run.py (build / read_reference / write_grammar); not a CLI.
-"""
+to the reference (under the rules, up to the saturation cap)."""
 
 from __future__ import annotations
 
@@ -271,11 +268,6 @@ def reachable(root: str, eclasses: EClassMapping) -> list[str]:
 
 
 def _branching_header(variables: list[str], root_name: str) -> list[str]:
-    """Grammar rules that let the program be a nest of `if`s over the inputs, each
-    branch being an equivalent program (the root e-class). Conditions compare the
-    variables or a numeric threshold, so the model can pick the form that is
-    accurate in each input region. Every leaf is still an e-graph program, so the
-    whole branching program stays equivalent to the reference for every input."""
     cmps = ("<", ">", "<=", ">=")
     cond = " | ".join(f'"({op} " operand " " operand ")"' for op in cmps)
     operand = " | ".join([f'"{v}"' for v in variables] + ["NUMBER"])
@@ -290,9 +282,7 @@ def _branching_header(variables: list[str], root_name: str) -> list[str]:
 
 def intersect(root: str, eclasses: EClassMapping, branching: bool = False) -> str:
     """The FPCore syntax grammar restricted to the e-graph, as a lark grammar:
-    one nonterminal per e-class, one production per e-node. With branching=True the
-    program may also be an `if` tree whose arms are e-graph programs (see
-    _branching_header)."""
+    one nonterminal per e-class, one production per e-node."""
     order = reachable(root, eclasses)
     name = {eclass: f"e{i}" for i, eclass in enumerate(order)}
 
@@ -329,7 +319,7 @@ def read_reference(benchmark: str) -> str:
 def build(benchmark: str, runs: int = SATURATION_RUNS,
           branching: bool = False) -> tuple[str, str]:
     content = (paths.BENCHMARKS / f"{benchmark}.egglog").read_text()
-    reference = content.splitlines()[0].removeprefix(";; ")
+    reference = read_reference(benchmark)
 
     root, eclasses = extract(saturate(content, runs))
     root, eclasses = strip_identity_enodes(root, eclasses)

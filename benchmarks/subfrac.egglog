@@ -1,5 +1,4 @@
-;; 1/(x+1) - 1/x
-;; would like to produce -1/((x+1)x)
+;; (FPCore (x) (- (/ 1 (+ x 1)) (/ 1 x)))
 
 (let x (Var "x"))
 

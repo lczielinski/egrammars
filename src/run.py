@@ -1,20 +1,11 @@
 """Sample equivalent programs from an egrammar-compiled grammar with casa.
 
+Sampling uses casa's asap sampler.
+
 Options:
     benchmark            benchmark name, e.g. quadratic (positional, required)
     --samples N          distinct programs to collect (default 20)
-    --sampler NAME       which casa sampler (default asap); one of:
-                           cars   rejection + first-token constraint + learning
-                           asap   cars + grammar mask every step (no rejects)
-                           gcd    grammar-constrained decoding (masked, no learning)
-                           ars    rejection + learning (no first-token constraint)
-                           rsft   rejection + first-token constraint
-                           rs     plain rejection sampling
-                           mcmc-uniform    MCMC, resample a uniformly-random position
-                           mcmc-priority   MCMC, resample a high-entropy position
-                           mcmc-restart    MCMC, always resample from the start
-    --max-attempts N     rejection samplers: cap on attempts per sample (default 200)
-    --steps N            mcmc samplers: MCMC steps per chain (default 10)
+    --max-attempts N     cap on attempts per sample (default 200)
     --temperature T      sampling temperature applied to the model (default 1.0);
                          T<1 sharpens, T>1 flattens the grammar-constrained model
     --model ID           HuggingFace model id to load (default Qwen2.5-14B-Instruct)
@@ -29,12 +20,12 @@ Options:
                          6; only used if not cached). Lower it for symmetry-heavy
                          expressions whose grammar explodes
 
-Without --branching, a harmony model (gpt-oss) on a rejection sampler reasons
-automatically: it proposes a menu of distinct rewrite ideas, then samples each
-idea under its own grammar-constrained prompt so the programs spread across ideas.
+Without --branching, a harmony model (gpt-oss) reasons automatically: it proposes a
+menu of distinct rewrite ideas, then samples each idea under its own grammar-
+constrained prompt so the programs spread across ideas.
 
 Examples:
-    uv run src/run.py quadratic --sampler mcmc-restart --steps 20
+    uv run src/run.py quadratic --samples 50
     uv run src/run.py sqrtshift --model openai/gpt-oss-120b --branching --saturation 4
 """
 
@@ -42,15 +33,15 @@ import argparse
 import json
 import os
 import re
+import warnings
 
 import paths
 
 os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+# Transitive dep `kernels` (via transformers) warns about a future API change.
+warnings.filterwarnings("ignore", category=FutureWarning, module="kernels")
 
 MODEL_ID = "Qwen/Qwen2.5-14B-Instruct"
-REJECTION = ("rs", "ars", "rsft", "cars", "asap", "gcd")
-MCMC_VARIANTS = ("uniform", "priority", "restart")
-SAMPLERS = REJECTION + tuple(f"mcmc-{v}" for v in MCMC_VARIANTS)
 
 
 def make_prompt(reference: str) -> str:
@@ -249,9 +240,7 @@ def main() -> None:
     )
     parser.add_argument("benchmark", help="benchmark name, e.g. quadratic")
     parser.add_argument("--samples", type=int, default=20)
-    parser.add_argument("--sampler", choices=SAMPLERS, default="asap")
     parser.add_argument("--max-attempts", type=int, default=200)
-    parser.add_argument("--steps", type=int, default=10)
     parser.add_argument("--temperature", type=float, default=1.0)
     parser.add_argument("--model", default=MODEL_ID)
     parser.add_argument("--effort", choices=["low", "medium", "high"], default="medium",
@@ -263,7 +252,7 @@ def main() -> None:
     parser.add_argument("--saturation", type=int, default=6,
                         help="rewrite-rule iterations when compiling a grammar "
                              "(only used if not already cached; lower it for "
-                             "symmetry-heavy expressions like heron)")
+                             "symmetry-heavy expressions like variance)")
     args = parser.parse_args()
 
     grammar_str, prompt, reference = ensure_artifacts(
@@ -271,16 +260,13 @@ def main() -> None:
 
     import casa
 
-    budget = (f"<= {args.max_attempts} attempts/sample" if args.sampler in REJECTION
-              else f"{args.steps} MCMC steps/chain")
     suffix = "-branching" if args.branching else ""
     print(f"benchmark: {args.benchmark}")
     print(f"grammar:   {paths.LARK / f'{args.benchmark}{suffix}.lark'} "
           f"({grammar_str.count(chr(10))} rules)")
     print(f"model:     {args.model}")
-    print(f"sampler:   {args.sampler}")
     print(f"temp:      {args.temperature}")
-    print(f"target {args.samples} programs, {budget}\n")
+    print(f"target {args.samples} programs, <= {args.max_attempts} attempts/sample\n")
 
     load_kwargs = {"dtype": "auto"} if "gpt-oss" in args.model.lower() else {}
     llm = casa.LLM.from_pretrained(args.model, **load_kwargs)
@@ -291,7 +277,7 @@ def main() -> None:
     # final channel. Otherwise a harmony model proposes a menu of rewrite ideas,
     # each conditioning its own batch of constrained samples.
     ideas, prompt_ids, bprompt = [], None, prompt + BRANCHING_GOAL
-    if args.branching and args.sampler in REJECTION and channel_ids(llm.tokenizer):
+    if args.branching and channel_ids(llm.tokenizer):
         print(f"{'=' * 70}\nreasoning phase (branching)\n{'=' * 70}")
         prompt_ids, _, opened = think_then_handoff(
             llm, bprompt, args.temperature, args.effort)
@@ -301,45 +287,32 @@ def main() -> None:
             print("warning: model never opened its final channel; sampling "
                   "without reasoning.\n")
             prompt_ids = None
-    elif not args.branching and args.sampler in REJECTION and channel_ids(llm.tokenizer):
+    elif not args.branching and channel_ids(llm.tokenizer):
         print(f"{'=' * 70}\nreasoning phase (proposing rewrite ideas)\n{'=' * 70}")
         ideas = propose_ideas(llm, reference, args.temperature, args.effort)
         print(f"\n{'=' * 70}\nproposed {len(ideas)} rewrite idea(s)\n{'=' * 70}")
         free_cuda()
 
     # casa prints each program live (verbose=True) as it is accepted/rejected.
-    if args.sampler in REJECTION:
-        sampler = getattr(casa, args.sampler.upper())(
-            llm, grammar, verbose=True, temperature=args.temperature
-        )
-        if args.branching:
-            results = sampler.sample(
-                bprompt if prompt_ids is None else None, n_samples=args.samples,
-                max_attempts=args.max_attempts, prompt_ids=prompt_ids,
-            )
-        elif ideas:
-            results = []
-            per = max(1, -(-args.samples // len(ideas)))  # ceil
-            for i, idea in enumerate(ideas):
-                print(f"\n[idea {i + 1}/{len(ideas)}] {idea}")
-                results += sampler.sample(prompt + condition_on(idea),
-                                          n_samples=per,
-                                          max_attempts=args.max_attempts)
-                free_cuda()
-                if len(distinct(results)) >= args.samples:
-                    break
-        else:
-            results = sampler.sample(
-                prompt, n_samples=args.samples, max_attempts=args.max_attempts
-            )
-    else:  # mcmc-<variant>
-        sampler = casa.MCMC(
-            llm, grammar, variant=args.sampler.split("-", 1)[1], verbose=True,
-            temperature=args.temperature,
-        )
+    sampler = casa.ASAP(llm, grammar, verbose=True, temperature=args.temperature)
+    if args.branching:
         results = sampler.sample(
-            bprompt if args.branching else prompt,
-            n_samples=args.samples, n_steps=args.steps, return_steps=False,
+            bprompt if prompt_ids is None else None, n_samples=args.samples,
+            max_attempts=args.max_attempts, prompt_ids=prompt_ids,
+        )
+    elif ideas:
+        results = []
+        per = max(1, -(-args.samples // len(ideas)))  # ceil
+        for i, idea in enumerate(ideas):
+            print(f"\n[idea {i + 1}/{len(ideas)}] {idea}")
+            results += sampler.sample(prompt + condition_on(idea),
+                                      n_samples=per, max_attempts=args.max_attempts)
+            free_cuda()
+            if len(distinct(results)) >= args.samples:
+                break
+    else:
+        results = sampler.sample(
+            prompt, n_samples=args.samples, max_attempts=args.max_attempts
         )
     programs = distinct(results)
 
@@ -353,8 +326,7 @@ def main() -> None:
     n, summary = paths.next_path(paths.EQUIVALENTS, args.benchmark)
     summary.write_text(json.dumps(
         {"benchmark": args.benchmark, "reference": reference,
-         "model": args.model, "sampler": args.sampler,
-         "ideas": ideas, "programs": programs},
+         "model": args.model, "ideas": ideas, "programs": programs},
         indent=2,
     ))
     print(f"\nwrote {len(programs)} distinct equivalent programs to {summary}")

@@ -1,4 +1,4 @@
-;; (-b + sqrt ((b * b) - 4 * a * c)) / (2 * a)
+;; (FPCore (a b c) (/ (+ (- b) (sqrt (- (* b b) (* (* 4 a) c)))) (* 2 a)))
 
 (let a (Var "a"))
 (let b (Var "b"))

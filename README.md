@@ -43,28 +43,24 @@ uv run src/egrammar.py quadratic        # writes lark/quadratic.lark
 
 ### Compile *and* sample in one step
 
-[run.py](src/run.py) compiles the grammar then drives one of casa's grammar-constrained samplers over a language
-model to harvest a *variety* of distinct programs, printing each program live as it
-is accepted or rejected. 
+[run.py](src/run.py) compiles the grammar then drives casa's `asap` sampler (CARS plus a
+grammar mask at every step, so no rejects) over a language model to harvest a *variety* of
+distinct programs, printing each program live as it is accepted.
 
 ```bash
-uv run src/run.py quadratic                            # 20 programs, asap sampler
-uv run src/run.py quadratic --samples 50 --sampler ars
-uv run src/run.py quadratic --sampler mcmc-restart --steps 20
-uv run src/run.py quadratic --model openai/gpt-oss-120b --reason
+uv run src/run.py quadratic                            # 20 programs
+uv run src/run.py quadratic --samples 50
+uv run src/run.py quadratic --model openai/gpt-oss-120b --branching
 ```
 
 It writes a numbered run file `equivalents/<benchmark>-NNN.json`. Key flags:
 
 - `--model ID` — any HuggingFace causal LM (default `Qwen/Qwen2.5-14B-Instruct`); larger
   or reasoning models such as `openai/gpt-oss-120b` work too.
-- `--sampler` — a casa rejection-family sampler `asap` (default), `cars`, `ars`, `rsft`,
-  `rs`, `gcd` (tuned with `--max-attempts`), or an MCMC variant `mcmc-uniform`,
-  `mcmc-priority`, `mcmc-restart` (tuned with `--steps`, kept per chain).
-- `--reason` — two-phase: let the model reason *unconstrained* about which rewrites
-  improve accuracy, then fold that reasoning into the prompt before grammar-constrained
-  sampling. Useful with a reasoning model, but only helps when the stabilizing rewrite is
-  actually reachable in the grammar.
+- `--max-attempts N` — cap on attempts per sample (default 200).
+- `--branching` — produce one program that branches on the input with `if`, each arm an
+  e-graph equivalent. The model reasons briefly, then a constrained pass writes the
+  branching program. fptaylor is skipped (it can't analyze `if`).
 - `--saturation N` — rounds when compiling a grammar that isn't cached yet.
 
 The full option list is in the [run.py](src/run.py) module docstring.
@@ -98,21 +94,19 @@ relative error of each program is reported, written to `fptaylor/<benchmark>-NNN
   the run continues.
 
 Sampling is delegated to the [casa](https://github.com/large-loris-models/casa)
-library, which implements CARS (Constrained Adaptive Rejection Sampling; see the
-[paper](https://arxiv.org/pdf/2506.05754)) and its mask-every-step variant `asap`,
-alongside the simpler `ars`/`rsft`/`rs`/`gcd` samplers and MCMC. casa pulls in the
-sampling runtime (torch, transformers, llguidance, xgrammar, accelerate); egglog is
-needed only to compile a grammar that is not already cached in `lark/`.
+library; we use its `asap` sampler, the mask-every-step variant of CARS (Constrained
+Adaptive Rejection Sampling; see the [paper](https://arxiv.org/pdf/2506.05754)). casa
+pulls in the sampling runtime (torch, transformers, llguidance, xgrammar, accelerate);
+egglog is needed only to compile a grammar that is not already cached in `lark/`.
 
 ## Grammar sizes (rules ≈ e-classes reachable from the root)
 
 | benchmark | rules | benchmark | rules |
 |-----------|------:|-----------|------:|
-| lerp      |    15 | distance  |   545 |
-| power     |    18 | quadratic |   292 |
-| sqrtminus |    23 | variance  | 11409 |
-| subfrac   |    27 | gravity   |    63 |
+| sqrtminus |    23 | distance  |   545 |
+| subfrac   |    27 | quadratic |   292 |
+| gravity   |    63 | variance  | 11409 |
 
 Sizes are for the cached grammars and depend on both `--saturation` and the rule set;
-adding rules or rounds grows them (e.g. `heron` is 744 rules at saturation 4 but 44.5k at
-6). All validate under `llguidance.LLMatcher.validate_grammar`.
+adding rules or rounds grows them. All validate under
+`llguidance.LLMatcher.validate_grammar`.
