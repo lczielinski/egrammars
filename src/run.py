@@ -18,14 +18,13 @@ Options:
     --temperature T      sampling temperature applied to the model (default 1.0);
                          T<1 sharpens, T>1 flattens the grammar-constrained model
     --model ID           HuggingFace model id to load (default Qwen2.5-14B-Instruct)
-    --reason-tokens N    cap on the reasoning phase (default 4096). A harmony model
-                         (gpt-oss) on a rejection sampler reasons automatically: it
-                         thinks in its analysis channel, then the program is sampled
-                         grammar-constrained in its own final channel. Generation
-                         stops the moment the final channel opens.
     --saturation N       rewrite-rule iterations when compiling a grammar (default
                          6; only used if not cached). Lower it for symmetry-heavy
                          expressions whose grammar explodes
+
+A harmony model (gpt-oss) on a rejection sampler reasons automatically: it thinks
+in its analysis channel (uncapped) until it opens its final channel, where the
+program is then sampled grammar-constrained.
 
 Examples:
     uv run src/run.py quadratic --sampler mcmc-restart --steps 20
@@ -104,10 +103,10 @@ def at_final_header(seq, ch_id, msg_id, decode) -> bool:
     return decode(seq[ch + 1:-1]).strip() == "final"
 
 
-def think_then_handoff(llm, prompt, max_new_tokens, temperature, effort="high"):
+def think_then_handoff(llm, prompt, temperature, effort="high"):
     """Reason in the analysis channel, halting the instant the final channel
-    opens. Returns (prompt_ids, analysis_text, opened_final) for the constrained
-    pass to continue from."""
+    opens. Returns (prompt_ids, analysis_text, opened_final) for the
+    constrained pass to continue from."""
     import torch
     from transformers import StoppingCriteria, StoppingCriteriaList, TextStreamer
 
@@ -129,7 +128,8 @@ def think_then_handoff(llm, prompt, max_new_tokens, temperature, effort="high"):
             return at_final_header(input_ids[0].tolist(), ch_id, msg_id,
                                    llm.tokenizer.decode)
 
-    gen_kwargs = dict(max_new_tokens=max_new_tokens,
+    max_ctx = getattr(llm.model.config, "max_position_embeddings", None) or 8192
+    gen_kwargs = dict(max_new_tokens=max(256, max_ctx - start - 64),
                       attention_mask=torch.ones_like(ids),
                       pad_token_id=llm.tokenizer.pad_token_id,
                       stopping_criteria=StoppingCriteriaList([StopAtFinal()]),
@@ -158,7 +158,6 @@ def main() -> None:
     parser.add_argument("--steps", type=int, default=10)
     parser.add_argument("--temperature", type=float, default=1.0)
     parser.add_argument("--model", default=MODEL_ID)
-    parser.add_argument("--reason-tokens", type=int, default=4096)
     parser.add_argument("--saturation", type=int, default=6,
                         help="rewrite-rule iterations when compiling a grammar "
                              "(only used if not already cached; lower it for "
@@ -190,13 +189,11 @@ def main() -> None:
     if args.sampler in REJECTION and channel_ids(llm.tokenizer):
         print(f"{'=' * 70}\nreasoning phase\n{'=' * 70}")
         prompt_ids, reasoning, opened = think_then_handoff(
-            llm, prompt + reasoning_goal(args.samples), args.reason_tokens,
-            args.temperature)
+            llm, prompt + reasoning_goal(args.samples), args.temperature)
         print(f"\n{'=' * 70}\n")
         if not opened:
-            print(f"warning: model did not open its final channel within "
-                  f"--reason-tokens={args.reason_tokens}; raise it. Sampling "
-                  f"without reasoning.\n")
+            print("warning: model hit the context limit without opening its "
+                  "final channel; sampling without reasoning.\n")
             prompt_ids = None
 
     # casa prints each program live (verbose=True) as it is accepted/rejected.
