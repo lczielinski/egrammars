@@ -107,7 +107,7 @@ def think_then_handoff(llm, prompt, max_new_tokens, temperature, effort="high"):
     opens. Returns (prompt_ids, analysis_text, opened_final) for the constrained
     pass to continue from."""
     import torch
-    from transformers import StoppingCriteria, StoppingCriteriaList
+    from transformers import StoppingCriteria, StoppingCriteriaList, TextStreamer
 
     ch_id, msg_id = channel_ids(llm.tokenizer)
     try:
@@ -128,8 +128,11 @@ def think_then_handoff(llm, prompt, max_new_tokens, temperature, effort="high"):
                                    llm.tokenizer.decode)
 
     gen_kwargs = dict(max_new_tokens=max_new_tokens,
+                      attention_mask=torch.ones_like(ids),
                       pad_token_id=llm.tokenizer.pad_token_id,
-                      stopping_criteria=StoppingCriteriaList([StopAtFinal()]))
+                      stopping_criteria=StoppingCriteriaList([StopAtFinal()]),
+                      streamer=TextStreamer(llm.tokenizer, skip_prompt=True,
+                                            skip_special_tokens=True))
     if temperature and temperature > 0:
         gen_kwargs.update(do_sample=True, temperature=temperature)
     with torch.no_grad():
@@ -186,7 +189,7 @@ def main() -> None:
         print(f"{'=' * 70}\nreasoning phase\n{'=' * 70}")
         prompt_ids, reasoning, opened = think_then_handoff(
             llm, prompt, args.reason_tokens, args.temperature)
-        print(f"{reasoning}\n{'=' * 70}\n")
+        print(f"\n{'=' * 70}\n")
         if not opened:
             print(f"warning: model did not open its final channel within "
                   f"--reason-tokens={args.reason_tokens}; raise it. Sampling "
