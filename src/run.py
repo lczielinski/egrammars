@@ -18,6 +18,8 @@ Options:
     --temperature T      sampling temperature applied to the model (default 1.0);
                          T<1 sharpens, T>1 flattens the grammar-constrained model
     --model ID           HuggingFace model id to load (default Qwen2.5-14B-Instruct)
+    --effort LEVEL       gpt-oss reasoning effort for the idea-proposal phase:
+                         low, medium, or high (default medium)
     --saturation N       rewrite-rule iterations when compiling a grammar (default
                          6; only used if not cached). Lower it for symmetry-heavy
                          expressions whose grammar explodes
@@ -132,7 +134,7 @@ def ideas_prompt(reference: str) -> str:
     )
 
 
-def propose_ideas(llm, reference, temperature, effort="high"):
+def propose_ideas(llm, reference, temperature, effort="medium"):
     import torch
     from transformers import TextStreamer
 
@@ -179,6 +181,8 @@ def main() -> None:
     parser.add_argument("--steps", type=int, default=10)
     parser.add_argument("--temperature", type=float, default=1.0)
     parser.add_argument("--model", default=MODEL_ID)
+    parser.add_argument("--effort", choices=["low", "medium", "high"], default="medium",
+                        help="gpt-oss reasoning effort for the idea-proposal phase")
     parser.add_argument("--saturation", type=int, default=6,
                         help="rewrite-rule iterations when compiling a grammar "
                              "(only used if not already cached; lower it for "
@@ -209,7 +213,7 @@ def main() -> None:
     ideas = []
     if args.sampler in REJECTION and channel_ids(llm.tokenizer):
         print(f"{'=' * 70}\nreasoning phase (proposing rewrite ideas)\n{'=' * 70}")
-        ideas = propose_ideas(llm, reference, args.temperature)
+        ideas = propose_ideas(llm, reference, args.temperature, args.effort)
         print(f"\n{'=' * 70}\nproposed {len(ideas)} rewrite idea(s)\n{'=' * 70}")
         free_cuda()
 

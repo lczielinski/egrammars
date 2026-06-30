@@ -95,6 +95,14 @@
 (rewrite (Sub (Mul a b) (Mul a c))
   (Mul a (Sub b c)))
 
+;; Rescale a sqrt of (term + constant) by factoring the term out:
+;; sqrt(a + n) = sqrt(a)*sqrt(1 + n/a), e.g. sqrt(x + 4) = sqrt(x)*sqrt(1 + 4/x).
+;; Restricted to a numeric second operand so it only fires on sqrt(... + const) --
+;; not on discriminant/product sqrts -- which keeps multi-variable graphs from
+;; exploding. (Commutativity supplies sqrt(x + 4) from sqrt(4 + x).)
+(rewrite (Sqrt (Add a (Num n)))
+  (Mul (Sqrt a) (Sqrt (Add (Num 1) (Div (Num n) a)))))
+
 ;; sqrt distributes over product and quotient (nonnegative operands, as in the
 ;; benchmark domains): moves factors in and out of a square root.
 (birewrite (Sqrt (Mul a b))
