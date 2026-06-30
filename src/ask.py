@@ -31,12 +31,12 @@ PROMPT = f"""\
 
 The expression below is evaluated in IEEE-754 double precision:
 
-    sqrt(x + 4) - 2
+    sqrt(x + 1) - sqrt(x)
 
 Use the condition numbers to find the input region(s) where it loses accuracy,
 and an algebraically equivalent rewrite that is well-conditioned there. Then
-produce one program that branches on the input so each region uses its accurate
-form."""
+produce one program (an S-expression) that branches on the input so each region 
+uses its accurate form."""
 
 
 def main() -> None:
