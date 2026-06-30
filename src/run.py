@@ -48,7 +48,7 @@ REASONING_GOAL = (
     "floating-point accuracy -- re-association, distribution, fraction splitting, "
     "conjugate rationalization -- and the input regime where each helps. Sketch "
     "several ideas; there's no fixed number and you don't need to pick a single "
-    "best. Then output one program."
+    "best."
 )
 
 
