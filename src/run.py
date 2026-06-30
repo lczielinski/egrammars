@@ -18,18 +18,18 @@ Options:
     --temperature T      sampling temperature applied to the model (default 1.0);
                          T<1 sharpens, T>1 flattens the grammar-constrained model
     --model ID           HuggingFace model id to load (default Qwen2.5-14B-Instruct)
-    --reason             two-phase: let the model reason (unconstrained) about
-                         which rewrites improve accuracy, then fold that reasoning
-                         into the prompt before grammar-constrained sampling. Lets
-                         a reasoning model (e.g. gpt-oss) actually think first.
-    --reason-tokens N    token budget for the reasoning phase (default 1024)
+    --reason-tokens N    cap on the reasoning phase (default 4096). A harmony model
+                         (gpt-oss) on a rejection sampler reasons automatically: it
+                         thinks in its analysis channel, then the program is sampled
+                         grammar-constrained in its own final channel. Generation
+                         stops the moment the final channel opens.
     --saturation N       rewrite-rule iterations when compiling a grammar (default
                          6; only used if not cached). Lower it for symmetry-heavy
-                         expressions whose grammar explodes 
+                         expressions whose grammar explodes
 
 Examples:
     uv run src/run.py quadratic --sampler mcmc-restart --steps 20
-    uv run src/run.py quadratic --model openai/gpt-oss-120b --reason
+    uv run src/run.py quadratic --model openai/gpt-oss-120b
 """
 
 import argparse
@@ -80,27 +80,66 @@ def reasoning_prompt(reference: str) -> str:
     )
 
 
-def generate_reasoning(llm, reference: str, max_new_tokens: int,
-                       temperature: float) -> str:
-    """Run the model unconstrained on the reasoning prompt; return its text."""
-    import torch
+def channel_ids(tokenizer):
+    """The (<|channel|>, <|message|>) token ids if the tokenizer has harmony
+    channels (gpt-oss), else None."""
+    ch = tokenizer.convert_tokens_to_ids("<|channel|>")
+    msg = tokenizer.convert_tokens_to_ids("<|message|>")
+    if None in (ch, msg) or tokenizer.unk_token_id in (ch, msg):
+        return None
+    return ch, msg
 
-    text = llm.format_prompt(reasoning_prompt(reference))
+
+def at_final_header(seq, ch_id, msg_id, decode) -> bool:
+    """True if token list `seq` ends exactly at a final channel header
+    (...<|channel|>final<|message|>). `decode` maps token ids to text."""
+    if not seq or seq[-1] != msg_id:
+        return False
+    try:
+        ch = len(seq) - 1 - seq[::-1].index(ch_id)
+    except ValueError:
+        return False
+    return decode(seq[ch + 1:-1]).strip() == "final"
+
+
+def think_then_handoff(llm, prompt, max_new_tokens, temperature, effort="high"):
+    """Reason in the analysis channel, halting the instant the final channel
+    opens. Returns (prompt_ids, analysis_text, opened_final) for the constrained
+    pass to continue from."""
+    import torch
+    from transformers import StoppingCriteria, StoppingCriteriaList
+
+    ch_id, msg_id = channel_ids(llm.tokenizer)
+    try:
+        text = llm.tokenizer.apply_chat_template(
+            [{"role": "user", "content": prompt}],
+            tokenize=False, add_generation_prompt=True, reasoning_effort=effort,
+        )
+    except TypeError:
+        text = llm.format_prompt(prompt)
     ids = llm.tokenizer.encode(
         text, return_tensors="pt", add_special_tokens=False
     ).to(llm.device)
+    start = ids.shape[1]
+
+    class StopAtFinal(StoppingCriteria):
+        def __call__(self, input_ids, scores, **kwargs):
+            return at_final_header(input_ids[0].tolist(), ch_id, msg_id,
+                                   llm.tokenizer.decode)
+
     gen_kwargs = dict(max_new_tokens=max_new_tokens,
-                      pad_token_id=llm.tokenizer.pad_token_id)
+                      pad_token_id=llm.tokenizer.pad_token_id,
+                      stopping_criteria=StoppingCriteriaList([StopAtFinal()]))
     if temperature and temperature > 0:
         gen_kwargs.update(do_sample=True, temperature=temperature)
     with torch.no_grad():
         out = llm.model.generate(ids, **gen_kwargs)
-    return llm.tokenizer.decode(out[0][ids.shape[1]:], skip_special_tokens=True).strip()
 
-
-def prompt_with_reasoning(base_prompt: str, reasoning: str) -> str:
-    return (f"{base_prompt}\n\nYour analysis of this expression:\n{reasoning}\n\n"
-            "Using that analysis, produce the program.")
+    opened_final = out[0, -1].item() == msg_id
+    analysis = llm.tokenizer.decode(
+        out[0][start:], skip_special_tokens=True
+    ).strip()
+    return out, analysis, opened_final
 
 
 def main() -> None:
@@ -114,8 +153,7 @@ def main() -> None:
     parser.add_argument("--steps", type=int, default=10)
     parser.add_argument("--temperature", type=float, default=1.0)
     parser.add_argument("--model", default=MODEL_ID)
-    parser.add_argument("--reason", action="store_true")
-    parser.add_argument("--reason-tokens", type=int, default=1024)
+    parser.add_argument("--reason-tokens", type=int, default=4096)
     parser.add_argument("--saturation", type=int, default=6,
                         help="rewrite-rule iterations when compiling a grammar "
                              "(only used if not already cached; lower it for "
@@ -134,20 +172,26 @@ def main() -> None:
     print(f"model:     {args.model}")
     print(f"sampler:   {args.sampler}")
     print(f"temp:      {args.temperature}")
-    print(f"reason:    {args.reason}")
     print(f"target {args.samples} programs, {budget}\n")
 
     load_kwargs = {"dtype": "auto"} if "gpt-oss" in args.model.lower() else {}
     llm = casa.LLM.from_pretrained(args.model, **load_kwargs)
     grammar = casa.Grammar.from_string(grammar_str, llm.tokenizer)
 
-    reasoning = None
-    if args.reason:
-        print(f"{'=' * 70}\nreasoning phase (unconstrained)\n{'=' * 70}")
-        reasoning = generate_reasoning(llm, reference, args.reason_tokens,
-                                       args.temperature)
+    # A harmony model (gpt-oss) on a rejection sampler reasons in its analysis
+    # channel, then the program is sampled grammar-constrained as a continuation
+    # in its own final channel.
+    reasoning, prompt_ids = None, None
+    if args.sampler in REJECTION and channel_ids(llm.tokenizer):
+        print(f"{'=' * 70}\nreasoning phase\n{'=' * 70}")
+        prompt_ids, reasoning, opened = think_then_handoff(
+            llm, prompt, args.reason_tokens, args.temperature)
         print(f"{reasoning}\n{'=' * 70}\n")
-        prompt = prompt_with_reasoning(prompt, reasoning)
+        if not opened:
+            print(f"warning: model did not open its final channel within "
+                  f"--reason-tokens={args.reason_tokens}; raise it. Sampling "
+                  f"without reasoning.\n")
+            prompt_ids = None
 
     # casa prints each program live (verbose=True) as it is accepted/rejected.
     if args.sampler in REJECTION:
@@ -155,7 +199,8 @@ def main() -> None:
             llm, grammar, verbose=True, temperature=args.temperature
         )
         results = sampler.sample(
-            prompt, n_samples=args.samples, max_attempts=args.max_attempts
+            prompt if prompt_ids is None else None, n_samples=args.samples,
+            max_attempts=args.max_attempts, prompt_ids=prompt_ids,
         )
     else:  # mcmc-<variant>
         sampler = casa.MCMC(
