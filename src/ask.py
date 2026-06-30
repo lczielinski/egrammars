@@ -39,10 +39,22 @@ The expression below is evaluated in IEEE-754 double precision:
 
     {EXPR}
 
-Use the condition numbers to find the input region(s) where it loses accuracy,
-and an algebraically equivalent rewrite that is well-conditioned there. Then
-produce one program (an S-expression) that branches on the input so each region
-uses its accurate form."""
+Goal: a single program that stays numerically accurate across the WHOLE input
+domain by using a different algebraically-equivalent form in each region.
+
+Steps:
+1. Using the condition numbers, find every input region where some operation loses
+   accuracy -- a + or - whose operands nearly cancel, or a / by a near-zero value.
+2. For each region, give a rewrite whose operations are all well-conditioned there,
+   so it has low rounding error throughout that region. Different regions may need
+   different rewrites.
+3. Combine them into ONE program that branches on the inputs (comparisons or sign
+   tests) so every input takes the form that is accurate for it. Cover the entire
+   domain, including the region where the original form is already accurate.
+
+Rules: every branch must equal the original exactly in real arithmetic (only the
+rounding may differ); use only +, -, *, /, sqrt and the original variables. Output
+the single program as an S-expression."""
 
 
 def main() -> None:
