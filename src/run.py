@@ -42,6 +42,16 @@ REJECTION = ("rs", "ars", "rsft", "cars", "asap", "gcd")
 MCMC_VARIANTS = ("uniform", "priority", "restart")
 SAMPLERS = REJECTION + tuple(f"mcmc-{v}" for v in MCMC_VARIANTS)
 
+REASONING_GOAL = (
+    "\n\nThis expression has several distinct accuracy-improving rewrites, and the "
+    "most accurate one can depend on the input range. You'll be asked for a program "
+    "repeatedly to collect a DIVERSE set of good rewrites. In your reasoning, survey "
+    "the different accuracy-improving rewrites available here -- re-association, "
+    "distribution, fraction splitting, conjugate rationalization -- and the input "
+    "regime where each is most accurate. Keep several good options in play; do not "
+    "converge on a single best. Then output one program."
+)
+
 
 def ensure_artifacts(benchmark: str, saturation: int) -> tuple[str, str, str]:
     import egrammar
@@ -66,18 +76,6 @@ def distinct(results) -> list[str]:
             seen.add(text)
             programs.append(text)
     return programs
-
-
-def reasoning_prompt(reference: str) -> str:
-    return (
-        (paths.ROOT / "prompt_header.md").read_text()
-        + f"\n\nThe original program is:\n{reference}\n\n"
-        "Think step by step about THIS expression's floating-point behavior: where "
-        "does it lose accuracy (catastrophic cancellation, division by a near-zero "
-        "or near-equal quantity, growth of intermediate magnitudes), and which of "
-        "the rewrites above would most improve its worst-case rounding error? "
-        "Reason in prose; do NOT write any FPCore program yet."
-    )
 
 
 def channel_ids(tokenizer):
@@ -188,7 +186,7 @@ def main() -> None:
     if args.sampler in REJECTION and channel_ids(llm.tokenizer):
         print(f"{'=' * 70}\nreasoning phase\n{'=' * 70}")
         prompt_ids, reasoning, opened = think_then_handoff(
-            llm, prompt, args.reason_tokens, args.temperature)
+            llm, prompt + REASONING_GOAL, args.reason_tokens, args.temperature)
         print(f"\n{'=' * 70}\n")
         if not opened:
             print(f"warning: model did not open its final channel within "
