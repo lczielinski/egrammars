@@ -119,13 +119,16 @@ def ideas_prompt(reference: str) -> str:
     return (
         "The following expression is evaluated in IEEE-754 double precision:\n\n"
         f"    {reference}\n\n"
-        "It is built from + - * / and sqrt over its variables. Reason about where "
-        "it loses floating-point accuracy -- catastrophic cancellation, division "
-        "by a near-zero quantity, growth of intermediate magnitudes. Then list "
+        "It is written with only these five operations -- addition, subtraction, "
+        "multiplication, division, and square root -- over its variables. List "
         "several distinct algebraic rewrites that keep the same exact value but "
-        "round differently and improve accuracy: one per line, numbered, each "
-        "naming the rewrite and the input regime where it helps. List ideas only; "
-        "do not write a program."
+        "round more accurately (e.g. avoiding catastrophic cancellation, division "
+        "by a near-zero quantity, or large intermediate magnitudes), one per line, "
+        "numbered, each naming the rewrite and the input regime where it helps. "
+        "Every rewrite must stay within those same five operations and the original "
+        "variables (integer constants are fine); introduce no other functions such "
+        "as exp, log, abs, pow, fma, or min/max. Output only the numbered list -- "
+        "no preamble or explanation, and no program."
     )
 
 
