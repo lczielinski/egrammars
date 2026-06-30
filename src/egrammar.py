@@ -8,13 +8,11 @@ Given a benchmark (a reference program plus egglog rewrite rules), this:
 The resulting grammar's language is a cleaned subset of FPCore programs equivalent
 to the reference (under the rules, up to the saturation cap).
 
-Usage:
-    uv run src/egrammar.py quadratic        # writes lark/quadratic.lark
+Used as a module by run.py (build / read_reference / write_grammar); not a CLI.
 """
 
 from __future__ import annotations
 
-import argparse
 import json
 from collections import defaultdict
 from dataclasses import dataclass
@@ -315,37 +313,8 @@ def build(benchmark: str, runs: int = SATURATION_RUNS) -> tuple[str, str]:
     return reference, grammar
 
 
-def make_prompt(reference: str) -> str:
-    return (
-        (paths.ROOT / "prompt_header.md").read_text()
-        + f"\n\nThe original program is:\n{reference}\n\n"
-        "Produce one complete FPCore program that is algebraically equivalent to "
-        "the original but evaluates with different floating-point behavior."
-    )
-
-
 def write_grammar(benchmark: str, grammar: str) -> Path:
     paths.LARK.mkdir(exist_ok=True)
     grammar_path = paths.LARK / f"{benchmark}.lark"
     grammar_path.write_text(grammar)
     return grammar_path
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("benchmark", help="benchmark name, e.g. quadratic")
-    parser.add_argument("--saturation", type=int, default=SATURATION_RUNS,
-                        help=f"rewrite-rule iterations (default {SATURATION_RUNS}); "
-                             "lower it for symmetry-heavy expressions whose grammar "
-                             "explodes")
-    args = parser.parse_args()
-
-    reference, grammar = build(args.benchmark, args.saturation)
-    grammar_path = write_grammar(args.benchmark, grammar)
-
-    print(f"reference: {reference}")
-    print(f"grammar:   {grammar_path} ({grammar.count(chr(10))} rules)")
-
-
-if __name__ == "__main__":
-    main()

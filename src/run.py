@@ -45,20 +45,13 @@ REJECTION = ("rs", "ars", "rsft", "cars", "asap", "gcd")
 MCMC_VARIANTS = ("uniform", "priority", "restart")
 SAMPLERS = REJECTION + tuple(f"mcmc-{v}" for v in MCMC_VARIANTS)
 
-def ideas_prompt(reference: str) -> str:
-    """Standalone prompt for the menu phase. Deliberately omits make_prompt's
-    'output one program' rules -- mixing the two makes the model agonize over
-    whether to emit a program or a list of ideas."""
+
+def make_prompt(reference: str) -> str:
     return (
-        "The following expression is evaluated in IEEE-754 double precision:\n\n"
-        f"    {reference}\n\n"
-        "It is built from + - * / and sqrt over its variables. Reason about where "
-        "it loses floating-point accuracy -- catastrophic cancellation, division "
-        "by a near-zero quantity, growth of intermediate magnitudes. Then list "
-        "several distinct algebraic rewrites that keep the same exact value but "
-        "round differently and improve accuracy: one per line, numbered, each "
-        "naming the rewrite and the input regime where it helps. List ideas only; "
-        "do not write a program."
+        (paths.ROOT / "prompt_header.md").read_text()
+        + f"\n\nThe original program is:\n{reference}\n\n"
+        "Produce one complete FPCore program that is algebraically equivalent to "
+        "the original but evaluates with different floating-point behavior."
     )
 
 
@@ -73,7 +66,7 @@ def ensure_artifacts(benchmark: str, saturation: int) -> tuple[str, str, str]:
               f"saturation={saturation})")
         reference, grammar = egrammar.build(benchmark, saturation)
         egrammar.write_grammar(benchmark, grammar)
-    return grammar, egrammar.make_prompt(reference), reference
+    return grammar, make_prompt(reference), reference
 
 
 def distinct(results) -> list[str]:
@@ -85,6 +78,12 @@ def distinct(results) -> list[str]:
             seen.add(text)
             programs.append(text)
     return programs
+
+
+def free_cuda() -> None:
+    import torch
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
 
 
 def channel_ids(tokenizer):
@@ -116,8 +115,21 @@ def parse_ideas(text: str) -> list[str]:
     return ideas
 
 
+def ideas_prompt(reference: str) -> str:
+    return (
+        "The following expression is evaluated in IEEE-754 double precision:\n\n"
+        f"    {reference}\n\n"
+        "It is built from + - * / and sqrt over its variables. Reason about where "
+        "it loses floating-point accuracy -- catastrophic cancellation, division "
+        "by a near-zero quantity, growth of intermediate magnitudes. Then list "
+        "several distinct algebraic rewrites that keep the same exact value but "
+        "round differently and improve accuracy: one per line, numbered, each "
+        "naming the rewrite and the input regime where it helps. List ideas only; "
+        "do not write a program."
+    )
+
+
 def propose_ideas(llm, reference, temperature, effort="high"):
-    """Reason once and return the model's menu of distinct rewrite ideas."""
     import torch
     from transformers import TextStreamer
 
@@ -149,7 +161,6 @@ def propose_ideas(llm, reference, temperature, effort="high"):
 
 
 def condition_on(idea: str) -> str:
-    """Prompt suffix pinning one constrained sample to a single rewrite idea."""
     return (f"\n\nApply this specific rewrite to the original program, and no "
             f"other:\n{idea}\nOutput the single program.")
 
@@ -192,14 +203,12 @@ def main() -> None:
     # A harmony model (gpt-oss) reasons once into a menu of distinct rewrite
     # ideas; each idea then conditions its own batch of constrained samples, so
     # the programs spread across ideas instead of orbiting a single one.
-    import torch
     ideas = []
     if args.sampler in REJECTION and channel_ids(llm.tokenizer):
         print(f"{'=' * 70}\nreasoning phase (proposing rewrite ideas)\n{'=' * 70}")
         ideas = propose_ideas(llm, reference, args.temperature)
         print(f"\n{'=' * 70}\nproposed {len(ideas)} rewrite idea(s)\n{'=' * 70}")
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
+        free_cuda()
 
     # casa prints each program live (verbose=True) as it is accepted/rejected.
     if args.sampler in REJECTION:
@@ -214,8 +223,7 @@ def main() -> None:
                 results += sampler.sample(prompt + condition_on(idea),
                                           n_samples=per,
                                           max_attempts=args.max_attempts)
-                if torch.cuda.is_available():
-                    torch.cuda.empty_cache()
+                free_cuda()
                 if len(distinct(results)) >= args.samples:
                     break
         else:

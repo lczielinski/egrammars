@@ -1,7 +1,8 @@
-"""Prompt a model unconstrained and print its full reasoning + answer.
+"""Prompt a model unconstrained and stream its reasoning + answer live.
 
-Edit PROMPT below, then run. Lets you eyeball how a reasoning model (gpt-oss)
-thinks before wiring it into the pipeline.
+Edit PROMPT below, then run. Used to watch how a reasoning model (gpt-oss) thinks
+-- here, reasoning from per-operation condition numbers toward a program that
+branches on the input.
 
 Usage:
     uv run src/ask.py
@@ -11,13 +12,31 @@ Usage:
 import argparse
 
 import torch
+from transformers import TextStreamer
 
 import casa
 
-PROMPT = """\
-Why does sqrt(x*x + 1) - x lose floating-point accuracy for large x, and how
-would you rewrite it to avoid the cancellation?
-"""
+CONDITION_RULES = """\
+Condition numbers (how much each operation amplifies relative input error):
+  x + y :  G_x = |x/(x+y)|,  G_y = |y/(x+y)|     -- blows up when x is close to -y
+  x - y :  G_x = |x/(x-y)|,  G_y = |y/(x-y)|     -- blows up when x is close to y
+  x * y :  G_x = G_y = 1                          -- always well-conditioned
+  x / y :  G_x = G_y = 1                          -- always well-conditioned
+A large condition number means small rounding errors in the inputs are magnified
+in the result. So + and - lose accuracy exactly when their operands nearly cancel;
+* and / never amplify relative error."""
+
+PROMPT = f"""\
+{CONDITION_RULES}
+
+The expression below is evaluated in IEEE-754 double precision:
+
+    sqrt(x + 4) - 2
+
+Use the condition numbers to find the input region(s) where it loses accuracy,
+and an algebraically equivalent rewrite that is well-conditioned there. Then
+produce one program that branches on the input so each region uses its accurate
+form."""
 
 
 def main() -> None:
@@ -46,21 +65,18 @@ def main() -> None:
 
     gen_kwargs = dict(max_new_tokens=args.max_new_tokens,
                       attention_mask=torch.ones_like(ids),
-                      pad_token_id=llm.tokenizer.pad_token_id)
+                      pad_token_id=llm.tokenizer.pad_token_id,
+                      streamer=TextStreamer(llm.tokenizer, skip_prompt=True,
+                                            skip_special_tokens=True))
     if args.temperature > 0:
         gen_kwargs.update(do_sample=True, temperature=args.temperature)
-
-    with torch.no_grad():
-        out = llm.model.generate(ids, **gen_kwargs)
-    new = out[0][ids.shape[1]:]
 
     print("=" * 70)
     print(f"PROMPT\n{PROMPT}")
     print("=" * 70)
-    # skip_special_tokens=False so the analysis (reasoning) and final channels
-    # both show; gpt-oss hides its chain-of-thought behind <|channel|> markers.
-    print(llm.tokenizer.decode(new, skip_special_tokens=False))
-    print("=" * 70)
+    with torch.no_grad():
+        llm.model.generate(ids, **gen_kwargs)
+    print("\n" + "=" * 70)
 
 
 if __name__ == "__main__":
