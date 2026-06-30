@@ -22,9 +22,9 @@ Options:
                          6; only used if not cached). Lower it for symmetry-heavy
                          expressions whose grammar explodes
 
-A harmony model (gpt-oss) on a rejection sampler reasons automatically: it thinks
-in its analysis channel (uncapped) until it opens its final channel, where the
-program is then sampled grammar-constrained.
+A harmony model (gpt-oss) on a rejection sampler reasons automatically: it first
+proposes a menu of distinct rewrite ideas, then samples each idea under its own
+grammar-constrained prompt so the programs spread across ideas.
 
 Examples:
     uv run src/run.py quadratic --sampler mcmc-restart --steps 20
@@ -34,6 +34,8 @@ Examples:
 import argparse
 import json
 import os
+import re
+
 import paths
 
 os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
@@ -43,12 +45,13 @@ REJECTION = ("rs", "ars", "rsft", "cars", "asap", "gcd")
 MCMC_VARIANTS = ("uniform", "priority", "restart")
 SAMPLERS = REJECTION + tuple(f"mcmc-{v}" for v in MCMC_VARIANTS)
 
-REASONING_GOAL = (
-    "\n\nThink about a few different ways to rewrite this expression for better "
-    "floating-point accuracy -- re-association, distribution, fraction splitting, "
-    "conjugate rationalization -- and the input regime where each helps. Sketch "
-    "several ideas; there's no fixed number and you don't need to pick a single "
-    "best."
+# Asks the reasoning phase for a menu of distinct rewrite ideas (not a program);
+# each idea then conditions its own batch of constrained samples.
+IDEAS_GOAL = (
+    "\n\nFirst reason about where this expression loses floating-point accuracy. "
+    "Then, instead of writing a program, list several distinct rewrite ideas that "
+    "would improve accuracy -- one per line, numbered, each naming the rewrite and "
+    "the input regime where it helps. Do not write an FPCore program."
 )
 
 
@@ -87,48 +90,46 @@ def channel_ids(tokenizer):
     return ch, msg
 
 
-def at_final_header(seq, ch_id, msg_id, decode) -> bool:
-    """True if token list `seq` ends exactly at a final channel header
-    (...<|channel|>final<|message|>). `decode` maps token ids to text."""
-    if not seq or seq[-1] != msg_id:
-        return False
-    try:
-        ch = len(seq) - 1 - seq[::-1].index(ch_id)
-    except ValueError:
-        return False
-    return decode(seq[ch + 1:-1]).strip() == "final"
+def final_channel(decoded: str) -> str:
+    """The text the model put in its harmony `final` channel."""
+    if "final<|message|>" in decoded:
+        decoded = decoded.split("final<|message|>", 1)[1]
+    for end in ("<|return|>", "<|end|>", "<|endoftext|>"):
+        decoded = decoded.split(end, 1)[0]
+    return decoded.strip()
 
 
-def think_then_handoff(llm, prompt, temperature, effort="high"):
-    """Reason in the analysis channel, halting the instant the final channel
-    opens. Returns (prompt_ids, analysis_text, opened_final) for the
-    constrained pass to continue from."""
+def parse_ideas(text: str) -> list[str]:
+    """Pull rewrite-idea phrases from a numbered or bulleted menu."""
+    ideas = []
+    for line in text.splitlines():
+        m = re.match(r"\s*(?:\d+[.)]|[-*])\s+(.+)", line)
+        if m and m.group(1).strip():
+            ideas.append(m.group(1).strip())
+    return ideas
+
+
+def propose_ideas(llm, prompt, temperature, effort="high"):
+    """Reason once and return the model's menu of distinct rewrite ideas."""
     import torch
-    from transformers import StoppingCriteria, StoppingCriteriaList, TextStreamer
+    from transformers import TextStreamer
 
-    ch_id, msg_id = channel_ids(llm.tokenizer)
+    full = prompt + IDEAS_GOAL
     try:
         text = llm.tokenizer.apply_chat_template(
-            [{"role": "user", "content": prompt}],
+            [{"role": "user", "content": full}],
             tokenize=False, add_generation_prompt=True, reasoning_effort=effort,
         )
     except TypeError:
-        text = llm.format_prompt(prompt)
+        text = llm.format_prompt(full)
     ids = llm.tokenizer.encode(
         text, return_tensors="pt", add_special_tokens=False
     ).to(llm.device)
-    start = ids.shape[1]
-
-    class StopAtFinal(StoppingCriteria):
-        def __call__(self, input_ids, scores, **kwargs):
-            return at_final_header(input_ids[0].tolist(), ch_id, msg_id,
-                                   llm.tokenizer.decode)
 
     max_ctx = getattr(llm.model.config, "max_position_embeddings", None) or 8192
-    gen_kwargs = dict(max_new_tokens=max(256, max_ctx - start - 64),
+    gen_kwargs = dict(max_new_tokens=max(256, max_ctx - ids.shape[1] - 64),
                       attention_mask=torch.ones_like(ids),
                       pad_token_id=llm.tokenizer.pad_token_id,
-                      stopping_criteria=StoppingCriteriaList([StopAtFinal()]),
                       streamer=TextStreamer(llm.tokenizer, skip_prompt=True,
                                             skip_special_tokens=True))
     if temperature and temperature > 0:
@@ -136,11 +137,14 @@ def think_then_handoff(llm, prompt, temperature, effort="high"):
     with torch.no_grad():
         out = llm.model.generate(ids, **gen_kwargs)
 
-    opened_final = out[0, -1].item() == msg_id
-    analysis = llm.tokenizer.decode(
-        out[0][start:], skip_special_tokens=True
-    ).strip()
-    return out, analysis, opened_final
+    decoded = llm.tokenizer.decode(out[0][ids.shape[1]:], skip_special_tokens=False)
+    return parse_ideas(final_channel(decoded))
+
+
+def condition_on(idea: str) -> str:
+    """Prompt suffix pinning one constrained sample to a single rewrite idea."""
+    return (f"\n\nApply this specific rewrite to the original program, and no "
+            f"other:\n{idea}\nOutput the single program.")
 
 
 def main() -> None:
@@ -178,20 +182,15 @@ def main() -> None:
     llm = casa.LLM.from_pretrained(args.model, **load_kwargs)
     grammar = casa.Grammar.from_string(grammar_str, llm.tokenizer)
 
-    # A harmony model (gpt-oss) on a rejection sampler reasons in its analysis
-    # channel, then the program is sampled grammar-constrained as a continuation
-    # in its own final channel.
-    reasoning, prompt_ids = None, None
+    # A harmony model (gpt-oss) reasons once into a menu of distinct rewrite
+    # ideas; each idea then conditions its own batch of constrained samples, so
+    # the programs spread across ideas instead of orbiting a single one.
+    import torch
+    ideas = []
     if args.sampler in REJECTION and channel_ids(llm.tokenizer):
-        print(f"{'=' * 70}\nreasoning phase\n{'=' * 70}")
-        prompt_ids, reasoning, opened = think_then_handoff(
-            llm, prompt + REASONING_GOAL, args.temperature)
-        print(f"\n{'=' * 70}\n")
-        if not opened:
-            print("warning: model hit the context limit without opening its "
-                  "final channel; sampling without reasoning.\n")
-            prompt_ids = None
-        import torch
+        print(f"{'=' * 70}\nreasoning phase (proposing rewrite ideas)\n{'=' * 70}")
+        ideas = propose_ideas(llm, prompt, args.temperature)
+        print(f"\n{'=' * 70}\nproposed {len(ideas)} rewrite idea(s)\n{'=' * 70}")
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
 
@@ -200,10 +199,22 @@ def main() -> None:
         sampler = getattr(casa, args.sampler.upper())(
             llm, grammar, verbose=True, temperature=args.temperature
         )
-        results = sampler.sample(
-            prompt if prompt_ids is None else None, n_samples=args.samples,
-            max_attempts=args.max_attempts, prompt_ids=prompt_ids,
-        )
+        if ideas:
+            results = []
+            per = max(1, -(-args.samples // len(ideas)))  # ceil
+            for i, idea in enumerate(ideas):
+                print(f"\n[idea {i + 1}/{len(ideas)}] {idea}")
+                results += sampler.sample(prompt + condition_on(idea),
+                                          n_samples=per,
+                                          max_attempts=args.max_attempts)
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+                if len(distinct(results)) >= args.samples:
+                    break
+        else:
+            results = sampler.sample(
+                prompt, n_samples=args.samples, max_attempts=args.max_attempts
+            )
     else:  # mcmc-<variant>
         sampler = casa.MCMC(
             llm, grammar, variant=args.sampler.split("-", 1)[1], verbose=True,
@@ -225,7 +236,7 @@ def main() -> None:
     summary.write_text(json.dumps(
         {"benchmark": args.benchmark, "reference": reference,
          "model": args.model, "sampler": args.sampler,
-         "reasoning": reasoning, "programs": programs},
+         "ideas": ideas, "programs": programs},
         indent=2,
     ))
     print(f"\nwrote {len(programs)} distinct equivalent programs to {summary}")
