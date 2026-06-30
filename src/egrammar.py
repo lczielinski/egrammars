@@ -270,9 +270,29 @@ def reachable(root: str, eclasses: EClassMapping) -> list[str]:
     return order
 
 
-def intersect(root: str, eclasses: EClassMapping) -> str:
+def _branching_header(variables: list[str], root_name: str) -> list[str]:
+    """Grammar rules that let the program be a nest of `if`s over the inputs, each
+    branch being an equivalent program (the root e-class). Conditions compare the
+    variables or a numeric threshold, so the model can pick the form that is
+    accurate in each input region. Every leaf is still an e-graph program, so the
+    whole branching program stays equivalent to the reference for every input."""
+    cmps = ("<", ">", "<=", ">=")
+    cond = " | ".join(f'"({op} " operand " " operand ")"' for op in cmps)
+    operand = " | ".join([f'"{v}"' for v in variables] + ["NUMBER"])
+    return [
+        f'start: "(FPCore ({" ".join(variables)}) " body ")"',
+        f'body: {root_name} | "(if " cond " " body " " body ")"',
+        f"cond: {cond}",
+        f"operand: {operand}",
+        r'NUMBER: /-?[0-9]+(\.[0-9]+)?/',
+    ]
+
+
+def intersect(root: str, eclasses: EClassMapping, branching: bool = False) -> str:
     """The FPCore syntax grammar restricted to the e-graph, as a lark grammar:
-    one nonterminal per e-class, one production per e-node."""
+    one nonterminal per e-class, one production per e-node. With branching=True the
+    program may also be an `if` tree whose arms are e-graph programs (see
+    _branching_header)."""
     order = reachable(root, eclasses)
     name = {eclass: f"e{i}" for i, eclass in enumerate(order)}
 
@@ -291,7 +311,10 @@ def intersect(root: str, eclasses: EClassMapping) -> str:
     variables = sorted(
         {leaf(e.children[0]) for ec in order for e in eclasses[ec] if e.op == "Var"}
     )
-    lines = [f'start: "(FPCore ({" ".join(variables)}) " {name[root]} ")"']
+    if branching:
+        lines = _branching_header(variables, name[root])
+    else:
+        lines = [f'start: "(FPCore ({" ".join(variables)}) " {name[root]} ")"']
     for eclass in order:
         productions = sorted({production(enode) for enode in eclasses[eclass]})
         lines.append(f"{name[eclass]}: {' | '.join(productions)}")
@@ -303,18 +326,20 @@ def read_reference(benchmark: str) -> str:
     return content.splitlines()[0].removeprefix(";; ")
 
 
-def build(benchmark: str, runs: int = SATURATION_RUNS) -> tuple[str, str]:
+def build(benchmark: str, runs: int = SATURATION_RUNS,
+          branching: bool = False) -> tuple[str, str]:
     content = (paths.BENCHMARKS / f"{benchmark}.egglog").read_text()
     reference = content.splitlines()[0].removeprefix(";; ")
 
     root, eclasses = extract(saturate(content, runs))
     root, eclasses = strip_identity_enodes(root, eclasses)
-    grammar = intersect(root, eclasses)
+    grammar = intersect(root, eclasses, branching)
     return reference, grammar
 
 
-def write_grammar(benchmark: str, grammar: str) -> Path:
+def write_grammar(benchmark: str, grammar: str, branching: bool = False) -> Path:
     paths.LARK.mkdir(exist_ok=True)
-    grammar_path = paths.LARK / f"{benchmark}.lark"
+    suffix = "-branching" if branching else ""
+    grammar_path = paths.LARK / f"{benchmark}{suffix}.lark"
     grammar_path.write_text(grammar)
     return grammar_path

@@ -18,19 +18,24 @@ Options:
     --temperature T      sampling temperature applied to the model (default 1.0);
                          T<1 sharpens, T>1 flattens the grammar-constrained model
     --model ID           HuggingFace model id to load (default Qwen2.5-14B-Instruct)
-    --effort LEVEL       gpt-oss reasoning effort for the idea-proposal phase:
+    --effort LEVEL       gpt-oss reasoning effort for the reasoning phase:
                          low, medium, or high (default medium)
+    --branching          produce one program that branches on the input with `if`,
+                         each arm an e-graph equivalent. The model reasons briefly,
+                         then a constrained pass writes the branching program. Uses
+                         a separate <name>-branching.lark grammar; fptaylor is
+                         skipped (it can't analyze `if`).
     --saturation N       rewrite-rule iterations when compiling a grammar (default
                          6; only used if not cached). Lower it for symmetry-heavy
                          expressions whose grammar explodes
 
-A harmony model (gpt-oss) on a rejection sampler reasons automatically: it first
-proposes a menu of distinct rewrite ideas, then samples each idea under its own
-grammar-constrained prompt so the programs spread across ideas.
+Without --branching, a harmony model (gpt-oss) on a rejection sampler reasons
+automatically: it proposes a menu of distinct rewrite ideas, then samples each
+idea under its own grammar-constrained prompt so the programs spread across ideas.
 
 Examples:
     uv run src/run.py quadratic --sampler mcmc-restart --steps 20
-    uv run src/run.py quadratic --model openai/gpt-oss-120b
+    uv run src/run.py sqrtshift --model openai/gpt-oss-120b --branching --saturation 4
 """
 
 import argparse
@@ -57,17 +62,31 @@ def make_prompt(reference: str) -> str:
     )
 
 
-def ensure_artifacts(benchmark: str, saturation: int) -> tuple[str, str, str]:
+# Appended to the prompt in --branching mode: permits an `if` over the inputs so
+# each region can use the rewrite that is accurate there.
+BRANCHING_GOAL = (
+    "\n\nThis expression loses accuracy on some inputs. In ADDITION to those five "
+    "operators you may use (if cond a b), where cond is a comparison -- (< a b), "
+    "(> a b), (<= a b), (>= a b) over the variables and numeric thresholds. Produce "
+    "one program that branches on the input so each region uses an algebraically-"
+    "equivalent form that is accurate there; every branch must equal the original "
+    "in exact arithmetic."
+)
+
+
+def ensure_artifacts(benchmark: str, saturation: int,
+                     branching: bool = False) -> tuple[str, str, str]:
     import egrammar
 
-    grammar_path = paths.LARK / f"{benchmark}.lark"
+    suffix = "-branching" if branching else ""
+    grammar_path = paths.LARK / f"{benchmark}{suffix}.lark"
     if grammar_path.exists():
         reference, grammar = egrammar.read_reference(benchmark), grammar_path.read_text()
     else:
         print(f"Compiling grammar for {benchmark!r} (no cached grammar, "
-              f"saturation={saturation})")
-        reference, grammar = egrammar.build(benchmark, saturation)
-        egrammar.write_grammar(benchmark, grammar)
+              f"saturation={saturation}, branching={branching})")
+        reference, grammar = egrammar.build(benchmark, saturation, branching)
+        egrammar.write_grammar(benchmark, grammar, branching)
     return grammar, make_prompt(reference), reference
 
 
@@ -170,6 +189,60 @@ def condition_on(idea: str) -> str:
             f"other:\n{idea}\nOutput the single program.")
 
 
+def at_final_header(seq, ch_id, msg_id, decode) -> bool:
+    """True if token list `seq` ends exactly at a final channel header
+    (...<|channel|>final<|message|>). `decode` maps token ids to text."""
+    if not seq or seq[-1] != msg_id:
+        return False
+    try:
+        ch = len(seq) - 1 - seq[::-1].index(ch_id)
+    except ValueError:
+        return False
+    return decode(seq[ch + 1:-1]).strip() == "final"
+
+
+def think_then_handoff(llm, prompt, temperature, effort="medium"):
+    """Reason in the analysis channel, halting the instant the final channel opens.
+    Returns (prompt_ids, analysis_text, opened_final) so a grammar-constrained pass
+    can continue in the same final channel, attending to the reasoning."""
+    import torch
+    from transformers import StoppingCriteria, StoppingCriteriaList, TextStreamer
+
+    ch_id, msg_id = channel_ids(llm.tokenizer)
+    try:
+        text = llm.tokenizer.apply_chat_template(
+            [{"role": "user", "content": prompt}],
+            tokenize=False, add_generation_prompt=True, reasoning_effort=effort,
+        )
+    except TypeError:
+        text = llm.format_prompt(prompt)
+    ids = llm.tokenizer.encode(
+        text, return_tensors="pt", add_special_tokens=False
+    ).to(llm.device)
+    start = ids.shape[1]
+
+    class StopAtFinal(StoppingCriteria):
+        def __call__(self, input_ids, scores, **kwargs):
+            return at_final_header(input_ids[0].tolist(), ch_id, msg_id,
+                                   llm.tokenizer.decode)
+
+    max_ctx = getattr(llm.model.config, "max_position_embeddings", None) or 8192
+    gen_kwargs = dict(max_new_tokens=max(256, max_ctx - start - 64),
+                      attention_mask=torch.ones_like(ids),
+                      pad_token_id=llm.tokenizer.pad_token_id,
+                      stopping_criteria=StoppingCriteriaList([StopAtFinal()]),
+                      streamer=TextStreamer(llm.tokenizer, skip_prompt=True,
+                                            skip_special_tokens=True))
+    if temperature and temperature > 0:
+        gen_kwargs.update(do_sample=True, temperature=temperature)
+    with torch.no_grad():
+        out = llm.model.generate(ids, **gen_kwargs)
+
+    opened_final = out[0, -1].item() == msg_id
+    analysis = llm.tokenizer.decode(out[0][start:], skip_special_tokens=True).strip()
+    return out, analysis, opened_final
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -182,21 +255,27 @@ def main() -> None:
     parser.add_argument("--temperature", type=float, default=1.0)
     parser.add_argument("--model", default=MODEL_ID)
     parser.add_argument("--effort", choices=["low", "medium", "high"], default="medium",
-                        help="gpt-oss reasoning effort for the idea-proposal phase")
+                        help="gpt-oss reasoning effort for the reasoning phase")
+    parser.add_argument("--branching", action="store_true",
+                        help="let the program branch on the input with `if`; the "
+                             "model reasons briefly, then samples one branching "
+                             "program whose every arm is an e-graph equivalent")
     parser.add_argument("--saturation", type=int, default=6,
                         help="rewrite-rule iterations when compiling a grammar "
                              "(only used if not already cached; lower it for "
                              "symmetry-heavy expressions like heron)")
     args = parser.parse_args()
 
-    grammar_str, prompt, reference = ensure_artifacts(args.benchmark, args.saturation)
+    grammar_str, prompt, reference = ensure_artifacts(
+        args.benchmark, args.saturation, args.branching)
 
     import casa
 
     budget = (f"<= {args.max_attempts} attempts/sample" if args.sampler in REJECTION
               else f"{args.steps} MCMC steps/chain")
+    suffix = "-branching" if args.branching else ""
     print(f"benchmark: {args.benchmark}")
-    print(f"grammar:   {paths.LARK / f'{args.benchmark}.lark'} "
+    print(f"grammar:   {paths.LARK / f'{args.benchmark}{suffix}.lark'} "
           f"({grammar_str.count(chr(10))} rules)")
     print(f"model:     {args.model}")
     print(f"sampler:   {args.sampler}")
@@ -207,11 +286,22 @@ def main() -> None:
     llm = casa.LLM.from_pretrained(args.model, **load_kwargs)
     grammar = casa.Grammar.from_string(grammar_str, llm.tokenizer)
 
-    # A harmony model (gpt-oss) reasons once into a menu of distinct rewrite
-    # ideas; each idea then conditions its own batch of constrained samples, so
-    # the programs spread across ideas instead of orbiting a single one.
-    ideas = []
-    if args.sampler in REJECTION and channel_ids(llm.tokenizer):
+    # Reasoning. --branching: the model reasons briefly, then a constrained pass
+    # writes one branching program (each arm an e-graph equivalent) in its own
+    # final channel. Otherwise a harmony model proposes a menu of rewrite ideas,
+    # each conditioning its own batch of constrained samples.
+    ideas, prompt_ids, bprompt = [], None, prompt + BRANCHING_GOAL
+    if args.branching and args.sampler in REJECTION and channel_ids(llm.tokenizer):
+        print(f"{'=' * 70}\nreasoning phase (branching)\n{'=' * 70}")
+        prompt_ids, _, opened = think_then_handoff(
+            llm, bprompt, args.temperature, args.effort)
+        print(f"\n{'=' * 70}\n")
+        free_cuda()
+        if not opened:
+            print("warning: model never opened its final channel; sampling "
+                  "without reasoning.\n")
+            prompt_ids = None
+    elif not args.branching and args.sampler in REJECTION and channel_ids(llm.tokenizer):
         print(f"{'=' * 70}\nreasoning phase (proposing rewrite ideas)\n{'=' * 70}")
         ideas = propose_ideas(llm, reference, args.temperature, args.effort)
         print(f"\n{'=' * 70}\nproposed {len(ideas)} rewrite idea(s)\n{'=' * 70}")
@@ -222,7 +312,12 @@ def main() -> None:
         sampler = getattr(casa, args.sampler.upper())(
             llm, grammar, verbose=True, temperature=args.temperature
         )
-        if ideas:
+        if args.branching:
+            results = sampler.sample(
+                bprompt if prompt_ids is None else None, n_samples=args.samples,
+                max_attempts=args.max_attempts, prompt_ids=prompt_ids,
+            )
+        elif ideas:
             results = []
             per = max(1, -(-args.samples // len(ideas)))  # ceil
             for i, idea in enumerate(ideas):
@@ -243,7 +338,8 @@ def main() -> None:
             temperature=args.temperature,
         )
         results = sampler.sample(
-            prompt, n_samples=args.samples, n_steps=args.steps, return_steps=False
+            bprompt if args.branching else prompt,
+            n_samples=args.samples, n_steps=args.steps, return_steps=False,
         )
     programs = distinct(results)
 
@@ -263,7 +359,10 @@ def main() -> None:
     ))
     print(f"\nwrote {len(programs)} distinct equivalent programs to {summary}")
 
-    if programs:
+    if args.branching:
+        print("\nskipping fptaylor: branching programs (if) are not supported by "
+              "the checker yet")
+    elif programs:
         import fptaylor_check
         print(f"\n{'=' * 70}\nfptaylor rounding-error analysis\n{'=' * 70}")
         try:
