@@ -42,15 +42,19 @@ REJECTION = ("rs", "ars", "rsft", "cars", "asap", "gcd")
 MCMC_VARIANTS = ("uniform", "priority", "restart")
 SAMPLERS = REJECTION + tuple(f"mcmc-{v}" for v in MCMC_VARIANTS)
 
-REASONING_GOAL = (
-    "\n\nThis expression has several distinct accuracy-improving rewrites, and the "
-    "most accurate one can depend on the input range. You'll be asked for a program "
-    "repeatedly to collect a DIVERSE set of good rewrites. In your reasoning, survey "
-    "the different accuracy-improving rewrites available here -- re-association, "
-    "distribution, fraction splitting, conjugate rationalization -- and the input "
-    "regime where each is most accurate. Keep several good options in play; do not "
-    "converge on a single best. Then output one program."
-)
+def reasoning_goal(n_samples: int) -> str:
+    """Steer the (shared) reasoning phase to plan the whole batch of distinct
+    rewrites up front, so each constrained sample draws from that plan instead of
+    orbiting a single champion."""
+    return (
+        f"\n\nYou will produce {n_samples} DISTINCT programs for this expression, "
+        "collected one at a time. Before writing any, use your reasoning to plan "
+        f"the full set: enumerate up to {n_samples} genuinely different accuracy-"
+        "improving rewrites -- re-association, distribution, fraction splitting, "
+        "conjugate rationalization -- and the input regime where each is most "
+        "accurate. Favour rewrites that change rounding, not minor reorderings. "
+        "Then output one program; you'll be asked for the rest."
+    )
 
 
 def ensure_artifacts(benchmark: str, saturation: int) -> tuple[str, str, str]:
@@ -186,7 +190,8 @@ def main() -> None:
     if args.sampler in REJECTION and channel_ids(llm.tokenizer):
         print(f"{'=' * 70}\nreasoning phase\n{'=' * 70}")
         prompt_ids, reasoning, opened = think_then_handoff(
-            llm, prompt + REASONING_GOAL, args.reason_tokens, args.temperature)
+            llm, prompt + reasoning_goal(args.samples), args.reason_tokens,
+            args.temperature)
         print(f"\n{'=' * 70}\n")
         if not opened:
             print(f"warning: model did not open its final channel within "
