@@ -1,0 +1,132 @@
+{
+  "benchmark": "sqrtminus",
+  "reference": "(FPCore (x) (- (sqrt (+ (* x x) 1)) x))",
+  "model": "openai/gpt-oss-120b",
+  "rounding": "float64, round-to-nearest (rnd64=)",
+  "intervals": {
+    "x": "[1,1000]"
+  },
+  "note": "Certified worst-case bounds over this interval box; valid only within it. The accuracy ranking can reorder in other regions. Results are ordered best-first by relative error. A branching program's error is the worst over its branches, each bounded over the sub-interval where that branch applies (see `branches`).",
+  "results": [
+    {
+      "fptaylor_expr": "(sqrt(((x * x) + 1)) + x)",
+      "enclosure": [
+        2.414213,
+        2000.001
+      ],
+      "abs_err": 2.514831e-13,
+      "rel_err": 2.240653e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.0091004015866585,
+      "program": "(FPCore (x) (+ (sqrt (+ (* x x) 1)) x))"
+    },
+    {
+      "fptaylor_expr": "(((1 / sqrt(sqrt(x))) * (sqrt(((1 / x) / sqrt(x))) * sqrt((((((x * x) * (x * x)) - 1) / ((x * x) - 1)) * (x * x))))) + (sqrt(x) * (-(sqrt(x)))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (+ (* (/ 1 (sqrt (sqrt x))) (* (sqrt (/ (/ 1 x) (sqrt x))) (sqrt (* (/ (- (* (* x x) (* x x)) 1) (- (* x x) 1)) (* x x))))) (* (sqrt x) (- (sqrt x)))))"
+    },
+    {
+      "fptaylor_expr": "(((sqrt(sqrt(x)) * ((sqrt(sqrt(sqrt(x))) * sqrt(((((1 / x) * (1 / x)) * ((((x * x) * (x * x)) - 1) / ((x * x) - 1))) * sqrt(sqrt(x))))) - sqrt(sqrt(x)))) * sqrt(sqrt(x))) * sqrt(sqrt(x)))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* (* (* (sqrt (sqrt x)) (- (* (sqrt (sqrt (sqrt x))) (sqrt (* (* (* (/ 1 x) (/ 1 x)) (/ (- (* (* x x) (* x x)) 1) (- (* x x) 1))) (sqrt (sqrt x))))) (sqrt (sqrt x)))) (sqrt (sqrt x))) (sqrt (sqrt x))))"
+    },
+    {
+      "fptaylor_expr": "(((sqrt(sqrt(x)) * (sqrt((sqrt(x) + (sqrt(x) / (x * x)))) - sqrt(sqrt(x)))) * sqrt(sqrt(x))) * sqrt(sqrt(x)))",
+      "enclosure": [
+        -0.007121857,
+        0.4243602
+      ],
+      "abs_err": 1.873845e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* (* (* (sqrt (sqrt x)) (- (sqrt (+ (sqrt x) (/ (sqrt x) (* x x)))) (sqrt (sqrt x)))) (sqrt (sqrt x))) (sqrt (sqrt x))))"
+    },
+    {
+      "fptaylor_expr": "(((1 / sqrt(sqrt(x))) * (sqrt(((1 / x) / sqrt(x))) * sqrt((((((x * x) * (x * x)) - 1) / ((x * x) - 1)) * (x * x))))) - x)",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (- (* (/ 1 (sqrt (sqrt x))) (* (sqrt (/ (/ 1 x) (sqrt x))) (sqrt (* (/ (- (* (* x x) (* x x)) 1) (- (* x x) 1)) (* x x))))) x))"
+    },
+    {
+      "fptaylor_expr": "(sqrt(((x * x) + 1)) - x)",
+      "enclosure": [
+        -0.007121762,
+        0.4250332
+      ],
+      "abs_err": 1.382404e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (- (sqrt (+ (* x x) 1)) x))"
+    },
+    {
+      "fptaylor_expr": "(sqrt(sqrt(sqrt(x))) * (sqrt(sqrt(sqrt(x))) * (sqrt(((x * sqrt(x)) + sqrt((1 / x)))) + (sqrt(sqrt(x)) * (-(sqrt(x)))))))",
+      "enclosure": [
+        -0.005216327,
+        0.4239055
+      ],
+      "abs_err": 3.54459e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* (sqrt (sqrt (sqrt x))) (* (sqrt (sqrt (sqrt x))) (+ (sqrt (+ (* x (sqrt x)) (sqrt (/ 1 x)))) (* (sqrt (sqrt x)) (- (sqrt x)))))))"
+    },
+    {
+      "fptaylor_expr": "(sqrt(((x * x) + 1)) + (sqrt(x) * (-(sqrt(x)))))",
+      "enclosure": [
+        -0.007121762,
+        0.4250332
+      ],
+      "abs_err": 2.918215e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (+ (sqrt (+ (* x x) 1)) (* (sqrt x) (- (sqrt x)))))"
+    },
+    {
+      "fptaylor_expr": "((sqrt((((1 / (1 / ((1 / x) * sqrt(x)))) * (1 / (1 / ((1 / x) / sqrt(x))))) + 1)) * (1 / (1 / x))) + (sqrt(x) * (-(sqrt(x)))))",
+      "enclosure": [
+        -0.007121771,
+        0.4263468
+      ],
+      "abs_err": 5.930054e-07,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (+ (* (sqrt (+ (* (/ 1 (/ 1 (* (/ 1 x) (sqrt x)))) (/ 1 (/ 1 (/ (/ 1 x) (sqrt x))))) 1)) (/ 1 (/ 1 x))) (* (sqrt x) (- (sqrt x)))))"
+    },
+    {
+      "fptaylor_expr": "(((((1 / (1 / x)) * (sqrt((((1 / (1 / sqrt((1 / x)))) * (1 / (1 / ((1 / x) / sqrt(x))))) + 1)) * sqrt((1 / x)))) - sqrt(x)) * sqrt(sqrt(x))) * sqrt(sqrt(x)))",
+      "enclosure": [
+        -0.00712177,
+        0.4266089
+      ],
+      "abs_err": 7.460957e-08,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* (* (- (* (/ 1 (/ 1 x)) (* (sqrt (+ (* (/ 1 (/ 1 (sqrt (/ 1 x)))) (/ 1 (/ 1 (/ (/ 1 x) (sqrt x))))) 1)) (sqrt (/ 1 x)))) (sqrt x)) (sqrt (sqrt x))) (sqrt (sqrt x))))"
+    }
+  ]
+}
