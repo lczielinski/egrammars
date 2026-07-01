@@ -28,7 +28,9 @@ TIMEOUT = 120
 # across a whole regime, so these span from the ill-conditioned region into the
 # well-conditioned one (each branch is checked only over its own sub-interval); the
 # reference must stay real and finite across the box (no sqrt of a negative, no
-# division by zero).
+# division by zero). Keep the span moderate (a few orders of magnitude at most):
+# FPTaylor's optimizer subdivides the box, so a very wide box over a cancellation-
+# heavy expression grinds toward TIMEOUT.
 #   quadratic   (-b + sqrt(b*b - 4ac)) / (2a)    need b*b > 4ac, a != 0
 #   sqrtminus   sqrt(x*x + 1) - x                defined for all x
 #   randexpr    ... sqrt(x*z), z/sqrt(z) ...     need x, y, z > 0
@@ -43,9 +45,9 @@ INTERVALS = {
     "randexpr": {"x": "[1,100]", "y": "[1,100]", "z": "[1,100]"},
     "subfrac": {"x": "[1,1000]"},                  # cancellation grows with x
     "sqrtshift": {"x": "[0.01,100]"},              # cancels as x -> 0, fine for large x
-    "sqrtquad": {"x": "[1,100000]"},               # cancels as x grows
-    "recipsqrt": {"x": "[1,100000]"},              # both terms -> 1/x as x grows
-    "recipback": {"x": "[2,100000]"},              # both terms -> 1/x; stay clear of x=1
+    "sqrtquad": {"x": "[1,1000]"},                 # cancels as x grows
+    "recipsqrt": {"x": "[1,1000]"},                # both terms -> 1/x as x grows
+    "recipback": {"x": "[2,1000]"},                # both terms -> 1/x; stay clear of x=1
 }
 
 
