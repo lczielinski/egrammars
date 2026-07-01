@@ -83,12 +83,16 @@
 (rewrite (Sub (Mul a b) (Mul a c))
   (Mul a (Sub b c)))
 
-(rewrite (Sqrt (Add a (Num n)))
-  (Mul (Sqrt a) (Sqrt (Add (Num 1) (Div (Num n) a)))))
-
-(birewrite (Sqrt (Mul a b))
-  (Mul (Sqrt a) (Sqrt b)))
-(birewrite (Sqrt (Div a b))
-  (Div (Sqrt a) (Sqrt b)))
+;; DISABLED: these sqrt-factoring rules assume nonnegative operands. They let
+;; egglog derive sqrt(x*x) = x (via sqrt(a*b)=sqrt(a)*sqrt(b) then sqrt(a)*sqrt(a)=a),
+;; which loses the sign of x and merges an expression with a non-equivalent form
+;; (e.g. sqrt(x*x+1)-x with its reciprocal sqrt(x*x+1)+x). Only sound on domains
+;; where every sqrt operand is >= 0.
+;; (rewrite (Sqrt (Add a (Num n)))
+;;   (Mul (Sqrt a) (Sqrt (Add (Num 1) (Div (Num n) a)))))
+;; (birewrite (Sqrt (Mul a b))
+;;   (Mul (Sqrt a) (Sqrt b)))
+;; (birewrite (Sqrt (Div a b))
+;;   (Div (Sqrt a) (Sqrt b)))
 (rewrite (Mul (Sqrt a) (Sqrt a))
   a)
