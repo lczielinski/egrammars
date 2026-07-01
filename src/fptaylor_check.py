@@ -34,7 +34,9 @@ TIMEOUT = 120
 #   quadratic   (-b + sqrt(b*b - 4ac)) / (2a)    c<0 so disc>0 for all b; b spans
 #               0 so -b+sqrt cancels for b>0 (needs conjugate) but is fine for b<0
 #               (needs original) -> the accurate program branches on sign(b)
-#   sqrtminus   sqrt(x*x + 1) - x                defined for all x
+#   sqrtminus   sqrt(x*x + 1) - x                defined for all x; b spans 0 so the
+#               difference cancels for x>0 (needs 1/(sqrt+x)) but the reciprocal's
+#               denom cancels for x<0 (needs original) -> branch on sign(x)
 #   randexpr    ... sqrt(x*z), z/sqrt(z) ...     need x, y, z > 0
 #   subfrac     1/(x+1) - 1/x                    need x != 0, -1
 #   sqrtshift   sqrt(x + 4) - 2                  need x > -4
@@ -43,7 +45,7 @@ TIMEOUT = 120
 #   recipback   1/(x - 1) - 1/x                  need x != 0, 1
 INTERVALS = {
     "quadratic": {"a": "[1,2]", "b": "[-1000,1000]", "c": "[-10,-1]"},  # branch on sign(b)
-    "sqrtminus": {"x": "[1,1000]"},                # cancellation grows with x
+    "sqrtminus": {"x": "[-1000,1000]"},            # branch on sign(x)
     "randexpr": {"x": "[1,100]", "y": "[1,100]", "z": "[1,100]"},
     "subfrac": {"x": "[1,1000]"},                  # cancellation grows with x
     "sqrtshift": {"x": "[0.01,100]"},              # cancels as x -> 0, fine for large x
