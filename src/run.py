@@ -38,23 +38,30 @@ warnings.filterwarnings("ignore", category=FutureWarning, module="kernels")
 MODEL_ID = "Qwen/Qwen2.5-14B-Instruct"
 
 
-def make_prompt(reference: str) -> str:
+def make_prompt(reference: str, box: dict | None) -> str:
     header = (paths.ROOT / "prompt_header.md").read_text()
-    return f"{header}\n\nThe original program is:\n{reference}"
+    prompt = f"{header}\n\nThe original program is:\n{reference}"
+    if box:
+        ranges = ", ".join(f"{v} in {iv}" for v, iv in box.items())
+        prompt += (f"\n\nThe program is only evaluated on inputs in these ranges: "
+                   f"{ranges}. Make it accurate across these ranges.")
+    return prompt
 
 
 def ensure_artifacts(benchmark: str, saturation: int) -> tuple[str, str, str]:
     import egrammar
+    import fptaylor_check
 
-    grammar_path = paths.LARK / f"{benchmark}-branching.lark"
+    grammar_path = paths.LARK / f"{benchmark}.lark"
     if grammar_path.exists():
         reference, grammar = egrammar.read_reference(benchmark), grammar_path.read_text()
     else:
         print(f"Compiling grammar for {benchmark!r} "
               f"(no cached grammar, saturation={saturation})")
         reference, grammar = egrammar.build(benchmark, saturation, branching=True)
-        egrammar.write_grammar(benchmark, grammar, branching=True)
-    return grammar, make_prompt(reference), reference
+        egrammar.write_grammar(benchmark, grammar)
+    box = fptaylor_check.INTERVALS.get(benchmark)
+    return grammar, make_prompt(reference, box), reference
 
 
 def distinct(results) -> list[str]:
@@ -158,7 +165,7 @@ def main() -> None:
     import casa
 
     print(f"benchmark: {args.benchmark}")
-    print(f"grammar:   {paths.LARK / f'{args.benchmark}-branching.lark'} "
+    print(f"grammar:   {paths.LARK / f'{args.benchmark}.lark'} "
           f"({grammar_str.count(chr(10))} rules)")
     print(f"model:     {args.model}")
     print(f"temp:      {args.temperature}")

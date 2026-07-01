@@ -327,9 +327,8 @@ def build(benchmark: str, runs: int = SATURATION_RUNS,
     return reference, grammar
 
 
-def write_grammar(benchmark: str, grammar: str, branching: bool = False) -> Path:
+def write_grammar(benchmark: str, grammar: str) -> Path:
     paths.LARK.mkdir(exist_ok=True)
-    suffix = "-branching" if branching else ""
-    grammar_path = paths.LARK / f"{benchmark}{suffix}.lark"
+    grammar_path = paths.LARK / f"{benchmark}.lark"
     grammar_path.write_text(grammar)
     return grammar_path

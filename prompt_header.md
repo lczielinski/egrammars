@@ -29,7 +29,7 @@ Condition numbers (how much each operation amplifies relative input error):
   x / y :  well-conditioned in relative error
 A large condition number means small rounding errors in the inputs are magnified in the result, so `+` and `-` lose accuracy exactly when their operands nearly cancel. Separately, watch the MAGNITUDE of intermediates: a product or square overflows to `inf` when its operands are huge and underflows to `0` when they are tiny, and a division by a near-zero value overflows — even when the final result is in range.
 
-Each branch is some algebraically-equivalent rewrite of the original that rounds differently. The useful rewrites:
+Each accurate form is some algebraically-equivalent rewrite of the original that rounds differently. The useful rewrites:
 - re-associate a sum or product, e.g. `(* (* a b) c)` to `(* a (* b c))`;
 - rewrite a division as multiplication by a reciprocal, e.g. `(/ x (* y z))` to `(* x (/ 1 (* y z)))`;
 - split a fraction over a sum or difference, e.g. `(/ (+ x y) c)` to `(+ (/ x c) (/ y c))`;
@@ -67,9 +67,9 @@ sqrt(a) * sqrt(a) = a
 sqrt(a + n) = sqrt(a) * sqrt(1 + n/a)
 p + sqrt(d) = (p*p - d) / (p - sqrt(d))
 
-Goal: ONE program that stays accurate across the WHOLE input domain by using a different equivalent form in each region.
-1. Using the condition numbers, find every input region where the program loses accuracy — a `+` or `-` whose operands nearly cancel, or a `/` by a near-zero value — and every region where an intermediate overflows or underflows.
-2. For each such region, give an algebraically-equivalent rewrite whose operations are all well-conditioned and whose intermediates stay in range there.
-3. Combine them into ONE program that branches on the inputs with `(if cond ...)` so every input takes the form that is accurate for it. Cover the entire domain, including the region where the original form is already fine. Every branch must equal the original in exact arithmetic; only the rounding may differ.
+Goal: ONE program that is accurate across the whole given input range.
+1. Using the condition numbers, find where inside the input range the program loses accuracy — a `+` or `-` whose operands nearly cancel, or a `/` by a near-zero value — or where an intermediate overflows or underflows.
+2. If a single algebraically-equivalent form is accurate everywhere in the input range, output just that form with NO `if`. Prefer this: only branch when different parts of the range genuinely need different forms. A needless `if` is worse than one clean form.
+3. When you do branch, give each fragile region a rewrite that is well-conditioned and in-range there, and combine the forms with `(if cond ...)` so every input takes the form accurate for it, covering the whole range. Every branch must equal the original in exact arithmetic; only the rounding may differ.
 
 Output ONLY the single-line `(FPCore (...) ...)` program, then immediately stop.
