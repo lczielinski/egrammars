@@ -1,0 +1,17 @@
+{
+  "benchmark": "sqrtquad",
+  "reference": "(FPCore (x) (- (sqrt (+ (* x x) x)) x))",
+  "model": "openai/gpt-oss-120b",
+  "programs": [
+    "(FPCore (x) (/ x (+ (sqrt (+ (* x x) x)) x)))",
+    "(FPCore (x) (/ x (/ (- x) (- x (sqrt (+ (* x x) x))))))",
+    "(FPCore (x) (* (/ 1 (+ (* x x) (+ (- (+ (* x x) x)) (- (sqrt (+ (* x x) x)))))) (- x)))",
+    "(FPCore (x) (- (sqrt (+ (* x x) x)) x))",
+    "(FPCore (x) (+ (sqrt (+ (* x x) x)) (- x)))",
+    "(FPCore (x) (/ (- x) (- (+ (sqrt (+ (* x x) x)) x))))",
+    "(FPCore (x) (/ x (+ (sqrt (+ x (* x x))) x)))",
+    "(FPCore (x) (+ (* x x) (+ (- (+ (* x x) x)) (sqrt (+ (* x x) x)))))",
+    "(FPCore (x) (if (< x 0) (/ x (+ (sqrt (+ (* x x) x)) x)) (/ x (+ (sqrt (+ (* x x) x)) x))))",
+    "(FPCore (x) (- (/ x (+ (- (sqrt (+ (* x x) x))) (- x)))))"
+  ]
+}
