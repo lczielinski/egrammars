@@ -10,18 +10,12 @@
       (Add
         (Add
           (Mul
-            (Sub a
-              (Div (Add (Add a b) c) (Num 3)))
-            (Sub a
-              (Div (Add (Add a b) c) (Num 3))))
+            (Sub a (Div (Add (Add a b) c) (Num 3)))
+            (Sub a (Div (Add (Add a b) c) (Num 3))))
           (Mul
-            (Sub b
-              (Div (Add (Add a b) c) (Num 3)))
-            (Sub b
-              (Div (Add (Add a b) c) (Num 3)))))
+            (Sub b (Div (Add (Add a b) c) (Num 3)))
+            (Sub b (Div (Add (Add a b) c) (Num 3)))))
         (Mul
-          (Sub c
-            (Div (Add (Add a b) c) (Num 3)))
-          (Sub c
-            (Div (Add (Add a b) c) (Num 3))))))
+          (Sub c (Div (Add (Add a b) c) (Num 3)))
+          (Sub c (Div (Add (Add a b) c) (Num 3))))))
     (Num 3)))

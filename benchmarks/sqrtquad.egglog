@@ -3,6 +3,4 @@
 (let x (Var "x"))
 
 (let start
-  (Sub
-    (Sqrt (Add (Mul x x) x))
-    x))
+  (Sub (Sqrt (Add (Mul x x) x)) x))

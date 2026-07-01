@@ -6,31 +6,7 @@
 
 (let start
   (Div
-    (Mul
-      (Add
-        (Sqrt
-          (Add
-            (Num 2)
-            (Var "z")))
-        (Num 5))
-      (Sqrt
-        (Add
-          (Var "z")
-          (Sqrt
-            (Var "y")))))
+    (Mul (Add (Sqrt (Add (Num 2) z)) (Num 5)) (Sqrt (Add z (Sqrt y))))
     (Div
-      (Mul
-        (Sqrt
-          (Mul
-            (Var "x")
-            (Var "z")))
-        (Div
-          (Var "z")
-          (Sqrt
-            (Var "z"))))
-      (Add
-        (Mul
-          (Var "x")
-          (Sqrt
-            (Num 2)))
-        (Num 4)))))
+      (Mul (Sqrt (Mul x z)) (Div z (Sqrt z)))
+      (Add (Mul x (Sqrt (Num 2))) (Num 4)))))

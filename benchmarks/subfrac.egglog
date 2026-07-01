@@ -3,6 +3,4 @@
 (let x (Var "x"))
 
 (let start
-  (Sub 
-    (Div (Num 1) (Add x (Num 1)))
-    (Div (Num 1) x)))
+  (Sub (Div (Num 1) (Add x (Num 1))) (Div (Num 1) x)))

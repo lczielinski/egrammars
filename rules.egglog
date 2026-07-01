@@ -48,25 +48,18 @@
 (rewrite (Mul (Sub a b) (Sub a b))
   (Mul (Sub b a) (Sub b a)))
 
-;; Conjugate rationalization p + sqrt(d) = (p*p - d) / (p - sqrt(d))
 (rewrite (Add p (Sqrt d))
   (Div (Sub (Mul p p) d) (Sub p (Sqrt d))))
 
-;; 1/a - 1/b = (b-a)/(ab); the general p/a - q/b form cross-multiplies everywhere
 (rewrite (Sub (Div (Num 1) a) (Div (Num 1) b))
   (Div (Sub b a) (Mul a b)))
-;; a - (a+b) = -b
 (rewrite (Sub a (Add a b))
   (Neg b))
-;; -a + -b = -(a+b)
 (rewrite (Add (Neg a) (Neg b))
   (Neg (Add a b)))
-;; (-a)/(-b) = a/b
 (rewrite (Div (Neg a) (Neg b))
   (Div a b))
 
-;; Identity eliminations: canonicalize during saturation so other rules match
-;; the bare term; strip_identity_enodes (egrammar.py) drops the padded spellings.
 (rewrite (Mul (Num 1) x)
   x)
 (rewrite (Div x (Num 1))
@@ -85,30 +78,17 @@
 (rewrite (Div (Mul a x) a)
   x)
 
-;; --- General identities (high fan-out: combined with the forward rules above
-;; they grow the e-graph fast, so keep --saturation low for big expressions) ---
-
-;; Factoring: the reverse of the (Mul a (Add/Sub ...)) distribution rules. Always
-;; valid; lets the e-graph reach factored forms.
 (rewrite (Add (Mul a b) (Mul a c))
   (Mul a (Add b c)))
 (rewrite (Sub (Mul a b) (Mul a c))
   (Mul a (Sub b c)))
 
-;; Rescale a sqrt of (term + constant) by factoring the term out:
-;; sqrt(a + n) = sqrt(a)*sqrt(1 + n/a), e.g. sqrt(x + 4) = sqrt(x)*sqrt(1 + 4/x).
-;; Restricted to a numeric second operand so it only fires on sqrt(... + const) --
-;; not on discriminant/product sqrts -- which keeps multi-variable graphs from
-;; exploding. (Commutativity supplies sqrt(x + 4) from sqrt(4 + x).)
 (rewrite (Sqrt (Add a (Num n)))
   (Mul (Sqrt a) (Sqrt (Add (Num 1) (Div (Num n) a)))))
 
-;; sqrt distributes over product and quotient (nonnegative operands, as in the
-;; benchmark domains): moves factors in and out of a square root.
 (birewrite (Sqrt (Mul a b))
   (Mul (Sqrt a) (Sqrt b)))
 (birewrite (Sqrt (Div a b))
   (Div (Sqrt a) (Sqrt b)))
-;; sqrt(a) * sqrt(a) = a
 (rewrite (Mul (Sqrt a) (Sqrt a))
   a)

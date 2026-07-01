@@ -6,10 +6,5 @@
 
 (let start
   (Div
-    (Add
-      (Neg b)
-      (Sqrt
-        (Sub
-          (Mul b b)
-          (Mul (Mul (Num 4) a) c))))
+    (Add (Neg b) (Sqrt (Sub (Mul b b) (Mul (Mul (Num 4) a) c))))
     (Mul (Num 2) a)))

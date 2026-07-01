@@ -5,8 +5,6 @@
 (let y1 (Var "y1"))
 (let y2 (Var "y2"))
 
-(let start (Sqrt (
-    Add
-    (Mul (Sub x1 x2) (Sub x1 x2))
-    (Mul (Sub y1 y2) (Sub y1 y2))
-)))
+(let start
+  (Sqrt
+    (Add (Mul (Sub x1 x2) (Sub x1 x2)) (Mul (Sub y1 y2) (Sub y1 y2)))))
