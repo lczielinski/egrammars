@@ -31,7 +31,9 @@ TIMEOUT = 120
 # division by zero). Keep the span moderate (a few orders of magnitude at most):
 # FPTaylor's optimizer subdivides the box, so a very wide box over a cancellation-
 # heavy expression grinds toward TIMEOUT.
-#   quadratic   (-b + sqrt(b*b - 4ac)) / (2a)    need b*b > 4ac, a != 0
+#   quadratic   (-b + sqrt(b*b - 4ac)) / (2a)    c<0 so disc>0 for all b; b spans
+#               0 so -b+sqrt cancels for b>0 (needs conjugate) but is fine for b<0
+#               (needs original) -> the accurate program branches on sign(b)
 #   sqrtminus   sqrt(x*x + 1) - x                defined for all x
 #   randexpr    ... sqrt(x*z), z/sqrt(z) ...     need x, y, z > 0
 #   subfrac     1/(x+1) - 1/x                    need x != 0, -1
@@ -40,7 +42,7 @@ TIMEOUT = 120
 #   recipsqrt   1/(x + sqrt(x)) - 1/x            need x > 0
 #   recipback   1/(x - 1) - 1/x                  need x != 0, 1
 INTERVALS = {
-    "quadratic": {"a": "[1,2]", "b": "[20,100]", "c": "[1,10]"},  # -b+sqrt cancels, b>0
+    "quadratic": {"a": "[1,2]", "b": "[-1000,1000]", "c": "[-10,-1]"},  # branch on sign(b)
     "sqrtminus": {"x": "[1,1000]"},                # cancellation grows with x
     "randexpr": {"x": "[1,100]", "y": "[1,100]", "z": "[1,100]"},
     "subfrac": {"x": "[1,1000]"},                  # cancellation grows with x
