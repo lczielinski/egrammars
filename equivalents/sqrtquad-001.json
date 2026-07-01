@@ -1,0 +1,27 @@
+{
+  "benchmark": "sqrtquad",
+  "reference": "(FPCore (x) (- (sqrt (+ (* x x) x)) x))",
+  "model": "openai/gpt-oss-120b",
+  "programs": [
+    "(FPCore (x) (if (>= x 0) (/ (- x) (+ (- x) (- (sqrt (+ (* x x) x))))) (/ (- x) (+ (- x) (- (sqrt (+ (* x x) x)))))))",
+    "(FPCore (x) (if (<= x -1) (* (- x) (/ 1 (+ (- x) (- (sqrt (+ (* x x) x)))))) (/ (- x) (+ (- x) (- (sqrt (+ (* x x) x)))))))",
+    "(FPCore (x) (if (> x -1) (/ (- x) (+ (- x) (- (sqrt (+ (* x x) x))))) (* (- x) (/ 1 (+ (- x) (- (sqrt (+ (* x x) x))))))))",
+    "(FPCore (x) (if (>= x 1) (/ (- x) (+ (* x x) (+ (- (+ (* x x) x)) (- (sqrt (+ (* x x) x)))))) (if (>= x 0) (/ (- x) (+ (* x x) (+ (- (+ (* x x) x)) (- (sqrt (+ (* x x) x)))))) (if (>= x 0) (/ (- x) (+ (* x x) (+ (- (+ (* x x) x)) (- (sqrt (+ (* x x) x)))))) (if (>= x 0) (/ (- x) (+ (* x x) (+ (- (+ (* x x) x)) (- (sqrt (+ (* x x) x)))))) (if (>= x 0) (/ (- x) (+ (* x x) (+ (- (+ (* x x) x)) (- (sqrt (+ (* x x) x)))))) (* (- x) (/ 1 (+ (* x x) (+ (- (+ (* x x) x)) (- (sqrt (+ (* x x) x)))))))))))))",
+    "(FPCore (x) (if (< x 0) (* (- x) (/ 1 (+ (- x) (- (sqrt (+ (* x x) x)))))) (/ (- x) (+ (- x) (- (sqrt (+ (* x x) x)))))))",
+    "(FPCore (x) (if (>= x 0) (* (/ 1 (+ (* x x) (+ (- (+ (* x x) x)) (- (sqrt (+ (* x x) x)))))) (- x)) (/ x (+ (sqrt (+ (* x x) x)) x))))",
+    "(FPCore (x) (if (>= x 0) (+ (sqrt (+ (* x x) x)) (- x)) (* (- x) (/ 1 (+ (* x x) (+ (- (+ (* x x) x)) (- (sqrt (+ (* x x) x)))))))))",
+    "(FPCore (x) (if (< x -1) (* (- x) (/ 1 (+ (- x) (- (sqrt (+ (* x x) x)))))) (/ (- x) (+ (- (sqrt (+ (* x x) x))) (- x)))))",
+    "(FPCore (x) (if (>= x 2) (/ (- x) (+ (* x x) (+ (- (+ x (* x x))) (- (sqrt (+ (* x x) x)))))) (* (- x) (/ 1 (+ (* x x) (+ (- (+ x (* x x))) (- (sqrt (+ (* x x) x)))))))))",
+    "(FPCore (x) (if (>= x 0) (/ x (+ (sqrt (+ (* x x) x)) x)) (* (- x) (/ 1 (+ (* x x) (+ (- (+ (* x x) x)) (- (sqrt (+ (* x x) x)))))))))",
+    "(FPCore (x) (if (> x -0.0) (/ (- x) (+ (- x) (- (sqrt (+ (* x x) x))))) (if (>= x 0) (/ x (+ (sqrt (+ (* x x) x)) x)) (* (- x) (/ 1 (+ (- x) (- (sqrt (+ (* x x) x)))))))))",
+    "(FPCore (x) (if (>= x 5.0) (/ x (+ (sqrt (+ (* x x) x)) x)) (if (>= x 0) (/ (- x) (+ (- (sqrt (+ (* x x) x))) (- x))) (* (- x) (/ 1 (+ (- (sqrt (+ (* x x) x))) (- x)))))))",
+    "(FPCore (x) (if (>= x 00) (/ (- x) (+ (* x x) (+ (- (+ x (* x x))) (- (sqrt (+ (* x x) x)))))) (* (- x) (/ 1 (+ (- x) (- (sqrt (+ (* x x) x))))))))",
+    "(FPCore (x) (if (>= x 000) (/ x (+ (sqrt (+ (* x x) x)) x)) (/ x (+ (sqrt (+ (* x x) x)) x))))",
+    "(FPCore (x) (if (>= x 0) (- (/ x (+ (* x x) (+ (- (+ (* x x) x)) (- (sqrt (+ (* x x) x))))))) (/ (- x) (+ (* x x) (+ (- (+ (* x x) x)) (- (sqrt (+ (* x x) x))))))))",
+    "(FPCore (x) (if (> x 0) (/ (- x) (+ (- (sqrt (+ (* x x) x))) (- x))) (/ (- x) (+ (- (sqrt (+ (* x x) x))) (- x)))))",
+    "(FPCore (x) (if (>= x 3.4028235) (/ x (+ (sqrt (+ (* x x) x)) x)) (if (>= x 0) (/ (- x) (+ (* x x) (+ (- (+ (* x x) x)) (- (sqrt (+ (* x x) x)))))) (* (- x) (/ 1 (+ (- (sqrt (+ (* x x) x))) (- x)))))))",
+    "(FPCore (x) (if (>= x 9) (/ x (+ (sqrt (+ (* x x) x)) x)) (* (- x) (/ 1 (+ (* x x) (+ (- (+ x (* x x))) (- (sqrt (+ (* x x) x)))))))))",
+    "(FPCore (x) (if (>= x 0) (* (/ 1 (+ (* x x) (+ (- (+ (* x x) x)) (- (sqrt (+ (* x x) x)))))) (- x)) (/ (- x) (+ (* x x) (+ (- (+ (* x x) x)) (- (sqrt (+ (* x x) x))))))))",
+    "(FPCore (x) (if (>= x 27) (/ x (+ (sqrt (+ (* x x) x)) x)) (if (>= x 0) (/ x (+ (sqrt (+ (* x x) x)) x)) (* (- x) (/ 1 (+ (* x x) (+ (- (+ x (* x x))) (- (sqrt (+ (* x x) x))))))))))"
+  ]
+}
