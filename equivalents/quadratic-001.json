@@ -1,0 +1,17 @@
+{
+  "benchmark": "quadratic",
+  "reference": "(FPCore (a b c) (/ (+ (- b) (sqrt (- (* b b) (* (* 4 a) c)))) (* 2 a)))",
+  "model": "openai/gpt-oss-120b",
+  "programs": [
+    "(FPCore (a b c) (if (>= b 0) (/ (* 4 c) (* 2 (- (- b) (sqrt (- (* b b) (* (* 4 a) c)))))) (/ (+ (- b) (sqrt (- (* b b) (* (* 4 a) c)))) (* 2 a))))",
+    "(FPCore (a b c) (if (>= b 0) (/ (* 4 c) (* 2 (+ (- b) (- (sqrt (- (* b b) (* (* 4 a) c))))))) (/ (+ (- b) (sqrt (- (* b b) (* (* 4 a) c)))) (* 2 a))))",
+    "(FPCore (a b c) (if (> b -1) (/ (* 4 c) (* 2 (- (- b) (sqrt (- (* b b) (* (* 4 a) c)))))) (/ (+ (- b) (sqrt (- (* b b) (* (* 4 a) c)))) (* 2 a))))",
+    "(FPCore (a b c) (if (>= b 0) (/ (/ (* 4 c) 2) (- (- b) (sqrt (- (* b b) (* (* 4 a) c))))) (/ (+ (- b) (sqrt (- (* b b) (* (* 4 a) c)))) (* 2 a))))",
+    "(FPCore (a b c) (if (> b -0) (/ (* 4 c) (* 2 (- (- b) (sqrt (- (* b b) (* (* 4 a) c)))))) (/ (+ (- b) (sqrt (- (* b b) (* (* 4 a) c)))) (* 2 a))))",
+    "(FPCore (a b c) (if (<= 0 b) (/ (* 4 c) (* 2 (+ (- b) (- (sqrt (- (* b b) (* (* 4 a) c))))))) (/ (+ (- b) (sqrt (- (* b b) (* (* 4 a) c)))) (* 2 a))))",
+    "(FPCore (a b c) (if (<= b 0) (/ (+ (- b) (sqrt (- (* b b) (* (* 4 a) c)))) (* 2 a)) (/ (* 4 c) (* (- (- b) (sqrt (- (* b b) (* (* 4 a) c)))) 2))))",
+    "(FPCore (a b c) (if (>= b 0) (/ (* (* 4 a) c) (- (* (* 2 a) (- b)) (* (* 2 a) (sqrt (- (* b b) (* (* 4 a) c)))))) (/ (+ (- b) (sqrt (- (* b b) (* (* 4 a) c)))) (* 2 a))))",
+    "(FPCore (a b c) (if (< b 0) (/ (+ (- b) (sqrt (- (* b b) (* (* 4 a) c)))) (* 2 a)) (/ (* 4 c) (* 2 (+ (- b) (- (sqrt (- (* b b) (* (* 4 a) c)))))))))",
+    "(FPCore (a b c) (if (> b 0) (/ (* 4 c) (* 2 (- (- b) (sqrt (- (* b b) (* (* 4 a) c)))))) (/ (+ (- b) (sqrt (- (* b b) (* (* 4 a) c)))) (* 2 a))))"
+  ]
+}
