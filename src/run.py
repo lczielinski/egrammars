@@ -1,7 +1,8 @@
 """Sample accurate branching programs, building each branch's grammar on the fly.
 
-The model generates in shared-context segments (one growing token sequence, so it
-sees everything it has written):
+The model reasons once, then every sample is generated from that shared reasoned
+context in segments (one growing token sequence, so it sees everything it has
+written):
   - a HEAD grammar lets it emit either a complete no-branch program, or the opening
     `(FPCore (v) (if (op v <threshold>)` with an ARBITRARY numeric threshold;
   - once the threshold is known, each arm's box is narrowed by the condition and a
@@ -182,8 +183,8 @@ def arm_grammar(benchmark, box, runs, closes):
     return f'start: " " e0{suffix}\n{egrammar.region_rules(benchmark, box, runs)}\n'
 
 
-def generate_program(llm, benchmark, reference, variables, box, args):
-    ids = initial_ids(llm, program_prompt(reference, box), args)
+def generate_program(llm, benchmark, variables, box, args, ids):
+    """One program, continued from the shared reasoned context `ids`."""
     if box is None:  # no interval box configured -> no branching, plain equivalents
         r = sample_segment(llm, egrammar.build_region(benchmark, None, args.saturation)[1],
                             ids, args)
@@ -239,10 +240,13 @@ def main() -> None:
     load_kwargs = {"dtype": "auto"} if "gpt-oss" in args.model.lower() else {}
     llm = casa.LLM.from_pretrained(args.model, **load_kwargs)
 
+    # Reason once; every sample is generated from this shared reasoned context.
+    base_ids = initial_ids(llm, program_prompt(reference, box), args)
+
     programs = []
     for i in range(args.samples):
         print(f"{'=' * 70}\nsample {i + 1}/{args.samples}\n{'=' * 70}")
-        prog = generate_program(llm, args.benchmark, reference, variables, box, args)
+        prog = generate_program(llm, args.benchmark, variables, box, args, base_ids)
         if prog:
             programs.append(prog)
 
