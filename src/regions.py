@@ -1,10 +1,8 @@
-"""Parse FPCore/skeleton `if`-trees, split them into (guards -> leaf), narrow an
-interval box by a region's guards, and assemble a program from a skeleton + arms.
-Shared by run.py and fptaylor_check.py."""
+"""Parse a branching program's `if`-tree, split it into (guards -> leaf), and narrow
+an interval box by a region's guards. Used by fptaylor_check to bound each branch."""
 
 import re
 
-HOLE = "?"
 NEGATE = {"<": ">=", ">": "<=", "<=": ">", ">=": "<"}
 
 
@@ -21,16 +19,6 @@ def parse(toks):
         node.append(parse(toks))
     toks.pop(0)
     return node
-
-
-def variables_of(program: str) -> list[str]:
-    ast = parse(tokenize(program))
-    return ast[1] if isinstance(ast, list) and ast[:1] == ["FPCore"] else []
-
-
-def body_of(program: str):
-    ast = parse(tokenize(program))
-    return ast[2] if isinstance(ast, list) and ast[:1] == ["FPCore"] else ast
 
 
 def split_branches(node):
@@ -67,35 +55,3 @@ def narrow_box(box: dict, conds) -> dict | None:
     if any(lo > hi for lo, hi in iv.values()):
         return None
     return {v: f"[{lo},{hi}]" for v, (lo, hi) in iv.items()}
-
-
-def leaf_paths(program: str) -> list[list]:
-    return [conds for conds, _ in split_branches(body_of(program))]
-
-
-def strip_wrapper(program: str, variables: list[str]) -> str:
-    prefix = f"(FPCore ({' '.join(variables)}) "
-    return program[len(prefix):-1] if program.startswith(prefix) else program
-
-
-def assemble(skeleton: str, arm_bodies: list[str]) -> str:
-    out = skeleton
-    for body in arm_bodies:
-        out = out.replace(HOLE, body, 1)
-    return out
-
-
-def skeleton_grammar(variables: list[str]) -> str:
-    """Lark grammar for `if`-trees over the inputs with `?` arm holes; conditions
-    compare a variable to a numeric threshold."""
-    cmps = ("<", ">", "<=", ">=")
-    cond = " | ".join(f'"({op} " operand " " NUMBER ")"' for op in cmps)
-    operand = " | ".join(f'"{v}"' for v in variables)
-    return "\n".join([
-        f'start: "(FPCore ({" ".join(variables)}) " tree ")"',
-        f'tree: HOLE | "(if " cond " " tree " " tree ")"',
-        f"cond: {cond}",
-        f"operand: {operand}",
-        'HOLE: "?"',
-        r'NUMBER: /-?[0-9]+(\.[0-9]+)?/',
-    ]) + "\n"

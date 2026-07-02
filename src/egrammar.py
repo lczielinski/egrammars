@@ -294,7 +294,7 @@ def reachable(root: str, eclasses: EClassMapping) -> list[str]:
 
 def intersect(root: str, eclasses: EClassMapping) -> str:
     """Lark grammar of the e-graph: one nonterminal per e-class, one production per
-    e-node (non-branching; the `if` skeleton is regions.skeleton_grammar)."""
+    e-node. `region_rules` strips its `start` line to splice into a head/arm grammar."""
     order = reachable(root, eclasses)
     name = {eclass: f"e{i}" for i, eclass in enumerate(order)}
 
@@ -340,3 +340,10 @@ def build_region(benchmark: str, box: dict[str, tuple[float, float]] | None = No
     root, eclasses = extract(saturate(content, runs, seeds))
     root, eclasses = strip_identity_enodes(root, eclasses)
     return reference, intersect(root, eclasses)
+
+
+def region_rules(benchmark: str, box: dict[str, tuple[float, float]] | None = None,
+                 runs: int = SATURATION_RUNS) -> str:
+    """The e-class rule lines (root `e0`) of the region grammar over `box`, without the
+    FPCore-wrapper `start` rule -- for splicing into a head/arm grammar on the fly."""
+    return "\n".join(build_region(benchmark, box, runs)[1].strip().split("\n")[1:])
