@@ -67,9 +67,4 @@ sqrt(a) * sqrt(a) = a
 sqrt(a + n) = sqrt(a) * sqrt(1 + n/a)
 p + sqrt(d) = (p*p - d) / (p - sqrt(d))
 
-Goal: ONE program that is accurate across the whole given input range.
-1. Using the condition numbers, find where inside the input range the program loses accuracy — a `+` or `-` whose operands nearly cancel, or a `/` by a near-zero value — or where an intermediate overflows or underflows.
-2. If a single algebraically-equivalent form is accurate everywhere in the input range, output just that form with NO `if`. Prefer this: only branch when different parts of the range genuinely need different forms. A needless `if` is worse than one clean form.
-3. When you do branch, give each fragile region a rewrite that is well-conditioned and in-range there, and combine the forms with `(if cond ...)` so every input takes the form accurate for it, covering the whole range. Every branch must equal the original in exact arithmetic; only the rounding may differ.
-
-Output ONLY the single-line `(FPCore (...) ...)` program, then immediately stop.
+Using the condition numbers, the fragile parts of a program are the input regions where a `+` or `-` nearly cancels, a `/` divides by a near-zero value, or an intermediate overflows/underflows. A different algebraically-equivalent form can be accurate where the original is not, and different regions of the input range may need different forms. Every rewrite must equal the original in exact arithmetic; only the rounding may differ.

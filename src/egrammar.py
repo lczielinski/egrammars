@@ -1,24 +1,36 @@
-"""Compile an e-graph of equivalent programs into a context-free grammar.
+"""Compile an e-graph of programs equivalent to a benchmark into a lark grammar.
 
-Given a benchmark (a reference program plus egglog rewrite rules), this:
-  1. builds the e-graph
-  2. removes identity padding and non-minimal cyclic spellings
-  3. intersects it with the simple FPCore syntax grammar
-
-The resulting grammar's language is a cleaned subset of FPCore programs equivalent
-to the reference (under the rules, up to the saturation cap)."""
+build_region(benchmark, box) saturates egglog (rules.egglog, with the interval
+analysis seeded from the box), strips identity/cyclic spellings, and intersects the
+result into a grammar whose language is the equivalent programs over that box."""
 
 from __future__ import annotations
 
+import contextlib
 import json
+import os
+import sys
 from collections import defaultdict
 from dataclasses import dataclass
-from pathlib import Path
 
 import paths
 
 SATURATION_RUNS = 6
 START = "__start__"
+
+
+@contextlib.contextmanager
+def _quiet_stderr():
+    """Drop egglog's Rust-side stderr (the `$`-prefix lint); errors still raise."""
+    sys.stderr.flush()
+    saved, devnull = os.dup(2), os.open(os.devnull, os.O_WRONLY)
+    try:
+        os.dup2(devnull, 2)
+        yield
+    finally:
+        os.dup2(saved, 2)
+        os.close(devnull)
+        os.close(saved)
 
 
 @dataclass(frozen=True, order=True)
@@ -30,26 +42,42 @@ class ENode:
 EClassMapping = dict[str, set[ENode]]
 
 
-def saturate(benchmark_source: str, runs: int = SATURATION_RUNS) -> "EGraph":
+def saturate(benchmark_source: str, runs: int = SATURATION_RUNS,
+             seeds: str = "") -> "EGraph":
     from egglog.bindings import EGraph
 
-    source = (paths.ROOT / "rules.egglog").read_text()
+    source = (paths.ROOT / "rules.egglog").read_text()  # rules + interval analysis
     source += benchmark_source
+    source += seeds             # (set (lo x) ..) (set (hi x) ..) from the region box
     source += f"\n(run {runs})"
     # Mark `start` so we can find its e-class after saturation.
     source += f"\n(relation {START} (Math))\n({START} start)"
     egraph = EGraph(record=True)
-    egraph.run_program(*egraph.parse_program(source))
+    with _quiet_stderr():
+        egraph.run_program(*egraph.parse_program(source))
     return egraph
 
 
+CONSTRUCTORS = frozenset(
+    {"Num", "Var", "Add", "Sub", "Neg", "Sqrt", "Mul", "Div"})
+
+
 def extract(egraph: EGraph) -> tuple[str, EClassMapping]:
-    """Read the e-graph back out: the root e-class and eclass -> set of e-nodes."""
+    """The root e-class and eclass -> set of e-nodes."""
     nodes = json.loads(egraph.serialize([]).to_json())["nodes"]
+
+    keep: set[str] = set()
+    for node in nodes.values():
+        if node["op"].strip('"') in CONSTRUCTORS or node["op"] == START:
+            keep.add(node["eclass"])
+            keep.update(nodes[c]["eclass"] for c in node["children"])
+
     root = None
     eclasses: defaultdict[str, set[ENode]] = defaultdict(set)
     for node in nodes.values():
         op = node["op"].strip('"')  # string leaves are serialized with quotes
+        if node["eclass"] not in keep:
+            continue                 # analysis (f64/lo/hi) node -- skip
         children = tuple(nodes[child]["eclass"] for child in node["children"])
         if op == START:
             root = children[0]
@@ -128,8 +156,7 @@ def strip_identity_enodes(
         return x
 
     def reduces_to(enode: ENode) -> str | None:
-        """The operand this enode equals, or None if it is not an identity.
-        Note `(- 0 b)` is `-b`, not an identity, so it is excluded."""
+        """The operand this enode equals, or None if it is not an identity."""
         match enode.op, enode.children:
             case ("Mul", (a, b)):
                 return a if a in zero else b if b in zero or a in one else (
@@ -210,8 +237,7 @@ def strip_identity_enodes(
 
 
 def _strongly_connected_components(eclasses: EClassMapping) -> dict[str, str]:
-    """Tarjan's SCC: eclass -> a shared id for the classes in each cycle. The
-    e-graph is wide but shallow, so plain recursion stays well under the limit."""
+    """Tarjan's SCC: eclass -> a shared id for the classes in each cycle."""
     order: dict[str, int] = {}
     low: dict[str, int] = {}
     scc: dict[str, str] = {}
@@ -242,8 +268,7 @@ def _strongly_connected_components(eclasses: EClassMapping) -> dict[str, str]:
     return scc
 
 
-# FPCore spelling of each operator — the "simple grammar":
-# expr -> "(+ " expr " " expr ")" | ... | VARIABLE | INTEGER.
+# FPCore spelling of each operator.
 SPELLING = {
     "Add": "+", "Sub": "-", "Mul": "*", "Div": "/",
     "Neg": "-", "Sqrt": "sqrt",
@@ -267,22 +292,9 @@ def reachable(root: str, eclasses: EClassMapping) -> list[str]:
     return order
 
 
-def _branching_header(variables: list[str], root_name: str) -> list[str]:
-    cmps = ("<", ">", "<=", ">=")
-    cond = " | ".join(f'"({op} " operand " " operand ")"' for op in cmps)
-    operand = " | ".join([f'"{v}"' for v in variables] + ["NUMBER"])
-    return [
-        f'start: "(FPCore ({" ".join(variables)}) " body ")"',
-        f'body: {root_name} | "(if " cond " " body " " body ")"',
-        f"cond: {cond}",
-        f"operand: {operand}",
-        r'NUMBER: /-?[0-9]+(\.[0-9]+)?/',
-    ]
-
-
-def intersect(root: str, eclasses: EClassMapping, branching: bool = False) -> str:
-    """The FPCore syntax grammar restricted to the e-graph, as a lark grammar:
-    one nonterminal per e-class, one production per e-node."""
+def intersect(root: str, eclasses: EClassMapping) -> str:
+    """Lark grammar of the e-graph: one nonterminal per e-class, one production per
+    e-node (non-branching; the `if` skeleton is regions.skeleton_grammar)."""
     order = reachable(root, eclasses)
     name = {eclass: f"e{i}" for i, eclass in enumerate(order)}
 
@@ -301,10 +313,7 @@ def intersect(root: str, eclasses: EClassMapping, branching: bool = False) -> st
     variables = sorted(
         {leaf(e.children[0]) for ec in order for e in eclasses[ec] if e.op == "Var"}
     )
-    if branching:
-        lines = _branching_header(variables, name[root])
-    else:
-        lines = [f'start: "(FPCore ({" ".join(variables)}) " {name[root]} ")"']
+    lines = [f'start: "(FPCore ({" ".join(variables)}) " {name[root]} ")"']
     for eclass in order:
         productions = sorted({production(enode) for enode in eclasses[eclass]})
         lines.append(f"{name[eclass]}: {' | '.join(productions)}")
@@ -316,19 +325,18 @@ def read_reference(benchmark: str) -> str:
     return content.splitlines()[0].removeprefix(";; ")
 
 
-def build(benchmark: str, runs: int = SATURATION_RUNS,
-          branching: bool = False) -> tuple[str, str]:
+def _seeds(box: dict[str, tuple[float, float]]) -> str:
+    return "".join(f"(set (lo {v}) {lo})(set (hi {v}) {hi})\n"
+                   for v, (lo, hi) in box.items())
+
+
+def build_region(benchmark: str, box: dict[str, tuple[float, float]] | None = None,
+                 runs: int = SATURATION_RUNS) -> tuple[str, str]:
+    """Grammar of programs equivalent to the reference over `box` (var -> (lo, hi))."""
     content = (paths.BENCHMARKS / f"{benchmark}.egglog").read_text()
     reference = read_reference(benchmark)
 
-    root, eclasses = extract(saturate(content, runs))
+    seeds = _seeds(box) if box else ""
+    root, eclasses = extract(saturate(content, runs, seeds))
     root, eclasses = strip_identity_enodes(root, eclasses)
-    grammar = intersect(root, eclasses, branching)
-    return reference, grammar
-
-
-def write_grammar(benchmark: str, grammar: str) -> Path:
-    paths.LARK.mkdir(exist_ok=True)
-    grammar_path = paths.LARK / f"{benchmark}.lark"
-    grammar_path.write_text(grammar)
-    return grammar_path
+    return reference, intersect(root, eclasses)

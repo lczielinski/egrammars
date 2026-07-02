@@ -1,14 +1,4 @@
-"""Repository directory layout and numbered per-run output paths.
-
-Four sibling folders, one role each (the prompt is built in memory, not cached):
-    benchmarks/   input:  <name>.egglog   (reference program + rewrite rules)
-    lark/         output: <name>.lark     (compiled equivalence grammar)
-    equivalents/  output: <name>-NNN.json (one sampling run's programs)
-    fptaylor/     output: <name>-NNN.json (rounding-error bounds, FPTaylor)
-
-An fptaylor file reuses the run number of the equivalents file it analyzed, so
-the two stay linked. NNN is zero-padded to 3 digits.
-"""
+"""Repository paths and numbered per-run output files (<name>-NNN.json)."""
 
 from __future__ import annotations
 
@@ -17,7 +7,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 BENCHMARKS = ROOT / "benchmarks"
-LARK = ROOT / "lark"
 EQUIVALENTS = ROOT / "equivalents"
 FPTAYLOR = ROOT / "fptaylor"
 
@@ -37,7 +26,6 @@ def path_for(folder: Path, benchmark: str, n: int) -> Path:
 
 
 def next_path(folder: Path, benchmark: str) -> tuple[int, Path]:
-    """The next unused run number and its path (creates `folder`)."""
     runs = _run_numbers(folder, benchmark)
     n = (runs[-1] + 1) if runs else 1
     folder.mkdir(parents=True, exist_ok=True)

@@ -1,28 +1,11 @@
-"""Sample equivalent programs from an egrammar-compiled grammar with casa.
+"""Sample accurate branching programs region-by-region (casa + egglog).
 
-Sampling uses casa's asap sampler. The model produces one program that branches on
-the input with `if`: it reasons about where the original loses accuracy -- input
-regions where a + or - cancels (large condition number) or an intermediate overflows
--- then a grammar-constrained pass writes a single program that branches into the
-algebraically-equivalent form that is accurate in each region. fptaylor then bounds
-each branch's rounding error over the sub-interval where that branch applies.
+Phase 1: the model, constrained to a skeleton grammar, emits an `if`-tree over the
+input range with `?` arm holes. Phase 2/3: each hole's guards narrow the box, egglog
+builds a grammar sound over that sub-box, and a constrained pass fills the arm.
+fptaylor then bounds each branch over its sub-interval.
 
-Options:
-    benchmark            benchmark name, e.g. quadratic (positional, required)
-    --samples N          distinct programs to collect (default 20)
-    --max-attempts N     cap on attempts per sample (default 200)
-    --temperature T      sampling temperature applied to the model (default 1.0);
-                         T<1 sharpens, T>1 flattens the grammar-constrained model
-    --model ID           HuggingFace model id to load (default Qwen2.5-14B-Instruct)
-    --effort LEVEL       gpt-oss reasoning effort for the reasoning phase:
-                         low, medium, or high (default medium)
-    --saturation N       rewrite-rule iterations when compiling a grammar (default
-                         6; only used if not cached). Lower it for symmetry-heavy
-                         expressions whose grammar explodes
-
-Examples:
-    uv run src/run.py quadratic --samples 50
-    uv run src/run.py sqrtshift --model openai/gpt-oss-120b --saturation 4
+    uv run src/run.py sqrtminus --model openai/gpt-oss-120b
 """
 
 import argparse
@@ -31,6 +14,7 @@ import os
 import warnings
 
 import paths
+import regions
 
 os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 warnings.filterwarnings("ignore", category=FutureWarning, module="kernels")
@@ -38,41 +22,52 @@ warnings.filterwarnings("ignore", category=FutureWarning, module="kernels")
 MODEL_ID = "Qwen/Qwen2.5-14B-Instruct"
 
 
-def make_prompt(reference: str, box: dict | None) -> str:
-    header = (paths.ROOT / "prompt_header.md").read_text()
-    prompt = f"{header}\n\nThe original program is:\n{reference}"
-    if box:
-        ranges = ", ".join(f"{v} in {iv}" for v, iv in box.items())
-        prompt += (f"\n\nThe program is only evaluated on inputs in these ranges: "
-                   f"{ranges}. Make it accurate across these ranges.")
-    return prompt
+def _preamble() -> str:
+    return (paths.ROOT / "prompt_header.md").read_text()
 
 
-def ensure_artifacts(benchmark: str, saturation: int) -> tuple[str, str, str]:
-    import egrammar
-    import fptaylor_check
-
-    grammar_path = paths.LARK / f"{benchmark}.lark"
-    if grammar_path.exists():
-        reference, grammar = egrammar.read_reference(benchmark), grammar_path.read_text()
-    else:
-        print(f"Compiling grammar for {benchmark!r} "
-              f"(no cached grammar, saturation={saturation})")
-        reference, grammar = egrammar.build(benchmark, saturation, branching=True)
-        egrammar.write_grammar(benchmark, grammar)
-    box = fptaylor_check.INTERVALS.get(benchmark)
-    return grammar, make_prompt(reference, box), reference
+def _range_line(box: dict | None) -> str:
+    if not box:
+        return ""
+    ranges = ", ".join(f"{v} in {iv}" for v, iv in box.items())
+    return f"\nThe program is only evaluated on inputs in these ranges: {ranges}."
 
 
-def distinct(results) -> list[str]:
-    seen: set[str] = set()
-    programs: list[str] = []
-    for r in results:
-        text = r.text.strip()
-        if text not in seen:
-            seen.add(text)
-            programs.append(text)
-    return programs
+def partition_prompt(reference: str, box: dict | None) -> str:
+    return (
+        _preamble() + f"\n\nThe original program is:\n{reference}\n" + _range_line(box)
+        + "\n\nDecide how to split this input range into pieces that each need a "
+        "different accurate form. Split ONLY where the accurate form must change -- a "
+        "sign flip, or a cancellation/overflow that one form avoids and another does "
+        "not. If a single form is accurate across the whole range, do NOT split. "
+        "Output ONLY an FPCore `if`-skeleton whose arms are `?` placeholders -- e.g. "
+        "(FPCore (x) (if (> x 0) ? ?)) to split at x=0, or (FPCore (x) ?) for no "
+        "split. Use `?` for every arm; write no real subexpression."
+    )
+
+
+def arm_prompt(reference: str, box: dict | None) -> str:
+    return (
+        _preamble() + f"\n\nThe original program is:\n{reference}\n" + _range_line(box)
+        + "\n\nOutput ONE FPCore program that is algebraically equivalent to the "
+        "original and numerically accurate across this range. Output only the "
+        "single-line program."
+    )
+
+
+def dedup(programs) -> list[str]:
+    seen, out = set(), []
+    for p in programs:
+        if p and p not in seen:
+            seen.add(p)
+            out.append(p)
+    return out
+
+
+def float_box(box: dict | None) -> dict | None:
+    if not box:
+        return None
+    return {v: tuple(map(float, iv.strip("[]").split(","))) for v, iv in box.items()}
 
 
 def free_cuda() -> None:
@@ -82,8 +77,7 @@ def free_cuda() -> None:
 
 
 def channel_ids(tokenizer):
-    """The (<|channel|>, <|message|>) token ids if the tokenizer has harmony
-    channels (gpt-oss), else None."""
+    """(<|channel|>, <|message|>) token ids for a harmony model (gpt-oss), else None."""
     ch = tokenizer.convert_tokens_to_ids("<|channel|>")
     msg = tokenizer.convert_tokens_to_ids("<|message|>")
     if None in (ch, msg) or tokenizer.unk_token_id in (ch, msg):
@@ -92,8 +86,7 @@ def channel_ids(tokenizer):
 
 
 def at_final_header(seq, ch_id, msg_id, decode) -> bool:
-    """True if token list `seq` ends exactly at a final channel header
-    (...<|channel|>final<|message|>). `decode` maps token ids to text."""
+    """True if `seq` ends at a `...<|channel|>final<|message|>` header."""
     if not seq or seq[-1] != msg_id:
         return False
     try:
@@ -103,10 +96,9 @@ def at_final_header(seq, ch_id, msg_id, decode) -> bool:
     return decode(seq[ch + 1:-1]).strip() == "final"
 
 
-def think_then_handoff(llm, prompt, temperature, effort="medium"):
-    """Reason in the analysis channel, halting the instant the final channel opens.
-    Returns (prompt_ids, analysis_text, opened_final) so a grammar-constrained pass
-    can continue in the same final channel, attending to the reasoning."""
+def think_then_handoff(llm, prompt, temperature, effort):
+    """Reason in the analysis channel, stopping when the final channel opens; return
+    the token ids so a constrained pass can continue there, or None if it never did."""
     import torch
     from transformers import StoppingCriteria, StoppingCriteriaList, TextStreamer
 
@@ -114,13 +106,11 @@ def think_then_handoff(llm, prompt, temperature, effort="medium"):
     try:
         text = llm.tokenizer.apply_chat_template(
             [{"role": "user", "content": prompt}],
-            tokenize=False, add_generation_prompt=True, reasoning_effort=effort,
-        )
+            tokenize=False, add_generation_prompt=True, reasoning_effort=effort)
     except TypeError:
         text = llm.format_prompt(prompt)
     ids = llm.tokenizer.encode(
-        text, return_tensors="pt", add_special_tokens=False
-    ).to(llm.device)
+        text, return_tensors="pt", add_special_tokens=False).to(llm.device)
     start = ids.shape[1]
 
     class StopAtFinal(StoppingCriteria):
@@ -139,89 +129,106 @@ def think_then_handoff(llm, prompt, temperature, effort="medium"):
         gen_kwargs.update(do_sample=True, temperature=temperature)
     with torch.no_grad():
         out = llm.model.generate(ids, **gen_kwargs)
+    return out if out[0, -1].item() == msg_id else None
 
-    opened_final = out[0, -1].item() == msg_id
-    analysis = llm.tokenizer.decode(out[0][start:], skip_special_tokens=True).strip()
-    return out, analysis, opened_final
+
+def constrained_sample(llm, grammar, prompt, args, reason: bool) -> str | None:
+    """One grammar-constrained program; on a harmony model, `reason` first thinks
+    unconstrained, then continues under the grammar in the same final channel."""
+    import casa
+    prompt_ids = None
+    if reason and channel_ids(llm.tokenizer):
+        prompt_ids = think_then_handoff(llm, prompt, args.temperature, args.effort)
+        free_cuda()
+    sampler = casa.ASAP(llm, grammar, verbose=True, temperature=args.temperature)
+    results = sampler.sample(
+        prompt if prompt_ids is None else None, n_samples=1,
+        max_attempts=args.max_attempts, prompt_ids=prompt_ids)
+    free_cuda()
+    return results[0].text.strip() if results else None
+
+
+def build_branching_program(llm, benchmark, reference, variables, box, skel_grammar,
+                            args, grammar_cache) -> str | None:
+    """Propose a partition, fill each region's arm from a region-sound grammar, assemble."""
+    import casa
+    import egrammar
+
+    skeleton = constrained_sample(llm, skel_grammar, partition_prompt(reference, box),
+                                  args, reason=True)
+    if skeleton is None:
+        return None
+    arm_bodies = []
+    for conds in regions.leaf_paths(skeleton):
+        rbox = regions.narrow_box(box, conds) if box else None
+        if box and rbox is None:  # region empty in the box; arm never executes
+            arm_bodies.append(regions.strip_wrapper(reference, variables))
+            continue
+        key = None if rbox is None else tuple(sorted(rbox.items()))
+        if key not in grammar_cache:
+            _, g = egrammar.build_region(benchmark, float_box(rbox), args.saturation)
+            grammar_cache[key] = casa.Grammar.from_string(g, llm.tokenizer)
+        arm = constrained_sample(llm, grammar_cache[key], arm_prompt(reference, rbox),
+                                 args, reason=False)
+        if arm is None:
+            return None
+        arm_bodies.append(regions.strip_wrapper(arm, variables))
+    return regions.assemble(skeleton, arm_bodies)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
-    )
-    parser.add_argument("benchmark", help="benchmark name, e.g. quadratic")
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("benchmark")
     parser.add_argument("--samples", type=int, default=20)
     parser.add_argument("--max-attempts", type=int, default=200)
     parser.add_argument("--temperature", type=float, default=1.0)
     parser.add_argument("--model", default=MODEL_ID)
-    parser.add_argument("--effort", choices=["low", "medium", "high"], default="medium",
-                        help="gpt-oss reasoning effort for the reasoning phase")
-    parser.add_argument("--saturation", type=int, default=6,
-                        help="rewrite-rule iterations when compiling a grammar")
+    parser.add_argument("--effort", choices=["low", "medium", "high"], default="medium")
+    parser.add_argument("--saturation", type=int, default=6)
     args = parser.parse_args()
 
-    grammar_str, prompt, reference = ensure_artifacts(args.benchmark, args.saturation)
-
     import casa
+    import egrammar
+    import fptaylor_check
 
-    print(f"benchmark: {args.benchmark}")
-    print(f"grammar:   {paths.LARK / f'{args.benchmark}.lark'} "
-          f"({grammar_str.count(chr(10))} rules)")
-    print(f"model:     {args.model}")
-    print(f"temp:      {args.temperature}")
-    print(f"target {args.samples} programs, <= {args.max_attempts} attempts/sample\n")
+    reference = egrammar.read_reference(args.benchmark)
+    variables = regions.variables_of(reference)
+    box = fptaylor_check.INTERVALS.get(args.benchmark)
+    print(f"benchmark: {args.benchmark}\nreference: {reference}\n"
+          f"model:     {args.model}\nbox:       {box or '(none)'}\n")
 
     load_kwargs = {"dtype": "auto"} if "gpt-oss" in args.model.lower() else {}
     llm = casa.LLM.from_pretrained(args.model, **load_kwargs)
-    grammar = casa.Grammar.from_string(grammar_str, llm.tokenizer)
+    skel_grammar = casa.Grammar.from_string(
+        regions.skeleton_grammar(variables), llm.tokenizer)
 
-    # On a harmony model (gpt-oss) the model reasons first
-    prompt_ids = None
-    if channel_ids(llm.tokenizer):
-        print(f"{'=' * 70}\nreasoning phase\n{'=' * 70}")
-        prompt_ids, _, opened = think_then_handoff(
-            llm, prompt, args.temperature, args.effort)
-        print(f"\n{'=' * 70}\n")
-        free_cuda()
-        if not opened:
-            print("warning: model never opened its final channel; sampling "
-                  "without reasoning.\n")
-            prompt_ids = None
+    grammar_cache, programs = {}, []
+    for i in range(args.samples):
+        print(f"{'=' * 70}\nsample {i + 1}/{args.samples}\n{'=' * 70}")
+        prog = build_branching_program(llm, args.benchmark, reference, variables, box,
+                                       skel_grammar, args, grammar_cache)
+        if prog:
+            programs.append(prog)
 
-    sampler = casa.ASAP(llm, grammar, verbose=True, temperature=args.temperature)
-    results = sampler.sample(
-        prompt if prompt_ids is None else None, n_samples=args.samples,
-        max_attempts=args.max_attempts, prompt_ids=prompt_ids,
-    )
-    programs = distinct(results)
-
-    print(f"\n{'=' * 70}")
-    print(f"original program:     {reference}")
-    print(f"distinct equivalents: {len(programs)}")
-    print(f"{'=' * 70}")
+    programs = dedup(programs)
+    print(f"\noriginal: {reference}\ndistinct programs: {len(programs)}")
     for i, program in enumerate(programs):
         print(f"{i:3d}  {program}")
 
     n, summary = paths.next_path(paths.EQUIVALENTS, args.benchmark)
     summary.write_text(json.dumps(
         {"benchmark": args.benchmark, "reference": reference,
-         "model": args.model, "programs": programs},
-        indent=2,
-    ))
-    print(f"\nwrote {len(programs)} distinct equivalent programs to {summary}")
+         "model": args.model, "programs": programs}, indent=2))
+    print(f"\nwrote {len(programs)} programs to {summary}")
 
     if programs:
-        import fptaylor_check
-        print(f"\n{'=' * 70}\nfptaylor rounding-error analysis\n{'=' * 70}")
         try:
             fptaylor_check.check(args.benchmark, run=n)
         except KeyError:
-            print(f"skipping fptaylor: no interval box configured for "
-                  f"{args.benchmark!r} (add one to INTERVALS in fptaylor_check.py)")
+            print(f"skipping fptaylor: no interval box for {args.benchmark!r}")
         except FileNotFoundError as e:
-            # Either the equivalents file (shouldn't happen) or the fptaylor binary.
-            msg = "fptaylor binary not found on PATH" if "fptaylor" in str(e).lower() \
-                else str(e)
+            msg = "fptaylor binary not on PATH" if "fptaylor" in str(e).lower() else str(e)
             print(f"skipping fptaylor: {msg}")
 
 
