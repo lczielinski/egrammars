@@ -1,0 +1,26 @@
+{
+  "benchmark": "sqrtminus",
+  "reference": "(FPCore (x) (- (sqrt (+ (* x x) 1)) x))",
+  "config": {
+    "mode": "check",
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "effort": "medium",
+    "samples": 20,
+    "max_attempts": 200,
+    "saturation": 6,
+    "box": {
+      "x": "[-1000,1000]"
+    }
+  },
+  "programs": [
+    "(FPCore (x) (if (< x 0) (- (sqrt (+ (* x x) 1)) x) (/ 1 (+ (sqrt (+ (* x x) 1)) x))))",
+    "(FPCore (x) (if (< x 0) (- (sqrt (+ (* x (* x 1)) 1)) x) (/ 1 (+ (sqrt (+ (* x (* x 1)) 1)) x))))",
+    "(FPCore (x) (if (< x 0) (- (sqrt (+ (* x x) 1)) x) (/ 1 (+ (sqrt (- (* x x) -1)) x))))",
+    "(FPCore (x) (if (<= x 0) (- (sqrt (+ (* x x) 1)) x) (/ 1 (+ (sqrt (+ (* x x) 1)) x))))",
+    "(FPCore (x) (if (> 0 x) (- (sqrt (+ (* x x) 1)) x) (/ 1 (+ (sqrt (+ (* x x) 1)) x))))",
+    "(FPCore (x) (if (< x 0) (- (sqrt (+ (* x x) 1)) x) (/ 1 (+ (+ (sqrt (+ (* x x) 1)) x) 0))))",
+    "(FPCore (x) (if (< x 0) (- (sqrt (+ (* x x) 1)) x) (/ 1 (+ (sqrt (- (* x x) (* -1 1))) x))))",
+    "(FPCore (x) (if (< x 0) (+ (sqrt (+ (* x x) 1)) (- x)) (/ 1 (+ (sqrt (+ (* x x) 1)) x))))"
+  ]
+}
