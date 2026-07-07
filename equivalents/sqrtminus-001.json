@@ -4,7 +4,7 @@
   "config": {
     "mode": "check",
     "model": "Qwen/Qwen2.5-14B-Instruct",
-    "temperature": 0.5,
+    "temperature": 1.0,
     "effort": "medium",
     "samples": 20,
     "max_attempts": 200,
@@ -14,8 +14,7 @@
     }
   },
   "programs": [
-    "(FPCore (x) (if (> x 0) (/ 1 (+ (sqrt (+ (* x x) 1)) x)) (- (sqrt (+ (* x x) 1)) x)))",
-    "(FPCore (x) (if (> x 0) (if (< x 1) (/ 1 (+ (sqrt (+ (* x x) 1)) x)) (- (sqrt (+ (* x x) 1)) x)) (- (sqrt (+ (* x x) 1)) x)))",
-    "(FPCore (x) (if (>= x 0) (/ 1 (+ (sqrt (+ (* x x) 1)) x)) (/ 1 (+ (sqrt (+ (* x x) 1)) x))))"
+    "(FPCore (x) (if (>= x 0) (/ 1 (+ (sqrt (+ (* x x) 1)) x)) (/ 1 (+ (sqrt (+ (* x x) 1)) x))))",
+    "(FPCore (x) (if (> x 0) (/ 1 (+ (sqrt (+ (* x x) 1)) x)) (- (sqrt (+ (* x x) 1)) x)))"
   ]
 }
