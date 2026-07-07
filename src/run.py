@@ -1,22 +1,27 @@
-"""Sample accurate branching programs, building each branch's grammar on the fly.
+"""Sample accurate branching programs, in one of two modes (--mode).
 
-The model reasons once, then every sample is generated from that shared reasoned
-context in segments (one growing token sequence, so it sees everything it has
-written):
-  - a HEAD grammar lets it emit either a complete no-branch program, or the opening
-    `(FPCore (v) (if (op v <threshold>)` with an ARBITRARY numeric threshold;
-  - once the threshold is known, each arm's box is narrowed by the condition and a
-    region grammar is built ON THE FLY over that sub-box (sound by construction), and
-    generation continues under it.
-fptaylor then bounds each branch over the sub-interval where it applies.
+check (default):   the model writes a WHOLE program in one pass under a light,
+    static SYNTAX grammar (well-formed FPCore, allowed ops/vars, threshold or
+    var-vs-var conditions), free to branch however it likes. Validity is checked
+    AFTER the fact: each branch's guards narrow the box and egglog proves the arm
+    equivalent to the reference over that sub-box (egrammar.equivalent). Programs
+    with any non-equivalent branch are dropped. Semantics live in the checker;
+    the grammar only enforces syntax.
+
+skeleton:          the two-phase constrained approach. The model, constrained to a
+    skeleton grammar, emits an `if`-tree with `?` arm holes; then each hole's guards
+    narrow the box, egglog builds a grammar sound over that sub-box, and a
+    constrained pass fills the arm. Sound by construction, but multiple generations.
+
+Either way, fptaylor then bounds each branch over the sub-interval where it applies.
 
     uv run src/run.py sqrtminus --model openai/gpt-oss-120b
+    uv run src/run.py sqrtminus --mode skeleton
 """
 
 import argparse
 import json
 import os
-import re
 import warnings
 
 import egrammar
@@ -27,7 +32,6 @@ os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 warnings.filterwarnings("ignore", category=FutureWarning, module="kernels")
 
 MODEL_ID = "Qwen/Qwen2.5-14B-Instruct"
-COND = re.compile(r"\(if \((<=|>=|<|>) (\w+) (-?\d+(?:\.\d+)?)\)")
 
 
 def _preamble() -> str:
@@ -48,6 +52,28 @@ def program_prompt(reference: str, box: dict | None) -> str:
         "original and numerically accurate across the range. You may branch with "
         "`(if cond ...)` on a variable and a numeric threshold when different regions "
         "need different forms; otherwise output a single form. Output only the "
+        "single-line program."
+    )
+
+
+def partition_prompt(reference: str, box: dict | None) -> str:
+    return (
+        _preamble() + f"\n\nThe original program is:\n{reference}\n" + _range_line(box)
+        + "\n\nDecide how to split this input range into pieces that each need a "
+        "different accurate form. Split ONLY where the accurate form must change -- a "
+        "sign flip, or a cancellation/overflow that one form avoids and another does "
+        "not. If a single form is accurate across the whole range, do NOT split. "
+        "Output ONLY an FPCore `if`-skeleton whose arms are `?` placeholders -- e.g. "
+        "(FPCore (x) (if (> x 0) ? ?)) to split at x=0, or (FPCore (x) ?) for no "
+        "split. Use `?` for every arm; write no real subexpression."
+    )
+
+
+def arm_prompt(reference: str, box: dict | None) -> str:
+    return (
+        _preamble() + f"\n\nThe original program is:\n{reference}\n" + _range_line(box)
+        + "\n\nOutput ONE FPCore program that is algebraically equivalent to the "
+        "original and numerically accurate across this range. Output only the "
         "single-line program."
     )
 
@@ -135,8 +161,8 @@ def think_then_handoff(llm, prompt, temperature, effort):
 
 
 def initial_ids(llm, prompt, args):
-    """The context to generate the program from: reasoning + open final channel on a
-    harmony model, else just the encoded prompt."""
+    """The context to generate from: reasoning + open final channel on a harmony model,
+    else just the encoded prompt."""
     if channel_ids(llm.tokenizer):
         ids = think_then_handoff(llm, prompt, args.temperature, args.effort)
         free_cuda()
@@ -145,81 +171,99 @@ def initial_ids(llm, prompt, args):
     return _encode(llm, prompt, args.effort)
 
 
-def sample_segment(llm, grammar_str, ids, args):
-    """One grammar-constrained segment continued from `ids`; returns the SamplingResult
-    (with .text and .token_ids) or None."""
+def make_grammar(llm, grammar_str):
     import casa
-    grammar = casa.Grammar.from_string(grammar_str, llm.tokenizer)
+    return casa.Grammar.from_string(grammar_str, llm.tokenizer)
+
+
+def sample(llm, grammar, args, *, prompt_ids=None, prompt=None):
+    """One grammar-constrained program (its stripped text) continued from `prompt_ids`
+    or generated from `prompt`, or None if the sampler produced nothing."""
+    import casa
     res = casa.ASAP(llm, grammar, verbose=True, temperature=args.temperature).sample(
-        prompt_ids=ids, n_samples=1, max_attempts=args.max_attempts)
+        prompt, prompt_ids=prompt_ids, n_samples=1, max_attempts=args.max_attempts)
     free_cuda()
-    return res[0] if res else None
+    return res[0].text.strip() if res else None
 
 
-def extend(ids, token_ids):
-    import torch
-    return torch.cat([ids, torch.tensor([token_ids], device=ids.device)], dim=1)
+# --- check mode: free generation under a light syntax grammar, checked after ---------
 
-
-def head_grammar(benchmark, box, variables, runs):
-    """Emit either a complete no-branch program, or the opening
-    `(FPCore (v) (if (op var <NUMBER>)` -- an arbitrary threshold, stopping at the `)`."""
+def syntax_grammar(variables):
+    """A light, static FPCore syntax grammar: well-formed programs over the allowed ops
+    and `variables`, branching freely, with threshold or var-vs-var conditions. It
+    constrains SYNTAX only -- equivalence is checked afterwards by egrammar.equivalent."""
     vs = " ".join(variables)
+    var_alts = " | ".join(f'"{v}"' for v in variables)
     cmps = ("<", ">", "<=", ">=")
-    cond = " | ".join(f'"({op} " operand " " NUMBER ")"' for op in cmps)
+    cond = " | ".join(f'"({op} " operand " " operand ")"' for op in cmps)
     return "\n".join([
-        f'start: "(FPCore ({vs}) " e0 ")" | "(FPCore ({vs}) (if " cond',
-        egrammar.region_rules(benchmark, box, runs),
+        f'start: "(FPCore ({vs}) " e ")"',
+        f'e: NUMBER | {var_alts}',
+        '  | "(+ " e " " e ")" | "(- " e " " e ")" | "(- " e ")"',
+        '  | "(* " e " " e ")" | "(/ " e " " e ")" | "(sqrt " e ")"',
+        '  | "(if " cond " " e " " e ")"',
         f"cond: {cond}",
-        "operand: " + " | ".join(f'"{v}"' for v in variables),
+        f"operand: {var_alts} | NUMBER",
         r'NUMBER: /-?[0-9]+(\.[0-9]+)?/',
     ]) + "\n"
 
 
-def arm_grammar(benchmark, box, runs, closes):
-    """A leaf over `box`, with a leading space and `closes` trailing `)` (0 for the
-    then-arm; 2 for the else-arm, to close the `if` and the `FPCore`)."""
-    suffix = "".join(' ")"' for _ in range(closes))
-    return f'start: " " e0{suffix}\n{egrammar.region_rules(benchmark, box, runs)}\n'
+def validate(benchmark, box, program, runs) -> bool:
+    """True if every branch of `program` is equivalent to the reference over the region
+    its guards select. Per-branch validity implies whole-program validity: `if` is
+    total, so each input lands in exactly one branch."""
+    for conds, leaf in regions.split_branches(regions.body_of(program)):
+        region = regions.narrow_box(box, conds) if box else None
+        if box and region is None:
+            continue  # branch unreachable in the box -- nothing to prove
+        if not egrammar.equivalent(benchmark, float_box(region), leaf, runs):
+            return False
+    return True
 
 
-def generate_program(llm, benchmark, variables, box, args, ids):
-    """One program, continued from the shared reasoned context `ids`."""
-    if box is None:  # no interval box configured -> no branching, plain equivalents
-        r = sample_segment(llm, egrammar.build_region(benchmark, None, args.saturation)[1],
-                            ids, args)
-        return r.text.strip() if r else None
+# --- skeleton mode: constrained skeleton, then fill each arm from a region grammar ----
 
-    fbox = float_box(box)
-    head = sample_segment(llm, head_grammar(benchmark, fbox, variables, args.saturation),
-                          ids, args)
-    if head is None:
+def constrained_sample(llm, grammar, prompt, args, reason: bool):
+    """One grammar-constrained program; on a harmony model, `reason` first thinks
+    unconstrained, then continues under the grammar in the same final channel."""
+    prompt_ids = None
+    if reason and channel_ids(llm.tokenizer):
+        prompt_ids = think_then_handoff(llm, prompt, args.temperature, args.effort)
+        free_cuda()
+    return sample(llm, grammar, args, prompt_ids=prompt_ids,
+                  prompt=(prompt if prompt_ids is None else None))
+
+
+def build_skeleton_program(llm, benchmark, reference, variables, box, skel_grammar,
+                           args, grammar_cache):
+    """Propose a partition, fill each region's arm from a region-sound grammar, assemble."""
+    skeleton = constrained_sample(llm, skel_grammar, partition_prompt(reference, box),
+                                  args, reason=True)
+    if skeleton is None:
         return None
-    text = head.text.strip()
-    m = COND.search(text)
-    if m is None:  # complete no-branch program
-        return text
-    op, var, thr = m.group(1), m.group(2), m.group(3)
-    then_box = regions.narrow_box(box, [(op, var, thr)]) or box
-    else_box = regions.narrow_box(box, [(regions.NEGATE[op], var, thr)]) or box
-
-    ids = extend(ids, head.token_ids)
-    then = sample_segment(llm, arm_grammar(benchmark, float_box(then_box), args.saturation, 0),
-                          ids, args)
-    if then is None:
-        return None
-    ids = extend(ids, then.token_ids)
-    els = sample_segment(llm, arm_grammar(benchmark, float_box(else_box), args.saturation, 2),
-                         ids, args)
-    if els is None:
-        return None
-    return text + then.text + els.text
+    arm_bodies = []
+    for conds in regions.leaf_paths(skeleton):
+        rbox = regions.narrow_box(box, conds) if box else None
+        if box and rbox is None:  # region empty in the box; arm never executes
+            arm_bodies.append(regions.strip_wrapper(reference, variables))
+            continue
+        key = None if rbox is None else tuple(sorted(rbox.items()))
+        if key not in grammar_cache:
+            _, g = egrammar.build_region(benchmark, float_box(rbox), args.saturation)
+            grammar_cache[key] = make_grammar(llm, g)
+        arm = constrained_sample(llm, grammar_cache[key], arm_prompt(reference, rbox),
+                                 args, reason=False)
+        if arm is None:
+            return None
+        arm_bodies.append(regions.strip_wrapper(arm, variables))
+    return regions.assemble(skeleton, arm_bodies)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("benchmark")
+    parser.add_argument("--mode", choices=["check", "skeleton"], default="check")
     parser.add_argument("--samples", type=int, default=20)
     parser.add_argument("--max-attempts", type=int, default=200)
     parser.add_argument("--temperature", type=float, default=1.0)
@@ -232,23 +276,43 @@ def main() -> None:
     import fptaylor_check
 
     reference = egrammar.read_reference(args.benchmark)
-    variables = regions.parse(regions.tokenize(reference))[1]  # (FPCore (vars) ...)
+    variables = regions.variables_of(reference)
     box = fptaylor_check.INTERVALS.get(args.benchmark)
-    print(f"benchmark: {args.benchmark}\nreference: {reference}\n"
-          f"model:     {args.model}\nbox:       {box or '(none)'}\n")
+    print(f"benchmark:   {args.benchmark}\nreference:   {reference}\nmode:        {args.mode}\n"
+          f"model:       {args.model}\ntemperature: {args.temperature}\n"
+          f"effort:      {args.effort}\nsamples:     {args.samples}\n"
+          f"saturation:  {args.saturation}\nbox:         {box or '(none)'}\n")
 
     load_kwargs = {"dtype": "auto"} if "gpt-oss" in args.model.lower() else {}
     llm = casa.LLM.from_pretrained(args.model, **load_kwargs)
 
-    # Reason once; every sample is generated from this shared reasoned context.
-    base_ids = initial_ids(llm, program_prompt(reference, box), args)
-
     programs = []
-    for i in range(args.samples):
-        print(f"{'=' * 70}\nsample {i + 1}/{args.samples}\n{'=' * 70}")
-        prog = generate_program(llm, args.benchmark, variables, box, args, base_ids)
-        if prog:
-            programs.append(prog)
+    if args.mode == "check":
+        # Reason once, then draw all programs from that shared context in ONE ASAP call
+        # so its trie persists across samples: each grammar-valid program it yields is
+        # masked out and never proposed again (dedup during generation), and the
+        # proposal is reweighted toward the true grammar-aligned distribution. Calling
+        # it once per sample would reset that state and degrade to plain GCD.
+        base_ids = initial_ids(llm, program_prompt(reference, box), args)
+        syntax = make_grammar(llm, syntax_grammar(variables))
+        sampler = casa.ASAP(llm, syntax, verbose=True, temperature=args.temperature)
+        candidates = sampler.sample(prompt_ids=base_ids, n_samples=args.samples,
+                                    max_attempts=args.max_attempts)
+        for r in candidates:
+            prog = r.text.strip()
+            if validate(args.benchmark, box, prog, args.saturation):
+                programs.append(prog)
+            else:
+                print(f"rejected (not equivalent over the box): {prog}")
+    else:  # skeleton
+        skel_grammar = make_grammar(llm, regions.skeleton_grammar(variables))
+        grammar_cache = {}
+        for i in range(args.samples):
+            print(f"{'=' * 70}\nsample {i + 1}/{args.samples}\n{'=' * 70}")
+            prog = build_skeleton_program(llm, args.benchmark, reference, variables, box,
+                                          skel_grammar, args, grammar_cache)
+            if prog:
+                programs.append(prog)
 
     programs = dedup(programs)
     print(f"\noriginal: {reference}\ndistinct programs: {len(programs)}")
@@ -258,7 +322,11 @@ def main() -> None:
     n, summary = paths.next_path(paths.EQUIVALENTS, args.benchmark)
     summary.write_text(json.dumps(
         {"benchmark": args.benchmark, "reference": reference,
-         "model": args.model, "programs": programs}, indent=2))
+         "config": {"mode": args.mode, "model": args.model,
+                    "temperature": args.temperature, "effort": args.effort,
+                    "samples": args.samples, "max_attempts": args.max_attempts,
+                    "saturation": args.saturation, "box": box},
+         "programs": programs}, indent=2))
     print(f"\nwrote {len(programs)} programs to {summary}")
 
     if programs:

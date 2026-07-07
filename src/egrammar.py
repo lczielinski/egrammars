@@ -294,7 +294,8 @@ def reachable(root: str, eclasses: EClassMapping) -> list[str]:
 
 def intersect(root: str, eclasses: EClassMapping) -> str:
     """Lark grammar of the e-graph: one nonterminal per e-class, one production per
-    e-node. `region_rules` strips its `start` line to splice into a head/arm grammar."""
+    e-node. Its language is exactly the programs equivalent to the reference over the
+    box the e-graph was saturated with -- used by skeleton mode to fill an arm."""
     order = reachable(root, eclasses)
     name = {eclass: f"e{i}" for i, eclass in enumerate(order)}
 
@@ -342,8 +343,58 @@ def build_region(benchmark: str, box: dict[str, tuple[float, float]] | None = No
     return reference, intersect(root, eclasses)
 
 
-def region_rules(benchmark: str, box: dict[str, tuple[float, float]] | None = None,
-                 runs: int = SATURATION_RUNS) -> str:
-    """The e-class rule lines (root `e0`) of the region grammar over `box`, without the
-    FPCore-wrapper `start` rule -- for splicing into a head/arm grammar on the fly."""
-    return "\n".join(build_region(benchmark, box, runs)[1].strip().split("\n")[1:])
+# FPCore head -> Math constructor, for the equivalence checker.
+CONSTRUCTOR = {"+": "Add", "-": "Sub", "*": "Mul", "/": "Div", "sqrt": "Sqrt"}
+
+
+def fpcore_to_math(node) -> str:
+    """Render a branch-free FPCore AST (from `regions.parse`) as an egglog `Math` term.
+    Raises ValueError on a non-integer literal or unsupported form (`Num` is i64)."""
+    if isinstance(node, str):
+        try:
+            value = float(node)
+        except ValueError:
+            return f'(Var "{node}")'  # not a number -> a variable
+        if value != int(value):
+            raise ValueError(f"non-integer literal {node!r}")
+        return f"(Num {int(value)})"
+    if not node:
+        raise ValueError("empty node")
+    head, operands = node[0], node[1:]
+    if head == "-" and len(operands) == 1:
+        return f"(Neg {fpcore_to_math(operands[0])})"
+    ctor = CONSTRUCTOR.get(head)
+    arity = 1 if head == "sqrt" else 2
+    if ctor is None or len(operands) != arity:
+        raise ValueError(f"unsupported form {node!r}")
+    return f"({ctor} " + " ".join(fpcore_to_math(o) for o in operands) + ")"
+
+
+def equivalent(benchmark: str, box: dict[str, tuple[float, float]] | None,
+               body, runs: int = SATURATION_RUNS) -> bool:
+    """True if the branch-free FPCore AST `body` is provably equal to the benchmark
+    reference over `box` (var -> (lo, hi)) under the rewrite rules + interval analysis.
+
+    Adds `body` to the reference's e-graph, saturates with the box seeded into the
+    interval analysis, and checks the two land in the same e-class -- so a
+    domain-conditional rewrite can only bridge them where its preconditions are proven
+    over `box`. A wider box (e.g. an ignored var-vs-var guard) is conservative: it can
+    only fail to prove an equivalence, never assert a false one."""
+    from egglog.bindings import EGraph
+
+    try:
+        term = fpcore_to_math(body)
+    except ValueError:
+        return False
+    rules = (paths.ROOT / "rules.egglog").read_text()
+    content = (paths.BENCHMARKS / f"{benchmark}.egglog").read_text()
+    seeds = _seeds(box) if box else ""
+    source = (rules + content + f"\n(let __candidate__ {term})\n" + seeds
+              + f"\n(run {runs})\n(check (= start __candidate__))")
+    egraph = EGraph()
+    try:
+        with _quiet_stderr():
+            egraph.run_program(*egraph.parse_program(source))
+        return True
+    except Exception:
+        return False

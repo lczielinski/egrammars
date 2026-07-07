@@ -188,7 +188,7 @@ def check(benchmark: str, run: int | None = None):
     dst = paths.path_for(paths.FPTAYLOR, benchmark, n)
     dst.write_text(json.dumps({
         "benchmark": benchmark, "reference": data.get("reference"),
-        "model": data.get("model"), "intervals": box,
+        "config": data.get("config"), "intervals": box,
         "note": "worst-case double-rounding bounds over this box; a branching "
                 "program's error is the worst over its branches (see `branches`).",
         "results": ranked,
