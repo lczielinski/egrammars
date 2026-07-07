@@ -11,8 +11,9 @@ check (default):   the model writes a WHOLE program in one pass under a light,
 skeleton:          the constrained two-phase approach, batched through ASAP. In one
     call the model proposes --skeletons distinct `if`-trees with `?` arm holes; then for
     each hole the guards narrow the box, egglog builds a grammar sound over that sub-box,
-    and one ASAP call draws --arms distinct fills from it (region grammars cached). Each
-    skeleton is assembled as the cross-product of its holes' options (capped at
+    and (after reasoning once about the sub-box) one ASAP call draws --arms distinct
+    fills from it (region grammars cached). Each skeleton is assembled as the
+    cross-product of its holes' options (capped at
     --max-combos). Sound by construction. Batching the draws keeps ASAP's dedup +
     reweighting instead of degrading to per-call GCD.
 
@@ -194,6 +195,19 @@ def asap_samples(llm, grammar, args, n_samples, *, prompt_ids=None, prompt=None)
     return [r.text.strip() for r in res]
 
 
+def reasoned_samples(llm, grammar, prompt, args, n_samples):
+    """Reason once about `prompt` (on a harmony model, in the analysis channel), then
+    draw `n_samples` distinct grammar-valid programs from that shared reasoned context
+    in one ASAP call."""
+    prompt_ids = None
+    if channel_ids(llm.tokenizer):
+        prompt_ids = think_then_handoff(llm, prompt, args.temperature, args.effort)
+        free_cuda()
+    return asap_samples(llm, grammar, args, n_samples,
+                        prompt=(prompt if prompt_ids is None else None),
+                        prompt_ids=prompt_ids)
+
+
 # --- check mode: free generation under a light syntax grammar, checked after ---------
 
 def syntax_grammar(variables):
@@ -232,12 +246,13 @@ def validate(benchmark, box, program, runs) -> bool:
 # --- skeleton mode: a few skeletons, each hole filled from a region grammar, assembled -
 
 def arm_options(llm, benchmark, reference, variables, rbox, args):
-    """`args.arms` DISTINCT region-sound arm bodies over `rbox`, drawn in one ASAP call
-    from a grammar whose language is exactly the forms equivalent to the reference and
-    sound over that sub-box (so no post-hoc check is needed)."""
+    """`args.arms` DISTINCT region-sound arm bodies over `rbox`: reason once about this
+    sub-box, then draw them in one ASAP call from a grammar whose language is exactly the
+    forms equivalent to the reference and sound over the sub-box (no post-hoc check
+    needed). Called once per distinct region and cached, so the reasoning is shared."""
     _, grammar_str = egrammar.build_region(benchmark, float_box(rbox), args.saturation)
     grammar = make_grammar(llm, grammar_str)
-    bodies = asap_samples(llm, grammar, args, args.arms, prompt=arm_prompt(reference, rbox))
+    bodies = reasoned_samples(llm, grammar, arm_prompt(reference, rbox), args, args.arms)
     return [regions.strip_wrapper(b, variables) for b in bodies]
 
 
@@ -245,16 +260,10 @@ def build_skeleton_programs(llm, benchmark, reference, variables, box, skel_gram
                             args, arm_cache):
     """Draw `args.skeletons` distinct `if`-skeletons in one ASAP call (reasoning once
     about the partition first); fill each hole with `args.arms` distinct region-sound
-    options (one ASAP call per region, cached); assemble the per-skeleton cross-product
-    of options, capped at `args.max_combos` programs per skeleton."""
-    prompt = partition_prompt(reference, box)
-    prompt_ids = None
-    if channel_ids(llm.tokenizer):
-        prompt_ids = think_then_handoff(llm, prompt, args.temperature, args.effort)
-        free_cuda()
-    skeletons = asap_samples(llm, skel_grammar, args, args.skeletons,
-                             prompt=(prompt if prompt_ids is None else None),
-                             prompt_ids=prompt_ids)
+    options (reasoning once per region, then one ASAP call, cached); assemble the
+    per-skeleton cross-product of options, capped at `args.max_combos` per skeleton."""
+    skeletons = reasoned_samples(llm, skel_grammar, partition_prompt(reference, box),
+                                 args, args.skeletons)
 
     programs = []
     for skeleton in skeletons:
@@ -289,7 +298,7 @@ def main() -> None:
     parser.add_argument("--mode", choices=["check", "skeleton"], default="check")
     parser.add_argument("--samples", type=int, default=20,
                         help="check mode: distinct programs to draw")
-    parser.add_argument("--skeletons", type=int, default=5,
+    parser.add_argument("--skeletons", type=int, default=3,
                         help="skeleton mode: distinct if-skeletons to draw")
     parser.add_argument("--arms", type=int, default=3,
                         help="skeleton mode: options to draw per skeleton hole")

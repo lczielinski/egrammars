@@ -24,8 +24,9 @@ total. Semantics live in the checker; the grammar only enforces syntax.
 **`skeleton` — a few skeletons, options per branch, assembled.** In one ASAP call the
 model (constrained to a skeleton grammar) proposes `--skeletons` distinct `if`-trees
 with `?` arm holes. For each hole, its guards narrow the box, egglog builds a grammar
-*sound over that sub-box*, and one ASAP call draws `--arms` distinct fills from it
-(region grammars cached across skeletons). Each skeleton is then assembled as the
+*sound over that sub-box*, and — after reasoning once about that sub-box — one ASAP call
+draws `--arms` distinct fills from it (region grammars and their reasoning cached across
+skeletons). Each skeleton is then assembled as the
 cross-product of its holes' options, capped at `--max-combos` programs. Sound by
 construction — no post-hoc check needed. Drawing skeletons and arms as batched ASAP
 calls (rather than one `n_samples=1` call each) is what gives it dedup + reweighting
