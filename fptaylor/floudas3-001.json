@@ -1,0 +1,84 @@
+{
+  "benchmark": "floudas3",
+  "reference": "(FPCore (x1 x2) (+ (- (* -12 x1) (* 7 x2)) (* x2 x2)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "effort": "medium",
+    "samples": 20,
+    "max_attempts": 200,
+    "saturation": 6,
+    "time_budget": 10.0,
+    "box": {
+      "x1": "[0,2]",
+      "x2": "[0,3]"
+    }
+  },
+  "intervals": {
+    "x1": "[0,2]",
+    "x2": "[0,3]"
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "results": [
+    {
+      "fptaylor_expr": "((x2 * x2) + ((-12 * x1) - (7 * x2)))",
+      "enclosure": [
+        -36.27906,
+        0.008789063
+      ],
+      "abs_err": 1.154632e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2) (+ (* x2 x2) (- (* -12 x1) (* 7 x2))))"
+    },
+    {
+      "fptaylor_expr": "(((x2 * x2) + ((-12 * x1) - (7 * x2))) + 0)",
+      "enclosure": [
+        -36.27906,
+        0.008789063
+      ],
+      "abs_err": 1.509904e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2) (+ (+ (* x2 x2) (- (* -12 x1) (* 7 x2))) 0))"
+    },
+    {
+      "fptaylor_expr": "(((-12 * x1) - (7 * x2)) + (x2 * x2))",
+      "enclosure": [
+        -36.27906,
+        0.008789063
+      ],
+      "abs_err": 1.154632e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2) (+ (- (* -12 x1) (* 7 x2)) (* x2 x2)))"
+    },
+    {
+      "fptaylor_expr": "(((x2 * x2) / 1) + ((-12 * x1) - (7 * x2)))",
+      "enclosure": [
+        -36.27906,
+        0.008789063
+      ],
+      "abs_err": 1.154632e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2) (+ (/ (* x2 x2) 1) (- (* -12 x1) (* 7 x2))))"
+    },
+    {
+      "fptaylor_expr": "(((x2 * x2) + (-12 * x1)) - (7 * x2))",
+      "enclosure": [
+        -36.27906,
+        0.008789063
+      ],
+      "abs_err": 9.769963e-15,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2) (- (+ (* x2 x2) (* -12 x1)) (* 7 x2)))"
+    }
+  ]
+}

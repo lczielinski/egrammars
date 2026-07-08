@@ -1,0 +1,170 @@
+{
+  "benchmark": "sum",
+  "reference": "(FPCore (x0 x1 x2) (+ (+ (- (+ x0 x1) x2) (- (+ x1 x2) x0)) (- (+ x2 x0) x1)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "effort": "medium",
+    "samples": 20,
+    "max_attempts": 200,
+    "saturation": 6,
+    "time_budget": 10.0,
+    "box": {
+      "x0": "[1,2]",
+      "x1": "[1,2]",
+      "x2": "[1,2]"
+    }
+  },
+  "intervals": {
+    "x0": "[1,2]",
+    "x1": "[1,2]",
+    "x2": "[1,2]"
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "results": [
+    {
+      "fptaylor_expr": "((x0 + x1) + x2)",
+      "enclosure": [
+        3.0,
+        6.0
+      ],
+      "abs_err": 6.661339e-16,
+      "rel_err": 1.685082e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 0.758893466728873,
+      "program": "(FPCore (x0 x1 x2) (+ (+ x0 x1) x2))"
+    },
+    {
+      "fptaylor_expr": "((1 * (x0 + x1)) + x2)",
+      "enclosure": [
+        3.0,
+        6.0
+      ],
+      "abs_err": 6.661339e-16,
+      "rel_err": 1.685082e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 0.758893466728873,
+      "program": "(FPCore (x0 x1 x2) (+ (* 1 (+ x0 x1)) x2))"
+    },
+    {
+      "fptaylor_expr": "((x0 + x2) + x1)",
+      "enclosure": [
+        3.0,
+        6.0
+      ],
+      "abs_err": 6.661339e-16,
+      "rel_err": 1.685082e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 0.758893466728873,
+      "program": "(FPCore (x0 x1 x2) (+ (+ x0 x2) x1))"
+    },
+    {
+      "fptaylor_expr": "(((x0 + x1) - 0) + x2)",
+      "enclosure": [
+        3.0,
+        6.0
+      ],
+      "abs_err": 1.110224e-15,
+      "rel_err": 2.23793e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.0078740714081253,
+      "program": "(FPCore (x0 x1 x2) (+ (- (+ x0 x1) 0) x2))"
+    },
+    {
+      "fptaylor_expr": "((x0 + x1) + sqrt((x2 * x2)))",
+      "enclosure": [
+        3.0,
+        6.0
+      ],
+      "abs_err": 9.439073e-16,
+      "rel_err": 2.364387e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.0648252412159644,
+      "program": "(FPCore (x0 x1 x2) (+ (+ x0 x1) (sqrt (* x2 x2))))"
+    },
+    {
+      "fptaylor_expr": "((x0 + sqrt((x1 * x1))) + sqrt((x2 * x2)))",
+      "enclosure": [
+        3.0,
+        6.0
+      ],
+      "abs_err": 1.443726e-15,
+      "rel_err": 2.781535e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.2526919989517993,
+      "program": "(FPCore (x0 x1 x2) (+ (+ x0 (sqrt (* x1 x1))) (sqrt (* x2 x2))))"
+    },
+    {
+      "fptaylor_expr": "((1 * ((x0 + x1) + x2)) + 0)",
+      "enclosure": [
+        3.0,
+        6.0
+      ],
+      "abs_err": 1.110224e-15,
+      "rel_err": 2.797413e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.2598428144401381,
+      "program": "(FPCore (x0 x1 x2) (+ (* 1 (+ (+ x0 x1) x2)) 0))"
+    },
+    {
+      "fptaylor_expr": "(((x0 + x1) + x2) - 0)",
+      "enclosure": [
+        3.0,
+        6.0
+      ],
+      "abs_err": 1.110224e-15,
+      "rel_err": 2.797413e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.2598428144401381,
+      "program": "(FPCore (x0 x1 x2) (- (+ (+ x0 x1) x2) 0))"
+    },
+    {
+      "fptaylor_expr": "((1 * (x0 + (x1 + x2))) + 0)",
+      "enclosure": [
+        3.0,
+        6.0
+      ],
+      "abs_err": 1.110224e-15,
+      "rel_err": 2.797413e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.2598428144401381,
+      "program": "(FPCore (x0 x1 x2) (+ (* 1 (+ x0 (+ x1 x2))) 0))"
+    },
+    {
+      "fptaylor_expr": "((0 * ((x0 + x1) + x2)) + ((x0 + x1) + x2))",
+      "enclosure": [
+        3.0,
+        6.0
+      ],
+      "abs_err": 1.110224e-15,
+      "rel_err": 2.797413e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.2598428144401381,
+      "program": "(FPCore (x0 x1 x2) (+ (* 0 (+ (+ x0 x1) x2)) (+ (+ x0 x1) x2)))"
+    },
+    {
+      "fptaylor_expr": "((((x0 + x1) + x2) - ((x0 + x1) + x2)) + ((x0 + x1) + x2))",
+      "enclosure": [
+        2.960937,
+        6.0625
+      ],
+      "abs_err": 1.445025e-15,
+      "rel_err": 3.655399e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.6462453574290483,
+      "program": "(FPCore (x0 x1 x2) (+ (- (+ (+ x0 x1) x2) (+ (+ x0 x1) x2)) (+ (+ x0 x1) x2)))"
+    },
+    {
+      "fptaylor_expr": "((((x0 + x1) + x2) - 0) + 0)",
+      "enclosure": [
+        3.0,
+        6.0
+      ],
+      "abs_err": 1.554313e-15,
+      "rel_err": 3.916378e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.7637798501442008,
+      "program": "(FPCore (x0 x1 x2) (+ (- (+ (+ x0 x1) x2) 0) 0))"
+    }
+  ]
+}

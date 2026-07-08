@@ -1,0 +1,156 @@
+{
+  "benchmark": "x_by_xy",
+  "reference": "(FPCore (x y) (/ x (+ x y)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "effort": "medium",
+    "samples": 20,
+    "max_attempts": 200,
+    "saturation": 6,
+    "time_budget": 10.0,
+    "box": {
+      "x": "[1,4]",
+      "y": "[1,4]"
+    }
+  },
+  "intervals": {
+    "x": "[1,4]",
+    "y": "[1,4]"
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "results": [
+    {
+      "fptaylor_expr": "(x / ((x + y) / 1))",
+      "enclosure": [
+        0.196319,
+        0.807571
+      ],
+      "abs_err": 1.405349e-16,
+      "rel_err": 2.246599e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.011778241925093,
+      "program": "(FPCore (x y) (/ x (/ (+ x y) 1)))"
+    },
+    {
+      "fptaylor_expr": "(x / ((x + y) * 1))",
+      "enclosure": [
+        0.196319,
+        0.807571
+      ],
+      "abs_err": 1.405349e-16,
+      "rel_err": 2.246599e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.011778241925093,
+      "program": "(FPCore (x y) (/ x (* (+ x y) 1)))"
+    },
+    {
+      "fptaylor_expr": "(x / (x + y))",
+      "enclosure": [
+        0.192771,
+        0.807571
+      ],
+      "abs_err": 1.398741e-16,
+      "rel_err": 2.248643e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.0126987776889274,
+      "program": "(FPCore (x y) (/ x (+ x y)))"
+    },
+    {
+      "fptaylor_expr": "(x / (1 * (x + y)))",
+      "enclosure": [
+        0.192771,
+        0.807571
+      ],
+      "abs_err": 1.398741e-16,
+      "rel_err": 2.248643e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.0126987776889274,
+      "program": "(FPCore (x y) (/ x (* 1 (+ x y))))"
+    },
+    {
+      "fptaylor_expr": "(1 / (1 + (y / x)))",
+      "enclosure": [
+        0.1999999,
+        0.8000001
+      ],
+      "abs_err": 1.44329e-16,
+      "rel_err": 2.795017e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.2587637519694201,
+      "program": "(FPCore (x y) (/ 1 (+ 1 (/ y x))))"
+    },
+    {
+      "fptaylor_expr": "(x / ((x + y) - 0))",
+      "enclosure": [
+        0.196319,
+        0.807571
+      ],
+      "abs_err": 2.24237e-16,
+      "rel_err": 3.363272e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.5146830525945623,
+      "program": "(FPCore (x y) (/ x (- (+ x y) 0)))"
+    },
+    {
+      "fptaylor_expr": "(x * (1 / (x + y)))",
+      "enclosure": [
+        0.192771,
+        0.807571
+      ],
+      "abs_err": 2.22343e-16,
+      "rel_err": 3.363272e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.5146830525945623,
+      "program": "(FPCore (x y) (* x (/ 1 (+ x y))))"
+    },
+    {
+      "fptaylor_expr": "(x / (sqrt(x) + (sqrt(x) + sqrt(y))))",
+      "enclosure": [
+        0.2392659,
+        0.8076163
+      ],
+      "abs_err": 2.168972e-16,
+      "rel_err": 3.641318e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.639903838793748,
+      "program": "(FPCore (x y) (/ x (+ (sqrt x) (+ (sqrt x) (sqrt y)))))"
+    },
+    {
+      "fptaylor_expr": "(sqrt((x * x)) / (x + y))",
+      "enclosure": [
+        0.192771,
+        0.807571
+      ],
+      "abs_err": 2.379175e-16,
+      "rel_err": 3.921824e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.7662325105012668,
+      "program": "(FPCore (x y) (/ (sqrt (* x x)) (+ x y)))"
+    },
+    {
+      "fptaylor_expr": "(x / (sqrt(((x * x) + (y * y))) + sqrt(((x * x) + (y * y)))))",
+      "enclosure": [
+        0.1182108,
+        0.4960049
+      ],
+      "abs_err": 1.787581e-16,
+      "rel_err": 4.345529e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.9570522785127684,
+      "program": "(FPCore (x y) (/ x (+ (sqrt (+ (* x x) (* y y))) (sqrt (+ (* x x) (* y y))))))"
+    },
+    {
+      "fptaylor_expr": "(x / (x + sqrt(0)))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x y) (/ x (+ x (sqrt 0))))"
+    }
+  ]
+}

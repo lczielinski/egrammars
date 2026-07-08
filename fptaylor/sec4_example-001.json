@@ -1,0 +1,72 @@
+{
+  "benchmark": "sec4_example",
+  "reference": "(FPCore (x y) (/ (- (* x y) 1) (- (* (* x y) (* x y)) 1)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "effort": "medium",
+    "samples": 20,
+    "max_attempts": 200,
+    "saturation": 6,
+    "time_budget": 10.0,
+    "box": {
+      "x": "[1.001,2]",
+      "y": "[1.001,2]"
+    }
+  },
+  "intervals": {
+    "x": "[1.001,2]",
+    "y": "[1.001,2]"
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "results": [
+    {
+      "fptaylor_expr": "(1 / ((x * y) + 1))",
+      "enclosure": [
+        0.1999999,
+        0.4995003
+      ],
+      "abs_err": 1.10856e-16,
+      "rel_err": 2.7984e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.2602873197233595,
+      "program": "(FPCore (x y) (/ 1 (+ (* x y) 1)))"
+    },
+    {
+      "fptaylor_expr": "(1 / (((x * y) + 1) * 1))",
+      "enclosure": [
+        0.1999999,
+        0.4995003
+      ],
+      "abs_err": 1.10856e-16,
+      "rel_err": 2.7984e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.2602873197233595,
+      "program": "(FPCore (x y) (/ 1 (* (+ (* x y) 1) 1)))"
+    },
+    {
+      "fptaylor_expr": "(1 / (((x * y) + 1) / 1))",
+      "enclosure": [
+        0.1999999,
+        0.4995003
+      ],
+      "abs_err": 1.10856e-16,
+      "rel_err": 2.7984e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.2602873197233595,
+      "program": "(FPCore (x y) (/ 1 (/ (+ (* x y) 1) 1)))"
+    },
+    {
+      "fptaylor_expr": "(1 / (((x * y) + 1) - 0))",
+      "enclosure": [
+        0.1999999,
+        0.4995003
+      ],
+      "abs_err": 1.662562e-16,
+      "rel_err": 3.923805e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.7671246735874488,
+      "program": "(FPCore (x y) (/ 1 (- (+ (* x y) 1) 0)))"
+    }
+  ]
+}

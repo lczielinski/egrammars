@@ -1,0 +1,173 @@
+{
+  "benchmark": "test06_sums4_sum2",
+  "reference": "(FPCore (x0 x1 x2 x3) (+ (+ x0 x1) (+ x2 x3)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "effort": "medium",
+    "samples": 20,
+    "max_attempts": 200,
+    "saturation": 6,
+    "time_budget": 10.0,
+    "box": {
+      "x0": "[-1e-05,1.00001]",
+      "x1": "[0,1]",
+      "x2": "[0,1]",
+      "x3": "[0,1]"
+    }
+  },
+  "programs": [
+    "(FPCore (x0 x1 x2 x3) (+ x0 (+ x1 (+ x2 x3))))",
+    "(FPCore (x0 x1 x2 x3) (+ x0 (+ x1 (+ (+ x2 x3) 0))))",
+    "(FPCore (x0 x1 x2 x3) (+ x0 (+ (+ x1 x2) x3)))",
+    "(FPCore (x0 x1 x2 x3) (+ x0 (+ x1 (- (+ x2 x3) 0))))",
+    "(FPCore (x0 x1 x2 x3) (- (+ x0 (+ x1 (+ x2 x3))) 0))",
+    "(FPCore (x0 x1 x2 x3) (+ x0 (+ x1 (- (+ x2 x3) (- 0)))))",
+    "(FPCore (x0 x1 x2 x3) (+ x0 (+ x1 (+ (sqrt (* x2 x2)) (+ (sqrt (* x3 x3)) (sqrt (* 0 0)))))))",
+    "(FPCore (x0 x1 x2 x3) (+ x0 (+ (+ x1 (+ x2 x3)) 0)))",
+    "(FPCore (x0 x1 x2 x3) (+ x0 (+ x1 (+ (sqrt (* x2 x2)) (sqrt (* x3 x3))))))",
+    "(FPCore (x0 x1 x2 x3) (- (+ (+ x0 x1) (+ x2 x3)) 0))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ x1 (+ x2 x3))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ x1 (+ (+ x2 x3) 0))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ 1 (+ 2 (+ 3 4)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9621150212917575,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ (+ x1 x2) x3)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ x1 (+ 2 x3))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.8387885157325061,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ x1 (+ (sqrt x2) (sqrt x3)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.47347462995462203,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ x1 (+ x2 0))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ 1 (+ x2 x3))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.7172774049912566,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ x1 (- (+ x2 x3) 0))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (- (+ x0 (+ x1 (+ x2 x3))) 0))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ x1 (- (+ x2 x3) (- 0)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ 1 x1)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.658905984154539,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ x1 (+ (sqrt (* x2 x2)) (+ (sqrt (* x3 x3)) (sqrt (* 0 0)))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ x0 (+ x1 (+ x2 x3)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.4570962458374485,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ (+ x1 (+ x2 x3)) 0)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ x1 (+ (sqrt (* x2 x2)) (sqrt (* x3 x3))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ x1 (+ (sqrt x2) x3))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.3356530547834936,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (- (+ (+ x0 x1) (+ x2 x3)) 0))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ x1 (+ (sqrt (* x2 1)) (+ x2 x3)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.4897296269422196,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x0 x1 x2 x3) (+ x0 (+ 1 0)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    }
+  ]
+}

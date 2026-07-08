@@ -1,0 +1,180 @@
+{
+  "benchmark": "sine",
+  "reference": "(FPCore (x) (- (+ (- x (/ (* (* x x) x) 6.0)) (/ (* (* (* (* x x) x) x) x) 120)) (/ (* (* (* (* (* (* x x) x) x) x) x) x) 5040)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "effort": "medium",
+    "samples": 20,
+    "max_attempts": 200,
+    "saturation": 6,
+    "time_budget": 10.0,
+    "box": {
+      "x": "[-1.57079632679,1.57079632679]"
+    }
+  },
+  "programs": [
+    "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 6.0))) (/ (* (* x x) (* x x)) 120)) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040)))))",
+    "(FPCore (x) (* x (+ (+ (+ (+ 1 (- (/ (* x x) 6.0))) (/ (* (* x x) (* x x)) 120)) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040))) 0)))",
+    "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 6.00))) (/ (* (* x x) (* x x)) 120)) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040)))))",
+    "(FPCore (x) (* x (+ (+ (- (/ (* x x) 6.0)) (+ (+ 1 (/ (* (* x x) (* x x)) 120)) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040)))) 0)))",
+    "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 6.0))) (+ (/ (* (* x x) (* x x)) 120) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040)))) 0)))",
+    "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 6.0))) (/ (* (* x x) (* x x)) 120)) (- (/ (/ (* (* (* x x) (* x x)) (* x x)) 1) 5040)))))",
+    "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 6.0))) (/ (* (* x x) (* x x)) 120.0)) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040.0)))))",
+    "(FPCore (x) (* x (+ (+ (- (/ (* x x) 6.0)) (+ 1 (/ (* (* x x) (* x x)) 120))) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040)))))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 6.0))) (/ (* (* x x) (* x x)) 120)) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (+ (+ 1 (- (/ (* x x) 6.0))) (/ (* (* x x) (* x x)) 120)) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040))) 0)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (+ 1 -1) (- (/ (* x x) 6.0))) (/ (* (* x x) (* x x)) 120))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.5645769757405772,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 6.00))) (/ (* (* x x) (* x x)) 120)) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 6.0))) (/ (* (* x x) (* x x)) 120)) (- (/ (* (* (* x x) (* x 0)) (* x x)) 5040)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (- (/ (* x x) 6.0)) (+ (+ 1 (/ (* (* x x) (* x x)) 120)) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040)))) 0)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 5.999999999999999))) (/ (* (* x x) (* x x)) 120)) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 3.726806378090723e-16,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 6.0))) (/ (* (* x x) (* x x)) 120)) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040) 0))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 600.0))) (/ (* (* x x) (* x x)) 120.0)) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040.0)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.3892693272614704,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 6.0))) (+ (* (* x x) (* x x)) (/ 1 120))) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9042433305886229,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 6.0))) (+ (/ (* (* x x) (* x x)) 120) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040)))) 0)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 6.0))) (/ (* (* x x) (* x x)) 12)) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.4162962429736848,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 6.0))) (/ (* (* x x) (* x x)) 120)) (- (/ (/ (* (* (* x x) (* x x)) (* x x)) 1) 5040)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (- (/ (* x x) 6.0)) (+ 1 (/ (* (* x x) (* x x)) 120)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.004623149846422763,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 6.0))) (/ (* (sqrt (* x x)) (sqrt (* x x))) 120)) (- (/ (* (sqrt (* (sqrt (* x x)) (sqrt (* x x)))) (sqrt (* x x))) 5040)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.043174973738819955,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (+ 0 1) (- (/ (* x x) 6.0))) (/ (* (* x x) (* x x)) 120))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.004623149846422763,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 6.0))) (/ (* (* x x) (* x x)) 120)) (- (/ (* (* (* x x) (* x (* x x))) (* x x)) 5040)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.01169162652532208,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x x) 6.0))) (/ (* (* x x) (* x x)) 120.0)) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040.0)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (+ 1 (- (/ (* x 6.0) x))) (/ (* (* x x) (* x x)) 120)) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.1999993973910401,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (* x (+ (+ (- (/ (* x x) 6.0)) (+ 1 (/ (* (* x x) (* x x)) 120))) (- (/ (* (* (* x x) (* x x)) (* x x)) 5040)))))",
+      "proven_equivalent": true
+    }
+  ]
+}
