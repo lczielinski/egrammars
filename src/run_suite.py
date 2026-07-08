@@ -3,8 +3,12 @@ loaded once, then print a comparison-ready summary (best relative-error bound pe
 benchmark). This is `run.py` in a loop over `benchmarks/*.egglog`, sharing one loaded
 model; to run a single benchmark use `run.py` directly.
 
-    uv run src/run_suite.py                 # generate + bound every benchmark
+    uv run src/run_suite.py                 # generate + bound every benchmark (1 GPU)
+    uv run src/run_suite.py --shard 0/8     # only benchmarks[0::8] — one shard per GPU
     uv run src/run_suite.py --summary-only  # just re-print the table from existing runs
+
+To use all GPUs, run one shard per GPU concurrently (reasoning dominates, so this is a
+near-linear speedup) — see scripts/run_gpus.sh, which pins CUDA_VISIBLE_DEVICES per shard.
 
 FPTaylor must be on PATH with its opam environment active (`eval $(opam env)`), else its
 native libs (dllnums.so, interval.cmi) fail to load and every bound comes back unbounded.
@@ -22,6 +26,15 @@ def all_benchmarks() -> list[str]:
     return sorted(p.stem for p in paths.BENCHMARKS.glob("*.egglog"))
 
 
+def shard(benchmarks: list[str], spec: str | None) -> list[str]:
+    """`spec` = "I/N": keep every N-th benchmark starting at I (round-robin, so the
+    slowest cores spread evenly across shards). None => all."""
+    if not spec:
+        return benchmarks
+    i, n = (int(x) for x in spec.split("/"))
+    return benchmarks[i::n]
+
+
 def generate_one(llm, benchmark: str, args) -> int | None:
     """Mirror run.main() for a single benchmark against an already-loaded model; return
     the run number written, or None if nothing survived verification."""
@@ -35,15 +48,14 @@ def generate_one(llm, benchmark: str, args) -> int | None:
 
     base_ids = run_module.initial_ids(
         llm, run_module.program_prompt(reference, box), args)
-    programs = []
-    for prog in run_module.asap_samples(
-            llm, run_module.syntax_grammar(variables), args, base_ids):
-        if run_module.validate(benchmark, box, prog, args.saturation):
-            programs.append(prog)
-        else:
-            print(f"rejected (not equivalent over the box): {prog}")
+    candidates = run_module.asap_samples(
+        llm, run_module.syntax_grammar(variables), args, base_ids)
+    programs, attempts = run_module.evaluate_candidates(
+        benchmark, reference, box, candidates, args.saturation)
 
-    print(f"distinct equivalent programs: {len(programs)}")
+    missing = sum(a.get("numeric", {}).get("verdict") == "equal" for a in attempts)
+    print(f"{len(attempts)} candidates: {len(programs)} proven, {missing} missing-rule?, "
+          f"{len(attempts) - len(programs) - missing} non-equivalent")
     n, summary = paths.next_path(paths.EQUIVALENTS, benchmark)
     summary.write_text(json.dumps(
         {"benchmark": benchmark, "reference": reference,
@@ -51,7 +63,7 @@ def generate_one(llm, benchmark: str, args) -> int | None:
                     "effort": args.effort, "samples": args.samples,
                     "max_attempts": args.max_attempts, "saturation": args.saturation,
                     "box": box},
-         "programs": programs}, indent=2))
+         "programs": programs, "attempts": attempts}, indent=2))
     if not programs:
         return None
     try:
@@ -84,6 +96,8 @@ def summarize(benchmarks: list[str]) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--shard", metavar="I/N",
+                    help="run only benchmarks[I::N] — one shard per GPU (see scripts/run_gpus.sh)")
     ap.add_argument("--summary-only", action="store_true",
                     help="skip generation; just re-print the table from existing runs")
     ap.add_argument("--samples", type=int, default=20)
@@ -94,8 +108,9 @@ def main() -> None:
     ap.add_argument("--saturation", type=int, default=6)
     args = ap.parse_args()
 
-    benchmarks = all_benchmarks()
-    print(f"{len(benchmarks)} benchmarks: {', '.join(benchmarks)}")
+    benchmarks = shard(all_benchmarks(), args.shard)
+    tag = f" (shard {args.shard})" if args.shard else ""
+    print(f"{len(benchmarks)} benchmarks{tag}: {', '.join(benchmarks)}")
 
     if not args.summary_only:
         import casa
@@ -107,6 +122,7 @@ def main() -> None:
             except Exception as e:  # one bad benchmark shouldn't sink the whole suite
                 print(f"!! {b} failed: {e!r}")
 
+    # A shard summarizes only its own slice; run --summary-only afterward for the full table.
     summarize(benchmarks)
 
 

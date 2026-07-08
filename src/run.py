@@ -175,6 +175,33 @@ def validate(benchmark, box, program, runs) -> bool:
     return True
 
 
+def evaluate_candidates(benchmark, reference, box, candidates, runs):
+    """Record EVERY sampled candidate, not just the ones that survive. Returns
+    (proven_programs, attempts): each attempt is {program, proven_equivalent, and — when
+    the e-graph couldn't prove it — a `numeric` classification separating a missing
+    e-graph rule (numerically equal) from a genuinely non-equivalent program}."""
+    import numcheck
+    programs, attempts = [], []
+    for prog in candidates:
+        proven = validate(benchmark, box, prog, runs)
+        rec = {"program": prog, "proven_equivalent": proven}
+        if proven:
+            programs.append(prog)
+        else:
+            rec["numeric"] = numcheck.classify(reference, prog, box)
+        attempts.append(rec)
+    return programs, attempts
+
+
+def attempt_line(rec: dict) -> str:
+    if rec["proven_equivalent"]:
+        return f"  proven      {rec['program']}"
+    num = rec["numeric"]
+    tag = {"equal": "MISSING-RULE?", "different": "not-equivalent",
+           "indeterminate": "indeterminate"}[num["verdict"]]
+    return f"  {tag:<13} {rec['program']}"
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -202,16 +229,16 @@ def main() -> None:
     llm = casa.LLM.from_pretrained(args.model, **load_kwargs)
 
     base_ids = initial_ids(llm, program_prompt(reference, box), args)
-    programs = []
-    for prog in asap_samples(llm, syntax_grammar(variables), args, base_ids):
-        if validate(args.benchmark, box, prog, args.saturation):
-            programs.append(prog)
-        else:
-            print(f"rejected (not equivalent over the box): {prog}")
+    candidates = asap_samples(llm, syntax_grammar(variables), args, base_ids)
+    programs, attempts = evaluate_candidates(
+        args.benchmark, reference, box, candidates, args.saturation)
 
-    print(f"\noriginal: {reference}\ndistinct programs: {len(programs)}")
-    for i, program in enumerate(programs):
-        print(f"{i:3d}  {program}")
+    missing = sum(a.get("numeric", {}).get("verdict") == "equal" for a in attempts)
+    print(f"\noriginal: {reference}\n{len(attempts)} candidates: "
+          f"{len(programs)} proven, {missing} numerically-equal-but-unproven "
+          f"(missing rule?), {len(attempts) - len(programs) - missing} non-equivalent")
+    for rec in attempts:
+        print(attempt_line(rec))
 
     n, summary = paths.next_path(paths.EQUIVALENTS, args.benchmark)
     summary.write_text(json.dumps(
@@ -220,8 +247,8 @@ def main() -> None:
                     "effort": args.effort, "samples": args.samples,
                     "max_attempts": args.max_attempts, "saturation": args.saturation,
                     "box": box},
-         "programs": programs}, indent=2))
-    print(f"\nwrote {len(programs)} programs to {summary}")
+         "programs": programs, "attempts": attempts}, indent=2))
+    print(f"\nwrote {len(programs)} programs ({len(attempts)} attempts) to {summary}")
 
     if programs:
         try:
