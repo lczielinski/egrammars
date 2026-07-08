@@ -43,6 +43,13 @@ def split_branches(node):
         yield [], node
 
 
+def float_box(box: dict | None) -> dict | None:
+    """`{"x": "[lo,hi]"}` -> `{"x": (lo, hi)}` floats, or None."""
+    if not box:
+        return None
+    return {v: tuple(map(float, s.strip("[]").split(","))) for v, s in box.items()}
+
+
 def _as_float(tok):
     try:
         return float(tok)

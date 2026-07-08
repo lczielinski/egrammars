@@ -23,13 +23,16 @@ decoding over an e-graph of equivalent forms
 ## Usage
 
 ```bash
-uv run src/run.py x_by_xy --model openai/gpt-oss-120b
-uv run src/fptaylor_check.py x_by_xy            # also runs automatically after run.py
+uv run src/run.py x_by_xy          # one benchmark (default model: openai/gpt-oss-120b)
+uv run src/run.py                  # every benchmark, model loaded once
+uv run src/run.py --summary-only   # re-print the results table
+uv run src/fptaylor_check.py x_by_xy   # bound a run's programs (also runs after run.py)
 ```
 
-`run.py` writes `equivalents/<name>-NNN.json`, `fptaylor_check.py` writes
+`run.py` writes `equivalents/<name>-NNN.json` (proven programs plus an `attempts` log of
+every candidate the model tried and why each was rejected), `fptaylor_check.py` writes
 `fptaylor/<name>-NNN.json`. Flags: `--samples --max-attempts --temperature --model
---effort --saturation`.
+--effort --saturation --time-budget --shard`.
 
 ## FPBench (comparing against Herbie)
 
@@ -41,9 +44,9 @@ tool's subset — only `+ - * / sqrt`, integer literals, and a branch-free refer
 loops, arrays, or non-integer constants the `Num i64` e-graph can't represent. Each
 core's input box (in `benchmarks/fpbench_intervals.json`, loaded into `INTERVALS`) was
 read from its `:pre`, with a wide default where `:pre` left a variable unbounded;
-`benchmarks/fpbench_manifest.json` records the provenance. Run one like any other
-benchmark (`uv run src/run.py kepler0`), or the whole suite with
-[run_suite.py](src/run_suite.py).
+`benchmarks/fpbench_manifest.json` records the provenance. Run one benchmark
+(`uv run src/run.py kepler0`), all of them (`uv run src/run.py`), or one shard per GPU
+across the suite ([scripts/run_gpus.sh](scripts/run_gpus.sh)).
 
 Note the metric mismatch: this tool reports *sound worst-case* FPTaylor bounds over the
 box, whereas Herbie reports *average-case* bits/ULP error over sampled points — a

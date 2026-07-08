@@ -29,7 +29,6 @@
 
 (rewrite (Add p (Sqrt d)) (Div (Sub (Mul p p) d) (Sub p (Sqrt d))))
 
-(rewrite (Sub (Div (Num 1) a) (Div (Num 1) b)) (Div (Sub b a) (Mul a b)))
 (rewrite (Sub a (Add a b)) (Neg b))
 (rewrite (Add (Neg a) (Neg b)) (Neg (Add a b)))
 (rewrite (Div (Neg a) (Neg b)) (Div a b))
@@ -42,6 +41,21 @@
 (rewrite (Mul (Neg a) (Neg a)) (Mul a a))
 (rewrite (Sub a (Sub a b)) b)
 
+;; additive inverse: cancelling terms vanish (lets sums with regrouped terms collapse)
+(rewrite (Sub a a) (Num 0))
+(rewrite (Add a (Neg a)) (Num 0))
+
+;; combine two fractions over a common denominator (only the 1/a - 1/b case existed)
+(rewrite (Add (Div p a) (Div q b)) (Div (Add (Mul p b) (Mul q a)) (Mul a b)))
+(rewrite (Sub (Div p a) (Div q b)) (Div (Sub (Mul p b) (Mul q a)) (Mul a b)))
+
+;; difference of squares (general, and the a^2 - 1 case where 1 is a literal)
+(rewrite (Sub (Mul a a) (Mul b b)) (Mul (Sub a b) (Add a b)))
+(rewrite (Sub (Mul a a) (Num 1)) (Mul (Sub a (Num 1)) (Add a (Num 1))))
+
+;; flatten a quotient-of-quotient (helps rationalize a root inside a division)
+(rewrite (Div (Div a b) c) (Div a (Mul b c)))
+
 ;; ------------------------------------------------------------------------------
 ;; Interval abstract interpretation, and the domain-conditional rewrites it guards.
 ;; ------------------------------------------------------------------------------
@@ -49,22 +63,22 @@
 (function lo (Math) f64 :merge (max old new))
 (function hi (Math) f64 :merge (min old new))
 
-(rule ((= e (Num n))) 
+(rule ((= e (Num n)))
     ((set (lo e) (to-f64 n)) (set (hi e) (to-f64 n))))
-(rule ((= e (Neg a)) (= la (lo a)) (= ha (hi a))) ((set (lo e) (neg ha)) 
+(rule ((= e (Neg a)) (= la (lo a)) (= ha (hi a))) ((set (lo e) (neg ha))
     (set (hi e) (neg la))))
-(rule ((= e (Add a b)) (= la (lo a)) (= lb (lo b)) (= ha (hi a)) (= hb (hi b))) 
+(rule ((= e (Add a b)) (= la (lo a)) (= lb (lo b)) (= ha (hi a)) (= hb (hi b)))
     ((set (lo e) (+ la lb)) (set (hi e) (+ ha hb))))
-(rule ((= e (Sub a b)) (= la (lo a)) (= lb (lo b)) (= ha (hi a)) (= hb (hi b))) 
+(rule ((= e (Sub a b)) (= la (lo a)) (= lb (lo b)) (= ha (hi a)) (= hb (hi b)))
     ((set (lo e) (- la hb)) (set (hi e) (- ha lb))))
-(rule ((= e (Mul a b)) (= la (lo a)) (= lb (lo b)) (= ha (hi a)) (= hb (hi b))) 
-    ((set (lo e) (min (min (* la lb) (* la hb)) (min (* ha lb) (* ha hb)))) 
+(rule ((= e (Mul a b)) (= la (lo a)) (= lb (lo b)) (= ha (hi a)) (= hb (hi b)))
+    ((set (lo e) (min (min (* la lb) (* la hb)) (min (* ha lb) (* ha hb))))
     (set (hi e) (max (max (* la lb) (* la hb)) (max (* ha lb) (* ha hb))))))
-(rule ((= e (Div a b)) (= la (lo a)) (= lb (lo b)) (= ha (hi a)) (= hb (hi b)) (> lb 0.0)) 
-    ((set (lo e) (min (min (/ la lb) (/ la hb)) (min (/ ha lb) (/ ha hb)))) 
+(rule ((= e (Div a b)) (= la (lo a)) (= lb (lo b)) (= ha (hi a)) (= hb (hi b)) (> lb 0.0))
+    ((set (lo e) (min (min (/ la lb) (/ la hb)) (min (/ ha lb) (/ ha hb))))
     (set (hi e) (max (max (/ la lb) (/ la hb)) (max (/ ha lb) (/ ha hb))))))
-(rule ((= e (Div a b)) (= la (lo a)) (= lb (lo b)) (= ha (hi a)) (= hb (hi b)) (< hb 0.0)) 
-    ((set (lo e) (min (min (/ la lb) (/ la hb)) (min (/ ha lb) (/ ha hb)))) 
+(rule ((= e (Div a b)) (= la (lo a)) (= lb (lo b)) (= ha (hi a)) (= hb (hi b)) (< hb 0.0))
+    ((set (lo e) (min (min (/ la lb) (/ la hb)) (min (/ ha lb) (/ ha hb))))
     (set (hi e) (max (max (/ la lb) (/ la hb)) (max (/ ha lb) (/ ha hb))))))
 ;; sqrt: loose sound upper bound sqrt(t) <= t+1 for t >= 0.
 (rule ((= e (Sqrt a)) (>= (lo a) 0.0) (= ha (hi a)))
@@ -73,7 +87,6 @@
 ;; sqrt-factoring: sound only where every sqrt operand is proven >= 0
 (rule ((= e (Sqrt (Mul a b))) (>= (lo a) 0.0) (>= (lo b) 0.0)) ((union e (Mul (Sqrt a) (Sqrt b)))))
 (rule ((= e (Sqrt (Div a b))) (>= (lo a) 0.0) (> (lo b) 0.0)) ((union e (Div (Sqrt a) (Sqrt b)))))
-(rule ((= e (Sqrt (Add a (Num n)))) (> (lo a) 0.0) (>= n 0)) ((union e (Mul (Sqrt a) (Sqrt (Add (Num 1) (Div (Num n) a)))))))
 (rule ((= e (Mul (Sqrt a) (Sqrt a))) (>= (lo a) 0.0)) ((union e a)))
 
 ;; division cancellation: sound only where the cancelled factor a is proven != 0
@@ -81,3 +94,9 @@
 (rule ((= e (Div (Mul a x) (Mul a y))) (< (hi a) 0.0)) ((union e (Div x y))))
 (rule ((= e (Div (Mul a x) a)) (> (lo a) 0.0)) ((union e x)))
 (rule ((= e (Div (Mul a x) a)) (< (hi a) 0.0)) ((union e x)))
+(rule ((= e (Div a (Mul a y))) (> (lo a) 0.0)) ((union e (Div (Num 1) y))))
+(rule ((= e (Div a (Mul a y))) (< (hi a) 0.0)) ((union e (Div (Num 1) y))))
+
+;; general sqrt factoring, variable pivot proven positive: sqrt(a+b) = sqrt(a)*sqrt(1 + b/a)
+(rule ((= e (Sqrt (Add a b))) (> (lo a) 0.0))
+    ((union e (Mul (Sqrt a) (Sqrt (Add (Num 1) (Div b a)))))))

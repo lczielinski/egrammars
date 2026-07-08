@@ -56,28 +56,75 @@ def fpcore_to_math(node) -> str:
     return f"({ctor} " + " ".join(fpcore_to_math(o) for o in operands) + ")"
 
 
+def _setup(benchmark, box, term) -> str:
+    rules = (paths.ROOT / "rules.egglog").read_text()
+    content = (paths.BENCHMARKS / f"{benchmark}.egglog").read_text()
+    seeds = _seeds(box) if box else ""
+    return rules + content + f"\n(let __candidate__ {term})\n" + seeds
+
+
+def _saturate_worker(setup: str, max_iters: int, q) -> None:
+    """Child process: step saturation one iteration at a time, checking after each, so a
+    proof is reported the moment it appears. The parent kills us if we run too long."""
+    from egglog.bindings import EGraph
+    try:
+        with _quiet_stderr():
+            eg = EGraph()
+            eg.run_program(*eg.parse_program(setup))
+            for _ in range(max_iters + 1):
+                try:
+                    eg.run_program(*eg.parse_program("(check (= start __candidate__))"))
+                    q.put(True)
+                    return
+                except Exception:
+                    pass
+                eg.run_program(*eg.parse_program("(run 1)"))
+        q.put(False)
+    except Exception:
+        q.put(False)
+
+
 def equivalent(benchmark: str, box: dict[str, tuple[float, float]] | None,
-               body, runs: int = SATURATION_RUNS) -> bool:
+               body, runs: int = SATURATION_RUNS,
+               timeout: float | None = None, max_iters: int = 1000) -> bool:
     """True if branch-free FPCore AST `body` is provably equal to the reference over
     `box`: add it to the reference's e-graph, saturate with the box seeded into the
     interval analysis, and check the two share an e-class. A domain-conditional rewrite
     bridges them only where its preconditions hold over `box`; a wider box can only fail
-    to prove an equivalence, never assert a false one."""
-    from egglog.bindings import EGraph
+    to prove an equivalence, never assert a false one.
 
+    With `timeout` set (seconds), saturate as long as possible in a child process,
+    checking after every iteration, and give up (return False) if it runs past the
+    budget — so explosive rule sets can't hang the run. Without it, run a fixed `runs`
+    iterations in-process (fast path)."""
     try:
         term = fpcore_to_math(body)
     except ValueError:
         return False
-    rules = (paths.ROOT / "rules.egglog").read_text()
-    content = (paths.BENCHMARKS / f"{benchmark}.egglog").read_text()
-    seeds = _seeds(box) if box else ""
-    source = (rules + content + f"\n(let __candidate__ {term})\n" + seeds
-              + f"\n(run {runs})\n(check (= start __candidate__))")
+    setup = _setup(benchmark, box, term)
+
+    if timeout is None:
+        from egglog.bindings import EGraph
+        source = setup + f"\n(run {runs})\n(check (= start __candidate__))"
+        try:
+            with _quiet_stderr():
+                egraph = EGraph()
+                egraph.run_program(*egraph.parse_program(source))
+            return True
+        except Exception:
+            return False
+
+    import multiprocessing as mp
+    ctx = mp.get_context("fork")
+    q = ctx.Queue()
+    p = ctx.Process(target=_saturate_worker, args=(setup, max_iters, q))
+    p.start()
+    p.join(timeout)
+    if p.is_alive():          # still saturating past the budget -> too long
+        p.terminate()
+        p.join()
+        return False
     try:
-        with _quiet_stderr():
-            egraph = EGraph()
-            egraph.run_program(*egraph.parse_program(source))
-        return True
+        return q.get_nowait()
     except Exception:
         return False

@@ -38,19 +38,13 @@ def _eval(node, env: dict):
     return {"+": a + b, "-": a - b, "*": a * b, "/": a / b}[head]
 
 
-def _float_box(box: dict | None) -> dict | None:
-    if not box:
-        return None
-    return {v: tuple(map(float, s.strip("[]").split(","))) for v, s in box.items()}
-
-
 def classify(reference: str, candidate: str, box: dict | None,
              n: int = 400, tol: float = 1e-6) -> dict:
     """Sample the box and compare candidate vs reference pointwise."""
     ref_body = regions.body_of(reference)
     cand_body = regions.body_of(candidate)
     variables = regions.variables_of(reference)
-    fbox = _float_box(box) or {v: (-100.0, 100.0) for v in variables}
+    fbox = regions.float_box(box) or {v: (-100.0, 100.0) for v in variables}
     rng = random.Random(0)  # deterministic
 
     worst = 0.0

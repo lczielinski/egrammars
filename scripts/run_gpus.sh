@@ -3,9 +3,9 @@
 # reasoning pass dominates wall-clock and each benchmark reasons independently, sharding
 # benchmarks across GPUs is a near-linear speedup — no batching inside casa needed.
 #
-#   scripts/run_gpus.sh [N_GPUS] [-- extra run_suite args]
+#   scripts/run_gpus.sh [N_GPUS] [extra run.py args]
 #   scripts/run_gpus.sh 8
-#   scripts/run_gpus.sh 8 --samples 40 --effort high
+#   scripts/run_gpus.sh 8 --time-budget 10 --samples 40
 #
 # Each shard is CUDA_VISIBLE_DEVICES-pinned to one GPU (so casa's model loads on it as
 # cuda:0). Per-GPU logs go to log/gpu<i>.log; the combined table prints at the end.
@@ -22,7 +22,7 @@ mkdir -p log
 echo "launching $N shards over $N GPUs; logs in log/gpu*.log"
 pids=()
 for i in $(seq 0 $((N - 1))); do
-  CUDA_VISIBLE_DEVICES=$i uv run src/run_suite.py --shard "$i/$N" "$@" \
+  CUDA_VISIBLE_DEVICES=$i uv run src/run.py --shard "$i/$N" "$@" \
     > "log/gpu$i.log" 2>&1 &
   pids+=($!)
 done
@@ -34,5 +34,5 @@ for i in "${!pids[@]}"; do
 done
 
 echo; echo "===== combined summary ====="
-uv run src/run_suite.py --summary-only
+uv run src/run.py --summary-only
 exit $fail
