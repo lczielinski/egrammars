@@ -1,6 +1,0 @@
-;; (FPCore (x y) (sqrt (+ (* x x) (* y y))))
-
-(let x (Var "x"))
-(let y (Var "y"))
-
-(let start (Sqrt (Add (Mul (Var "x") (Var "x")) (Mul (Var "y") (Var "y")))))

@@ -1,26 +1,4 @@
 {
-  "bspline3": {
-    "box": {
-      "u": "[0,1]"
-    },
-    "box_provenance": {
-      "u": "pre"
-    },
-    "fpcore": "(FPCore (u) (/ (- (* (* u u) u)) 6))",
-    "source": "rosa.fpcore"
-  },
-  "carthesiantopolar_radius": {
-    "box": {
-      "x": "[1,100]",
-      "y": "[1,100]"
-    },
-    "box_provenance": {
-      "x": "pre",
-      "y": "pre"
-    },
-    "fpcore": "(FPCore (x y) (sqrt (+ (* x x) (* y y))))",
-    "source": "daisy.fpcore"
-  },
   "delta": {
     "box": {
       "x1": "[4,100]",
@@ -61,18 +39,6 @@
     "fpcore": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (- (+ (+ (- (* (- x2) x3) (* x1 x4)) (* x2 x5)) (* x3 x6)) (* x5 x6)) (* x1 (+ (+ (- (+ (+ (- x1) x2) x3) x4) x5) x6))))",
     "source": "fptaylor-extra.fpcore"
   },
-  "floudas": {
-    "box": {
-      "x1": "[0,2]",
-      "x2": "[0,3]"
-    },
-    "box_provenance": {
-      "x1": "pre",
-      "x2": "pre"
-    },
-    "fpcore": "(FPCore (x1 x2) (+ x1 x2))",
-    "source": "fptaylor-extra.fpcore"
-  },
   "floudas1": {
     "box": {
       "x1": "[0,6]",
@@ -91,18 +57,6 @@
       "x6": "pre"
     },
     "fpcore": "(FPCore (x1 x2 x3 x4 x5 x6) (- (- (- (- (- (* -25 (* (- x1 2) (- x1 2))) (* (- x2 2) (- x2 2))) (* (- x3 1) (- x3 1))) (* (- x4 4) (- x4 4))) (* (- x5 1) (- x5 1))) (* (- x6 4) (- x6 4))))",
-    "source": "fptaylor-real2float.fpcore"
-  },
-  "floudas2": {
-    "box": {
-      "x1": "[0,3]",
-      "x2": "[0,4]"
-    },
-    "box_provenance": {
-      "x1": "pre",
-      "x2": "pre"
-    },
-    "fpcore": "(FPCore (x1 x2) (- (- x1) x2))",
     "source": "fptaylor-real2float.fpcore"
   },
   "floudas3": {
@@ -129,30 +83,6 @@
     "fpcore": "(FPCore (x1 x2) (+ (* (- (+ (* x1 x1) x2) 11) (- (+ (* x1 x1) x2) 11)) (* (- (+ x1 (* x2 x2)) 7) (- (+ x1 (* x2 x2)) 7))))",
     "source": "fptaylor-extra.fpcore"
   },
-  "hypot": {
-    "box": {
-      "x1": "[1,100]",
-      "x2": "[1,100]"
-    },
-    "box_provenance": {
-      "x1": "pre",
-      "x2": "pre"
-    },
-    "fpcore": "(FPCore (x1 x2) (sqrt (+ (* x1 x1) (* x2 x2))))",
-    "source": "fptaylor-extra.fpcore"
-  },
-  "hypot32": {
-    "box": {
-      "x1": "[1,100]",
-      "x2": "[1,100]"
-    },
-    "box_provenance": {
-      "x1": "pre",
-      "x2": "pre"
-    },
-    "fpcore": "(FPCore (x1 x2) (sqrt (+ (* x1 x1) (* x2 x2))))",
-    "source": "fptaylor-extra.fpcore"
-  },
   "i4": {
     "box": {
       "x": "[-100,10]",
@@ -164,16 +94,6 @@
     },
     "fpcore": "(FPCore (x y) (sqrt (+ x (* y y))))",
     "source": "fptaylor-extra.fpcore"
-  },
-  "intro_example": {
-    "box": {
-      "t": "[0,999]"
-    },
-    "box_provenance": {
-      "t": "pre"
-    },
-    "fpcore": "(FPCore (t) (/ t (+ t 1)))",
-    "source": "fptaylor-tests.fpcore"
   },
   "jetengine": {
     "box": {
@@ -391,16 +311,6 @@
     "fpcore": "(FPCore (x) (+ (- (/ 1 (+ x 1)) (/ 2 x)) (/ 1 (- x 1))))",
     "source": "hamming-ch3.fpcore"
   },
-  "nonlin1": {
-    "box": {
-      "z": "[0,999]"
-    },
-    "box_provenance": {
-      "z": "pre"
-    },
-    "fpcore": "(FPCore (z) (/ z (+ z 1)))",
-    "source": "fptaylor-extra.fpcore"
-  },
   "nonlin2": {
     "box": {
       "x": "[-100,2]",
@@ -462,16 +372,6 @@
     },
     "fpcore": "(FPCore (x) (- (+ (- x (/ (* (* x x) x) 6.0)) (/ (* (* (* (* x x) x) x) x) 120)) (/ (* (* (* (* (* (* x x) x) x) x) x) x) 5040)))",
     "source": "rosa.fpcore"
-  },
-  "sqrt_add": {
-    "box": {
-      "x": "[1,1000]"
-    },
-    "box_provenance": {
-      "x": "pre"
-    },
-    "fpcore": "(FPCore (x) (/ 1 (+ (sqrt (+ x 1)) (sqrt x))))",
-    "source": "fptaylor-extra.fpcore"
   },
   "sum": {
     "box": {
@@ -571,48 +471,6 @@
       "x": "pre"
     },
     "fpcore": "(FPCore (x) (/ (- x 1) (- (* x x) 1)))",
-    "source": "fptaylor-tests.fpcore"
-  },
-  "test05_nonlin1_test2": {
-    "box": {
-      "x": "[1.00001,2]"
-    },
-    "box_provenance": {
-      "x": "pre"
-    },
-    "fpcore": "(FPCore (x) (/ 1 (+ x 1)))",
-    "source": "fptaylor-tests.fpcore"
-  },
-  "test06_sums4_sum1": {
-    "box": {
-      "x0": "[-1e-05,1.00001]",
-      "x1": "[0,1]",
-      "x2": "[0,1]",
-      "x3": "[0,1]"
-    },
-    "box_provenance": {
-      "x0": "pre",
-      "x1": "pre",
-      "x2": "pre",
-      "x3": "pre"
-    },
-    "fpcore": "(FPCore (x0 x1 x2 x3) (+ (+ (+ x0 x1) x2) x3))",
-    "source": "fptaylor-tests.fpcore"
-  },
-  "test06_sums4_sum2": {
-    "box": {
-      "x0": "[-1e-05,1.00001]",
-      "x1": "[0,1]",
-      "x2": "[0,1]",
-      "x3": "[0,1]"
-    },
-    "box_provenance": {
-      "x0": "pre",
-      "x1": "pre",
-      "x2": "pre",
-      "x3": "pre"
-    },
-    "fpcore": "(FPCore (x0 x1 x2 x3) (+ (+ x0 x1) (+ x2 x3)))",
     "source": "fptaylor-tests.fpcore"
   },
   "triangle": {
@@ -796,17 +654,5 @@
     },
     "fpcore": "(FPCore (a b c) (sqrt (* (* (* (/ (+ (+ a b) c) 2) (- (/ (+ (+ a b) c) 2) a)) (- (/ (+ (+ a b) c) 2) b)) (- (/ (+ (+ a b) c) 2) c))))",
     "source": "rosa.fpcore"
-  },
-  "x_by_xy": {
-    "box": {
-      "x": "[1,4]",
-      "y": "[1,4]"
-    },
-    "box_provenance": {
-      "x": "pre",
-      "y": "pre"
-    },
-    "fpcore": "(FPCore (x y) (/ x (+ x y)))",
-    "source": "fptaylor-extra.fpcore"
   }
 }
