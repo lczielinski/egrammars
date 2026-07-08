@@ -2,7 +2,6 @@
   "benchmark": "sqrtminus",
   "reference": "(FPCore (x) (- (sqrt (+ (* x x) 1)) x))",
   "config": {
-    "mode": "check",
     "model": "Qwen/Qwen2.5-14B-Instruct",
     "temperature": 1.0,
     "effort": "medium",
@@ -14,7 +13,6 @@
     }
   },
   "programs": [
-    "(FPCore (x) (if (>= x 0) (/ 1 (+ (sqrt (+ (* x x) 1)) x)) (/ 1 (+ (sqrt (+ (* x x) 1)) x))))",
-    "(FPCore (x) (if (> x 0) (/ 1 (+ (sqrt (+ (* x x) 1)) x)) (- (sqrt (+ (* x x) 1)) x)))"
+    "(FPCore (x) (if (>= x 0) (/ 1 (+ (sqrt (+ (* x x) 1)) x)) (/ 1 (+ (sqrt (+ (* x x) 1)) x))))"
   ]
 }

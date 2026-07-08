@@ -9,7 +9,7 @@ where `body` is built from:
 - the binary operators `(+ a b)`, `(- a b)`, `(* a b)`, `(/ a b)`;
 - unary negation `(- a)`;
 - `(sqrt a)`;
-- a branch `(if cond a b)` — evaluates to `a` where `cond` holds, otherwise `b` — where `cond` is a comparison `(< p q)`, `(> p q)`, `(<= p q)`, or `(>= p q)` between two variables, or between a variable and a numeric threshold.
+- a branch `(if cond a b)` — evaluates to `a` where `cond` holds, otherwise `b` — where `cond` compares a variable to a numeric threshold: `(< v n)`, `(> v n)`, `(<= v n)`, or `(>= v n)`.
 
 Use exactly the variables that appear in the original program; introduce none. No other operators and no variable bindings (`let`).
 

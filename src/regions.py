@@ -1,10 +1,8 @@
-"""Parse a program's `if`-tree, split it into (guards -> leaf), narrow an interval box
-by a region's guards, and (for skeleton mode) assemble a program from a `?`-hole
-skeleton + arm bodies. Shared by run.py and fptaylor_check.py."""
+"""Parse a program's `if`-tree, split it into (guards -> leaf), and narrow an interval
+box by a region's guards. Shared by run.py and fptaylor_check.py."""
 
 import re
 
-HOLE = "?"
 NEGATE = {"<": ">=", ">": "<=", "<=": ">", ">=": "<"}
 
 
@@ -29,7 +27,6 @@ def variables_of(program: str) -> list[str]:
 
 
 def body_of(program):
-    """The FPCore body AST (unwrapping the `(FPCore (vars) ...)` header if present)."""
     ast = parse(tokenize(program)) if isinstance(program, str) else program
     return ast[2] if isinstance(ast, list) and ast[:1] == ["FPCore"] else ast
 
@@ -54,8 +51,8 @@ def _as_float(tok):
 
 
 def narrow_box(box: dict, conds) -> dict | None:
-    """`box` restricted to where all `conds` hold, or None if empty. A var-vs-var
-    comparison isn't a box, so it's ignored (yielding a sound superset)."""
+    """`box` restricted to where all `conds` hold, or None if empty. A comparison that
+    doesn't pin a variable to a number is ignored (yielding a sound superset)."""
     iv = {v: list(map(float, s.strip("[]").split(","))) for v, s in box.items()}
     for op, lhs, rhs in conds:
         hi_side = op in ("<", "<=")
@@ -68,36 +65,3 @@ def narrow_box(box: dict, conds) -> dict | None:
     if any(lo > hi for lo, hi in iv.values()):
         return None
     return {v: f"[{lo},{hi}]" for v, (lo, hi) in iv.items()}
-
-
-def leaf_paths(program: str) -> list[list]:
-    """The guard list reaching each `?` hole of a skeleton, in left-to-right order."""
-    return [conds for conds, _ in split_branches(body_of(program))]
-
-
-def strip_wrapper(program: str, variables: list[str]) -> str:
-    prefix = f"(FPCore ({' '.join(variables)}) "
-    return program[len(prefix):-1] if program.startswith(prefix) else program
-
-
-def assemble(skeleton: str, arm_bodies: list[str]) -> str:
-    out = skeleton
-    for body in arm_bodies:
-        out = out.replace(HOLE, body, 1)
-    return out
-
-
-def skeleton_grammar(variables: list[str]) -> str:
-    """Lark grammar for `if`-trees over the inputs with `?` arm holes; conditions
-    compare a variable to a numeric threshold."""
-    cmps = ("<", ">", "<=", ">=")
-    cond = " | ".join(f'"({op} " operand " " NUMBER ")"' for op in cmps)
-    operand = " | ".join(f'"{v}"' for v in variables)
-    return "\n".join([
-        f'start: "(FPCore ({" ".join(variables)}) " tree ")"',
-        'tree: HOLE | "(if " cond " " tree " " tree ")"',
-        f"cond: {cond}",
-        f"operand: {operand}",
-        'HOLE: "?"',
-        r'NUMBER: /-?[0-9]+(\.[0-9]+)?/',
-    ]) + "\n"

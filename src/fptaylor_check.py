@@ -19,9 +19,6 @@ EPS = 2.0 ** -52  # double-precision ulp
 CONFIG = "abs-error = true\nrel-error = true\n"
 TIMEOUT = 120
 
-# Per-benchmark input box. Keep the span moderate (a few orders of magnitude) or
-# FPTaylor grinds; the reference must stay real and finite across it. This box also
-# seeds the interval analysis when run.py builds the region grammars.
 INTERVALS = {
     "quadratic": {"a": "[1,2]", "b": "[-1000,1000]", "c": "[-10,-1]"},  # branch on sign(b)
     "sqrtminus": {"x": "[-1000,1000]"},            # branch on sign(x)
@@ -94,8 +91,7 @@ def analyze(expr: str, box: dict, cfg_path: str) -> dict:
         return {"fptaylor_expr": expr, "enclosure": [], "abs_err": None,
                 "rel_err": None, "rel_err_ulps": None, "timeout": True}
     abs_err, rel_err, encl = grab("Absolute error", out), grab("Relative error", out), bounds(out)
-    # FPTaylor often omits relative error through divisions; derive a looser bound
-    # abs_err / min|value| when the value range avoids 0.
+    # FPTaylor often omits rel error through divisions; derive abs_err / min|value|.
     derived = False
     if rel_err is None and abs_err is not None and encl and (encl[0] > 0 or encl[1] < 0):
         rel_err = abs_err / min(abs(encl[0]), abs(encl[1]))
