@@ -1,0 +1,59 @@
+{
+  "benchmark": "test03_nonlin2",
+  "reference": "(FPCore (x y) (/ (+ x y) (- x y)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "effort": "medium",
+    "samples": 20,
+    "max_attempts": 200,
+    "saturation": 6,
+    "box": {
+      "x": "[0,1]",
+      "y": "[-1,-0.1]"
+    }
+  },
+  "intervals": {
+    "x": "[0,1]",
+    "y": "[-1,-0.1]"
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "results": [
+    {
+      "fptaylor_expr": "(0 + ((x + y) / (x - y)))",
+      "enclosure": [
+        -1.070313,
+        0.8299712
+      ],
+      "abs_err": 4.579064e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x y) (+ 0 (/ (+ x y) (- x y))))"
+    },
+    {
+      "fptaylor_expr": "(0 + (((x + y) * 1) / (x - y)))",
+      "enclosure": [
+        -1.070313,
+        0.8299712
+      ],
+      "abs_err": 4.579064e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x y) (+ 0 (/ (* (+ x y) 1) (- x y))))"
+    },
+    {
+      "fptaylor_expr": "(0.0 + ((x + y) / (x - y)))",
+      "enclosure": [
+        -1.070313,
+        0.8299712
+      ],
+      "abs_err": 4.579064e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x y) (+ 0.0 (/ (+ x y) (- x y))))"
+    }
+  ]
+}

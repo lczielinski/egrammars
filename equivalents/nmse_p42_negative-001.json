@@ -1,0 +1,220 @@
+{
+  "benchmark": "nmse_p42_negative",
+  "reference": "(FPCore (a b c) (/ (- (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "effort": "medium",
+    "samples": 20,
+    "max_attempts": 200,
+    "saturation": 6,
+    "box": {
+      "a": "[-100,100]",
+      "b": "[-100,100]",
+      "c": "[-100,100]"
+    }
+  },
+  "programs": [],
+  "attempts": [
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (- (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)) (/ (* 2 c) (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 5.218012426143179e-15,
+        "samples": 253,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (- (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)) (/ (* 2 c) (+ (- b) (sqrt -1)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 0.0,
+        "samples": 128,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)) (/ (* 2 c) (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.9274474393962706,
+        "samples": 253,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* -2 a)) (/ (* 2 c) (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.826370418232675,
+        "samples": 253,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (- (sqrt (- (* b b) (* 4 (* a c)))) (- b)) (* 2 a)) (/ (* 2 c) (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 2.0,
+        "samples": 253,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (+ (- b) (- (sqrt (- (* b b) (* 4 (* a c)))))) (* 2 a)) (/ (* 2 c) (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 5.218012426143179e-15,
+        "samples": 253,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (- (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)) (/ (* 2 c) (+ (- b) (sqrt (+ (* b b) (* -4 (* a c))))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 5.218012426143179e-15,
+        "samples": 253,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (- (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)) (/ (* 2 c) (+ (- b) (sqrt (+ (* (- b) (- b)) (* -4 (* a c))))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 5.218012426143179e-15,
+        "samples": 253,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (- (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)) (/ (* 2 c) (+ (- b) (sqrt (* -1 (- (* b b) (* 4 (* a c)))))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 0.0,
+        "samples": 128,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (- (- b) (sqrt (- (* b b) (* (sqrt 4) (* a c))))) (* 2 a)) (/ (* 2 c) (+ (- b) (sqrt (- (* b b) (* (sqrt 4) (* a c))))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.35971974697421394,
+        "samples": 253,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (- (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)) (/ (* 2 c) (+ (- b) (sqrt (* -1 (* b b)))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 0.0,
+        "samples": 128,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (- (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)) (/ (* 2 c) (+ (- b) (sqrt (- (* b b) (* 42 (* a c))))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.6892341458627631,
+        "samples": 230,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (- -1 b) (* 2 a)) (/ (* 2 c) (+ -1 b))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.7804914428222256,
+        "samples": 253,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (<= b 0) (/ (* 2 c) (+ (- b) (sqrt (- (* b b) (* 4 (* a c)))))) (/ (- (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 5.218012426143179e-15,
+        "samples": 253,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (- (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)) (/ (* 2 c) (+ (- b) (sqrt (- (* b b) (* (* 4 a) c)))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 5.218012426143179e-15,
+        "samples": 253,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (- (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)) (/ (* 2 c) (+ (- b) (sqrt (- (+ (* b b) (* -4 (* a c))) 0))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 0.0,
+        "samples": 128,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (- (- b) (sqrt (- (* b b) (* 4 (* a c))))) (+ (* 2 a) 0)) (/ (* 2 c) (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 5.218012426143179e-15,
+        "samples": 125,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (> b -0.0) (/ (- (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)) (/ (* 2 c) (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 5.218012426143179e-15,
+        "samples": 253,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (+ (sqrt (- (* b b) (* 4 (* a c)))) (- b)) (* 2 a)) (/ (* 2 c) (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.9274474393962706,
+        "samples": 253,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 0 a)) (/ (* 2 c) (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 5.218012426143179e-15,
+        "samples": 125,
+        "hint": "likely a missing e-graph rule"
+      }
+    }
+  ]
+}
