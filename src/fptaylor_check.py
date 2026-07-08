@@ -2,7 +2,7 @@
 (needs the `fptaylor` binary on PATH). A branching program is split on `if` and each
 branch bounded over the sub-interval where it applies.
 
-    uv run src/fptaylor_check.py quadratic [--run N]
+    uv run src/fptaylor_check.py x_by_xy [--run N]
 """
 
 import argparse
@@ -19,16 +19,12 @@ EPS = 2.0 ** -52  # double-precision ulp
 CONFIG = "abs-error = true\nrel-error = true\n"
 TIMEOUT = 120
 
-INTERVALS = {
-    "quadratic": {"a": "[1,2]", "b": "[-1000,1000]", "c": "[-10,-1]"},  # branch on sign(b)
-    "sqrtminus": {"x": "[-1000,1000]"},            # branch on sign(x)
-    "randexpr": {"x": "[1,100]", "y": "[1,100]", "z": "[1,100]"},
-    "subfrac": {"x": "[1,1000]"},
-    "sqrtshift": {"x": "[0.01,100]"},
-    "sqrtquad": {"x": "[1,1000]"},
-    "recipsqrt": {"x": "[1,1000]"},
-    "recipback": {"x": "[2,1000]"},                # clear of the x=1 pole
-}
+def _imported_intervals() -> dict:
+    f = paths.BENCHMARKS / "fpbench_intervals.json"
+    return json.loads(f.read_text()) if f.exists() else {}
+
+
+INTERVALS = _imported_intervals()
 
 
 def fmt(v):
@@ -196,7 +192,7 @@ def check(benchmark: str, run: int | None = None):
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("benchmark", nargs="?", default="quadratic")
+    ap.add_argument("benchmark")
     ap.add_argument("--run", type=int, default=None)
     args = ap.parse_args()
     try:

@@ -1,0 +1,8 @@
+;; (FPCore (x1 x2 x3 x4) (- (- (- (- (+ (+ (* (* x1 x4) (- (+ (+ (- x1) x2) x3) x4)) (* x2 (+ (+ (- x1 x2) x3) x4))) (* x3 (+ (- (+ x1 x2) x3) x4))) (* (* x2 x3) x4)) (* x1 x3)) (* x1 x2)) x4))
+
+(let x1 (Var "x1"))
+(let x2 (Var "x2"))
+(let x3 (Var "x3"))
+(let x4 (Var "x4"))
+
+(let start (Sub (Sub (Sub (Sub (Add (Add (Mul (Mul (Var "x1") (Var "x4")) (Sub (Add (Add (Neg (Var "x1")) (Var "x2")) (Var "x3")) (Var "x4"))) (Mul (Var "x2") (Add (Add (Sub (Var "x1") (Var "x2")) (Var "x3")) (Var "x4")))) (Mul (Var "x3") (Add (Sub (Add (Var "x1") (Var "x2")) (Var "x3")) (Var "x4")))) (Mul (Mul (Var "x2") (Var "x3")) (Var "x4"))) (Mul (Var "x1") (Var "x3"))) (Mul (Var "x1") (Var "x2"))) (Var "x4")))

@@ -1,0 +1,6 @@
+;; (FPCore (x1 x2) (+ (- (* -12 x1) (* 7 x2)) (* x2 x2)))
+
+(let x1 (Var "x1"))
+(let x2 (Var "x2"))
+
+(let start (Add (Sub (Mul (Num -12) (Var "x1")) (Mul (Num 7) (Var "x2"))) (Mul (Var "x2") (Var "x2"))))

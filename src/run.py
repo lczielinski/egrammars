@@ -6,7 +6,7 @@ box and egglog proves the arm equivalent to the reference over that sub-box
 (egrammar.equivalent); a program with any non-equivalent branch is dropped. fptaylor
 then bounds each branch over the sub-interval where it applies.
 
-    uv run src/run.py sqrtminus --model openai/gpt-oss-120b
+    uv run src/run.py x_by_xy --model openai/gpt-oss-120b
 """
 
 import argparse

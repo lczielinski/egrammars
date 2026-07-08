@@ -1,0 +1,10 @@
+;; (FPCore (x1 x2 x3 x4 x5 x6) (+ (+ (+ (+ (+ (+ (* (* x1 x4) (+ (+ (- (+ (+ (- x1) x2) x3) x4) x5) x6)) (* (* x2 x5) (+ (- (+ (+ (- x1 x2) x3) x4) x5) x6))) (* (* x3 x6) (- (+ (+ (- (+ x1 x2) x3) x4) x5) x6))) (* (* (- x2) x3) x4)) (* (* (- x1) x3) x5)) (* (* (- x1) x2) x6)) (* (* (- x4) x5) x6)))
+
+(let x1 (Var "x1"))
+(let x2 (Var "x2"))
+(let x3 (Var "x3"))
+(let x4 (Var "x4"))
+(let x5 (Var "x5"))
+(let x6 (Var "x6"))
+
+(let start (Add (Add (Add (Add (Add (Add (Mul (Mul (Var "x1") (Var "x4")) (Add (Add (Sub (Add (Add (Neg (Var "x1")) (Var "x2")) (Var "x3")) (Var "x4")) (Var "x5")) (Var "x6"))) (Mul (Mul (Var "x2") (Var "x5")) (Add (Sub (Add (Add (Sub (Var "x1") (Var "x2")) (Var "x3")) (Var "x4")) (Var "x5")) (Var "x6")))) (Mul (Mul (Var "x3") (Var "x6")) (Sub (Add (Add (Sub (Add (Var "x1") (Var "x2")) (Var "x3")) (Var "x4")) (Var "x5")) (Var "x6")))) (Mul (Mul (Neg (Var "x2")) (Var "x3")) (Var "x4"))) (Mul (Mul (Neg (Var "x1")) (Var "x3")) (Var "x5"))) (Mul (Mul (Neg (Var "x1")) (Var "x2")) (Var "x6"))) (Mul (Mul (Neg (Var "x4")) (Var "x5")) (Var "x6"))))

@@ -1,0 +1,5 @@
+;; (FPCore (t) (/ t (+ t 1)))
+
+(let t (Var "t"))
+
+(let start (Div (Var "t") (Add (Var "t") (Num 1))))

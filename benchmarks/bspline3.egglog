@@ -1,0 +1,5 @@
+;; (FPCore (u) (/ (- (* (* u u) u)) 6))
+
+(let u (Var "u"))
+
+(let start (Div (Neg (Mul (Mul (Var "u") (Var "u")) (Var "u"))) (Num 6)))

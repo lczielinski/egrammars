@@ -1,0 +1,13 @@
+;; (FPCore (a b c d e f g h i) (- (+ (* a (* e i)) (+ (* g (* b f)) (* c (* d h)))) (+ (* e (* c g)) (+ (* i (* b d)) (* a (* f h))))))
+
+(let a (Var "a"))
+(let b (Var "b"))
+(let c (Var "c"))
+(let d (Var "d"))
+(let e (Var "e"))
+(let f (Var "f"))
+(let g (Var "g"))
+(let h (Var "h"))
+(let i (Var "i"))
+
+(let start (Sub (Add (Mul (Var "a") (Mul (Var "e") (Var "i"))) (Add (Mul (Var "g") (Mul (Var "b") (Var "f"))) (Mul (Var "c") (Mul (Var "d") (Var "h"))))) (Add (Mul (Var "e") (Mul (Var "c") (Var "g"))) (Add (Mul (Var "i") (Mul (Var "b") (Var "d"))) (Mul (Var "a") (Mul (Var "f") (Var "h")))))))

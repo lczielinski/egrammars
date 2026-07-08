@@ -1,0 +1,12 @@
+;; (FPCore (x0 x1 x2 x3 x4 x5 x6 x7) (+ (+ (+ (+ (+ (+ (+ x0 x1) x2) x3) x4) x5) x6) x7))
+
+(let x0 (Var "x0"))
+(let x1 (Var "x1"))
+(let x2 (Var "x2"))
+(let x3 (Var "x3"))
+(let x4 (Var "x4"))
+(let x5 (Var "x5"))
+(let x6 (Var "x6"))
+(let x7 (Var "x7"))
+
+(let start (Add (Add (Add (Add (Add (Add (Add (Var "x0") (Var "x1")) (Var "x2")) (Var "x3")) (Var "x4")) (Var "x5")) (Var "x6")) (Var "x7")))
