@@ -32,11 +32,21 @@ def program_prompt(reference: str, box: dict | None) -> str:
         ranges = f"\nThe program is only evaluated on inputs in these ranges: {spans}."
     return (
         preamble + f"\n\nThe original program is:\n{reference}\n" + ranges
-        + "\n\nOutput ONE FPCore program that is algebraically equivalent to the "
-        "original and numerically accurate across the range. You may branch with "
-        "`(if cond ...)` on a variable and a numeric threshold when different regions "
-        "need different forms; otherwise output a single form. Output only the "
-        "single-line program."
+        + "\n\nGoal: ONE FPCore program, algebraically equivalent to the original, that "
+        "is accurate across the whole input range.\n"
+        "1. Using the condition numbers, find where inside the range the program loses "
+        "accuracy -- a `+` or `-` whose operands nearly cancel, a `/` by a near-zero "
+        "value, or an intermediate that overflows or underflows.\n"
+        "2. If a single algebraically-equivalent form is accurate everywhere in the "
+        "range, output just that form with NO `if`. Prefer this: only branch when "
+        "different parts of the range genuinely need different forms. A needless `if` is "
+        "worse than one clean form.\n"
+        "3. When you do branch, split on a variable and a numeric threshold and give "
+        "each fragile region a rewrite that is well-conditioned and in-range there, so "
+        "every input takes the form accurate for it. The arms must be genuinely "
+        "different forms; never repeat the same form in both. Every branch must equal "
+        "the original in exact arithmetic; only the rounding may differ.\n\n"
+        "Output only the single-line program, then immediately stop."
     )
 
 
