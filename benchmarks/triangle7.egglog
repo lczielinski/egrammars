@@ -1,7 +1,0 @@
-;; (FPCore (a b c) (sqrt (* (* (* (/ (+ (+ a b) c) 2) (- (/ (+ (+ a b) c) 2) a)) (- (/ (+ (+ a b) c) 2) b)) (- (/ (+ (+ a b) c) 2) c))))
-
-(let a (Var "a"))
-(let b (Var "b"))
-(let c (Var "c"))
-
-(let start (Sqrt (Mul (Mul (Mul (Div (Add (Add (Var "a") (Var "b")) (Var "c")) (Num 2)) (Sub (Div (Add (Add (Var "a") (Var "b")) (Var "c")) (Num 2)) (Var "a"))) (Sub (Div (Add (Add (Var "a") (Var "b")) (Var "c")) (Num 2)) (Var "b"))) (Sub (Div (Add (Add (Var "a") (Var "b")) (Var "c")) (Num 2)) (Var "c")))))

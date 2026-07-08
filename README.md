@@ -42,7 +42,8 @@ it. The benchmarks in `benchmarks/*.egglog` are the [FPBench](https://fpbench.or
 tool's subset — only `+ - * / sqrt`, integer literals, and a branch-free reference
 (`let`/`let*` inlined). 57 of the 130 cores survived that filter, and trivially-accurate
 ones (single ops, plain sums, already-optimal forms like `1/(x+1)`, and `sqrt(x^2+y^2)`
-whose only fix is unexpressible scaling) were then dropped, leaving 44. The rest of the
+whose only fix is unexpressible scaling) were then dropped, along with 11 exact-duplicate
+`triangle` cores (identical over the same box), leaving 33. The rest of the
 130 need transcendentals, loops, arrays, or non-integer constants the `Num i64` e-graph
 can't represent. Each
 core's input box (in `benchmarks/fpbench_intervals.json`, loaded into `INTERVALS`) was
