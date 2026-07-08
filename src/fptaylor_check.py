@@ -147,6 +147,12 @@ def check(benchmark: str, run: int | None = None):
         f.write(CONFIG)
         cfg_path = f.name
     try:
+        # bound the reference too, so "did we improve on it?" is answerable offline
+        reference_result = None
+        if data.get("reference"):
+            reference_result = analyze_program(
+                regions.parse(regions.tokenize(data["reference"])), box, cfg_path)
+            reference_result["program"] = data["reference"]
         results = []
         for i, p in enumerate(data["programs"]):
             r = analyze_program(regions.parse(regions.tokenize(p)), box, cfg_path)
@@ -183,7 +189,7 @@ def check(benchmark: str, run: int | None = None):
         "config": data.get("config"), "intervals": box,
         "note": "worst-case double-rounding bounds over this box; a branching "
                 "program's error is the worst over its branches (see `branches`).",
-        "results": ranked,
+        "reference_result": reference_result, "results": ranked,
     }, indent=2))
     print(f"\nread {src}\nwrote {len(results)} results to {dst}")
     return dst
