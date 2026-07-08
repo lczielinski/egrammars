@@ -1,0 +1,81 @@
+{
+  "benchmark": "sqrtminus",
+  "reference": "(FPCore (x) (- (sqrt (+ (* x x) 1)) x))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "effort": "medium",
+    "samples": 20,
+    "max_attempts": 200,
+    "saturation": 6,
+    "box": {
+      "x": "[-1000,1000]"
+    }
+  },
+  "intervals": {
+    "x": "[-1000,1000]"
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "results": [
+    {
+      "fptaylor_expr": "(1 / (sqrt(((x * x) + 1)) + x))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (+ (sqrt (+ (* x x) 1)) x)))"
+    },
+    {
+      "fptaylor_expr": "(1 / (sqrt(((x * x) + sqrt(1))) + x))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (+ (sqrt (+ (* x x) (sqrt 1))) x)))"
+    },
+    {
+      "fptaylor_expr": "(1 / (sqrt((((x * x) + 1) / 1)) + x))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (+ (sqrt (/ (+ (* x x) 1) 1)) x)))"
+    },
+    {
+      "fptaylor_expr": "(1 / (sqrt(((x * x) - -1)) + x))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (+ (sqrt (- (* x x) -1)) x)))"
+    },
+    {
+      "fptaylor_expr": "(1 / (sqrt((((x * x) / 1) + 1)) + x))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (+ (sqrt (+ (/ (* x x) 1) 1)) x)))"
+    }
+  ]
+}

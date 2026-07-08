@@ -1,0 +1,27 @@
+{
+  "benchmark": "subfrac",
+  "reference": "(FPCore (x) (- (/ 1 (+ x 1)) (/ 1 x)))",
+  "config": {
+    "mode": "check",
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "effort": "medium",
+    "samples": 20,
+    "skeletons": 5,
+    "arms": 3,
+    "max_combos": 12,
+    "max_attempts": 200,
+    "saturation": 6,
+    "box": {
+      "x": "[1,1000]"
+    }
+  },
+  "programs": [
+    "(FPCore (x) (/ -1 (* x (+ x 1))))",
+    "(FPCore (x) (/ -1 (+ (* x x) x)))",
+    "(FPCore (x) (/ -1 (* x (+ 1 x))))",
+    "(FPCore (x) (/ -1 (* x (- x -1))))",
+    "(FPCore (x) (/ -1 (* x (+ x 001))))",
+    "(FPCore (x) (/ -1 (/ (* x (+ x 1)) 1)))"
+  ]
+}
