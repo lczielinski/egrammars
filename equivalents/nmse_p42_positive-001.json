@@ -1,0 +1,221 @@
+{
+  "benchmark": "nmse_p42_positive",
+  "reference": "(FPCore (a b c) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "effort": "medium",
+    "samples": 20,
+    "max_attempts": 200,
+    "saturation": 6,
+    "time_budget": 10.0,
+    "box": {
+      "a": "[-100,100]",
+      "b": "[-100,100]",
+      "c": "[-100,100]"
+    }
+  },
+  "programs": [],
+  "attempts": [
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (- (- b) (sqrt (- (* b b) (* 4 (* a c)))))) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 1.8434551305471884e-13,
+        "samples": 253,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (<= b 0) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)) (/ (* 2 c) (- (- b) (sqrt (- (* b b) (* 4 (* a c))))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 1.8434551305471884e-13,
+        "samples": 253,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (> b 0) (/ (* 2 c) (- (- b) (sqrt (- (* b b) (* 4 (* a c)))))) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 1.8434551305471884e-13,
+        "samples": 253,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (- (- b) (sqrt (+ (* -1 (* b b)) (* -4 (* a c)))))) (/ (+ (- b) (sqrt (+ (* -1 (* b b)) (* -4 (* a c))))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.45995150489203407,
+        "samples": 139,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* 1 2) (* c (- (- b) (sqrt (- (* b b) (* 4 (* a c))))))) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9998958299130836,
+        "samples": 253,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* 3 2) (/ 1 (* 2 c))) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.0043639308788437,
+        "samples": 253,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (- 0 (- b))) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.9131852091163373,
+        "samples": 253,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (- (- b) (sqrt -1))) (/ (+ (- b) (sqrt -1)) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* 1 (* 2 c)) (- (- b) (sqrt (- (* b b) (* 4 (* a c)))))) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 1.8434551305471884e-13,
+        "samples": 253,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (- (- b) (sqrt (- (* b (sqrt 1)) (sqrt (- (* b b) (* 4 (* a c)))))))) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.49927628568990656,
+        "samples": 155,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (> b -0) (/ (* 2 c) (- (- b) (sqrt (- (* b b) (* 4 (* a c)))))) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 1.8434551305471884e-13,
+        "samples": 253,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (- (- b) (sqrt (- (+ (* b b) (* -4 (* a c))) 0)))) (/ (+ (- b) (sqrt (- (+ (* b b) (* -4 (* a c))) 0))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (- (- b) (sqrt (- (/ (* b b) 1) (* 4 (* a c)))))) (/ (+ (- b) (sqrt (- (/ (* b b) 1) (* 4 (* a c))))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 1.8434551305471884e-13,
+        "samples": 253,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* 12 c) (- (- b) (sqrt (- (* b b) (* 4 (* a c)))))) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.8333333333333641,
+        "samples": 253,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (- (- b) (if (< b 0) (sqrt (- (* b b) (* 4 (* a c)))) (sqrt (- (* b b) (* 4 (* a c))))))) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 1.8434551305471884e-13,
+        "samples": 253,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* 22 c) (- (- b) (sqrt (- (* b b) (* 4 (* a c)))))) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9090909090909258,
+        "samples": 253,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* 1.0 2.0) (- (- b) (sqrt (- (* b b) (* 4 (* a c)))))) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.943207635841263,
+        "samples": 253,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (- (- b) (sqrt (+ (* b b) (* -4 (* a c)))))) (/ (+ (- b) (sqrt (+ (* b b) (* -4 (* a c))))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 1.8434551305471884e-13,
+        "samples": 253,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* 23 c) (- (- b) (sqrt (- (* b b) (* 4 (* a c)))))) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9130434782608856,
+        "samples": 253,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (- (- b) (sqrt (- (* b b) (/ (* 4 a) 1))))) (/ (+ (- b) (sqrt (- (* b b) (/ (* 4 a) 1)))) (* 2 a))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.7880457925832272,
+        "samples": 235,
+        "hint": "model produced a non-equivalent program"
+      }
+    }
+  ]
+}

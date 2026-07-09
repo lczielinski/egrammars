@@ -1,0 +1,58 @@
+{
+  "benchmark": "sine",
+  "reference": "(FPCore (x) (- (+ (- x (/ (* (* x x) x) 6.0)) (/ (* (* (* (* x x) x) x) x) 120)) (/ (* (* (* (* (* (* x x) x) x) x) x) x) 5040)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "effort": "medium",
+    "samples": 20,
+    "max_attempts": 200,
+    "saturation": 6,
+    "time_budget": 10.0,
+    "box": {
+      "x": "[-1.57079632679,1.57079632679]"
+    }
+  },
+  "intervals": {
+    "x": "[-1.57079632679,1.57079632679]"
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "(((x - (((x * x) * x) / 6.0)) + (((((x * x) * x) * x) * x) / 120)) - (((((((x * x) * x) * x) * x) * x) * x) / 5040))",
+    "enclosure": [
+      -1.015116,
+      1.015116
+    ],
+    "abs_err": 4.377246e-16,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (x) (- (+ (- x (/ (* (* x x) x) 6.0)) (/ (* (* (* (* x x) x) x) x) 120)) (/ (* (* (* (* (* (* x x) x) x) x) x) x) 5040)))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "(x * (1.0 + ((x * x) * (((1.0 / 6.0) - sqrt(1.0)) + ((x * x) * ((1.0 / 120.0) + ((x * x) * (-((1.0 / 5040.0))))))))))",
+      "enclosure": [
+        -1.601594,
+        1.601594
+      ],
+      "abs_err": 1.648666e-15,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (+ 1.0 (* (* x x) (+ (- (/ 1.0 6.0) (sqrt 1.0)) (* (* x x) (+ (/ 1.0 120.0) (* (* x x) (- (/ 1.0 5040.0))))))))))"
+    },
+    {
+      "fptaylor_expr": "(x * (1.0 + ((x * x) * ((-((1.0 / 6.0))) + ((x * x) * ((1.0 / 120.0) + ((sqrt(1.0) * sqrt(1.0)) * (-((1.0 / 5040.0))))))))))",
+      "enclosure": [
+        -1.020244,
+        1.020244
+      ],
+      "abs_err": 4.192102e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (+ 1.0 (* (* x x) (+ (- (/ 1.0 6.0)) (* (* x x) (+ (/ 1.0 120.0) (* (* (sqrt 1.0) (sqrt 1.0)) (- (/ 1.0 5040.0))))))))))"
+    }
+  ]
+}

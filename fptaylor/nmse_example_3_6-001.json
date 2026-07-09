@@ -1,0 +1,190 @@
+{
+  "benchmark": "nmse_example_3_6",
+  "reference": "(FPCore (x) (- (/ 1 (sqrt x)) (/ 1 (sqrt (+ x 1)))))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "effort": "medium",
+    "samples": 20,
+    "max_attempts": 200,
+    "saturation": 6,
+    "time_budget": 10.0,
+    "box": {
+      "x": "[0,100]"
+    }
+  },
+  "intervals": {
+    "x": "[0,100]"
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "((1 / sqrt(x)) - (1 / sqrt((x + 1))))",
+    "enclosure": [
+      -Infinity,
+      Infinity
+    ],
+    "abs_err": null,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (x) (- (/ 1 (sqrt x)) (/ 1 (sqrt (+ x 1)))))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "(1 / ((sqrt(x) * sqrt((x + 1))) * (sqrt(x) + sqrt((x + 1)))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (* (* (sqrt x) (sqrt (+ x 1))) (+ (sqrt x) (sqrt (+ x 1))))))"
+    },
+    {
+      "fptaylor_expr": "(1 / ((sqrt(x) * sqrt((1 + x))) * (sqrt(x) + sqrt((1 + x)))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (* (* (sqrt x) (sqrt (+ 1 x))) (+ (sqrt x) (sqrt (+ 1 x))))))"
+    },
+    {
+      "fptaylor_expr": "(1 / (sqrt(x) * sqrt((x + 1))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (* (sqrt x) (sqrt (+ x 1)))))"
+    },
+    {
+      "fptaylor_expr": "(1 / ((sqrt(x) * sqrt((x + 1))) * (sqrt(x) + sqrt((1 + x)))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (* (* (sqrt x) (sqrt (+ x 1))) (+ (sqrt x) (sqrt (+ 1 x))))))"
+    },
+    {
+      "fptaylor_expr": "(1 / ((sqrt(x) * sqrt((x + 1))) * (sqrt(x) + sqrt((x + 0)))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (* (* (sqrt x) (sqrt (+ x 1))) (+ (sqrt x) (sqrt (+ x 0))))))"
+    },
+    {
+      "fptaylor_expr": "(1 / ((sqrt(x) * sqrt((x + 0))) * (sqrt(x) + sqrt((x + 0)))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (* (* (sqrt x) (sqrt (+ x 0))) (+ (sqrt x) (sqrt (+ x 0))))))"
+    },
+    {
+      "fptaylor_expr": "(1 / ((sqrt(x) + sqrt((x + 1))) * (sqrt(x) * sqrt((x + 1)))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (* (+ (sqrt x) (sqrt (+ x 1))) (* (sqrt x) (sqrt (+ x 1))))))"
+    },
+    {
+      "fptaylor_expr": "(1 / ((sqrt(x) * sqrt((x + 1))) * (sqrt(x) + sqrt(((x + 1) - 0)))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (* (* (sqrt x) (sqrt (+ x 1))) (+ (sqrt x) (sqrt (- (+ x 1) 0))))))"
+    },
+    {
+      "fptaylor_expr": "(0 / 0)",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 0 0))"
+    },
+    {
+      "fptaylor_expr": "(1 / (((sqrt(x) * sqrt((x + 1))) * (sqrt(x) + sqrt((x + 1)))) / 1))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (/ (* (* (sqrt x) (sqrt (+ x 1))) (+ (sqrt x) (sqrt (+ x 1)))) 1)))"
+    },
+    {
+      "fptaylor_expr": "(1 / ((sqrt(x) * sqrt((x + 1))) * (sqrt(x) + sqrt((x - -1)))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (* (* (sqrt x) (sqrt (+ x 1))) (+ (sqrt x) (sqrt (- x -1))))))"
+    },
+    {
+      "fptaylor_expr": "(1 / ((sqrt(x) * sqrt((x + 1))) * (sqrt(x) + (sqrt(x) + sqrt((x + 1))))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (* (* (sqrt x) (sqrt (+ x 1))) (+ (sqrt x) (+ (sqrt x) (sqrt (+ x 1)))))))"
+    },
+    {
+      "fptaylor_expr": "(1 / (((sqrt(x) * sqrt((x + 1))) * (sqrt(x) + sqrt((x + 1)))) * 1))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (* (* (* (sqrt x) (sqrt (+ x 1))) (+ (sqrt x) (sqrt (+ x 1)))) 1)))"
+    }
+  ]
+}

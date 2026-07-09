@@ -1,0 +1,70 @@
+{
+  "benchmark": "nmse_problem_3_3_3",
+  "reference": "(FPCore (x) (+ (- (/ 1 (+ x 1)) (/ 2 x)) (/ 1 (- x 1))))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "effort": "medium",
+    "samples": 20,
+    "max_attempts": 200,
+    "saturation": 6,
+    "time_budget": 10.0,
+    "box": {
+      "x": "[-100,100]"
+    }
+  },
+  "intervals": {
+    "x": "[-100,100]"
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "(((1 / (x + 1)) - (2 / x)) + (1 / (x - 1)))",
+    "enclosure": [
+      -Infinity,
+      Infinity
+    ],
+    "abs_err": null,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (x) (+ (- (/ 1 (+ x 1)) (/ 2 x)) (/ 1 (- x 1))))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "(2 / (x * ((x - 1) * (x + 1))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 2 (* x (* (- x 1) (+ x 1)))))"
+    },
+    {
+      "fptaylor_expr": "(2 / (sqrt(1) * (x * (x - 1))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 2 (* (sqrt 1) (* x (- x 1)))))"
+    },
+    {
+      "fptaylor_expr": "(2 / ((x * (x - 1)) * (x + 1)))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 2 (* (* x (- x 1)) (+ x 1))))"
+    }
+  ]
+}

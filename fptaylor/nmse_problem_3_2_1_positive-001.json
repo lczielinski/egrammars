@@ -1,0 +1,533 @@
+{
+  "benchmark": "nmse_problem_3_2_1_positive",
+  "reference": "(FPCore (a b2 c) (/ (+ (- b2) (sqrt (- (* b2 b2) (* a c)))) a))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "effort": "medium",
+    "samples": 20,
+    "max_attempts": 200,
+    "saturation": 6,
+    "time_budget": 10.0,
+    "box": {
+      "a": "[-100,100]",
+      "b2": "[-100,100]",
+      "c": "[-100,100]"
+    }
+  },
+  "intervals": {
+    "a": "[-100,100]",
+    "b2": "[-100,100]",
+    "c": "[-100,100]"
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "(((-(b2)) + sqrt(((b2 * b2) - (a * c)))) / a)",
+    "enclosure": [
+      -Infinity,
+      Infinity
+    ],
+    "abs_err": null,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (a b2 c) (/ (+ (- b2) (sqrt (- (* b2 b2) (* a c)))) a))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": null,
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-(c)) / (sqrt(((b2 * b2) - (a * c))) + b2))",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 >= 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[0.0,100.0]",
+            "c": "[-100.0,100.0]"
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) + sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 < 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[-100.0,0.0]",
+            "c": "[-100.0,100.0]"
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (>= b2 0) (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2)) (/ (+ (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-(c)) / (sqrt(((b2 * b2) - (a * c))) + b2))",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 >= 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[0.0,100.0]",
+            "c": "[-100.0,100.0]"
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) + sqrt(-0)) / a)",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 < 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[-100.0,0.0]",
+            "c": "[-100.0,100.0]"
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (>= b2 0) (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2)) (/ (+ (- b2) (sqrt -0)) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-(c)) / (sqrt(((b2 * b2) - (a * c))) + b2))",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 >= 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[0.0,100.0]",
+            "c": "[-100.0,100.0]"
+          }
+        },
+        {
+          "fptaylor_expr": "((sqrt(((b2 * b2) - (a * c))) + (-(b2))) / a)",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 < 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[-100.0,0.0]",
+            "c": "[-100.0,100.0]"
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (>= b2 0) (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2)) (/ (+ (sqrt (- (* b2 b2) (* a c))) (- b2)) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-(c)) / (sqrt(((b2 * b2) - (a * c))) + b2))",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 > 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[0.0,100.0]",
+            "c": "[-100.0,100.0]"
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) + sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 <= 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[-100.0,0.0]",
+            "c": "[-100.0,100.0]"
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (> b2 0) (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2)) (/ (+ (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(((-(b2)) + sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 <= 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[-100.0,0.0]",
+            "c": "[-100.0,100.0]"
+          }
+        },
+        {
+          "fptaylor_expr": "((-(c)) / (sqrt(((b2 * b2) - (a * c))) + b2))",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 > 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[0.0,100.0]",
+            "c": "[-100.0,100.0]"
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (<= b2 0) (/ (+ (- b2) (sqrt (- (* b2 b2) (* a c)))) a) (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(((-(c)) / (sqrt(((b2 * b2) - (a * c))) + b2)) + 0)",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 >= 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[0.0,100.0]",
+            "c": "[-100.0,100.0]"
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) + sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 < 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[-100.0,0.0]",
+            "c": "[-100.0,100.0]"
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (>= b2 0) (+ (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2)) 0) (/ (+ (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-(c)) / (sqrt(((b2 * b2) - (a * c))) + b2))",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 >= 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[0.0,100.0]",
+            "c": "[-100.0,100.0]"
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) + sqrt((((b2 * b2) - (a * c)) / 1))) / a)",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 < 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[-100.0,0.0]",
+            "c": "[-100.0,100.0]"
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (>= b2 0) (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2)) (/ (+ (- b2) (sqrt (/ (- (* b2 b2) (* a c)) 1))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-(c)) / (sqrt(((b2 * b2) - (a * c))) + b2))",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 >= 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[0.0,100.0]",
+            "c": "[-100.0,100.0]"
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) + sqrt(((b2 * b2) - ((a * c) / 1)))) / a)",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 < 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[-100.0,0.0]",
+            "c": "[-100.0,100.0]"
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (>= b2 0) (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2)) (/ (+ (- b2) (sqrt (- (* b2 b2) (/ (* a c) 1)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-(c)) / (sqrt(((b2 * b2) - (a * c))) + b2))",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 >= 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[0.0,100.0]",
+            "c": "[-100.0,100.0]"
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) + sqrt((b2 * b2))) / a)",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 < 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[-100.0,0.0]",
+            "c": "[-100.0,100.0]"
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (>= b2 0) (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2)) (/ (+ (- b2) (sqrt (* b2 b2))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-(c)) / (sqrt(((b2 * b2) - ((a * c) - 0))) + b2))",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 >= 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[0.0,100.0]",
+            "c": "[-100.0,100.0]"
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) + sqrt(((b2 * b2) - ((a * c) - 0)))) / a)",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 < 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[-100.0,0.0]",
+            "c": "[-100.0,100.0]"
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (>= b2 0) (/ (- c) (+ (sqrt (- (* b2 b2) (- (* a c) 0))) b2)) (/ (+ (- b2) (sqrt (- (* b2 b2) (- (* a c) 0)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-(c)) / (sqrt(((b2 * b2) - (a * c))) + b2))",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 >= 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[0.0,100.0]",
+            "c": "[-100.0,100.0]"
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) + sqrt(((b2 * b2) + ((-(a)) * c)))) / a)",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 < 0",
+          "region": {
+            "a": "[-100.0,100.0]",
+            "b2": "[-100.0,0.0]",
+            "c": "[-100.0,100.0]"
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (>= b2 0) (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2)) (/ (+ (- b2) (sqrt (+ (* b2 b2) (* (- a) c)))) a)))"
+    }
+  ]
+}

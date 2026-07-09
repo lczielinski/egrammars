@@ -1,0 +1,201 @@
+{
+  "benchmark": "floudas3",
+  "reference": "(FPCore (x1 x2) (+ (- (* -12 x1) (* 7 x2)) (* x2 x2)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "effort": "medium",
+    "samples": 20,
+    "max_attempts": 200,
+    "saturation": 6,
+    "time_budget": 10.0,
+    "box": {
+      "x1": "[0,2]",
+      "x2": "[0,3]"
+    }
+  },
+  "programs": [
+    "(FPCore (x1 x2) (+ (- (* x2 x2) (* 7 x2)) (* -12 x1)))",
+    "(FPCore (x1 x2) (+ (- (/ (* x2 x2) 1) (* 7 x2)) (* -12 x1)))",
+    "(FPCore (x1 x2) (+ (- (* (sqrt x2) (sqrt x2)) (* 7 x2)) (* -12 x1)))",
+    "(FPCore (x1 x2) (+ (- (* x2 x2) (/ (* 7 x2) 1)) (* -12 x1)))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (x1 x2) (+ (- (* x2 x2) (* 7 x2)) (* -12 x1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (if (< x2 0) (* x2 x2) (* x2 x2)) (* 7 x2)) (* -12 x1)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 2.6278879710102457e-16,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (* x2 x2) (* 7 x2)) (* -12 x2)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9922195591015617,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (* x2 x2) (* (sqrt 49) x2)) (* -12 x1)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 2.6278879710102457e-16,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (/ (* x2 x2) 1) (* 7 x2)) (* -12 x1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (* x1 x1) (* 7 x2)) (* -12 x1)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.41273189056907306,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (* x2 x2) (* 7 x1)) (* -12 x2)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.5442240087506279,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (* (sqrt (sqrt x2)) (sqrt (sqrt x2))) (* 7 x2)) (* -12 x1)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.35987316389657564,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (* (sqrt x2) (sqrt x2)) (* 7 x2)) (* -12 x1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (* x2 x2) (* 7 x2)) (/ (* 12 x1) -1)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 2.6278879710102457e-16,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (* x2 x2) (/ (* 7 x2) 1)) (* -12 x1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (* x2 x2) (* 7 x2)) (- (* 12 x1) 0)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (* x2 x2) (* 7 (sqrt x2))) (* -12 x1)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.6986657486245776,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (* x2 x2) (* 7 x1)) (* -12 x1)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.671684395139646,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ -0 (- (* x2 x2) (* 7 x2))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.997135351663593,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (* x1 x1) (* x1 x2)) (* -12 x1)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.998288724130013,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (* x2 x1) (* 7 x2)) (* -12 x1)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.41108593227260437,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (* x2 x2) (+ (* 7 x2) (* 12 x1))) 0))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (* x2 x2) (* 7 x2)) (- (* 12 x1) (* 0 x1))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (x1 x2) (+ (- (+ (* x2 x2) (* -7 x2)) (* -12 x1)) 0))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    }
+  ]
+}
