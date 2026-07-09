@@ -111,11 +111,9 @@ def equivalent(benchmark: str, box: dict[str, tuple[float, float]] | None,
     bridges them only where its preconditions hold over `box`; a wider box can only fail
     to prove an equivalence, never assert a false one.
 
-    With `timeout` set (seconds), saturate step-by-step in a child process, checking
-    after every iteration and stopping early on a proof, on saturation (no rewrite fired,
-    so it can never prove), or when the e-graph grows past `node_cap` (blowup) — so a
-    reject need not burn the whole budget. The parent still kills the child if it somehow
-    runs past `timeout`. Without a timeout, run a fixed `runs` iterations in-process."""
+    Without a timeout, run a fixed `runs` iterations in-process. With `timeout` set
+    (seconds), saturate step-by-step in a child process (see `_saturate_worker`), which
+    the parent kills if it runs past the budget."""
     try:
         term = fpcore_to_math(body)
     except ValueError:

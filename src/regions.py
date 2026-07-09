@@ -43,11 +43,16 @@ def split_branches(node):
         yield [], node
 
 
+def _bounds(s: str) -> list[float]:
+    """`"[lo,hi]"` -> `[lo, hi]`."""
+    return [float(x) for x in s.strip("[]").split(",")]
+
+
 def float_box(box: dict | None) -> dict | None:
     """`{"x": "[lo,hi]"}` -> `{"x": (lo, hi)}` floats, or None."""
     if not box:
         return None
-    return {v: tuple(map(float, s.strip("[]").split(","))) for v, s in box.items()}
+    return {v: tuple(_bounds(s)) for v, s in box.items()}
 
 
 def _as_float(tok):
@@ -60,7 +65,7 @@ def _as_float(tok):
 def narrow_box(box: dict, conds) -> dict | None:
     """`box` restricted to where all `conds` hold, or None if empty. A comparison that
     doesn't pin a variable to a number is ignored (yielding a sound superset)."""
-    iv = {v: list(map(float, s.strip("[]").split(","))) for v, s in box.items()}
+    iv = {v: _bounds(s) for v, s in box.items()}
     for op, lhs, rhs in conds:
         hi_side = op in ("<", "<=")
         if lhs in iv and (n := _as_float(rhs)) is not None:

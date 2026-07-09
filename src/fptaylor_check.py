@@ -114,8 +114,7 @@ def _combine(branches: list) -> dict:
 
 def analyze_program(ast, box: dict, cfg_path: str) -> dict:
     """Analyze one program, splitting on `if` and bounding each branch over its box."""
-    body = ast[2] if isinstance(ast, list) and ast and ast[0] == "FPCore" else ast
-    leaves = list(regions.split_branches(body))
+    leaves = list(regions.split_branches(regions.body_of(ast)))
     if len(leaves) == 1:
         return analyze(to_fptaylor(body), box, cfg_path)
     branches = []

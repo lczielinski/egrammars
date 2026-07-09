@@ -41,6 +41,13 @@
 (rewrite (Mul (Neg a) (Neg a)) (Mul a a))
 (rewrite (Sub a (Sub a b)) b)
 
+;; multiply/divide by -1, and fold a negation into a literal coefficient. Each fires only
+;; on a Num-literal head, so fan-out is bounded and the terms strictly shrink (no blowup);
+;; lets `x/-1`, `-1*x`, and `-(n*x)` normalize to the reference's signed-coefficient form.
+(rewrite (Mul (Num -1) x) (Neg x))
+(rewrite (Div x (Num -1)) (Neg x))
+(rewrite (Neg (Mul (Num n) x)) (Mul (Num (* -1 n)) x))
+
 ;; additive inverse: cancelling terms vanish (lets sums with regrouped terms collapse)
 (rewrite (Sub a a) (Num 0))
 (rewrite (Add a (Neg a)) (Num 0))

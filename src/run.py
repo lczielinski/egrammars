@@ -268,12 +268,13 @@ def _benchmark_row(b):
     attempts = json.loads(esrc.read_text()).get("attempts", [])
     v = lambda pred: sum(1 for a in attempts if pred(a))
     verd = lambda a: a.get("numeric", {}).get("verdict")
-    row = {"benchmark": b, "candidates": len(attempts),
-           "valid": v(lambda a: a["proven_equivalent"]),
-           "missing_rule": v(lambda a: not a["proven_equivalent"] and verd(a) == "equal"),
-           "non_equiv": v(lambda a: not a["proven_equivalent"] and verd(a) == "different"),
-           "indeterminate": v(lambda a: not a["proven_equivalent"] and verd(a) == "indeterminate"),
-           "best_ulp": None, "verdict": "no-valid" if not v(lambda a: a["proven_equivalent"]) else "unmeasurable"}
+    unproven = lambda a: not a["proven_equivalent"]
+    valid = v(lambda a: a["proven_equivalent"])
+    row = {"benchmark": b, "candidates": len(attempts), "valid": valid,
+           "missing_rule": v(lambda a: unproven(a) and verd(a) == "equal"),
+           "non_equiv": v(lambda a: unproven(a) and verd(a) == "different"),
+           "indeterminate": v(lambda a: unproven(a) and verd(a) == "indeterminate"),
+           "best_ulp": None, "verdict": "unmeasurable" if valid else "no-valid"}
     _, fsrc = paths.latest(paths.FPTAYLOR, b)
     if fsrc is not None:
         fd = json.loads(fsrc.read_text())

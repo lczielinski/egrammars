@@ -1,14 +1,9 @@
 #!/usr/bin/env bash
-# Run the benchmark suite across all GPUs, one shard per GPU. Because the model's
-# reasoning pass dominates wall-clock and each benchmark reasons independently, sharding
-# benchmarks across GPUs is a near-linear speedup — no batching inside casa needed.
+# Run the benchmark suite across all GPUs, one shard per GPU.
 #
 #   scripts/run_gpus.sh [N_GPUS] [extra run.py args]
 #   scripts/run_gpus.sh 8
 #   scripts/run_gpus.sh 8 --time-budget 10 --samples 40
-#
-# Each shard is CUDA_VISIBLE_DEVICES-pinned to one GPU (so casa's model loads on it as
-# cuda:0). Per-GPU logs go to log/gpu<i>.log; the combined table prints at the end.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
