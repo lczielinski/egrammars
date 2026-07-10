@@ -1,3 +1,0 @@
-(FPCore (a b)
-  :name "symmetry log of sum of exp"
-  (log (+ (exp a) (exp b))))
