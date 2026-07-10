@@ -1,0 +1,7 @@
+;; (FPCore (es ca rone_es) (- (* (* (- 1 (* es (* ca ca))) rone_es) (* (- 1 (* es (* ca ca))) rone_es)) 1))
+
+(let es (Var "es"))
+(let ca (Var "ca"))
+(let rone_es (Var "rone_es"))
+
+(let start (Sub (Mul (Mul (Sub (Num 1) (Mul (Var "es") (Mul (Var "ca") (Var "ca")))) (Var "rone_es")) (Mul (Sub (Num 1) (Mul (Var "es") (Mul (Var "ca") (Var "ca")))) (Var "rone_es"))) (Num 1)))

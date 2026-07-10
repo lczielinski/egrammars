@@ -1,0 +1,8 @@
+;; (FPCore (d1 d2 d3 d4) (- (+ (- (* d1 d2) (* d1 d3)) (* d4 d1)) (* d1 d1)))
+
+(let d1 (Var "d1"))
+(let d2 (Var "d2"))
+(let d3 (Var "d3"))
+(let d4 (Var "d4"))
+
+(let start (Sub (Add (Sub (Mul (Var "d1") (Var "d2")) (Mul (Var "d1") (Var "d3"))) (Mul (Var "d4") (Var "d1"))) (Mul (Var "d1") (Var "d1"))))

@@ -34,23 +34,48 @@ every candidate the model tried and why each was rejected), `fptaylor_check.py` 
 `fptaylor/<name>-NNN.json`. Flags: `--samples --max-attempts --temperature --model
 --effort --saturation --time-budget --shard`.
 
-## FPBench (comparing against Herbie)
+## Benchmark suite (FPBench + Herbie)
 
-FPCore is the common ground with [Herbie](https://herbie.uwplse.org): both tools consume
-it. The benchmarks in `benchmarks/*.egglog` are the [FPBench](https://fpbench.org) suite
-(vendored raw under `benchmarks/fpbench/`) filtered to the cores expressible in *this*
-tool's subset — only `+ - * / sqrt`, integer literals, and a branch-free reference
-(`let`/`let*` inlined). 57 of the 130 cores survived that filter, and trivially-accurate
-ones (single ops, plain sums, already-optimal forms like `1/(x+1)`, and `sqrt(x^2+y^2)`
-whose only fix is unexpressible scaling) were then dropped, along with 11 exact-duplicate
-`triangle` cores (identical over the same box), leaving 33. The rest of the
-130 need transcendentals, loops, arrays, or non-integer constants the `Num i64` e-graph
-can't represent. Each
-core's input box (in `benchmarks/fpbench_intervals.json`, loaded into `INTERVALS`) was
-read from its `:pre`, with a wide default where `:pre` left a variable unbounded;
-`benchmarks/fpbench_manifest.json` records the provenance. Run one benchmark
-(`uv run src/run.py kepler0`), all of them (`uv run src/run.py`), or one shard per GPU
-across the suite ([scripts/run_gpus.sh](scripts/run_gpus.sh)).
+FPCore is the common ground with [Herbie](https://herbie.uwplse.org) and
+[FPBench](https://fpbench.org): all three tools consume it. The suite lives under
+`benchmarks/`:
+
+```
+benchmarks/
+  egglog/          one <name>.egglog per benchmark: the reference term the tool rewrites
+  intervals.json   per-benchmark input box {var: "[lo,hi]"}, loaded into INTERVALS
+  sources/
+    fpbench/       raw FPBench dump the original 33 were filtered from
+    herbie/        vendored Herbie bench/ tree (HERBIE_COMMIT.txt pins the revision)
+```
+
+Every benchmark is filtered to *this* tool's subset — only `+ - * / sqrt`, integer
+literals, and a branch-free reference (`let`/`let*` inlined, variadic operators folded
+left). The `Num i64` e-graph rules out transcendentals, loops, arrays, and non-integer
+constants.
+
+- **33 FPBench cores** (`delta`, `kepler*`, `rigidbody*`, `nmse_*`, …): the FPBench suite
+  filtered to the subset, with trivially-accurate and duplicate cores dropped. Their
+  boxes were read from each core's `:pre` (hand-refined; a wide default where `:pre` left
+  a variable unbounded).
+- **14 Herbie cores** imported by [scripts/import_fpcore.py](scripts/import_fpcore.py)
+  from the vendored `sources/herbie/` tree. Of Herbie's 730 cores, 312 are
+  subset-expressible; after dropping the 200+ auto-extracted `haskell.fpcore` entries
+  (no `:pre`), cores already covered by the FPBench 33, and — crucially — cores where no
+  subset-expressible rewrite lowers the *worst-case* bound this tool measures (their real
+  fix is average-case, or needs overflow-scaling / `fma` the subset can't express), 14
+  genuinely-improvable programs remain: catastrophic cancellation (`kahan_p9`,
+  `conte_x_minus_sqrt`, `expand_square`, `complex_square_real`, `som_setup_w`),
+  near-pole / difference-of-ratios (`conte_near_pole`, `asymptote_c`), summation order
+  (`martel_p6`), factoring (`fastmath_dist4`), and more. Each was verified to admit a
+  lower-error equivalent under the FPTaylor harness before inclusion. The `SPEC` list in
+  `import_fpcore.py` records each import's source core, per-variable box provenance
+  (`pre` / `pre-hi` / `pre-lo` from the source `:pre`, or `cur` curated), and a note.
+
+To (re)generate or extend the Herbie set, edit the `SPEC` list in `import_fpcore.py` and
+run `uv run scripts/import_fpcore.py` (idempotent; `--list` prints every
+subset-expressible source core). Run one benchmark (`uv run src/run.py kepler0`), all of
+them (`uv run src/run.py`), or one shard per GPU ([scripts/run_gpus.sh](scripts/run_gpus.sh)).
 
 Note the metric mismatch: this tool reports *sound worst-case* FPTaylor bounds over the
 box, whereas Herbie reports *average-case* bits/ULP error over sampled points — a

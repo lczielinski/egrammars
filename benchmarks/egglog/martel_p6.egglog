@@ -1,0 +1,8 @@
+;; (FPCore (a b c d) (* (+ a (+ b (+ c d))) 2))
+
+(let a (Var "a"))
+(let b (Var "b"))
+(let c (Var "c"))
+(let d (Var "d"))
+
+(let start (Mul (Add (Var "a") (Add (Var "b") (Add (Var "c") (Var "d")))) (Num 2)))

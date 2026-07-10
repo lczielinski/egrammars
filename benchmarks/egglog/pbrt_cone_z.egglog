@@ -1,0 +1,6 @@
+;; (FPCore (ux maxCos) (+ (- 1 ux) (* ux maxCos)))
+
+(let ux (Var "ux"))
+(let maxCos (Var "maxCos"))
+
+(let start (Add (Sub (Num 1) (Var "ux")) (Mul (Var "ux") (Var "maxCos"))))

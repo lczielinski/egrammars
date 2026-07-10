@@ -1,0 +1,6 @@
+;; (FPCore (x0 x1) (- (/ x0 (- 1 x1)) x0))
+
+(let x0 (Var "x0"))
+(let x1 (Var "x1"))
+
+(let start (Sub (Div (Var "x0") (Sub (Num 1) (Var "x1"))) (Var "x0")))

@@ -1,0 +1,6 @@
+;; (FPCore (re im) (- (* re re) (* im im)))
+
+(let re (Var "re"))
+(let im (Var "im"))
+
+(let start (Sub (Mul (Var "re") (Var "re")) (Mul (Var "im") (Var "im"))))

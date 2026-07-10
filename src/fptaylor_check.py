@@ -20,7 +20,7 @@ CONFIG = "abs-error = true\nrel-error = true\n"
 TIMEOUT = 120
 
 def _imported_intervals() -> dict:
-    f = paths.BENCHMARKS / "fpbench_intervals.json"
+    f = paths.INTERVALS_FILE
     return json.loads(f.read_text()) if f.exists() else {}
 
 
@@ -116,7 +116,7 @@ def analyze_program(ast, box: dict, cfg_path: str) -> dict:
     """Analyze one program, splitting on `if` and bounding each branch over its box."""
     leaves = list(regions.split_branches(regions.body_of(ast)))
     if len(leaves) == 1:
-        return analyze(to_fptaylor(body), box, cfg_path)
+        return analyze(to_fptaylor(leaves[0][1]), box, cfg_path)
     branches = []
     for conds, expr in leaves:
         region = regions.narrow_box(box, conds)

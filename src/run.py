@@ -204,7 +204,7 @@ def attempt_line(rec: dict) -> str:
 
 
 def all_benchmarks() -> list[str]:
-    return sorted(p.stem for p in paths.BENCHMARKS.glob("*.egglog"))
+    return sorted(p.stem for p in paths.EGGLOG.glob("*.egglog"))
 
 
 def shard(benchmarks: list[str], spec: str | None) -> list[str]:

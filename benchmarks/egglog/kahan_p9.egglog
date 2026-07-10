@@ -1,0 +1,6 @@
+;; (FPCore (x y) (/ (* (- x y) (+ x y)) (+ (* x x) (* y y))))
+
+(let x (Var "x"))
+(let y (Var "y"))
+
+(let start (Div (Mul (Sub (Var "x") (Var "y")) (Add (Var "x") (Var "y"))) (Add (Mul (Var "x") (Var "x")) (Mul (Var "y") (Var "y")))))

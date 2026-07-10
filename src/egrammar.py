@@ -27,7 +27,7 @@ def _quiet_stderr():
 
 
 def read_reference(benchmark: str) -> str:
-    return (paths.BENCHMARKS / f"{benchmark}.egglog").read_text().splitlines()[0].removeprefix(";; ")
+    return (paths.EGGLOG / f"{benchmark}.egglog").read_text().splitlines()[0].removeprefix(";; ")
 
 
 def _seeds(box: dict[str, tuple[float, float]]) -> str:
@@ -58,7 +58,7 @@ def fpcore_to_math(node) -> str:
 
 def _setup(benchmark, box, term) -> str:
     rules = (paths.ROOT / "rules.egglog").read_text()
-    content = (paths.BENCHMARKS / f"{benchmark}.egglog").read_text()
+    content = (paths.EGGLOG / f"{benchmark}.egglog").read_text()
     seeds = _seeds(box) if box else ""
     return rules + content + f"\n(let __candidate__ {term})\n" + seeds
 

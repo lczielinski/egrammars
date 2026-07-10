@@ -7,6 +7,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 BENCHMARKS = ROOT / "benchmarks"
+EGGLOG = BENCHMARKS / "egglog"          # per-benchmark reference terms (<name>.egglog)
+INTERVALS_FILE = BENCHMARKS / "intervals.json"
 EQUIVALENTS = ROOT / "equivalents"
 FPTAYLOR = ROOT / "fptaylor"
 
