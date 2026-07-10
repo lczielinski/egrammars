@@ -162,29 +162,27 @@ def asap_samples(llm, grammar_str, args, base_ids):
     return [r.text.strip() for r in res]
 
 
-def validate(benchmark, box, program, runs, timeout=None) -> bool:
+def validate(benchmark, box, program, timeout) -> bool:
     """True if every branch is equivalent to the reference over the region its guards
-    select. `if` is total, so per-branch validity implies whole-program validity. With
-    `timeout` set, each branch check saturates until proven or the per-check budget."""
+    select. `if` is total, so per-branch validity implies whole-program validity. Each
+    branch check saturates until proven or its `timeout` budget."""
     for conds, leaf in regions.split_branches(regions.body_of(program)):
         region = regions.narrow_box(box, conds) if box else None
         if box and region is None:
             continue  # unreachable branch
-        if not egrammar.equivalent(benchmark, regions.float_box(region), leaf, runs,
+        if not egrammar.equivalent(benchmark, regions.float_box(region), leaf,
                                    timeout=timeout):
             return False
     return True
 
 
-def evaluate_candidates(benchmark, reference, box, candidates, runs, timeout=None):
-    """Record EVERY sampled candidate, not just the ones that survive. Returns
-    (proven_programs, attempts): each attempt is {program, proven_equivalent, and — when
-    the e-graph couldn't prove it — a `numeric` classification separating a missing
-    e-graph rule (numerically equal) from a genuinely non-equivalent program}."""
+def evaluate_candidates(benchmark, reference, box, candidates, timeout):
+    """Returns (proven_programs, attempts). Every candidate is recorded; an unproven one
+    gets a `numeric` classification (missing rule vs. genuinely non-equivalent)."""
     import numcheck
     programs, attempts = [], []
     for prog in candidates:
-        proven = validate(benchmark, box, prog, runs, timeout=timeout)
+        proven = validate(benchmark, box, prog, timeout=timeout)
         rec = {"program": prog, "proven_equivalent": proven}
         if proven:
             programs.append(prog)
@@ -227,7 +225,7 @@ def run_benchmark(llm, benchmark: str, args) -> None:
     candidates = asap_samples(llm, syntax_grammar(regions.variables_of(reference)),
                               args, base_ids)
     programs, attempts = evaluate_candidates(
-        benchmark, reference, box, candidates, args.saturation, timeout=args.time_budget)
+        benchmark, reference, box, candidates, timeout=args.time_budget)
 
     missing = sum(a.get("numeric", {}).get("verdict") == "equal" for a in attempts)
     print(f"{len(attempts)} candidates: {len(programs)} proven, {missing} missing-rule?, "
@@ -240,7 +238,7 @@ def run_benchmark(llm, benchmark: str, args) -> None:
         {"benchmark": benchmark, "reference": reference,
          "config": {"model": args.model, "temperature": args.temperature,
                     "effort": args.effort, "samples": args.samples,
-                    "max_attempts": args.max_attempts, "saturation": args.saturation,
+                    "max_attempts": args.max_attempts,
                     "time_budget": args.time_budget, "box": box},
          "programs": programs, "attempts": attempts}, indent=2))
     print(f"wrote {summary}")
@@ -300,9 +298,8 @@ def _benchmark_row(b):
 
 
 def summarize(benchmarks: list[str]) -> None:
-    """Aggregate the latest runs into console output and a summary.md at the repo root:
-    what fraction of candidates were valid / missing-rule / non-equivalent, and what
-    fraction of benchmarks the tool actually improved over the reference."""
+    """Aggregate the latest runs into console output and summary.md: fraction of candidates
+    valid / missing-rule / non-equivalent, and of benchmarks improved over the reference."""
     rows = [r for r in (_benchmark_row(b) for b in benchmarks) if r]
     if not rows:
         print("no results found (run some benchmarks first)")
@@ -364,11 +361,9 @@ def main() -> None:
     p.add_argument("--temperature", type=float, default=1.0)
     p.add_argument("--model", default=MODEL_ID)
     p.add_argument("--effort", choices=["low", "medium", "high"], default="medium")
-    p.add_argument("--saturation", type=int, default=6,
-                   help="fixed e-graph saturation iterations (ignored if --time-budget set)")
-    p.add_argument("--time-budget", type=float, default=None, metavar="SECONDS",
-                   help="instead of --saturation, saturate each check until proven or "
-                        "this many seconds elapse")
+    p.add_argument("--time-budget", type=float, default=10.0, metavar="SECONDS",
+                   help="per-check budget: saturate each branch until proven or this many "
+                        "seconds elapse")
     args = p.parse_args()
 
     benchmarks = [args.benchmark] if args.benchmark else shard(all_benchmarks(), args.shard)

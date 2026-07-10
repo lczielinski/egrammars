@@ -9,7 +9,6 @@ import sys
 
 import paths
 
-SATURATION_RUNS = 6
 CONSTRUCTOR = {"+": "Add", "-": "Sub", "*": "Mul", "/": "Div", "sqrt": "Sqrt"}
 
 
@@ -56,8 +55,11 @@ def fpcore_to_math(node) -> str:
     return f"({ctor} " + " ".join(fpcore_to_math(o) for o in operands) + ")"
 
 
-def _setup(benchmark, box, term) -> str:
-    rules = (paths.ROOT / "rules.egglog").read_text()
+_RULES = (paths.ROOT / "rules.egglog").read_text()
+_RULES_UNIFIED = _RULES.replace(" :ruleset expand", "")  # all rules in the default ruleset
+
+
+def _setup(benchmark, box, term, rules: str = _RULES) -> str:
     content = (paths.EGGLOG / f"{benchmark}.egglog").read_text()
     seeds = _seeds(box) if box else ""
     return rules + content + f"\n(let __candidate__ {term})\n" + seeds
@@ -75,69 +77,65 @@ def _nodes(eg) -> int:
     return sum(n for _, n in eg.run_program(*eg.parse_program("(print-size)"))[0].sizes)
 
 
-def _saturate_worker(setup: str, max_iters: int, node_cap: int, q) -> None:
-    """Child process: step saturation one iteration at a time, checking after each, so a
-    proof is reported the moment it appears. Rejects stop early too — the moment the
-    e-graph saturates (no rewrite fired: it can never prove now) or grows past `node_cap`
-    (blowup: bound it like egg's node limit) — instead of burning the whole budget."""
-    from egglog.bindings import EGraph
+# Two proof passes (see `equivalent`), sound from either: `_run_aggressive` fires every
+# rule at once (fast, proves anything that doesn't blow up); `_run_throttled` fires the
+# combinatorial `expand` rules one step at a time, renormalizing in between, to rescue the
+# proofs that would otherwise blow the graph up. (egg's per-rule backoff scheduler by hand.)
+_CHEAP = "(run-schedule (repeat 4 (run)))"   # bounded cheap normalization (saturate can hang)
+_EXPAND = "(run expand 1)"                   # one throttled expansion step
+
+
+def _run_aggressive(eg, max_iters: int, node_cap: int) -> bool:
+    """All rules at once, one iteration at a time. Rejects early on saturation or blowup."""
+    for _ in range(max_iters + 1):
+        if _proved(eg):
+            return True
+        if _nodes(eg) > node_cap:
+            return False
+        if not eg.run_program(*eg.parse_program("(run 1)"))[0].report.updated:
+            return _proved(eg)               # saturated
+    return _proved(eg)
+
+
+def _run_throttled(eg, max_iters: int, node_cap: int) -> bool:
+    """`expand` one step per round, renormalizing in between so the graph can't run away."""
+    for _ in range(max_iters + 1):
+        eg.run_program(*eg.parse_program(_CHEAP))
+        if _proved(eg):
+            return True
+        if _nodes(eg) > node_cap:
+            return False
+        updated = eg.run_program(*eg.parse_program(_EXPAND))[0].report.updated
+        if _proved(eg):
+            return True
+        if _nodes(eg) > node_cap:
+            return False
+        if not updated:                      # saturated
+            return False
+    return _proved(eg)
+
+
+def _pass_worker(setup: str, throttled: bool, max_iters: int, node_cap: int, q) -> None:
+    """Run one pass on a fresh e-graph in a child process (killed if it runs past budget)."""
     try:
         with _quiet_stderr():
+            from egglog.bindings import EGraph
             eg = EGraph()
             eg.run_program(*eg.parse_program(setup))
-            for _ in range(max_iters + 1):
-                if _proved(eg):
-                    q.put(True)
-                    return
-                if _nodes(eg) > node_cap:      # blew up -> bounded reject
-                    q.put(False)
-                    return
-                report = eg.run_program(*eg.parse_program("(run 1)"))[0].report
-                if not report.updated:         # saturated -> it can never prove now
-                    q.put(_proved(eg))
-                    return
-        q.put(False)
+            run = _run_throttled if throttled else _run_aggressive
+            q.put(run(eg, max_iters, node_cap))
     except Exception:
         q.put(False)
 
 
-def equivalent(benchmark: str, box: dict[str, tuple[float, float]] | None,
-               body, runs: int = SATURATION_RUNS,
-               timeout: float | None = None, max_iters: int = 1000,
-               node_cap: int = 100_000) -> bool:
-    """True if branch-free FPCore AST `body` is provably equal to the reference over
-    `box`: add it to the reference's e-graph, saturate with the box seeded into the
-    interval analysis, and check the two share an e-class. A domain-conditional rewrite
-    bridges them only where its preconditions hold over `box`; a wider box can only fail
-    to prove an equivalence, never assert a false one.
-
-    Without a timeout, run a fixed `runs` iterations in-process. With `timeout` set
-    (seconds), saturate step-by-step in a child process (see `_saturate_worker`), which
-    the parent kills if it runs past the budget."""
-    try:
-        term = fpcore_to_math(body)
-    except ValueError:
-        return False
-    setup = _setup(benchmark, box, term)
-
-    if timeout is None:
-        from egglog.bindings import EGraph
-        source = setup + f"\n(run {runs})\n(check (= start __candidate__))"
-        try:
-            with _quiet_stderr():
-                egraph = EGraph()
-                egraph.run_program(*egraph.parse_program(source))
-            return True
-        except Exception:
-            return False
-
+def _pass_in_budget(setup, throttled, max_iters, node_cap, budget) -> bool:
     import multiprocessing as mp
     ctx = mp.get_context("fork")
     q = ctx.Queue()
-    p = ctx.Process(target=_saturate_worker, args=(setup, max_iters, node_cap, q))
+    p = ctx.Process(target=_pass_worker, args=(setup, throttled, max_iters, node_cap, q))
     p.start()
-    p.join(timeout)
-    if p.is_alive():          # still saturating past the budget -> too long
+    p.join(budget)
+    if p.is_alive():                 # over budget -> give up on this pass
         p.terminate()
         p.join()
         return False
@@ -145,3 +143,25 @@ def equivalent(benchmark: str, box: dict[str, tuple[float, float]] | None,
         return q.get_nowait()
     except Exception:
         return False
+
+
+def equivalent(benchmark: str, box: dict[str, tuple[float, float]] | None,
+               body, timeout: float = 10.0, max_iters: int = 1000,
+               node_cap: int = 100_000) -> bool:
+    """True if branch-free FPCore AST `body` is provably equal to the reference over `box`:
+    add it to the reference's e-graph, saturate with the box seeded into the interval
+    analysis, and check the two share an e-class. A domain-conditional rewrite bridges them
+    only where its preconditions hold over `box`; a wider box can only fail to prove an
+    equivalence, never assert a false one.
+
+    Runs the aggressive pass then the throttled pass (see above), each as a child process
+    the parent kills at its slice of the `timeout` (seconds) budget."""
+    try:
+        term = fpcore_to_math(body)
+    except ValueError:
+        return False
+    aggressive_setup = _setup(benchmark, box, term, _RULES_UNIFIED)
+    throttled_setup = _setup(benchmark, box, term, _RULES)
+    if _pass_in_budget(aggressive_setup, False, max_iters, node_cap, timeout * 0.5):
+        return True
+    return _pass_in_budget(throttled_setup, True, max_iters, node_cap, timeout * 0.5)

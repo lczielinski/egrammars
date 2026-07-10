@@ -1,17 +1,12 @@
-"""Numerically classify a candidate the e-graph *failed* to prove equivalent, to tell
-the two failure modes apart:
+"""Classify a candidate the e-graph failed to prove, by sampling the box and comparing to
+the reference pointwise:
 
-- verdict "equal"       : candidate matches the reference at every sampled point (within
-                          tolerance) => it is almost certainly algebraically equivalent
-                          and the e-graph is MISSING A RULE.
-- verdict "different"   : candidate disagrees with the reference somewhere => the model
-                          produced a genuinely NON-EQUIVALENT program.
-- verdict "indeterminate": no sample point evaluated to a finite value in both (e.g. the
-                          whole box is a singularity) => can't tell.
+- "equal"        : matches everywhere (within tolerance) => likely a MISSING e-graph RULE.
+- "different"    : disagrees somewhere => a genuinely NON-EQUIVALENT program.
+- "indeterminate": no finite sample point in both => can't tell.
 
-This is a heuristic (sampling can't prove equivalence), but a loose tolerance cleanly
-separates the two: algebraically-equal forms differ only by rounding (~1e-16), while a
-wrong program differs by O(1)."""
+Heuristic (sampling can't prove equivalence), but a loose tolerance separates the two
+cleanly: equal forms differ only by rounding (~1e-16), a wrong program by O(1)."""
 
 from __future__ import annotations
 

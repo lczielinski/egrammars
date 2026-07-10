@@ -32,7 +32,7 @@ uv run src/fptaylor_check.py x_by_xy   # bound a run's programs (also runs after
 `run.py` writes `equivalents/<name>-NNN.json` (proven programs plus an `attempts` log of
 every candidate the model tried and why each was rejected), `fptaylor_check.py` writes
 `fptaylor/<name>-NNN.json`. Flags: `--samples --max-attempts --temperature --model
---effort --saturation --time-budget --shard`.
+--effort --time-budget --shard`.
 
 ## Benchmark suite (FPBench + Herbie)
 
