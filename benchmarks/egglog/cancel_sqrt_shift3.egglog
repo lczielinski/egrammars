@@ -1,0 +1,5 @@
+;; (FPCore (x) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+(let x (Var "x"))
+
+(let start (Add (Sub (Var "x") (Num 3)) (Sqrt (Add (Mul (Sub (Var "x") (Num 3)) (Sub (Var "x") (Num 3))) (Num 1)))))
