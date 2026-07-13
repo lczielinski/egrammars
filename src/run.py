@@ -24,6 +24,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 import warnings
 from datetime import datetime
 
@@ -40,11 +41,12 @@ os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 warnings.filterwarnings("ignore", category=FutureWarning, module="kernels")
 
 
-def run_benchmark(llm, benchmark: str, run, args) -> None:
+def run_benchmark(llm, benchmark: str, run, args, tag: str = "") -> None:
     """Generate, verify, bound, and write <run>/equivalents/<benchmark>.json."""
     reference = benchmarks.read_reference(benchmark)
     box = benchmarks.INTERVALS.get(benchmark)
-    print(f"\n{'=' * 70}\n{benchmark}   box: {box or '(none)'}\n{reference}\n{'=' * 70}")
+    print(f"\n{'=' * 70}\n{benchmark}{f'  [{tag}]' if tag else ''}   "
+          f"box: {box or '(none)'}\n{reference}\n{'=' * 70}", flush=True)
 
     base_ids = generate.initial_ids(llm, generate.program_prompt(reference, box),
                                     args.temperature)
@@ -86,14 +88,15 @@ def gpu_count() -> int:
 
 
 def run_shards(n: int, run, args) -> bool:
-    """The whole suite as N subprocesses, one per GPU, all writing into `run`."""
+    """The whole suite as N subprocesses, one per GPU, all writing into `run`.
+    Progress = completed benchmarks, counted off the run directory."""
     log_dir = run / "log"
     log_dir.mkdir(parents=True, exist_ok=True)
     base = [sys.executable, __file__, "all", "--run", run.name,
             "--samples", str(args.samples), "--temperature", str(args.temperature),
             "--model", args.model, "--decoding", args.decoding,
             "--saturation", str(args.saturation), "--time-budget", str(args.time_budget)]
-    print(f"launching {n} shards over {n} GPUs; logs in {log_dir}")
+    print(f"launching {n} shards over {n} GPUs; tail -f {log_dir}/gpu0.log to watch one")
     procs = []
     for i in range(n):
         log = open(log_dir / f"gpu{i}.log", "w")
@@ -101,12 +104,23 @@ def run_shards(n: int, run, args) -> bool:
             base + ["--shard", f"{i}/{n}"],
             env=os.environ | {"CUDA_VISIBLE_DEVICES": str(i)},
             stdout=log, stderr=subprocess.STDOUT), log))
+
+    total, start, done = len(benchmarks.suite()), time.time(), -1
+    while any(p.poll() is None for _, p, _ in procs):
+        if (d := len(paths.benchmarks_in(run))) != done:
+            done = d
+            print(f"  {done}/{total} benchmarks done  ({time.time() - start:.0f}s)",
+                  flush=True)
+        time.sleep(10)
+
     ok = True
     for i, p, log in procs:
-        code = p.wait()
         log.close()
-        print(f"shard {i} {'done' if code == 0 else f'FAILED (see {log_dir}/gpu{i}.log)'}")
-        ok &= code == 0
+        if p.returncode != 0:
+            print(f"shard {i} FAILED (see {log_dir}/gpu{i}.log)")
+            ok = False
+    print(f"{len(paths.benchmarks_in(run))}/{total} benchmarks done "
+          f"({time.time() - start:.0f}s)")
     return ok
 
 
@@ -155,9 +169,9 @@ def main() -> None:
         sys.exit(0 if ok else 1)
 
     llm = generate.load_model(args.model)
-    for b in names:
+    for k, b in enumerate(names, 1):
         try:
-            run_benchmark(llm, b, run, args)
+            run_benchmark(llm, b, run, args, tag=f"{k}/{len(names)}")
         except Exception as e:  # one bad benchmark shouldn't sink a suite run
             print(f"!! {b} failed: {e!r}")
 
