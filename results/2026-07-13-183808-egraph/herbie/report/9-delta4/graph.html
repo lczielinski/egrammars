@@ -1,0 +1,1834 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/><title>Result for delta4</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous"/><script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js" integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6" crossorigin="anonymous"></script><script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/d3@7" defer=""></script><script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6" defer=""></script><link rel="stylesheet" type="text/css" href="../report.css"/><script src="../report.js"></script></head><body><header><h1>delta4</h1><img src="../logo-car.png"/><nav><ul><li><a href="../index.html">Report</a></li><li><a href="timeline.html">Metrics</a></li></ul></nav></header><div id="large"><div>Percentage Accurate: <span class="number" title="Minimum Accuracy: 79.8% → 85.2%">98.4%<span class="unit"> → </span>99.5%</span></div><div>Time: <span class="number">3.5s</span></div><div>Alternatives: <span class="number">13</span></div><div>Speedup: <span class="number" title="Relative speed of fastest alternative that improves accuracy.">1.7×</span></div></div><section><details id="specification" class="programs"><summary><h2>Specification</h2><select><option>Math</option><option>FPCore</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#spec" target="_blank">?</a></summary><div><div id="precondition"><div class="program math">\[\left(\left(\left(\left(\left(4 \leq x1 \land x1 \leq \frac{3969}{625}\right) \land \left(4 \leq x2 \land x2 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x3 \land x3 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x4 \land x4 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x5 \land x5 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x6 \land x6 \leq \frac{3969}{625}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[\left(\left(\left(\left(\left(\mathsf{neg}\left(x2\right)\right) \cdot x3 - x1 \cdot x4\right) + x2 \cdot x5\right) + x3 \cdot x6\right) - x5 \cdot x6\right) + x1 \cdot \left(\left(\left(\left(\left(\left(\mathsf{neg}\left(x1\right)\right) + x2\right) + x3\right) - x4\right) + x5\right) + x6\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre (and (and (and (and (and (and (&lt;= 4 x1) (&lt;= x1 3969/625))
+                         (and (&lt;= 4 x2) (&lt;= x2 3969/625)))
+                    (and (&lt;= 4 x3) (&lt;= x3 3969/625)))
+               (and (&lt;= 4 x4) (&lt;= x4 3969/625)))
+          (and (&lt;= 4 x5) (&lt;= x5 3969/625)))
+     (and (&lt;= 4 x6) (&lt;= x6 3969/625)))
+  (+
+ (-
+  (+ (+ (- (* (neg x2) x3) (* x1 x4)) (* x2 x5)) (* x3 x6))
+  (* x5 x6))
+ (* x1 (+ (+ (- (+ (+ (neg x1) x2) x3) x4) x5) x6))))</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(\left(\left(\left(\left(\mathsf{neg}\left(x2\right)\right) \cdot x3 - x1 \cdot x4\right) + x2 \cdot x5\right) + x3 \cdot x6\right) - x5 \cdot x6\right) + x1 \cdot \left(\left(\left(\left(\left(\left(\mathsf{neg}\left(x1\right)\right) + x2\right) + x3\right) - x4\right) + x5\right) + x6\right)
+</pre></div></div></details></section><figure id="graphs"><h2>Local Percentage Accuracy vs <span id="variables"></span><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#graph" target="_blank">?</a></h2><svg></svg><div id="functions"></div><figcaption>The average percentage accuracy by input value. Horizontal axis shows value of an input variable; the variable is choosen in the title. Vertical axis is accuracy; higher is better. Red represent the original program, while blue represents Herbie's suggestion. These can be toggled with buttons below the plot. The line is an average while dots represent individual samples.</figcaption></figure><section id="cost-accuracy" class="section" data-benchmark-name="delta4"><h2>Accuracy vs Speed<a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#cost-accuracy" target="_blank">?</a></h2><div class="figure-row"><svg></svg><div><p>Herbie found 13 alternatives:</p><table><thead><tr><th>Alternative</th><th class="numeric">Accuracy</th><th class="numeric">Speedup</th></tr></thead><tbody></tbody></table></div></div><figcaption>The accuracy (vertical axis) and speed (horizontal axis) of each alternatives. Up and to the right is better. The red square shows the initial program, and each blue circle shows an alternative.The line shows the best available speed-accuracy tradeoffs.</figcaption></section><section id="initial" class="programs"><h2>Initial Program: <span class="subhead"><data>98.4%</data> accurate, <data>1.0×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(\left(\left(\left(4 \leq x1 \land x1 \leq \frac{3969}{625}\right) \land \left(4 \leq x2 \land x2 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x3 \land x3 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x4 \land x4 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x5 \land x5 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x6 \land x6 \leq \frac{3969}{625}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[\left(\left(\left(\left(\left(-x2\right) \cdot x3 - x1 \cdot x4\right) + x2 \cdot x5\right) + x3 \cdot x6\right) - x5 \cdot x6\right) + x1 \cdot \left(\left(\left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + x5\right) + x6\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre (and (and (and (and (and (and (&lt;= 4 x1) (&lt;= x1 3969/625))
+                         (and (&lt;= 4 x2) (&lt;= x2 3969/625)))
+                    (and (&lt;= 4 x3) (&lt;= x3 3969/625)))
+               (and (&lt;= 4 x4) (&lt;= x4 3969/625)))
+          (and (&lt;= 4 x5) (&lt;= x5 3969/625)))
+     (and (&lt;= 4 x6) (&lt;= x6 3969/625)))
+  (+
+ (- (+ (+ (- (* (- x2) x3) (* x1 x4)) (* x2 x5)) (* x3 x6)) (* x5 x6))
+ (* x1 (+ (+ (- (+ (+ (- x1) x2) x3) x4) x5) x6))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (((((-x2 * x3) - (x1 * x4)) + (x2 * x5)) + (x3 * x6)) - (x5 * x6)) + (x1 * (((((-x1 + x2) + x3) - x4) + x5) + x6));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (((((-x2 * x3) - (x1 * x4)) + (x2 * x5)) + (x3 * x6)) - (x5 * x6)) + (x1 * (((((-x1 + x2) + x3) - x4) + x5) + x6))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (((((-x2 * x3) - (x1 * x4)) + (x2 * x5)) + (x3 * x6)) - (x5 * x6)) + (x1 * (((((-x1 + x2) + x3) - x4) + x5) + x6));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (((((-x2 * x3) - (x1 * x4)) + (x2 * x5)) + (x3 * x6)) - (x5 * x6)) + (x1 * (((((-x1 + x2) + x3) - x4) + x5) + x6))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(Float64(Float64(Float64(Float64(Float64(-x2) * x3) - Float64(x1 * x4)) + Float64(x2 * x5)) + Float64(x3 * x6)) - Float64(x5 * x6)) + Float64(x1 * Float64(Float64(Float64(Float64(Float64(Float64(-x1) + x2) + x3) - x4) + x5) + x6)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (((((-x2 * x3) - (x1 * x4)) + (x2 * x5)) + (x3 * x6)) - (x5 * x6)) + (x1 * (((((-x1 + x2) + x3) - x4) + x5) + x6));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(N[(N[(N[(N[((-x2) * x3), $MachinePrecision] - N[(x1 * x4), $MachinePrecision]), $MachinePrecision] + N[(x2 * x5), $MachinePrecision]), $MachinePrecision] + N[(x3 * x6), $MachinePrecision]), $MachinePrecision] - N[(x5 * x6), $MachinePrecision]), $MachinePrecision] + N[(x1 * N[(N[(N[(N[(N[((-x1) + x2), $MachinePrecision] + x3), $MachinePrecision] - x4), $MachinePrecision] + x5), $MachinePrecision] + x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [4, 63504e-4],
+	x2 in [4, 63504e-4],
+	x3 in [4, 63504e-4],
+	x4 in [4, 63504e-4],
+	x5 in [4, 63504e-4],
+	x6 in [4, 63504e-4]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	((((((- x2) * x3) - (x1 * x4)) + (x2 * x5)) + (x3 * x6)) - (x5 * x6)) + (x1 * ((((((- x1) + x2) + x3) - x4) + x5) + x6))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(\left(\left(\left(\left(-x2\right) \cdot x3 - x1 \cdot x4\right) + x2 \cdot x5\right) + x3 \cdot x6\right) - x5 \cdot x6\right) + x1 \cdot \left(\left(\left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + x5\right) + x6\right)
+</pre></div></div></section><section id="alternative1" class="programs"><h2>Alternative 1: <span class="subhead"><data>99.5%</data> accurate, <data>1.3×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(\left(\left(\left(4 \leq x1 \land x1 \leq \frac{3969}{625}\right) \land \left(4 \leq x2 \land x2 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x3 \land x3 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x4 \land x4 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x5 \land x5 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x6 \land x6 \leq \frac{3969}{625}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[\left(\left(x1 \cdot \left(x6 - x4\right) + x2 \cdot \left(x5 - x3\right)\right) - x6 \cdot \left(x5 - x3\right)\right) - \left(\left(\left(x4 - x5\right) - x2\right) - \left(x3 - x1\right)\right) \cdot x1
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre (and (and (and (and (and (and (&lt;= 4 x1) (&lt;= x1 3969/625))
+                         (and (&lt;= 4 x2) (&lt;= x2 3969/625)))
+                    (and (&lt;= 4 x3) (&lt;= x3 3969/625)))
+               (and (&lt;= 4 x4) (&lt;= x4 3969/625)))
+          (and (&lt;= 4 x5) (&lt;= x5 3969/625)))
+     (and (&lt;= 4 x6) (&lt;= x6 3969/625)))
+  (-
+ (- (+ (* x1 (- x6 x4)) (* x2 (- x5 x3))) (* x6 (- x5 x3)))
+ (* (- (- (- x4 x5) x2) (- x3 x1)) x1)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (((x1 * (x6 - x4)) + (x2 * (x5 - x3))) - (x6 * (x5 - x3))) - ((((x4 - x5) - x2) - (x3 - x1)) * x1);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (((x1 * (x6 - x4)) + (x2 * (x5 - x3))) - (x6 * (x5 - x3))) - ((((x4 - x5) - x2) - (x3 - x1)) * x1)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (((x1 * (x6 - x4)) + (x2 * (x5 - x3))) - (x6 * (x5 - x3))) - ((((x4 - x5) - x2) - (x3 - x1)) * x1);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (((x1 * (x6 - x4)) + (x2 * (x5 - x3))) - (x6 * (x5 - x3))) - ((((x4 - x5) - x2) - (x3 - x1)) * x1)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(Float64(Float64(x1 * Float64(x6 - x4)) + Float64(x2 * Float64(x5 - x3))) - Float64(x6 * Float64(x5 - x3))) - Float64(Float64(Float64(Float64(x4 - x5) - x2) - Float64(x3 - x1)) * x1))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (((x1 * (x6 - x4)) + (x2 * (x5 - x3))) - (x6 * (x5 - x3))) - ((((x4 - x5) - x2) - (x3 - x1)) * x1);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(N[(N[(x1 * N[(x6 - x4), $MachinePrecision]), $MachinePrecision] + N[(x2 * N[(x5 - x3), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(x6 * N[(x5 - x3), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(N[(N[(N[(x4 - x5), $MachinePrecision] - x2), $MachinePrecision] - N[(x3 - x1), $MachinePrecision]), $MachinePrecision] * x1), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [4, 63504e-4],
+	x2 in [4, 63504e-4],
+	x3 in [4, 63504e-4],
+	x4 in [4, 63504e-4],
+	x5 in [4, 63504e-4],
+	x6 in [4, 63504e-4]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(((x1 * (x6 - x4)) + (x2 * (x5 - x3))) - (x6 * (x5 - x3))) - ((((x4 - x5) - x2) - (x3 - x1)) * x1)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(\left(x1 \cdot \left(x6 - x4\right) + x2 \cdot \left(x5 - x3\right)\right) - x6 \cdot \left(x5 - x3\right)\right) - \left(\left(\left(x4 - x5\right) - x2\right) - \left(x3 - x1\right)\right) \cdot x1
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">98.4%</span></p><div class="math">\[\left(\left(\left(\left(\left(-x2\right) \cdot x3 - x1 \cdot x4\right) + x2 \cdot x5\right) + x3 \cdot x6\right) - x5 \cdot x6\right) + x1 \cdot \left(\left(\left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + x5\right) + x6\right)
+\]</div></li><li></li><li><p>Applied rewrites<span class="error">99.0%</span></p><div class="math">\[\leadsto \left(\left(x6 \cdot x1 - x6 \cdot \left(x5 - x3\right)\right) - \left(x4 \cdot x1 - x2 \cdot \left(x5 - x3\right)\right)\right) - \left(\left(\left(x4 - x5\right) - x2\right) - \left(x3 - x1\right)\right) \cdot x1
+\]</div></li><li><p>Taylor expanded in x1 around 0 to order 1</p><div class="math">\[\leadsto \left(\left(x1 \cdot \left(x6 - x4\right) + x2 \cdot \left(x5 - x3\right)\right) - x6 \cdot \left(x5 - x3\right)\right) - \left(\left(\left(x4 - x5\right) - x2\right) - \left(x3 - x1\right)\right) \cdot x1
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.5%</span></p><div class="math">\[\leadsto \left(\left(x1 \cdot \left(x6 - x4\right) + x2 \cdot \left(x5 - x3\right)\right) - x6 \cdot \left(x5 - x3\right)\right) - \left(\left(\left(x4 - x5\right) - x2\right) - \left(x3 - x1\right)\right) \cdot x1
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative2" class="programs"><h2>Alternative 2: <span class="subhead"><data>99.5%</data> accurate, <data>1.4×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(\left(\left(\left(4 \leq x1 \land x1 \leq \frac{3969}{625}\right) \land \left(4 \leq x2 \land x2 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x3 \land x3 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x4 \land x4 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x5 \land x5 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x6 \land x6 \leq \frac{3969}{625}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(\left(x4 - x3\right) - x5\right) + x4\right)\right) + \left(\left(x5 - x3\right) \cdot x2 - \left(x5 - x3\right) \cdot x6\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre (and (and (and (and (and (and (&lt;= 4 x1) (&lt;= x1 3969/625))
+                         (and (&lt;= 4 x2) (&lt;= x2 3969/625)))
+                    (and (&lt;= 4 x3) (&lt;= x3 3969/625)))
+               (and (&lt;= 4 x4) (&lt;= x4 3969/625)))
+          (and (&lt;= 4 x5) (&lt;= x5 3969/625)))
+     (and (&lt;= 4 x6) (&lt;= x6 3969/625)))
+  (+
+ (* x1 (- (- x6 (- x1 x2)) (+ (- (- x4 x3) x5) x4)))
+ (- (* (- x5 x3) x2) (* (- x5 x3) x6))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * ((x6 - (x1 - x2)) - (((x4 - x3) - x5) + x4))) + (((x5 - x3) * x2) - ((x5 - x3) * x6));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * ((x6 - (x1 - x2)) - (((x4 - x3) - x5) + x4))) + (((x5 - x3) * x2) - ((x5 - x3) * x6))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * ((x6 - (x1 - x2)) - (((x4 - x3) - x5) + x4))) + (((x5 - x3) * x2) - ((x5 - x3) * x6));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * ((x6 - (x1 - x2)) - (((x4 - x3) - x5) + x4))) + (((x5 - x3) * x2) - ((x5 - x3) * x6))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(Float64(x6 - Float64(x1 - x2)) - Float64(Float64(Float64(x4 - x3) - x5) + x4))) + Float64(Float64(Float64(x5 - x3) * x2) - Float64(Float64(x5 - x3) * x6)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * ((x6 - (x1 - x2)) - (((x4 - x3) - x5) + x4))) + (((x5 - x3) * x2) - ((x5 - x3) * x6));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(N[(x6 - N[(x1 - x2), $MachinePrecision]), $MachinePrecision] - N[(N[(N[(x4 - x3), $MachinePrecision] - x5), $MachinePrecision] + x4), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + N[(N[(N[(x5 - x3), $MachinePrecision] * x2), $MachinePrecision] - N[(N[(x5 - x3), $MachinePrecision] * x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [4, 63504e-4],
+	x2 in [4, 63504e-4],
+	x3 in [4, 63504e-4],
+	x4 in [4, 63504e-4],
+	x5 in [4, 63504e-4],
+	x6 in [4, 63504e-4]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * ((x6 - (x1 - x2)) - (((x4 - x3) - x5) + x4))) + (((x5 - x3) * x2) - ((x5 - x3) * x6))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(\left(x4 - x3\right) - x5\right) + x4\right)\right) + \left(\left(x5 - x3\right) \cdot x2 - \left(x5 - x3\right) \cdot x6\right)
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">98.4%</span></p><div class="math">\[\left(\left(\left(\left(\left(-x2\right) \cdot x3 - x1 \cdot x4\right) + x2 \cdot x5\right) + x3 \cdot x6\right) - x5 \cdot x6\right) + x1 \cdot \left(\left(\left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + x5\right) + x6\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">98.6%</span></p><div class="math">\[\leadsto \left(\left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(x4 - x3\right) - x5\right)\right) \cdot x1 - \left(x4 \cdot x1 - x2 \cdot \left(x5 - x3\right)\right)\right) - x6 \cdot \left(x5 - x3\right)
+\]</div></li><li><p>Taylor expanded in x3 around 0 to order 0</p><div class="math">\[\leadsto \left(\left(x1 \cdot \left(\left(x2 + \left(x5 + x6\right)\right) - \left(x1 + x4\right)\right) + x2 \cdot x5\right) - x1 \cdot x4\right) - x6 \cdot \left(x5 - x3\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">22.6%</span></p><div class="math">\[\leadsto \left(\left(x1 \cdot \left(\left(x2 + \left(x5 + x6\right)\right) - \left(x1 + x4\right)\right) + x2 \cdot x5\right) - x1 \cdot x4\right) - x6 \cdot \left(x5 - x3\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.0%</span></p><div class="math">\[\leadsto x1 \cdot \left(\left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(x4 - x3\right) - x5\right)\right) - x4\right) + \left(\left(x5 - x3\right) \cdot x2 - \left(x5 - x3\right) \cdot x6\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.5%</span></p><div class="math">\[\leadsto x1 \cdot \left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(\left(x4 - x3\right) - x5\right) + x4\right)\right) + \left(\left(x5 - x3\right) \cdot x2 - \left(x5 - x3\right) \cdot x6\right)
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative3" class="programs"><h2>Alternative 3: <span class="subhead"><data>99.4%</data> accurate, <data>1.4×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(\left(\left(\left(4 \leq x1 \land x1 \leq \frac{3969}{625}\right) \land \left(4 \leq x2 \land x2 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x3 \land x3 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x4 \land x4 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x5 \land x5 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x6 \land x6 \leq \frac{3969}{625}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[\left(x1 \cdot \left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(\left(x4 - x3\right) - x5\right) + x4\right)\right) - \left(x3 - x5\right) \cdot x2\right) - \left(x5 - x3\right) \cdot x6
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre (and (and (and (and (and (and (&lt;= 4 x1) (&lt;= x1 3969/625))
+                         (and (&lt;= 4 x2) (&lt;= x2 3969/625)))
+                    (and (&lt;= 4 x3) (&lt;= x3 3969/625)))
+               (and (&lt;= 4 x4) (&lt;= x4 3969/625)))
+          (and (&lt;= 4 x5) (&lt;= x5 3969/625)))
+     (and (&lt;= 4 x6) (&lt;= x6 3969/625)))
+  (-
+ (-
+  (* x1 (- (- x6 (- x1 x2)) (+ (- (- x4 x3) x5) x4)))
+  (* (- x3 x5) x2))
+ (* (- x5 x3) x6)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return ((x1 * ((x6 - (x1 - x2)) - (((x4 - x3) - x5) + x4))) - ((x3 - x5) * x2)) - ((x5 - x3) * x6);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = ((x1 * ((x6 - (x1 - x2)) - (((x4 - x3) - x5) + x4))) - ((x3 - x5) * x2)) - ((x5 - x3) * x6)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return ((x1 * ((x6 - (x1 - x2)) - (((x4 - x3) - x5) + x4))) - ((x3 - x5) * x2)) - ((x5 - x3) * x6);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return ((x1 * ((x6 - (x1 - x2)) - (((x4 - x3) - x5) + x4))) - ((x3 - x5) * x2)) - ((x5 - x3) * x6)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(Float64(x1 * Float64(Float64(x6 - Float64(x1 - x2)) - Float64(Float64(Float64(x4 - x3) - x5) + x4))) - Float64(Float64(x3 - x5) * x2)) - Float64(Float64(x5 - x3) * x6))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = ((x1 * ((x6 - (x1 - x2)) - (((x4 - x3) - x5) + x4))) - ((x3 - x5) * x2)) - ((x5 - x3) * x6);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(N[(x1 * N[(N[(x6 - N[(x1 - x2), $MachinePrecision]), $MachinePrecision] - N[(N[(N[(x4 - x3), $MachinePrecision] - x5), $MachinePrecision] + x4), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(N[(x3 - x5), $MachinePrecision] * x2), $MachinePrecision]), $MachinePrecision] - N[(N[(x5 - x3), $MachinePrecision] * x6), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [4, 63504e-4],
+	x2 in [4, 63504e-4],
+	x3 in [4, 63504e-4],
+	x4 in [4, 63504e-4],
+	x5 in [4, 63504e-4],
+	x6 in [4, 63504e-4]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	((x1 * ((x6 - (x1 - x2)) - (((x4 - x3) - x5) + x4))) - ((x3 - x5) * x2)) - ((x5 - x3) * x6)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(x1 \cdot \left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(\left(x4 - x3\right) - x5\right) + x4\right)\right) - \left(x3 - x5\right) \cdot x2\right) - \left(x5 - x3\right) \cdot x6
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">98.4%</span></p><div class="math">\[\left(\left(\left(\left(\left(-x2\right) \cdot x3 - x1 \cdot x4\right) + x2 \cdot x5\right) + x3 \cdot x6\right) - x5 \cdot x6\right) + x1 \cdot \left(\left(\left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + x5\right) + x6\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">98.6%</span></p><div class="math">\[\leadsto \left(\left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(x4 - x3\right) - x5\right)\right) \cdot x1 - \left(x4 \cdot x1 - x2 \cdot \left(x5 - x3\right)\right)\right) - x6 \cdot \left(x5 - x3\right)
+\]</div></li><li><p>Taylor expanded in x3 around 0 to order 0</p><div class="math">\[\leadsto \left(\left(x1 \cdot \left(\left(x2 + \left(x5 + x6\right)\right) - \left(x1 + x4\right)\right) + x2 \cdot x5\right) - x1 \cdot x4\right) - x6 \cdot \left(x5 - x3\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">22.6%</span></p><div class="math">\[\leadsto \left(\left(x1 \cdot \left(\left(x2 + \left(x5 + x6\right)\right) - \left(x1 + x4\right)\right) + x2 \cdot x5\right) - x1 \cdot x4\right) - x6 \cdot \left(x5 - x3\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">98.9%</span></p><div class="math">\[\leadsto \left(x1 \cdot \left(\left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(x4 - x3\right) - x5\right)\right) - x4\right) - \left(x3 - x5\right) \cdot x2\right) - \left(x5 - x3\right) \cdot x6
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.4%</span></p><div class="math">\[\leadsto \left(x1 \cdot \left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(\left(x4 - x3\right) - x5\right) + x4\right)\right) - \left(x3 - x5\right) \cdot x2\right) - \left(x5 - x3\right) \cdot x6
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative4" class="programs"><h2>Alternative 4: <span class="subhead"><data>99.0%</data> accurate, <data>1.4×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(\left(\left(\left(4 \leq x1 \land x1 \leq \frac{3969}{625}\right) \land \left(4 \leq x2 \land x2 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x3 \land x3 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x4 \land x4 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x5 \land x5 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x6 \land x6 \leq \frac{3969}{625}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(\left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(x4 - x3\right) - x5\right)\right) - x4\right) + \left(\left(x5 - x3\right) \cdot x2 - \left(x5 - x3\right) \cdot x6\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre (and (and (and (and (and (and (&lt;= 4 x1) (&lt;= x1 3969/625))
+                         (and (&lt;= 4 x2) (&lt;= x2 3969/625)))
+                    (and (&lt;= 4 x3) (&lt;= x3 3969/625)))
+               (and (&lt;= 4 x4) (&lt;= x4 3969/625)))
+          (and (&lt;= 4 x5) (&lt;= x5 3969/625)))
+     (and (&lt;= 4 x6) (&lt;= x6 3969/625)))
+  (+
+ (* x1 (- (- (- x6 (- x1 x2)) (- (- x4 x3) x5)) x4))
+ (- (* (- x5 x3) x2) (* (- x5 x3) x6))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((x6 - (x1 - x2)) - ((x4 - x3) - x5)) - x4)) + (((x5 - x3) * x2) - ((x5 - x3) * x6));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * (((x6 - (x1 - x2)) - ((x4 - x3) - x5)) - x4)) + (((x5 - x3) * x2) - ((x5 - x3) * x6))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((x6 - (x1 - x2)) - ((x4 - x3) - x5)) - x4)) + (((x5 - x3) * x2) - ((x5 - x3) * x6));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * (((x6 - (x1 - x2)) - ((x4 - x3) - x5)) - x4)) + (((x5 - x3) * x2) - ((x5 - x3) * x6))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(Float64(Float64(x6 - Float64(x1 - x2)) - Float64(Float64(x4 - x3) - x5)) - x4)) + Float64(Float64(Float64(x5 - x3) * x2) - Float64(Float64(x5 - x3) * x6)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * (((x6 - (x1 - x2)) - ((x4 - x3) - x5)) - x4)) + (((x5 - x3) * x2) - ((x5 - x3) * x6));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(N[(N[(x6 - N[(x1 - x2), $MachinePrecision]), $MachinePrecision] - N[(N[(x4 - x3), $MachinePrecision] - x5), $MachinePrecision]), $MachinePrecision] - x4), $MachinePrecision]), $MachinePrecision] + N[(N[(N[(x5 - x3), $MachinePrecision] * x2), $MachinePrecision] - N[(N[(x5 - x3), $MachinePrecision] * x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [4, 63504e-4],
+	x2 in [4, 63504e-4],
+	x3 in [4, 63504e-4],
+	x4 in [4, 63504e-4],
+	x5 in [4, 63504e-4],
+	x6 in [4, 63504e-4]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * (((x6 - (x1 - x2)) - ((x4 - x3) - x5)) - x4)) + (((x5 - x3) * x2) - ((x5 - x3) * x6))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(\left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(x4 - x3\right) - x5\right)\right) - x4\right) + \left(\left(x5 - x3\right) \cdot x2 - \left(x5 - x3\right) \cdot x6\right)
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">98.4%</span></p><div class="math">\[\left(\left(\left(\left(\left(-x2\right) \cdot x3 - x1 \cdot x4\right) + x2 \cdot x5\right) + x3 \cdot x6\right) - x5 \cdot x6\right) + x1 \cdot \left(\left(\left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + x5\right) + x6\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">98.6%</span></p><div class="math">\[\leadsto \left(\left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(x4 - x3\right) - x5\right)\right) \cdot x1 - \left(x4 \cdot x1 - x2 \cdot \left(x5 - x3\right)\right)\right) - x6 \cdot \left(x5 - x3\right)
+\]</div></li><li><p>Taylor expanded in x3 around 0 to order 0</p><div class="math">\[\leadsto \left(\left(x1 \cdot \left(\left(x2 + \left(x5 + x6\right)\right) - \left(x1 + x4\right)\right) + x2 \cdot x5\right) - x1 \cdot x4\right) - x6 \cdot \left(x5 - x3\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">22.6%</span></p><div class="math">\[\leadsto \left(\left(x1 \cdot \left(\left(x2 + \left(x5 + x6\right)\right) - \left(x1 + x4\right)\right) + x2 \cdot x5\right) - x1 \cdot x4\right) - x6 \cdot \left(x5 - x3\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.0%</span></p><div class="math">\[\leadsto x1 \cdot \left(\left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(x4 - x3\right) - x5\right)\right) - x4\right) + \left(\left(x5 - x3\right) \cdot x2 - \left(x5 - x3\right) \cdot x6\right)
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative5" class="programs"><h2>Alternative 5: <span class="subhead"><data>99.0%</data> accurate, <data>1.7×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(\left(\left(\left(4 \leq x1 \land x1 \leq \frac{3969}{625}\right) \land \left(4 \leq x2 \land x2 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x3 \land x3 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x4 \land x4 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x5 \land x5 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x6 \land x6 \leq \frac{3969}{625}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(\left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(x4 - x3\right) - x5\right)\right) - x4\right) + \left(x5 - x3\right) \cdot \left(x2 - x6\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre (and (and (and (and (and (and (&lt;= 4 x1) (&lt;= x1 3969/625))
+                         (and (&lt;= 4 x2) (&lt;= x2 3969/625)))
+                    (and (&lt;= 4 x3) (&lt;= x3 3969/625)))
+               (and (&lt;= 4 x4) (&lt;= x4 3969/625)))
+          (and (&lt;= 4 x5) (&lt;= x5 3969/625)))
+     (and (&lt;= 4 x6) (&lt;= x6 3969/625)))
+  (+
+ (* x1 (- (- (- x6 (- x1 x2)) (- (- x4 x3) x5)) x4))
+ (* (- x5 x3) (- x2 x6))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((x6 - (x1 - x2)) - ((x4 - x3) - x5)) - x4)) + ((x5 - x3) * (x2 - x6));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * (((x6 - (x1 - x2)) - ((x4 - x3) - x5)) - x4)) + ((x5 - x3) * (x2 - x6))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((x6 - (x1 - x2)) - ((x4 - x3) - x5)) - x4)) + ((x5 - x3) * (x2 - x6));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * (((x6 - (x1 - x2)) - ((x4 - x3) - x5)) - x4)) + ((x5 - x3) * (x2 - x6))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(Float64(Float64(x6 - Float64(x1 - x2)) - Float64(Float64(x4 - x3) - x5)) - x4)) + Float64(Float64(x5 - x3) * Float64(x2 - x6)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * (((x6 - (x1 - x2)) - ((x4 - x3) - x5)) - x4)) + ((x5 - x3) * (x2 - x6));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(N[(N[(x6 - N[(x1 - x2), $MachinePrecision]), $MachinePrecision] - N[(N[(x4 - x3), $MachinePrecision] - x5), $MachinePrecision]), $MachinePrecision] - x4), $MachinePrecision]), $MachinePrecision] + N[(N[(x5 - x3), $MachinePrecision] * N[(x2 - x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [4, 63504e-4],
+	x2 in [4, 63504e-4],
+	x3 in [4, 63504e-4],
+	x4 in [4, 63504e-4],
+	x5 in [4, 63504e-4],
+	x6 in [4, 63504e-4]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * (((x6 - (x1 - x2)) - ((x4 - x3) - x5)) - x4)) + ((x5 - x3) * (x2 - x6))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(\left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(x4 - x3\right) - x5\right)\right) - x4\right) + \left(x5 - x3\right) \cdot \left(x2 - x6\right)
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">98.4%</span></p><div class="math">\[\left(\left(\left(\left(\left(-x2\right) \cdot x3 - x1 \cdot x4\right) + x2 \cdot x5\right) + x3 \cdot x6\right) - x5 \cdot x6\right) + x1 \cdot \left(\left(\left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + x5\right) + x6\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">98.6%</span></p><div class="math">\[\leadsto \left(\left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(x4 - x3\right) - x5\right)\right) \cdot x1 - \left(x4 \cdot x1 - x2 \cdot \left(x5 - x3\right)\right)\right) - x6 \cdot \left(x5 - x3\right)
+\]</div></li><li><p>Taylor expanded in x3 around 0 to order 0</p><div class="math">\[\leadsto \left(\left(x1 \cdot \left(\left(x2 + \left(x5 + x6\right)\right) - \left(x1 + x4\right)\right) + x2 \cdot x5\right) - x1 \cdot x4\right) - x6 \cdot \left(x5 - x3\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">22.6%</span></p><div class="math">\[\leadsto \left(\left(x1 \cdot \left(\left(x2 + \left(x5 + x6\right)\right) - \left(x1 + x4\right)\right) + x2 \cdot x5\right) - x1 \cdot x4\right) - x6 \cdot \left(x5 - x3\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.0%</span></p><div class="math">\[\leadsto x1 \cdot \left(\left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(x4 - x3\right) - x5\right)\right) - x4\right) + \left(\left(x5 - x3\right) \cdot x2 - \left(x5 - x3\right) \cdot x6\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.0%</span></p><div class="math">\[\leadsto x1 \cdot \left(\left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(x4 - x3\right) - x5\right)\right) - x4\right) + \left(x5 - x3\right) \cdot \left(x2 - x6\right)
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative6" class="programs"><h2>Alternative 6: <span class="subhead"><data>28.0%</data> accurate, <data>2.3×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(\left(\left(\left(4 \leq x1 \land x1 \leq \frac{3969}{625}\right) \land \left(4 \leq x2 \land x2 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x3 \land x3 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x4 \land x4 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x5 \land x5 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x6 \land x6 \leq \frac{3969}{625}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(x6 - x4\right) - \left(x4 - \left(x5 + \left(\left(x3 + x2\right) - x1\right)\right)\right) \cdot x1
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre (and (and (and (and (and (and (&lt;= 4 x1) (&lt;= x1 3969/625))
+                         (and (&lt;= 4 x2) (&lt;= x2 3969/625)))
+                    (and (&lt;= 4 x3) (&lt;= x3 3969/625)))
+               (and (&lt;= 4 x4) (&lt;= x4 3969/625)))
+          (and (&lt;= 4 x5) (&lt;= x5 3969/625)))
+     (and (&lt;= 4 x6) (&lt;= x6 3969/625)))
+  (- (* x1 (- x6 x4)) (* (- x4 (+ x5 (- (+ x3 x2) x1))) x1)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (x6 - x4)) - ((x4 - (x5 + ((x3 + x2) - x1))) * x1);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * (x6 - x4)) - ((x4 - (x5 + ((x3 + x2) - x1))) * x1)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (x6 - x4)) - ((x4 - (x5 + ((x3 + x2) - x1))) * x1);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * (x6 - x4)) - ((x4 - (x5 + ((x3 + x2) - x1))) * x1)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(x6 - x4)) - Float64(Float64(x4 - Float64(x5 + Float64(Float64(x3 + x2) - x1))) * x1))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * (x6 - x4)) - ((x4 - (x5 + ((x3 + x2) - x1))) * x1);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(x6 - x4), $MachinePrecision]), $MachinePrecision] - N[(N[(x4 - N[(x5 + N[(N[(x3 + x2), $MachinePrecision] - x1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] * x1), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [4, 63504e-4],
+	x2 in [4, 63504e-4],
+	x3 in [4, 63504e-4],
+	x4 in [4, 63504e-4],
+	x5 in [4, 63504e-4],
+	x6 in [4, 63504e-4]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * (x6 - x4)) - ((x4 - (x5 + ((x3 + x2) - x1))) * x1)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(x6 - x4\right) - \left(x4 - \left(x5 + \left(\left(x3 + x2\right) - x1\right)\right)\right) \cdot x1
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">98.4%</span></p><div class="math">\[\left(\left(\left(\left(\left(-x2\right) \cdot x3 - x1 \cdot x4\right) + x2 \cdot x5\right) + x3 \cdot x6\right) - x5 \cdot x6\right) + x1 \cdot \left(\left(\left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + x5\right) + x6\right)
+\]</div></li><li></li><li><p>Applied rewrites<span class="error">99.0%</span></p><div class="math">\[\leadsto \left(\left(x6 \cdot x1 - x6 \cdot \left(x5 - x3\right)\right) - \left(x4 \cdot x1 - x2 \cdot \left(x5 - x3\right)\right)\right) - \left(\left(\left(x4 - x5\right) - x2\right) - \left(x3 - x1\right)\right) \cdot x1
+\]</div></li><li><p>Taylor expanded in x1 around inf to order 0</p><div class="math">\[\leadsto x1 \cdot \left(x6 - x4\right) - \left(\left(\left(x4 - x5\right) - x2\right) - \left(x3 - x1\right)\right) \cdot x1
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">28.0%</span></p><div class="math">\[\leadsto x1 \cdot \left(x6 - x4\right) - \left(\left(\left(x4 - x5\right) - x2\right) - \left(x3 - x1\right)\right) \cdot x1
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">28.0%</span></p><div class="math">\[\leadsto x1 \cdot \left(x6 - x4\right) - \left(\left(x4 - x5\right) - \left(\left(x3 + x2\right) - x1\right)\right) \cdot x1
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">28.0%</span></p><div class="math">\[\leadsto x1 \cdot \left(x6 - x4\right) - \left(x4 - \left(x5 + \left(\left(x3 + x2\right) - x1\right)\right)\right) \cdot x1
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative7" class="programs"><h2>Alternative 7: <span class="subhead"><data>28.0%</data> accurate, <data>2.3×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(\left(\left(\left(4 \leq x1 \land x1 \leq \frac{3969}{625}\right) \land \left(4 \leq x2 \land x2 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x3 \land x3 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x4 \land x4 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x5 \land x5 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x6 \land x6 \leq \frac{3969}{625}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(x6 - x4\right) - \left(\left(x4 - \left(x2 + x5\right)\right) - \left(x3 - x1\right)\right) \cdot x1
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre (and (and (and (and (and (and (&lt;= 4 x1) (&lt;= x1 3969/625))
+                         (and (&lt;= 4 x2) (&lt;= x2 3969/625)))
+                    (and (&lt;= 4 x3) (&lt;= x3 3969/625)))
+               (and (&lt;= 4 x4) (&lt;= x4 3969/625)))
+          (and (&lt;= 4 x5) (&lt;= x5 3969/625)))
+     (and (&lt;= 4 x6) (&lt;= x6 3969/625)))
+  (- (* x1 (- x6 x4)) (* (- (- x4 (+ x2 x5)) (- x3 x1)) x1)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (x6 - x4)) - (((x4 - (x2 + x5)) - (x3 - x1)) * x1);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * (x6 - x4)) - (((x4 - (x2 + x5)) - (x3 - x1)) * x1)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (x6 - x4)) - (((x4 - (x2 + x5)) - (x3 - x1)) * x1);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * (x6 - x4)) - (((x4 - (x2 + x5)) - (x3 - x1)) * x1)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(x6 - x4)) - Float64(Float64(Float64(x4 - Float64(x2 + x5)) - Float64(x3 - x1)) * x1))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * (x6 - x4)) - (((x4 - (x2 + x5)) - (x3 - x1)) * x1);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(x6 - x4), $MachinePrecision]), $MachinePrecision] - N[(N[(N[(x4 - N[(x2 + x5), $MachinePrecision]), $MachinePrecision] - N[(x3 - x1), $MachinePrecision]), $MachinePrecision] * x1), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [4, 63504e-4],
+	x2 in [4, 63504e-4],
+	x3 in [4, 63504e-4],
+	x4 in [4, 63504e-4],
+	x5 in [4, 63504e-4],
+	x6 in [4, 63504e-4]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * (x6 - x4)) - (((x4 - (x2 + x5)) - (x3 - x1)) * x1)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(x6 - x4\right) - \left(\left(x4 - \left(x2 + x5\right)\right) - \left(x3 - x1\right)\right) \cdot x1
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">98.4%</span></p><div class="math">\[\left(\left(\left(\left(\left(-x2\right) \cdot x3 - x1 \cdot x4\right) + x2 \cdot x5\right) + x3 \cdot x6\right) - x5 \cdot x6\right) + x1 \cdot \left(\left(\left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + x5\right) + x6\right)
+\]</div></li><li></li><li><p>Applied rewrites<span class="error">99.0%</span></p><div class="math">\[\leadsto \left(\left(x6 \cdot x1 - x6 \cdot \left(x5 - x3\right)\right) - \left(x4 \cdot x1 - x2 \cdot \left(x5 - x3\right)\right)\right) - \left(\left(\left(x4 - x5\right) - x2\right) - \left(x3 - x1\right)\right) \cdot x1
+\]</div></li><li><p>Taylor expanded in x1 around inf to order 0</p><div class="math">\[\leadsto x1 \cdot \left(x6 - x4\right) - \left(\left(\left(x4 - x5\right) - x2\right) - \left(x3 - x1\right)\right) \cdot x1
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">28.0%</span></p><div class="math">\[\leadsto x1 \cdot \left(x6 - x4\right) - \left(\left(\left(x4 - x5\right) - x2\right) - \left(x3 - x1\right)\right) \cdot x1
+\]</div></li><li><p>Taylor expanded in x4 around 0 to order 1</p><div class="math">\[\leadsto x1 \cdot \left(x6 - x4\right) - \left(\left(x4 - \left(x2 + x5\right)\right) - \left(x3 - x1\right)\right) \cdot x1
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">28.0%</span></p><div class="math">\[\leadsto x1 \cdot \left(x6 - x4\right) - \left(\left(x4 - \left(x2 + x5\right)\right) - \left(x3 - x1\right)\right) \cdot x1
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative8" class="programs"><h2>Alternative 8: <span class="subhead"><data>28.0%</data> accurate, <data>2.3×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(\left(\left(\left(4 \leq x1 \land x1 \leq \frac{3969}{625}\right) \land \left(4 \leq x2 \land x2 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x3 \land x3 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x4 \land x4 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x5 \land x5 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x6 \land x6 \leq \frac{3969}{625}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(x6 - x4\right) - \left(\left(\left(x4 - x5\right) - x2\right) - \left(x3 - x1\right)\right) \cdot x1
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre (and (and (and (and (and (and (&lt;= 4 x1) (&lt;= x1 3969/625))
+                         (and (&lt;= 4 x2) (&lt;= x2 3969/625)))
+                    (and (&lt;= 4 x3) (&lt;= x3 3969/625)))
+               (and (&lt;= 4 x4) (&lt;= x4 3969/625)))
+          (and (&lt;= 4 x5) (&lt;= x5 3969/625)))
+     (and (&lt;= 4 x6) (&lt;= x6 3969/625)))
+  (- (* x1 (- x6 x4)) (* (- (- (- x4 x5) x2) (- x3 x1)) x1)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (x6 - x4)) - ((((x4 - x5) - x2) - (x3 - x1)) * x1);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * (x6 - x4)) - ((((x4 - x5) - x2) - (x3 - x1)) * x1)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (x6 - x4)) - ((((x4 - x5) - x2) - (x3 - x1)) * x1);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * (x6 - x4)) - ((((x4 - x5) - x2) - (x3 - x1)) * x1)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(x6 - x4)) - Float64(Float64(Float64(Float64(x4 - x5) - x2) - Float64(x3 - x1)) * x1))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * (x6 - x4)) - ((((x4 - x5) - x2) - (x3 - x1)) * x1);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(x6 - x4), $MachinePrecision]), $MachinePrecision] - N[(N[(N[(N[(x4 - x5), $MachinePrecision] - x2), $MachinePrecision] - N[(x3 - x1), $MachinePrecision]), $MachinePrecision] * x1), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [4, 63504e-4],
+	x2 in [4, 63504e-4],
+	x3 in [4, 63504e-4],
+	x4 in [4, 63504e-4],
+	x5 in [4, 63504e-4],
+	x6 in [4, 63504e-4]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * (x6 - x4)) - ((((x4 - x5) - x2) - (x3 - x1)) * x1)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(x6 - x4\right) - \left(\left(\left(x4 - x5\right) - x2\right) - \left(x3 - x1\right)\right) \cdot x1
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">98.4%</span></p><div class="math">\[\left(\left(\left(\left(\left(-x2\right) \cdot x3 - x1 \cdot x4\right) + x2 \cdot x5\right) + x3 \cdot x6\right) - x5 \cdot x6\right) + x1 \cdot \left(\left(\left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + x5\right) + x6\right)
+\]</div></li><li></li><li><p>Applied rewrites<span class="error">99.0%</span></p><div class="math">\[\leadsto \left(\left(x6 \cdot x1 - x6 \cdot \left(x5 - x3\right)\right) - \left(x4 \cdot x1 - x2 \cdot \left(x5 - x3\right)\right)\right) - \left(\left(\left(x4 - x5\right) - x2\right) - \left(x3 - x1\right)\right) \cdot x1
+\]</div></li><li><p>Taylor expanded in x1 around inf to order 0</p><div class="math">\[\leadsto x1 \cdot \left(x6 - x4\right) - \left(\left(\left(x4 - x5\right) - x2\right) - \left(x3 - x1\right)\right) \cdot x1
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">28.0%</span></p><div class="math">\[\leadsto x1 \cdot \left(x6 - x4\right) - \left(\left(\left(x4 - x5\right) - x2\right) - \left(x3 - x1\right)\right) \cdot x1
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative9" class="programs"><h2>Alternative 9: <span class="subhead"><data>22.9%</data> accurate, <data>2.5×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(\left(\left(\left(4 \leq x1 \land x1 \leq \frac{3969}{625}\right) \land \left(4 \leq x2 \land x2 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x3 \land x3 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x4 \land x4 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x5 \land x5 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x6 \land x6 \leq \frac{3969}{625}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[x2 \cdot \left(x5 - x3\right) - \left(x4 \cdot x1 - x3 \cdot \left(x6 + x1\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre (and (and (and (and (and (and (&lt;= 4 x1) (&lt;= x1 3969/625))
+                         (and (&lt;= 4 x2) (&lt;= x2 3969/625)))
+                    (and (&lt;= 4 x3) (&lt;= x3 3969/625)))
+               (and (&lt;= 4 x4) (&lt;= x4 3969/625)))
+          (and (&lt;= 4 x5) (&lt;= x5 3969/625)))
+     (and (&lt;= 4 x6) (&lt;= x6 3969/625)))
+  (- (* x2 (- x5 x3)) (- (* x4 x1) (* x3 (+ x6 x1)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x2 * (x5 - x3)) - ((x4 * x1) - (x3 * (x6 + x1)));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x2 * (x5 - x3)) - ((x4 * x1) - (x3 * (x6 + x1)))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x2 * (x5 - x3)) - ((x4 * x1) - (x3 * (x6 + x1)));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x2 * (x5 - x3)) - ((x4 * x1) - (x3 * (x6 + x1)))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x2 * Float64(x5 - x3)) - Float64(Float64(x4 * x1) - Float64(x3 * Float64(x6 + x1))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x2 * (x5 - x3)) - ((x4 * x1) - (x3 * (x6 + x1)));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x2 * N[(x5 - x3), $MachinePrecision]), $MachinePrecision] - N[(N[(x4 * x1), $MachinePrecision] - N[(x3 * N[(x6 + x1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [4, 63504e-4],
+	x2 in [4, 63504e-4],
+	x3 in [4, 63504e-4],
+	x4 in [4, 63504e-4],
+	x5 in [4, 63504e-4],
+	x6 in [4, 63504e-4]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x2 * (x5 - x3)) - ((x4 * x1) - (x3 * (x6 + x1)))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x2 \cdot \left(x5 - x3\right) - \left(x4 \cdot x1 - x3 \cdot \left(x6 + x1\right)\right)
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">98.4%</span></p><div class="math">\[\left(\left(\left(\left(\left(-x2\right) \cdot x3 - x1 \cdot x4\right) + x2 \cdot x5\right) + x3 \cdot x6\right) - x5 \cdot x6\right) + x1 \cdot \left(\left(\left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + x5\right) + x6\right)
+\]</div></li><li></li><li><p>Applied rewrites<span class="error">98.6%</span></p><div class="math">\[\leadsto x2 \cdot \left(x5 - x3\right) - \left(x4 \cdot x1 - \left(\left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(x4 - x3\right) - x5\right)\right) \cdot x1 - x6 \cdot \left(x5 - x3\right)\right)\right)
+\]</div></li><li><p>Taylor expanded in x3 around inf to order 0</p><div class="math">\[\leadsto x2 \cdot \left(x5 - x3\right) - \left(x4 \cdot x1 - x3 \cdot \left(x1 - -1 \cdot x6\right)\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">22.9%</span></p><div class="math">\[\leadsto x2 \cdot \left(x5 - x3\right) - \left(x4 \cdot x1 - x3 \cdot \left(x1 - -1 \cdot x6\right)\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">22.9%</span></p><div class="math">\[\leadsto x2 \cdot \left(x5 - x3\right) - \left(x4 \cdot x1 - x3 \cdot \left(x6 + x1\right)\right)
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative10" class="programs"><h2>Alternative 10: <span class="subhead"><data>21.6%</data> accurate, <data>6.7×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(\left(\left(\left(4 \leq x1 \land x1 \leq \frac{3969}{625}\right) \land \left(4 \leq x2 \land x2 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x3 \land x3 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x4 \land x4 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x5 \land x5 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x6 \land x6 \leq \frac{3969}{625}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[x3 \cdot \left(x6 - 0\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre (and (and (and (and (and (and (&lt;= 4 x1) (&lt;= x1 3969/625))
+                         (and (&lt;= 4 x2) (&lt;= x2 3969/625)))
+                    (and (&lt;= 4 x3) (&lt;= x3 3969/625)))
+               (and (&lt;= 4 x4) (&lt;= x4 3969/625)))
+          (and (&lt;= 4 x5) (&lt;= x5 3969/625)))
+     (and (&lt;= 4 x6) (&lt;= x6 3969/625)))
+  (* x3 (- x6 0.0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return x3 * (x6 - 0.0);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = x3 * (x6 - 0.0d0)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return x3 * (x6 - 0.0);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return x3 * (x6 - 0.0)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(x3 * Float64(x6 - 0.0))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = x3 * (x6 - 0.0);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(x3 * N[(x6 - 0.0), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [4, 63504e-4],
+	x2 in [4, 63504e-4],
+	x3 in [4, 63504e-4],
+	x4 in [4, 63504e-4],
+	x5 in [4, 63504e-4],
+	x6 in [4, 63504e-4]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	x3 * (x6 - (0))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x3 \cdot \left(x6 - 0\right)
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">98.4%</span></p><div class="math">\[\left(\left(\left(\left(\left(-x2\right) \cdot x3 - x1 \cdot x4\right) + x2 \cdot x5\right) + x3 \cdot x6\right) - x5 \cdot x6\right) + x1 \cdot \left(\left(\left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + x5\right) + x6\right)
+\]</div></li><li></li><li><p>Applied rewrites<span class="error">98.6%</span></p><div class="math">\[\leadsto \left(\left(\left(x6 - \left(x1 - x2\right)\right) - \left(\left(x4 - x3\right) - x5\right)\right) \cdot x1 - x3 \cdot x2\right) - \left(\left(x4 \cdot x1 - x5 \cdot x2\right) - \left(x3 - x5\right) \cdot x6\right)
+\]</div></li><li><p>Taylor expanded in x3 around inf to order 0</p><div class="math">\[\leadsto x3 \cdot \left(\left(x1 + x6\right) - x2\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">21.1%</span></p><div class="math">\[\leadsto x3 \cdot \left(\left(x1 + x6\right) - x2\right)
+\]</div></li><li><p>Taylor expanded in x1 around 0 to order 0</p><div class="math">\[\leadsto x3 \cdot \left(x6 - x2\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">8.9%</span></p><div class="math">\[\leadsto x3 \cdot \left(x6 - x2\right)
+\]</div></li><li><p>Taylor expanded in undef-var around zero to order -1</p><div class="math">\[\leadsto x3 \cdot \left(x6 - 0\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">21.6%</span></p><div class="math">\[\leadsto x3 \cdot \left(x6 - 0\right)
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative11" class="programs"><h2>Alternative 11: <span class="subhead"><data>21.6%</data> accurate, <data>14.6×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(\left(\left(\left(4 \leq x1 \land x1 \leq \frac{3969}{625}\right) \land \left(4 \leq x2 \land x2 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x3 \land x3 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x4 \land x4 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x5 \land x5 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x6 \land x6 \leq \frac{3969}{625}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[x2 \cdot x5
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre (and (and (and (and (and (and (&lt;= 4 x1) (&lt;= x1 3969/625))
+                         (and (&lt;= 4 x2) (&lt;= x2 3969/625)))
+                    (and (&lt;= 4 x3) (&lt;= x3 3969/625)))
+               (and (&lt;= 4 x4) (&lt;= x4 3969/625)))
+          (and (&lt;= 4 x5) (&lt;= x5 3969/625)))
+     (and (&lt;= 4 x6) (&lt;= x6 3969/625)))
+  (* x2 x5))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return x2 * x5;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = x2 * x5
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return x2 * x5;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return x2 * x5
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(x2 * x5)
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = x2 * x5;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(x2 * x5), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [4, 63504e-4],
+	x2 in [4, 63504e-4],
+	x3 in [4, 63504e-4],
+	x4 in [4, 63504e-4],
+	x5 in [4, 63504e-4],
+	x6 in [4, 63504e-4]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	x2 * x5
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x2 \cdot x5
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">98.4%</span></p><div class="math">\[\left(\left(\left(\left(\left(-x2\right) \cdot x3 - x1 \cdot x4\right) + x2 \cdot x5\right) + x3 \cdot x6\right) - x5 \cdot x6\right) + x1 \cdot \left(\left(\left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + x5\right) + x6\right)
+\]</div></li><li><p>Taylor expanded in x2 around inf to order 0</p><div class="math">\[\leadsto x2 \cdot \left(x1 + \left(x5 + -1 \cdot x3\right)\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">21.1%</span></p><div class="math">\[\leadsto x2 \cdot \left(x1 + \left(x5 + -1 \cdot x3\right)\right)
+\]</div></li><li><p>Taylor expanded in x3 around 0 to order 0</p><div class="math">\[\leadsto x2 \cdot \left(x1 + x5\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">18.7%</span></p><div class="math">\[\leadsto x2 \cdot \left(x1 + x5\right)
+\]</div></li><li><p>Taylor expanded in x1 around 0 to order 0</p><div class="math">\[\leadsto x2 \cdot x5
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">21.6%</span></p><div class="math">\[\leadsto x2 \cdot x5
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative12" class="programs"><h2>Alternative 12: <span class="subhead"><data>21.3%</data> accurate, <data>14.6×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(\left(\left(\left(4 \leq x1 \land x1 \leq \frac{3969}{625}\right) \land \left(4 \leq x2 \land x2 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x3 \land x3 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x4 \land x4 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x5 \land x5 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x6 \land x6 \leq \frac{3969}{625}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot x3
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre (and (and (and (and (and (and (&lt;= 4 x1) (&lt;= x1 3969/625))
+                         (and (&lt;= 4 x2) (&lt;= x2 3969/625)))
+                    (and (&lt;= 4 x3) (&lt;= x3 3969/625)))
+               (and (&lt;= 4 x4) (&lt;= x4 3969/625)))
+          (and (&lt;= 4 x5) (&lt;= x5 3969/625)))
+     (and (&lt;= 4 x6) (&lt;= x6 3969/625)))
+  (* x1 x3))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return x1 * x3;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = x1 * x3
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return x1 * x3;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return x1 * x3
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(x1 * x3)
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = x1 * x3;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(x1 * x3), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [4, 63504e-4],
+	x2 in [4, 63504e-4],
+	x3 in [4, 63504e-4],
+	x4 in [4, 63504e-4],
+	x5 in [4, 63504e-4],
+	x6 in [4, 63504e-4]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	x1 * x3
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot x3
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">98.4%</span></p><div class="math">\[\left(\left(\left(\left(\left(-x2\right) \cdot x3 - x1 \cdot x4\right) + x2 \cdot x5\right) + x3 \cdot x6\right) - x5 \cdot x6\right) + x1 \cdot \left(\left(\left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + x5\right) + x6\right)
+\]</div></li><li><p>Taylor expanded in x3 around inf to order 0</p><div class="math">\[\leadsto x3 \cdot \left(x1 + \left(x6 + -1 \cdot x2\right)\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">21.1%</span></p><div class="math">\[\leadsto x3 \cdot \left(x1 + \left(x6 + -1 \cdot x2\right)\right)
+\]</div></li><li><p>Taylor expanded in x1 around inf to order 0</p><div class="math">\[\leadsto x1 \cdot x3
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">21.3%</span></p><div class="math">\[\leadsto x1 \cdot x3
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative13" class="programs"><h2>Alternative 13: <span class="subhead"><data>21.4%</data> accurate, <data>14.6×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(\left(\left(\left(4 \leq x1 \land x1 \leq \frac{3969}{625}\right) \land \left(4 \leq x2 \land x2 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x3 \land x3 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x4 \land x4 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x5 \land x5 \leq \frac{3969}{625}\right)\right) \land \left(4 \leq x6 \land x6 \leq \frac{3969}{625}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot x2
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre (and (and (and (and (and (and (&lt;= 4 x1) (&lt;= x1 3969/625))
+                         (and (&lt;= 4 x2) (&lt;= x2 3969/625)))
+                    (and (&lt;= 4 x3) (&lt;= x3 3969/625)))
+               (and (&lt;= 4 x4) (&lt;= x4 3969/625)))
+          (and (&lt;= 4 x5) (&lt;= x5 3969/625)))
+     (and (&lt;= 4 x6) (&lt;= x6 3969/625)))
+  (* x1 x2))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return x1 * x2;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = x1 * x2
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return x1 * x2;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return x1 * x2
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(x1 * x2)
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = x1 * x2;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(x1 * x2), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [4, 63504e-4],
+	x2 in [4, 63504e-4],
+	x3 in [4, 63504e-4],
+	x4 in [4, 63504e-4],
+	x5 in [4, 63504e-4],
+	x6 in [4, 63504e-4]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	x1 * x2
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot x2
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">98.4%</span></p><div class="math">\[\left(\left(\left(\left(\left(-x2\right) \cdot x3 - x1 \cdot x4\right) + x2 \cdot x5\right) + x3 \cdot x6\right) - x5 \cdot x6\right) + x1 \cdot \left(\left(\left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + x5\right) + x6\right)
+\]</div></li><li><p>Taylor expanded in x2 around inf to order 0</p><div class="math">\[\leadsto x2 \cdot \left(x1 + \left(x5 + -1 \cdot x3\right)\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">21.1%</span></p><div class="math">\[\leadsto x2 \cdot \left(x1 + \left(x5 + -1 \cdot x3\right)\right)
+\]</div></li><li><p>Taylor expanded in x1 around inf to order 0</p><div class="math">\[\leadsto x1 \cdot x2
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">21.4%</span></p><div class="math">\[\leadsto x1 \cdot x2
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="target1" class="programs"><h2>Developer Target 1: <span class="subhead"><data>98.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + \left(\left(x1 \cdot x5 + x1 \cdot x6\right) + \left(\left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x4 \cdot x1\right)\right)\right) - x5 \cdot x6\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (* x1 (- (+ (+ (- x1) x2) x3) x4))
+ (+
+  (+ (* x1 x5) (* x1 x6))
+  (-
+   (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1))))
+   (* x5 x6)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((-x1 + x2) + x3) - x4)) + (((x1 * x5) + (x1 * x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * (((-x1 + x2) + x3) - x4)) + (((x1 * x5) + (x1 * x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((-x1 + x2) + x3) - x4)) + (((x1 * x5) + (x1 * x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * (((-x1 + x2) + x3) - x4)) + (((x1 * x5) + (x1 * x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(Float64(Float64(Float64(-x1) + x2) + x3) - x4)) + Float64(Float64(Float64(x1 * x5) + Float64(x1 * x6)) + Float64(Float64(Float64(x2 * x5) + Float64(Float64(x3 * x6) + Float64(Float64(x3 * Float64(-x2)) - Float64(x4 * x1)))) - Float64(x5 * x6))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * (((-x1 + x2) + x3) - x4)) + (((x1 * x5) + (x1 * x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(N[(N[((-x1) + x2), $MachinePrecision] + x3), $MachinePrecision] - x4), $MachinePrecision]), $MachinePrecision] + N[(N[(N[(x1 * x5), $MachinePrecision] + N[(x1 * x6), $MachinePrecision]), $MachinePrecision] + N[(N[(N[(x2 * x5), $MachinePrecision] + N[(N[(x3 * x6), $MachinePrecision] + N[(N[(x3 * (-x2)), $MachinePrecision] - N[(x4 * x1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(x5 * x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * ((((- x1) + x2) + x3) - x4)) + (((x1 * x5) + (x1 * x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * (- x2)) - (x4 * x1)))) - (x5 * x6)))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + \left(\left(x1 \cdot x5 + x1 \cdot x6\right) + \left(\left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x4 \cdot x1\right)\right)\right) - x5 \cdot x6\right)\right)
+</pre></div></div></section><section id="target2" class="programs"><h2>Developer Target 2: <span class="subhead"><data>98.6%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + \left(x2 \cdot x5 + \left(x1 \cdot x6 + \left(\left(x1 \cdot x5 + \left(-x5 \cdot x6\right)\right) + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x4 \cdot x1\right)\right)\right)\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (* x1 (- (+ (+ (- x1) x2) x3) x4))
+ (+
+  (* x2 x5)
+  (+
+   (* x1 x6)
+   (+
+    (+ (* x1 x5) (- (* x5 x6)))
+    (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1))))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + (((x1 * x5) + -(x5 * x6)) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1))))));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + (((x1 * x5) + -(x5 * x6)) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1))))))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + (((x1 * x5) + -(x5 * x6)) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1))))));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + (((x1 * x5) + -(x5 * x6)) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1))))))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(Float64(Float64(Float64(-x1) + x2) + x3) - x4)) + Float64(Float64(x2 * x5) + Float64(Float64(x1 * x6) + Float64(Float64(Float64(x1 * x5) + Float64(-Float64(x5 * x6))) + Float64(Float64(x3 * x6) + Float64(Float64(x3 * Float64(-x2)) - Float64(x4 * x1)))))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + (((x1 * x5) + -(x5 * x6)) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1))))));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(N[(N[((-x1) + x2), $MachinePrecision] + x3), $MachinePrecision] - x4), $MachinePrecision]), $MachinePrecision] + N[(N[(x2 * x5), $MachinePrecision] + N[(N[(x1 * x6), $MachinePrecision] + N[(N[(N[(x1 * x5), $MachinePrecision] + (-N[(x5 * x6), $MachinePrecision])), $MachinePrecision] + N[(N[(x3 * x6), $MachinePrecision] + N[(N[(x3 * (-x2)), $MachinePrecision] - N[(x4 * x1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * ((((- x1) + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + (((x1 * x5) + (- (x5 * x6))) + ((x3 * x6) + ((x3 * (- x2)) - (x4 * x1))))))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + \left(x2 \cdot x5 + \left(x1 \cdot x6 + \left(\left(x1 \cdot x5 + \left(-x5 \cdot x6\right)\right) + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x4 \cdot x1\right)\right)\right)\right)\right)
+</pre></div></div></section><section id="target3" class="programs"><h2>Developer Target 3: <span class="subhead"><data>98.6%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + \left(x2 \cdot x5 + \left(x1 \cdot x6 + \left(\left(x1 \cdot x5 + \left(-x5 \cdot x6\right)\right) + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x1 \cdot x4\right)\right)\right)\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (* x1 (- (+ (+ (- x1) x2) x3) x4))
+ (+
+  (* x2 x5)
+  (+
+   (* x1 x6)
+   (+
+    (+ (* x1 x5) (- (* x5 x6)))
+    (+ (* x3 x6) (- (* x3 (- x2)) (* x1 x4))))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + (((x1 * x5) + -(x5 * x6)) + ((x3 * x6) + ((x3 * -x2) - (x1 * x4))))));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + (((x1 * x5) + -(x5 * x6)) + ((x3 * x6) + ((x3 * -x2) - (x1 * x4))))))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + (((x1 * x5) + -(x5 * x6)) + ((x3 * x6) + ((x3 * -x2) - (x1 * x4))))));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + (((x1 * x5) + -(x5 * x6)) + ((x3 * x6) + ((x3 * -x2) - (x1 * x4))))))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(Float64(Float64(Float64(-x1) + x2) + x3) - x4)) + Float64(Float64(x2 * x5) + Float64(Float64(x1 * x6) + Float64(Float64(Float64(x1 * x5) + Float64(-Float64(x5 * x6))) + Float64(Float64(x3 * x6) + Float64(Float64(x3 * Float64(-x2)) - Float64(x1 * x4)))))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + (((x1 * x5) + -(x5 * x6)) + ((x3 * x6) + ((x3 * -x2) - (x1 * x4))))));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(N[(N[((-x1) + x2), $MachinePrecision] + x3), $MachinePrecision] - x4), $MachinePrecision]), $MachinePrecision] + N[(N[(x2 * x5), $MachinePrecision] + N[(N[(x1 * x6), $MachinePrecision] + N[(N[(N[(x1 * x5), $MachinePrecision] + (-N[(x5 * x6), $MachinePrecision])), $MachinePrecision] + N[(N[(x3 * x6), $MachinePrecision] + N[(N[(x3 * (-x2)), $MachinePrecision] - N[(x1 * x4), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * ((((- x1) + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + (((x1 * x5) + (- (x5 * x6))) + ((x3 * x6) + ((x3 * (- x2)) - (x1 * x4))))))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + \left(x2 \cdot x5 + \left(x1 \cdot x6 + \left(\left(x1 \cdot x5 + \left(-x5 \cdot x6\right)\right) + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x1 \cdot x4\right)\right)\right)\right)\right)
+</pre></div></div></section><section id="target4" class="programs"><h2>Developer Target 4: <span class="subhead"><data>98.3%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + \left(x1 \cdot \left(x5 + x6\right) + \left(\left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x4 \cdot x1\right)\right)\right) - x5 \cdot x6\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (* x1 (- (+ (+ (- x1) x2) x3) x4))
+ (+
+  (* x1 (+ x5 x6))
+  (-
+   (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1))))
+   (* x5 x6)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * (((-x1 + x2) + x3) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(Float64(Float64(Float64(-x1) + x2) + x3) - x4)) + Float64(Float64(x1 * Float64(x5 + x6)) + Float64(Float64(Float64(x2 * x5) + Float64(Float64(x3 * x6) + Float64(Float64(x3 * Float64(-x2)) - Float64(x4 * x1)))) - Float64(x5 * x6))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * (((-x1 + x2) + x3) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(N[(N[((-x1) + x2), $MachinePrecision] + x3), $MachinePrecision] - x4), $MachinePrecision]), $MachinePrecision] + N[(N[(x1 * N[(x5 + x6), $MachinePrecision]), $MachinePrecision] + N[(N[(N[(x2 * x5), $MachinePrecision] + N[(N[(x3 * x6), $MachinePrecision] + N[(N[(x3 * (-x2)), $MachinePrecision] - N[(x4 * x1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(x5 * x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * ((((- x1) + x2) + x3) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * (- x2)) - (x4 * x1)))) - (x5 * x6)))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + \left(x1 \cdot \left(x5 + x6\right) + \left(\left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x4 \cdot x1\right)\right)\right) - x5 \cdot x6\right)\right)
+</pre></div></div></section><section id="target5" class="programs"><h2>Developer Target 5: <span class="subhead"><data>98.2%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(\left(\left(-x1\right) + \left(x2 + x3\right)\right) - x4\right) + \left(x1 \cdot \left(x5 + x6\right) + \left(\left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x1 \cdot x4\right)\right)\right) - x5 \cdot x6\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (* x1 (- (+ (- x1) (+ x2 x3)) x4))
+ (+
+  (* x1 (+ x5 x6))
+  (-
+   (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x1 x4))))
+   (* x5 x6)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * ((-x1 + (x2 + x3)) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x1 * x4)))) - (x5 * x6)));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * ((-x1 + (x2 + x3)) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x1 * x4)))) - (x5 * x6)))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * ((-x1 + (x2 + x3)) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x1 * x4)))) - (x5 * x6)));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * ((-x1 + (x2 + x3)) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x1 * x4)))) - (x5 * x6)))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(Float64(Float64(-x1) + Float64(x2 + x3)) - x4)) + Float64(Float64(x1 * Float64(x5 + x6)) + Float64(Float64(Float64(x2 * x5) + Float64(Float64(x3 * x6) + Float64(Float64(x3 * Float64(-x2)) - Float64(x1 * x4)))) - Float64(x5 * x6))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * ((-x1 + (x2 + x3)) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x1 * x4)))) - (x5 * x6)));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(N[((-x1) + N[(x2 + x3), $MachinePrecision]), $MachinePrecision] - x4), $MachinePrecision]), $MachinePrecision] + N[(N[(x1 * N[(x5 + x6), $MachinePrecision]), $MachinePrecision] + N[(N[(N[(x2 * x5), $MachinePrecision] + N[(N[(x3 * x6), $MachinePrecision] + N[(N[(x3 * (-x2)), $MachinePrecision] - N[(x1 * x4), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(x5 * x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * (((- x1) + (x2 + x3)) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * (- x2)) - (x1 * x4)))) - (x5 * x6)))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(\left(\left(-x1\right) + \left(x2 + x3\right)\right) - x4\right) + \left(x1 \cdot \left(x5 + x6\right) + \left(\left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x1 \cdot x4\right)\right)\right) - x5 \cdot x6\right)\right)
+</pre></div></div></section><section id="target6" class="programs"><h2>Developer Target 6: <span class="subhead"><data>98.2%</data> accurate, <data>1.0×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(\left(\left(\left(x2 + x3\right) + \left(-x1\right)\right) - x4\right) + \left(x5 + x6\right)\right) + \left(\left(x2 \cdot x5 + \left(\left(-x2 \cdot x3\right) + \left(\left(-x1 \cdot x4\right) + x6 \cdot x3\right)\right)\right) - x5 \cdot x6\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (* x1 (+ (- (+ (+ x2 x3) (- x1)) x4) (+ x5 x6)))
+ (-
+  (+ (* x2 x5) (+ (- (* x2 x3)) (+ (- (* x1 x4)) (* x6 x3))))
+  (* x5 x6))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * ((((x2 + x3) + -x1) - x4) + (x5 + x6))) + (((x2 * x5) + (-(x2 * x3) + (-(x1 * x4) + (x6 * x3)))) - (x5 * x6));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * ((((x2 + x3) + -x1) - x4) + (x5 + x6))) + (((x2 * x5) + (-(x2 * x3) + (-(x1 * x4) + (x6 * x3)))) - (x5 * x6))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * ((((x2 + x3) + -x1) - x4) + (x5 + x6))) + (((x2 * x5) + (-(x2 * x3) + (-(x1 * x4) + (x6 * x3)))) - (x5 * x6));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * ((((x2 + x3) + -x1) - x4) + (x5 + x6))) + (((x2 * x5) + (-(x2 * x3) + (-(x1 * x4) + (x6 * x3)))) - (x5 * x6))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(Float64(Float64(Float64(x2 + x3) + Float64(-x1)) - x4) + Float64(x5 + x6))) + Float64(Float64(Float64(x2 * x5) + Float64(Float64(-Float64(x2 * x3)) + Float64(Float64(-Float64(x1 * x4)) + Float64(x6 * x3)))) - Float64(x5 * x6)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * ((((x2 + x3) + -x1) - x4) + (x5 + x6))) + (((x2 * x5) + (-(x2 * x3) + (-(x1 * x4) + (x6 * x3)))) - (x5 * x6));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(N[(N[(N[(x2 + x3), $MachinePrecision] + (-x1)), $MachinePrecision] - x4), $MachinePrecision] + N[(x5 + x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + N[(N[(N[(x2 * x5), $MachinePrecision] + N[((-N[(x2 * x3), $MachinePrecision]) + N[((-N[(x1 * x4), $MachinePrecision]) + N[(x6 * x3), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(x5 * x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * ((((x2 + x3) + (- x1)) - x4) + (x5 + x6))) + (((x2 * x5) + ((- (x2 * x3)) + ((- (x1 * x4)) + (x6 * x3)))) - (x5 * x6))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(\left(\left(\left(x2 + x3\right) + \left(-x1\right)\right) - x4\right) + \left(x5 + x6\right)\right) + \left(\left(x2 \cdot x5 + \left(\left(-x2 \cdot x3\right) + \left(\left(-x1 \cdot x4\right) + x6 \cdot x3\right)\right)\right) - x5 \cdot x6\right)
+</pre></div></div></section><section id="target7" class="programs"><h2>Developer Target 7: <span class="subhead"><data>98.6%</data> accurate, <data>0.8×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + \left(x2 \cdot x5 + \left(x1 \cdot x6 + \left(\left(\left(-x3 \cdot x2\right) + \left(\left(-x5 \cdot x6\right) + \left(\left(-x4 \cdot x1\right) + x3 \cdot x6\right)\right)\right) + x5 \cdot x1\right)\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (* x1 (- (+ (+ (- x1) x2) x3) x4))
+ (+
+  (* x2 x5)
+  (+
+   (* x1 x6)
+   (+
+    (+ (- (* x3 x2)) (+ (- (* x5 x6)) (+ (- (* x4 x1)) (* x3 x6))))
+    (* x5 x1))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + ((-(x3 * x2) + (-(x5 * x6) + (-(x4 * x1) + (x3 * x6)))) + (x5 * x1))));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + ((-(x3 * x2) + (-(x5 * x6) + (-(x4 * x1) + (x3 * x6)))) + (x5 * x1))))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + ((-(x3 * x2) + (-(x5 * x6) + (-(x4 * x1) + (x3 * x6)))) + (x5 * x1))));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + ((-(x3 * x2) + (-(x5 * x6) + (-(x4 * x1) + (x3 * x6)))) + (x5 * x1))))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(Float64(Float64(Float64(-x1) + x2) + x3) - x4)) + Float64(Float64(x2 * x5) + Float64(Float64(x1 * x6) + Float64(Float64(Float64(-Float64(x3 * x2)) + Float64(Float64(-Float64(x5 * x6)) + Float64(Float64(-Float64(x4 * x1)) + Float64(x3 * x6)))) + Float64(x5 * x1)))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + ((-(x3 * x2) + (-(x5 * x6) + (-(x4 * x1) + (x3 * x6)))) + (x5 * x1))));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(N[(N[((-x1) + x2), $MachinePrecision] + x3), $MachinePrecision] - x4), $MachinePrecision]), $MachinePrecision] + N[(N[(x2 * x5), $MachinePrecision] + N[(N[(x1 * x6), $MachinePrecision] + N[(N[((-N[(x3 * x2), $MachinePrecision]) + N[((-N[(x5 * x6), $MachinePrecision]) + N[((-N[(x4 * x1), $MachinePrecision]) + N[(x3 * x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + N[(x5 * x1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * ((((- x1) + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + (((- (x3 * x2)) + ((- (x5 * x6)) + ((- (x4 * x1)) + (x3 * x6)))) + (x5 * x1))))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + \left(x2 \cdot x5 + \left(x1 \cdot x6 + \left(\left(\left(-x3 \cdot x2\right) + \left(\left(-x5 \cdot x6\right) + \left(\left(-x4 \cdot x1\right) + x3 \cdot x6\right)\right)\right) + x5 \cdot x1\right)\right)\right)
+</pre></div></div></section><section id="target8" class="programs"><h2>Developer Target 8: <span class="subhead"><data>98.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + \left(x2 \cdot x5 + \left(\left(-x1 \cdot x4\right) + \left(\left(-x5 \cdot x6\right) + \left(x3 \cdot \left(x6 + \left(-x2\right)\right) + x1 \cdot \left(x5 + x6\right)\right)\right)\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (* x1 (- (+ (+ (- x1) x2) x3) x4))
+ (+
+  (* x2 x5)
+  (+
+   (- (* x1 x4))
+   (+ (- (* x5 x6)) (+ (* x3 (+ x6 (- x2))) (* x1 (+ x5 x6))))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + (-(x1 * x4) + (-(x5 * x6) + ((x3 * (x6 + -x2)) + (x1 * (x5 + x6))))));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + (-(x1 * x4) + (-(x5 * x6) + ((x3 * (x6 + -x2)) + (x1 * (x5 + x6))))))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + (-(x1 * x4) + (-(x5 * x6) + ((x3 * (x6 + -x2)) + (x1 * (x5 + x6))))));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + (-(x1 * x4) + (-(x5 * x6) + ((x3 * (x6 + -x2)) + (x1 * (x5 + x6))))))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(Float64(Float64(Float64(-x1) + x2) + x3) - x4)) + Float64(Float64(x2 * x5) + Float64(Float64(-Float64(x1 * x4)) + Float64(Float64(-Float64(x5 * x6)) + Float64(Float64(x3 * Float64(x6 + Float64(-x2))) + Float64(x1 * Float64(x5 + x6)))))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + (-(x1 * x4) + (-(x5 * x6) + ((x3 * (x6 + -x2)) + (x1 * (x5 + x6))))));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(N[(N[((-x1) + x2), $MachinePrecision] + x3), $MachinePrecision] - x4), $MachinePrecision]), $MachinePrecision] + N[(N[(x2 * x5), $MachinePrecision] + N[((-N[(x1 * x4), $MachinePrecision]) + N[((-N[(x5 * x6), $MachinePrecision]) + N[(N[(x3 * N[(x6 + (-x2)), $MachinePrecision]), $MachinePrecision] + N[(x1 * N[(x5 + x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * ((((- x1) + x2) + x3) - x4)) + ((x2 * x5) + ((- (x1 * x4)) + ((- (x5 * x6)) + ((x3 * (x6 + (- x2))) + (x1 * (x5 + x6))))))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + \left(x2 \cdot x5 + \left(\left(-x1 \cdot x4\right) + \left(\left(-x5 \cdot x6\right) + \left(x3 \cdot \left(x6 + \left(-x2\right)\right) + x1 \cdot \left(x5 + x6\right)\right)\right)\right)\right)
+</pre></div></div></section><section id="target9" class="programs"><h2>Developer Target 9: <span class="subhead"><data>98.3%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(\left(x2 + \left(x3 + \left(-x1\right)\right)\right) - x4\right) + \left(x1 \cdot \left(x5 + x6\right) + \left(\left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x4 \cdot x1\right)\right)\right) - x5 \cdot x6\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (* x1 (- (+ x2 (+ x3 (- x1))) x4))
+ (+
+  (* x1 (+ x5 x6))
+  (-
+   (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1))))
+   (* x5 x6)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * ((x2 + (x3 + -x1)) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * ((x2 + (x3 + -x1)) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * ((x2 + (x3 + -x1)) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * ((x2 + (x3 + -x1)) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(Float64(x2 + Float64(x3 + Float64(-x1))) - x4)) + Float64(Float64(x1 * Float64(x5 + x6)) + Float64(Float64(Float64(x2 * x5) + Float64(Float64(x3 * x6) + Float64(Float64(x3 * Float64(-x2)) - Float64(x4 * x1)))) - Float64(x5 * x6))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * ((x2 + (x3 + -x1)) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(N[(x2 + N[(x3 + (-x1)), $MachinePrecision]), $MachinePrecision] - x4), $MachinePrecision]), $MachinePrecision] + N[(N[(x1 * N[(x5 + x6), $MachinePrecision]), $MachinePrecision] + N[(N[(N[(x2 * x5), $MachinePrecision] + N[(N[(x3 * x6), $MachinePrecision] + N[(N[(x3 * (-x2)), $MachinePrecision] - N[(x4 * x1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(x5 * x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * ((x2 + (x3 + (- x1))) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * (- x2)) - (x4 * x1)))) - (x5 * x6)))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(\left(x2 + \left(x3 + \left(-x1\right)\right)\right) - x4\right) + \left(x1 \cdot \left(x5 + x6\right) + \left(\left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x4 \cdot x1\right)\right)\right) - x5 \cdot x6\right)\right)
+</pre></div></div></section><section id="target10" class="programs"><h2>Developer Target 10: <span class="subhead"><data>98.1%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(x1 \cdot \left(\left(\left(x2 + x3\right) + \left(-x1\right)\right) - x4\right) + x1 \cdot \left(x5 + x6\right)\right) + \left(\left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x4 \cdot x1\right)\right)\right) - x5 \cdot x6\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (+ (* x1 (- (+ (+ x2 x3) (- x1)) x4)) (* x1 (+ x5 x6)))
+ (-
+  (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1))))
+  (* x5 x6))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return ((x1 * (((x2 + x3) + -x1) - x4)) + (x1 * (x5 + x6))) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = ((x1 * (((x2 + x3) + -x1) - x4)) + (x1 * (x5 + x6))) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return ((x1 * (((x2 + x3) + -x1) - x4)) + (x1 * (x5 + x6))) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return ((x1 * (((x2 + x3) + -x1) - x4)) + (x1 * (x5 + x6))) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(Float64(x1 * Float64(Float64(Float64(x2 + x3) + Float64(-x1)) - x4)) + Float64(x1 * Float64(x5 + x6))) + Float64(Float64(Float64(x2 * x5) + Float64(Float64(x3 * x6) + Float64(Float64(x3 * Float64(-x2)) - Float64(x4 * x1)))) - Float64(x5 * x6)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = ((x1 * (((x2 + x3) + -x1) - x4)) + (x1 * (x5 + x6))) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(N[(x1 * N[(N[(N[(x2 + x3), $MachinePrecision] + (-x1)), $MachinePrecision] - x4), $MachinePrecision]), $MachinePrecision] + N[(x1 * N[(x5 + x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + N[(N[(N[(x2 * x5), $MachinePrecision] + N[(N[(x3 * x6), $MachinePrecision] + N[(N[(x3 * (-x2)), $MachinePrecision] - N[(x4 * x1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(x5 * x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	((x1 * (((x2 + x3) + (- x1)) - x4)) + (x1 * (x5 + x6))) + (((x2 * x5) + ((x3 * x6) + ((x3 * (- x2)) - (x4 * x1)))) - (x5 * x6))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(x1 \cdot \left(\left(\left(x2 + x3\right) + \left(-x1\right)\right) - x4\right) + x1 \cdot \left(x5 + x6\right)\right) + \left(\left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x4 \cdot x1\right)\right)\right) - x5 \cdot x6\right)
+</pre></div></div></section><section id="target11" class="programs"><h2>Developer Target 11: <span class="subhead"><data>98.3%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + \left(x2 \cdot x5 + \left(\left(-x3 \cdot x2\right) + \left(\left(x6 \cdot x3 + \left(-\left(x4 \cdot x1 + x5 \cdot x6\right)\right)\right) + x1 \cdot \left(x5 + x6\right)\right)\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (* x1 (- (+ (+ (- x1) x2) x3) x4))
+ (+
+  (* x2 x5)
+  (+
+   (- (* x3 x2))
+   (+ (+ (* x6 x3) (- (+ (* x4 x1) (* x5 x6)))) (* x1 (+ x5 x6)))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + (-(x3 * x2) + (((x6 * x3) + -((x4 * x1) + (x5 * x6))) + (x1 * (x5 + x6)))));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + (-(x3 * x2) + (((x6 * x3) + -((x4 * x1) + (x5 * x6))) + (x1 * (x5 + x6)))))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + (-(x3 * x2) + (((x6 * x3) + -((x4 * x1) + (x5 * x6))) + (x1 * (x5 + x6)))));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + (-(x3 * x2) + (((x6 * x3) + -((x4 * x1) + (x5 * x6))) + (x1 * (x5 + x6)))))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(Float64(Float64(Float64(-x1) + x2) + x3) - x4)) + Float64(Float64(x2 * x5) + Float64(Float64(-Float64(x3 * x2)) + Float64(Float64(Float64(x6 * x3) + Float64(-Float64(Float64(x4 * x1) + Float64(x5 * x6)))) + Float64(x1 * Float64(x5 + x6))))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + (-(x3 * x2) + (((x6 * x3) + -((x4 * x1) + (x5 * x6))) + (x1 * (x5 + x6)))));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(N[(N[((-x1) + x2), $MachinePrecision] + x3), $MachinePrecision] - x4), $MachinePrecision]), $MachinePrecision] + N[(N[(x2 * x5), $MachinePrecision] + N[((-N[(x3 * x2), $MachinePrecision]) + N[(N[(N[(x6 * x3), $MachinePrecision] + (-N[(N[(x4 * x1), $MachinePrecision] + N[(x5 * x6), $MachinePrecision]), $MachinePrecision])), $MachinePrecision] + N[(x1 * N[(x5 + x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * ((((- x1) + x2) + x3) - x4)) + ((x2 * x5) + ((- (x3 * x2)) + (((x6 * x3) + (- ((x4 * x1) + (x5 * x6)))) + (x1 * (x5 + x6)))))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + \left(x2 \cdot x5 + \left(\left(-x3 \cdot x2\right) + \left(\left(x6 \cdot x3 + \left(-\left(x4 \cdot x1 + x5 \cdot x6\right)\right)\right) + x1 \cdot \left(x5 + x6\right)\right)\right)\right)
+</pre></div></div></section><section id="target12" class="programs"><h2>Developer Target 12: <span class="subhead"><data>98.2%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(\left(\left(x2 + x3\right) + \left(-x1\right)\right) - x4\right) + \left(x2 \cdot x5 + \left(\left(-x2 \cdot x3\right) + \left(\left(x3 \cdot x6 + \left(-\left(x1 \cdot x4 + x5 \cdot x6\right)\right)\right) + x1 \cdot \left(x6 + x5\right)\right)\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (* x1 (- (+ (+ x2 x3) (- x1)) x4))
+ (+
+  (* x2 x5)
+  (+
+   (- (* x2 x3))
+   (+ (+ (* x3 x6) (- (+ (* x1 x4) (* x5 x6)))) (* x1 (+ x6 x5)))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((x2 + x3) + -x1) - x4)) + ((x2 * x5) + (-(x2 * x3) + (((x3 * x6) + -((x1 * x4) + (x5 * x6))) + (x1 * (x6 + x5)))));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * (((x2 + x3) + -x1) - x4)) + ((x2 * x5) + (-(x2 * x3) + (((x3 * x6) + -((x1 * x4) + (x5 * x6))) + (x1 * (x6 + x5)))))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((x2 + x3) + -x1) - x4)) + ((x2 * x5) + (-(x2 * x3) + (((x3 * x6) + -((x1 * x4) + (x5 * x6))) + (x1 * (x6 + x5)))));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * (((x2 + x3) + -x1) - x4)) + ((x2 * x5) + (-(x2 * x3) + (((x3 * x6) + -((x1 * x4) + (x5 * x6))) + (x1 * (x6 + x5)))))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(Float64(Float64(x2 + x3) + Float64(-x1)) - x4)) + Float64(Float64(x2 * x5) + Float64(Float64(-Float64(x2 * x3)) + Float64(Float64(Float64(x3 * x6) + Float64(-Float64(Float64(x1 * x4) + Float64(x5 * x6)))) + Float64(x1 * Float64(x6 + x5))))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * (((x2 + x3) + -x1) - x4)) + ((x2 * x5) + (-(x2 * x3) + (((x3 * x6) + -((x1 * x4) + (x5 * x6))) + (x1 * (x6 + x5)))));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(N[(N[(x2 + x3), $MachinePrecision] + (-x1)), $MachinePrecision] - x4), $MachinePrecision]), $MachinePrecision] + N[(N[(x2 * x5), $MachinePrecision] + N[((-N[(x2 * x3), $MachinePrecision]) + N[(N[(N[(x3 * x6), $MachinePrecision] + (-N[(N[(x1 * x4), $MachinePrecision] + N[(x5 * x6), $MachinePrecision]), $MachinePrecision])), $MachinePrecision] + N[(x1 * N[(x6 + x5), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * (((x2 + x3) + (- x1)) - x4)) + ((x2 * x5) + ((- (x2 * x3)) + (((x3 * x6) + (- ((x1 * x4) + (x5 * x6)))) + (x1 * (x6 + x5)))))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(\left(\left(x2 + x3\right) + \left(-x1\right)\right) - x4\right) + \left(x2 \cdot x5 + \left(\left(-x2 \cdot x3\right) + \left(\left(x3 \cdot x6 + \left(-\left(x1 \cdot x4 + x5 \cdot x6\right)\right)\right) + x1 \cdot \left(x6 + x5\right)\right)\right)\right)
+</pre></div></div></section><section id="target13" class="programs"><h2>Developer Target 13: <span class="subhead"><data>97.7%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(\left(\left(\left(\left(x2 + x3\right) + x5\right) + x6\right) + \left(-x1\right)\right) + \left(-x4\right)\right) + \left(\left(x2 \cdot x5 + \left(\left(-x2\right) \cdot x3 + \left(x6 \cdot x3 + \left(-x4 \cdot x1\right)\right)\right)\right) - x5 \cdot x6\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (* x1 (+ (+ (+ (+ (+ x2 x3) x5) x6) (- x1)) (- x4)))
+ (-
+  (+ (* x2 x5) (+ (* (- x2) x3) (+ (* x6 x3) (- (* x4 x1)))))
+  (* x5 x6))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((((x2 + x3) + x5) + x6) + -x1) + -x4)) + (((x2 * x5) + ((-x2 * x3) + ((x6 * x3) + -(x4 * x1)))) - (x5 * x6));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * (((((x2 + x3) + x5) + x6) + -x1) + -x4)) + (((x2 * x5) + ((-x2 * x3) + ((x6 * x3) + -(x4 * x1)))) - (x5 * x6))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * (((((x2 + x3) + x5) + x6) + -x1) + -x4)) + (((x2 * x5) + ((-x2 * x3) + ((x6 * x3) + -(x4 * x1)))) - (x5 * x6));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * (((((x2 + x3) + x5) + x6) + -x1) + -x4)) + (((x2 * x5) + ((-x2 * x3) + ((x6 * x3) + -(x4 * x1)))) - (x5 * x6))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(Float64(Float64(Float64(Float64(x2 + x3) + x5) + x6) + Float64(-x1)) + Float64(-x4))) + Float64(Float64(Float64(x2 * x5) + Float64(Float64(Float64(-x2) * x3) + Float64(Float64(x6 * x3) + Float64(-Float64(x4 * x1))))) - Float64(x5 * x6)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * (((((x2 + x3) + x5) + x6) + -x1) + -x4)) + (((x2 * x5) + ((-x2 * x3) + ((x6 * x3) + -(x4 * x1)))) - (x5 * x6));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(N[(N[(N[(N[(x2 + x3), $MachinePrecision] + x5), $MachinePrecision] + x6), $MachinePrecision] + (-x1)), $MachinePrecision] + (-x4)), $MachinePrecision]), $MachinePrecision] + N[(N[(N[(x2 * x5), $MachinePrecision] + N[(N[((-x2) * x3), $MachinePrecision] + N[(N[(x6 * x3), $MachinePrecision] + (-N[(x4 * x1), $MachinePrecision])), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(x5 * x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * (((((x2 + x3) + x5) + x6) + (- x1)) + (- x4))) + (((x2 * x5) + (((- x2) * x3) + ((x6 * x3) + (- (x4 * x1))))) - (x5 * x6))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(\left(\left(\left(\left(x2 + x3\right) + x5\right) + x6\right) + \left(-x1\right)\right) + \left(-x4\right)\right) + \left(\left(x2 \cdot x5 + \left(\left(-x2\right) \cdot x3 + \left(x6 \cdot x3 + \left(-x4 \cdot x1\right)\right)\right)\right) - x5 \cdot x6\right)
+</pre></div></div></section><section id="target14" class="programs"><h2>Developer Target 14: <span class="subhead"><data>97.6%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(\left(\left(\left(x2 + x3\right) + x5\right) + x6\right) + \left(-x1\right)\right) + \left(\left(-x4\right) \cdot x1 + \left(\left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x4 \cdot x1\right)\right)\right) - x5 \cdot x6\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (* x1 (+ (+ (+ (+ x2 x3) x5) x6) (- x1)))
+ (+
+  (* (- x4) x1)
+  (-
+   (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1))))
+   (* x5 x6)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * ((((x2 + x3) + x5) + x6) + -x1)) + ((-x4 * x1) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * ((((x2 + x3) + x5) + x6) + -x1)) + ((-x4 * x1) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * ((((x2 + x3) + x5) + x6) + -x1)) + ((-x4 * x1) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * ((((x2 + x3) + x5) + x6) + -x1)) + ((-x4 * x1) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(Float64(Float64(Float64(x2 + x3) + x5) + x6) + Float64(-x1))) + Float64(Float64(Float64(-x4) * x1) + Float64(Float64(Float64(x2 * x5) + Float64(Float64(x3 * x6) + Float64(Float64(x3 * Float64(-x2)) - Float64(x4 * x1)))) - Float64(x5 * x6))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * ((((x2 + x3) + x5) + x6) + -x1)) + ((-x4 * x1) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(N[(N[(N[(x2 + x3), $MachinePrecision] + x5), $MachinePrecision] + x6), $MachinePrecision] + (-x1)), $MachinePrecision]), $MachinePrecision] + N[(N[((-x4) * x1), $MachinePrecision] + N[(N[(N[(x2 * x5), $MachinePrecision] + N[(N[(x3 * x6), $MachinePrecision] + N[(N[(x3 * (-x2)), $MachinePrecision] - N[(x4 * x1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(x5 * x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * ((((x2 + x3) + x5) + x6) + (- x1))) + (((- x4) * x1) + (((x2 * x5) + ((x3 * x6) + ((x3 * (- x2)) - (x4 * x1)))) - (x5 * x6)))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(\left(\left(\left(x2 + x3\right) + x5\right) + x6\right) + \left(-x1\right)\right) + \left(\left(-x4\right) \cdot x1 + \left(\left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x4 \cdot x1\right)\right)\right) - x5 \cdot x6\right)\right)
+</pre></div></div></section><section id="target15" class="programs"><h2>Developer Target 15: <span class="subhead"><data>98.3%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(x1 \cdot \left(\left(\left(-x1\right) + x2\right) + x3\right) - x1 \cdot x4\right) + \left(x1 \cdot \left(x5 + x6\right) + \left(\left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x4 \cdot x1\right)\right)\right) - x5 \cdot x6\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (- (* x1 (+ (+ (- x1) x2) x3)) (* x1 x4))
+ (+
+  (* x1 (+ x5 x6))
+  (-
+   (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1))))
+   (* x5 x6)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return ((x1 * ((-x1 + x2) + x3)) - (x1 * x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = ((x1 * ((-x1 + x2) + x3)) - (x1 * x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return ((x1 * ((-x1 + x2) + x3)) - (x1 * x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return ((x1 * ((-x1 + x2) + x3)) - (x1 * x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(Float64(x1 * Float64(Float64(Float64(-x1) + x2) + x3)) - Float64(x1 * x4)) + Float64(Float64(x1 * Float64(x5 + x6)) + Float64(Float64(Float64(x2 * x5) + Float64(Float64(x3 * x6) + Float64(Float64(x3 * Float64(-x2)) - Float64(x4 * x1)))) - Float64(x5 * x6))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = ((x1 * ((-x1 + x2) + x3)) - (x1 * x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) - (x4 * x1)))) - (x5 * x6)));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(N[(x1 * N[(N[((-x1) + x2), $MachinePrecision] + x3), $MachinePrecision]), $MachinePrecision] - N[(x1 * x4), $MachinePrecision]), $MachinePrecision] + N[(N[(x1 * N[(x5 + x6), $MachinePrecision]), $MachinePrecision] + N[(N[(N[(x2 * x5), $MachinePrecision] + N[(N[(x3 * x6), $MachinePrecision] + N[(N[(x3 * (-x2)), $MachinePrecision] - N[(x4 * x1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(x5 * x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	((x1 * (((- x1) + x2) + x3)) - (x1 * x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * (- x2)) - (x4 * x1)))) - (x5 * x6)))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(x1 \cdot \left(\left(\left(-x1\right) + x2\right) + x3\right) - x1 \cdot x4\right) + \left(x1 \cdot \left(x5 + x6\right) + \left(\left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) - x4 \cdot x1\right)\right)\right) - x5 \cdot x6\right)\right)
+</pre></div></div></section><section id="target16" class="programs"><h2>Developer Target 16: <span class="subhead"><data>97.9%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(x1 + x3\right) \cdot x6 + \left(x1 \cdot \left(\left(\left(x2 + x3\right) + \left(-x1\right)\right) - x4\right) + \left(x1 \cdot x5 + \left(x2 \cdot x5 + \left(x3 \cdot \left(-x2\right) + \left(-\left(x5 \cdot x6 + x4 \cdot x1\right)\right)\right)\right)\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (* (+ x1 x3) x6)
+ (+
+  (* x1 (- (+ (+ x2 x3) (- x1)) x4))
+  (+
+   (* x1 x5)
+   (+ (* x2 x5) (+ (* x3 (- x2)) (- (+ (* x5 x6) (* x4 x1)))))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return ((x1 + x3) * x6) + ((x1 * (((x2 + x3) + -x1) - x4)) + ((x1 * x5) + ((x2 * x5) + ((x3 * -x2) + -((x5 * x6) + (x4 * x1))))));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = ((x1 + x3) * x6) + ((x1 * (((x2 + x3) + -x1) - x4)) + ((x1 * x5) + ((x2 * x5) + ((x3 * -x2) + -((x5 * x6) + (x4 * x1))))))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return ((x1 + x3) * x6) + ((x1 * (((x2 + x3) + -x1) - x4)) + ((x1 * x5) + ((x2 * x5) + ((x3 * -x2) + -((x5 * x6) + (x4 * x1))))));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return ((x1 + x3) * x6) + ((x1 * (((x2 + x3) + -x1) - x4)) + ((x1 * x5) + ((x2 * x5) + ((x3 * -x2) + -((x5 * x6) + (x4 * x1))))))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(Float64(x1 + x3) * x6) + Float64(Float64(x1 * Float64(Float64(Float64(x2 + x3) + Float64(-x1)) - x4)) + Float64(Float64(x1 * x5) + Float64(Float64(x2 * x5) + Float64(Float64(x3 * Float64(-x2)) + Float64(-Float64(Float64(x5 * x6) + Float64(x4 * x1))))))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = ((x1 + x3) * x6) + ((x1 * (((x2 + x3) + -x1) - x4)) + ((x1 * x5) + ((x2 * x5) + ((x3 * -x2) + -((x5 * x6) + (x4 * x1))))));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(N[(x1 + x3), $MachinePrecision] * x6), $MachinePrecision] + N[(N[(x1 * N[(N[(N[(x2 + x3), $MachinePrecision] + (-x1)), $MachinePrecision] - x4), $MachinePrecision]), $MachinePrecision] + N[(N[(x1 * x5), $MachinePrecision] + N[(N[(x2 * x5), $MachinePrecision] + N[(N[(x3 * (-x2)), $MachinePrecision] + (-N[(N[(x5 * x6), $MachinePrecision] + N[(x4 * x1), $MachinePrecision]), $MachinePrecision])), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	((x1 + x3) * x6) + ((x1 * (((x2 + x3) + (- x1)) - x4)) + ((x1 * x5) + ((x2 * x5) + ((x3 * (- x2)) + (- ((x5 * x6) + (x4 * x1)))))))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(x1 + x3\right) \cdot x6 + \left(x1 \cdot \left(\left(\left(x2 + x3\right) + \left(-x1\right)\right) - x4\right) + \left(x1 \cdot x5 + \left(x2 \cdot x5 + \left(x3 \cdot \left(-x2\right) + \left(-\left(x5 \cdot x6 + x4 \cdot x1\right)\right)\right)\right)\right)\right)
+</pre></div></div></section><section id="target17" class="programs"><h2>Developer Target 17: <span class="subhead"><data>98.2%</data> accurate, <data>0.8×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[x2 \cdot x1 + \left(x3 \cdot x1 + \left(x1 \cdot \left(-\left(x4 + x1\right)\right) + \left(x5 \cdot x1 + \left(x6 \cdot x1 + \left(\left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) + \left(-x1 \cdot x4\right)\right)\right)\right) - x5 \cdot x6\right)\right)\right)\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (* x2 x1)
+ (+
+  (* x3 x1)
+  (+
+   (* x1 (- (+ x4 x1)))
+   (+
+    (* x5 x1)
+    (+
+     (* x6 x1)
+     (-
+      (+ (* x2 x5) (+ (* x3 x6) (+ (* x3 (- x2)) (- (* x1 x4)))))
+      (* x5 x6))))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x2 * x1) + ((x3 * x1) + ((x1 * -(x4 + x1)) + ((x5 * x1) + ((x6 * x1) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) + -(x1 * x4)))) - (x5 * x6))))));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x2 * x1) + ((x3 * x1) + ((x1 * -(x4 + x1)) + ((x5 * x1) + ((x6 * x1) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) + -(x1 * x4)))) - (x5 * x6))))))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x2 * x1) + ((x3 * x1) + ((x1 * -(x4 + x1)) + ((x5 * x1) + ((x6 * x1) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) + -(x1 * x4)))) - (x5 * x6))))));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x2 * x1) + ((x3 * x1) + ((x1 * -(x4 + x1)) + ((x5 * x1) + ((x6 * x1) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) + -(x1 * x4)))) - (x5 * x6))))))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x2 * x1) + Float64(Float64(x3 * x1) + Float64(Float64(x1 * Float64(-Float64(x4 + x1))) + Float64(Float64(x5 * x1) + Float64(Float64(x6 * x1) + Float64(Float64(Float64(x2 * x5) + Float64(Float64(x3 * x6) + Float64(Float64(x3 * Float64(-x2)) + Float64(-Float64(x1 * x4))))) - Float64(x5 * x6)))))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x2 * x1) + ((x3 * x1) + ((x1 * -(x4 + x1)) + ((x5 * x1) + ((x6 * x1) + (((x2 * x5) + ((x3 * x6) + ((x3 * -x2) + -(x1 * x4)))) - (x5 * x6))))));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x2 * x1), $MachinePrecision] + N[(N[(x3 * x1), $MachinePrecision] + N[(N[(x1 * (-N[(x4 + x1), $MachinePrecision])), $MachinePrecision] + N[(N[(x5 * x1), $MachinePrecision] + N[(N[(x6 * x1), $MachinePrecision] + N[(N[(N[(x2 * x5), $MachinePrecision] + N[(N[(x3 * x6), $MachinePrecision] + N[(N[(x3 * (-x2)), $MachinePrecision] + (-N[(x1 * x4), $MachinePrecision])), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(x5 * x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x2 * x1) + ((x3 * x1) + ((x1 * (- (x4 + x1))) + ((x5 * x1) + ((x6 * x1) + (((x2 * x5) + ((x3 * x6) + ((x3 * (- x2)) + (- (x1 * x4))))) - (x5 * x6))))))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x2 \cdot x1 + \left(x3 \cdot x1 + \left(x1 \cdot \left(-\left(x4 + x1\right)\right) + \left(x5 \cdot x1 + \left(x6 \cdot x1 + \left(\left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x3 \cdot \left(-x2\right) + \left(-x1 \cdot x4\right)\right)\right)\right) - x5 \cdot x6\right)\right)\right)\right)\right)
+</pre></div></div></section><section id="target18" class="programs"><h2>Developer Target 18: <span class="subhead"><data>98.3%</data> accurate, <data>1.0×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(\left(\left(\left(\left(-\left(x1 + x4\right)\right) + x2\right) + x3\right) + x5\right) + x6\right) + \left(\left(x2 \cdot x5 + \left(\left(-x2 \cdot x3\right) + \left(\left(-x1 \cdot x4\right) + x3 \cdot x6\right)\right)\right) - x5 \cdot x6\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (* x1 (+ (+ (+ (+ (- (+ x1 x4)) x2) x3) x5) x6))
+ (-
+  (+ (* x2 x5) (+ (- (* x2 x3)) (+ (- (* x1 x4)) (* x3 x6))))
+  (* x5 x6))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * ((((-(x1 + x4) + x2) + x3) + x5) + x6)) + (((x2 * x5) + (-(x2 * x3) + (-(x1 * x4) + (x3 * x6)))) - (x5 * x6));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * ((((-(x1 + x4) + x2) + x3) + x5) + x6)) + (((x2 * x5) + (-(x2 * x3) + (-(x1 * x4) + (x3 * x6)))) - (x5 * x6))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * ((((-(x1 + x4) + x2) + x3) + x5) + x6)) + (((x2 * x5) + (-(x2 * x3) + (-(x1 * x4) + (x3 * x6)))) - (x5 * x6));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * ((((-(x1 + x4) + x2) + x3) + x5) + x6)) + (((x2 * x5) + (-(x2 * x3) + (-(x1 * x4) + (x3 * x6)))) - (x5 * x6))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(Float64(Float64(Float64(Float64(-Float64(x1 + x4)) + x2) + x3) + x5) + x6)) + Float64(Float64(Float64(x2 * x5) + Float64(Float64(-Float64(x2 * x3)) + Float64(Float64(-Float64(x1 * x4)) + Float64(x3 * x6)))) - Float64(x5 * x6)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * ((((-(x1 + x4) + x2) + x3) + x5) + x6)) + (((x2 * x5) + (-(x2 * x3) + (-(x1 * x4) + (x3 * x6)))) - (x5 * x6));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * N[(N[(N[(N[((-N[(x1 + x4), $MachinePrecision]) + x2), $MachinePrecision] + x3), $MachinePrecision] + x5), $MachinePrecision] + x6), $MachinePrecision]), $MachinePrecision] + N[(N[(N[(x2 * x5), $MachinePrecision] + N[((-N[(x2 * x3), $MachinePrecision]) + N[((-N[(x1 * x4), $MachinePrecision]) + N[(x3 * x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(x5 * x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * (((((- (x1 + x4)) + x2) + x3) + x5) + x6)) + (((x2 * x5) + ((- (x2 * x3)) + ((- (x1 * x4)) + (x3 * x6)))) - (x5 * x6))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(\left(\left(\left(\left(-\left(x1 + x4\right)\right) + x2\right) + x3\right) + x5\right) + x6\right) + \left(\left(x2 \cdot x5 + \left(\left(-x2 \cdot x3\right) + \left(\left(-x1 \cdot x4\right) + x3 \cdot x6\right)\right)\right) - x5 \cdot x6\right)
+</pre></div></div></section><section id="target19" class="programs"><h2>Developer Target 19: <span class="subhead"><data>98.1%</data> accurate, <data>0.8×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := x1 \cdot \left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + \left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x5 \cdot x1 + \left(x6 \cdot x1 + \left(x3 \cdot \left(-x2\right) + \left(\left(-x1 \cdot x4\right) + \left(-x5 \cdot x6\right)\right)\right)\right)\right)\right)\right)\\
+\mathbf{if}\;x4 &lt; 0:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0
+        (+
+         (* x1 (- (+ (+ (- x1) x2) x3) x4))
+         (+
+          (* x2 x5)
+          (+
+           (* x3 x6)
+           (+
+            (* x5 x1)
+            (+
+             (* x6 x1)
+             (+ (* x3 (- x2)) (+ (- (* x1 x4)) (- (* x5 x6)))))))))))
+  (if (&lt; x4 0.0) t_0 t_0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	double t_0 = (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x3 * x6) + ((x5 * x1) + ((x6 * x1) + ((x3 * -x2) + (-(x1 * x4) + -(x5 * x6)))))));
+	double tmp;
+	if (x4 &lt; 0.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x3 * x6) + ((x5 * x1) + ((x6 * x1) + ((x3 * -x2) + (-(x1 * x4) + -(x5 * x6)))))))
+    if (x4 &lt; 0.0d0) then
+        tmp = t_0
+    else
+        tmp = t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	double t_0 = (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x3 * x6) + ((x5 * x1) + ((x6 * x1) + ((x3 * -x2) + (-(x1 * x4) + -(x5 * x6)))))));
+	double tmp;
+	if (x4 &lt; 0.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	t_0 = (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x3 * x6) + ((x5 * x1) + ((x6 * x1) + ((x3 * -x2) + (-(x1 * x4) + -(x5 * x6)))))))
+	tmp = 0
+	if x4 &lt; 0.0:
+		tmp = t_0
+	else:
+		tmp = t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	t_0 = Float64(Float64(x1 * Float64(Float64(Float64(Float64(-x1) + x2) + x3) - x4)) + Float64(Float64(x2 * x5) + Float64(Float64(x3 * x6) + Float64(Float64(x5 * x1) + Float64(Float64(x6 * x1) + Float64(Float64(x3 * Float64(-x2)) + Float64(Float64(-Float64(x1 * x4)) + Float64(-Float64(x5 * x6)))))))))
+	tmp = 0.0
+	if (x4 &lt; 0.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x1, x2, x3, x4, x5, x6)
+	t_0 = (x1 * (((-x1 + x2) + x3) - x4)) + ((x2 * x5) + ((x3 * x6) + ((x5 * x1) + ((x6 * x1) + ((x3 * -x2) + (-(x1 * x4) + -(x5 * x6)))))));
+	tmp = 0.0;
+	if (x4 &lt; 0.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := Block[{t$95$0 = N[(N[(x1 * N[(N[(N[((-x1) + x2), $MachinePrecision] + x3), $MachinePrecision] - x4), $MachinePrecision]), $MachinePrecision] + N[(N[(x2 * x5), $MachinePrecision] + N[(N[(x3 * x6), $MachinePrecision] + N[(N[(x5 * x1), $MachinePrecision] + N[(N[(x6 * x1), $MachinePrecision] + N[(N[(x3 * (-x2)), $MachinePrecision] + N[((-N[(x1 * x4), $MachinePrecision]) + (-N[(x5 * x6), $MachinePrecision])), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]}, If[Less[x4, 0.0], t$95$0, t$95$0]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	LET t_0 = ((x1 * ((((- x1) + x2) + x3) - x4)) + ((x2 * x5) + ((x3 * x6) + ((x5 * x1) + ((x6 * x1) + ((x3 * (- x2)) + ((- (x1 * x4)) + (- (x5 * x6))))))))) IN
+		LET tmp = IF (x4 &lt; (0)) THEN t_0 ELSE t_0 ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := x1 \cdot \left(\left(\left(\left(-x1\right) + x2\right) + x3\right) - x4\right) + \left(x2 \cdot x5 + \left(x3 \cdot x6 + \left(x5 \cdot x1 + \left(x6 \cdot x1 + \left(x3 \cdot \left(-x2\right) + \left(\left(-x1 \cdot x4\right) + \left(-x5 \cdot x6\right)\right)\right)\right)\right)\right)\right)\\
+\mathbf{if}\;x4 &lt; 0:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target20" class="programs"><h2>Developer Target 20: <span class="subhead"><data>97.9%</data> accurate, <data>0.7×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[x1 \cdot \left(-\left(x1 + x4\right)\right) + \left(x2 \cdot x1 + \left(x1 \cdot x3 + \left(x1 \cdot x5 + \left(x1 \cdot x6 + \left(x2 \cdot x5 + \left(\left(-x2 \cdot x3\right) + \left(\left(-x5 \cdot x6\right) + \left(\left(-x1 \cdot x4\right) + x3 \cdot x6\right)\right)\right)\right)\right)\right)\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x1 x2 x3 x4 x5 x6)
+  :precision binary64
+  :pre TRUE
+  (+
+ (* x1 (- (+ x1 x4)))
+ (+
+  (* x2 x1)
+  (+
+   (* x1 x3)
+   (+
+    (* x1 x5)
+    (+
+     (* x1 x6)
+     (+
+      (* x2 x5)
+      (+
+       (- (* x2 x3))
+       (+ (- (* x5 x6)) (+ (- (* x1 x4)) (* x3 x6)))))))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * -(x1 + x4)) + ((x2 * x1) + ((x1 * x3) + ((x1 * x5) + ((x1 * x6) + ((x2 * x5) + (-(x2 * x3) + (-(x5 * x6) + (-(x1 * x4) + (x3 * x6)))))))));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x1, x2, x3, x4, x5, x6)
+use fmin_fmax_functions
+    real(8), intent (in) :: x1
+    real(8), intent (in) :: x2
+    real(8), intent (in) :: x3
+    real(8), intent (in) :: x4
+    real(8), intent (in) :: x5
+    real(8), intent (in) :: x6
+    code = (x1 * -(x1 + x4)) + ((x2 * x1) + ((x1 * x3) + ((x1 * x5) + ((x1 * x6) + ((x2 * x5) + (-(x2 * x3) + (-(x5 * x6) + (-(x1 * x4) + (x3 * x6)))))))))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x1, double x2, double x3, double x4, double x5, double x6) {
+	return (x1 * -(x1 + x4)) + ((x2 * x1) + ((x1 * x3) + ((x1 * x5) + ((x1 * x6) + ((x2 * x5) + (-(x2 * x3) + (-(x5 * x6) + (-(x1 * x4) + (x3 * x6)))))))));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x1, x2, x3, x4, x5, x6):
+	return (x1 * -(x1 + x4)) + ((x2 * x1) + ((x1 * x3) + ((x1 * x5) + ((x1 * x6) + ((x2 * x5) + (-(x2 * x3) + (-(x5 * x6) + (-(x1 * x4) + (x3 * x6)))))))))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x1, x2, x3, x4, x5, x6)
+	return Float64(Float64(x1 * Float64(-Float64(x1 + x4))) + Float64(Float64(x2 * x1) + Float64(Float64(x1 * x3) + Float64(Float64(x1 * x5) + Float64(Float64(x1 * x6) + Float64(Float64(x2 * x5) + Float64(Float64(-Float64(x2 * x3)) + Float64(Float64(-Float64(x5 * x6)) + Float64(Float64(-Float64(x1 * x4)) + Float64(x3 * x6))))))))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x1, x2, x3, x4, x5, x6)
+	tmp = (x1 * -(x1 + x4)) + ((x2 * x1) + ((x1 * x3) + ((x1 * x5) + ((x1 * x6) + ((x2 * x5) + (-(x2 * x3) + (-(x5 * x6) + (-(x1 * x4) + (x3 * x6)))))))));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x1_, x2_, x3_, x4_, x5_, x6_] := N[(N[(x1 * (-N[(x1 + x4), $MachinePrecision])), $MachinePrecision] + N[(N[(x2 * x1), $MachinePrecision] + N[(N[(x1 * x3), $MachinePrecision] + N[(N[(x1 * x5), $MachinePrecision] + N[(N[(x1 * x6), $MachinePrecision] + N[(N[(x2 * x5), $MachinePrecision] + N[((-N[(x2 * x3), $MachinePrecision]) + N[((-N[(x5 * x6), $MachinePrecision]) + N[((-N[(x1 * x4), $MachinePrecision]) + N[(x3 * x6), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x1, x2, x3, x4, x5, x6):
+	x1 in [-inf, +inf],
+	x2 in [-inf, +inf],
+	x3 in [-inf, +inf],
+	x4 in [-inf, +inf],
+	x5 in [-inf, +inf],
+	x6 in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x1, x2, x3, x4, x5, x6: real): real =
+	(x1 * (- (x1 + x4))) + ((x2 * x1) + ((x1 * x3) + ((x1 * x5) + ((x1 * x6) + ((x2 * x5) + ((- (x2 * x3)) + ((- (x5 * x6)) + ((- (x1 * x4)) + (x3 * x6)))))))))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">x1 \cdot \left(-\left(x1 + x4\right)\right) + \left(x2 \cdot x1 + \left(x1 \cdot x3 + \left(x1 \cdot x5 + \left(x1 \cdot x6 + \left(x2 \cdot x5 + \left(\left(-x2 \cdot x3\right) + \left(\left(-x5 \cdot x6\right) + \left(\left(-x1 \cdot x4\right) + x3 \cdot x6\right)\right)\right)\right)\right)\right)\right)\right)
+</pre></div></div></section><section id="reproduce"><details><summary><h2>Reproduce</h2><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#reproduction" target="_blank">?</a></summary><pre class="shell"><code>herbie shell --seed 1 
+(FPCore (x1 x2 x3 x4 x5 x6)
+  :name "delta4"
+  :precision binary64
+  :pre (and (and (and (and (and (and (&lt;= 4 x1) (&lt;= x1 3969/625)) (and (&lt;= 4 x2) (&lt;= x2 3969/625))) (and (&lt;= 4 x3) (&lt;= x3 3969/625))) (and (&lt;= 4 x4) (&lt;= x4 3969/625))) (and (&lt;= 4 x5) (&lt;= x5 3969/625))) (and (&lt;= 4 x6) (&lt;= x6 3969/625)))
+
+  :alt
+  (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (+ (* x1 x5) (* x1 x6)) (- (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1)))) (* x5 x6))))
+
+  :alt
+  (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (* x2 x5) (+ (* x1 x6) (+ (+ (* x1 x5) (- (* x5 x6))) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1)))))))
+
+  :alt
+  (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (* x2 x5) (+ (* x1 x6) (+ (+ (* x1 x5) (- (* x5 x6))) (+ (* x3 x6) (- (* x3 (- x2)) (* x1 x4)))))))
+
+  :alt
+  (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (* x1 (+ x5 x6)) (- (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1)))) (* x5 x6))))
+
+  :alt
+  (+ (* x1 (- (+ (- x1) (+ x2 x3)) x4)) (+ (* x1 (+ x5 x6)) (- (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x1 x4)))) (* x5 x6))))
+
+  :alt
+  (+ (* x1 (+ (- (+ (+ x2 x3) (- x1)) x4) (+ x5 x6))) (- (+ (* x2 x5) (+ (- (* x2 x3)) (+ (- (* x1 x4)) (* x6 x3)))) (* x5 x6)))
+
+  :alt
+  (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (* x2 x5) (+ (* x1 x6) (+ (+ (- (* x3 x2)) (+ (- (* x5 x6)) (+ (- (* x4 x1)) (* x3 x6)))) (* x5 x1)))))
+
+  :alt
+  (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (* x2 x5) (+ (- (* x1 x4)) (+ (- (* x5 x6)) (+ (* x3 (+ x6 (- x2))) (* x1 (+ x5 x6)))))))
+
+  :alt
+  (+ (* x1 (- (+ x2 (+ x3 (- x1))) x4)) (+ (* x1 (+ x5 x6)) (- (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1)))) (* x5 x6))))
+
+  :alt
+  (+ (+ (* x1 (- (+ (+ x2 x3) (- x1)) x4)) (* x1 (+ x5 x6))) (- (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1)))) (* x5 x6)))
+
+  :alt
+  (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (* x2 x5) (+ (- (* x3 x2)) (+ (+ (* x6 x3) (- (+ (* x4 x1) (* x5 x6)))) (* x1 (+ x5 x6))))))
+
+  :alt
+  (+ (* x1 (- (+ (+ x2 x3) (- x1)) x4)) (+ (* x2 x5) (+ (- (* x2 x3)) (+ (+ (* x3 x6) (- (+ (* x1 x4) (* x5 x6)))) (* x1 (+ x6 x5))))))
+
+  :alt
+  (+ (* x1 (+ (+ (+ (+ (+ x2 x3) x5) x6) (- x1)) (- x4))) (- (+ (* x2 x5) (+ (* (- x2) x3) (+ (* x6 x3) (- (* x4 x1))))) (* x5 x6)))
+
+  :alt
+  (+ (* x1 (+ (+ (+ (+ x2 x3) x5) x6) (- x1))) (+ (* (- x4) x1) (- (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1)))) (* x5 x6))))
+
+  :alt
+  (+ (- (* x1 (+ (+ (- x1) x2) x3)) (* x1 x4)) (+ (* x1 (+ x5 x6)) (- (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1)))) (* x5 x6))))
+
+  :alt
+  (+ (* (+ x1 x3) x6) (+ (* x1 (- (+ (+ x2 x3) (- x1)) x4)) (+ (* x1 x5) (+ (* x2 x5) (+ (* x3 (- x2)) (- (+ (* x5 x6) (* x4 x1))))))))
+
+  :alt
+  (+ (* x2 x1) (+ (* x3 x1) (+ (* x1 (- (+ x4 x1))) (+ (* x5 x1) (+ (* x6 x1) (- (+ (* x2 x5) (+ (* x3 x6) (+ (* x3 (- x2)) (- (* x1 x4))))) (* x5 x6)))))))
+
+  :alt
+  (+ (* x1 (+ (+ (+ (+ (- (+ x1 x4)) x2) x3) x5) x6)) (- (+ (* x2 x5) (+ (- (* x2 x3)) (+ (- (* x1 x4)) (* x3 x6)))) (* x5 x6)))
+
+  :alt
+  (if (&lt; x4 0) (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (* x2 x5) (+ (* x3 x6) (+ (* x5 x1) (+ (* x6 x1) (+ (* x3 (- x2)) (+ (- (* x1 x4)) (- (* x5 x6))))))))) (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (* x2 x5) (+ (* x3 x6) (+ (* x5 x1) (+ (* x6 x1) (+ (* x3 (- x2)) (+ (- (* x1 x4)) (- (* x5 x6))))))))))
+
+  :alt
+  (+ (* x1 (- (+ x1 x4))) (+ (* x2 x1) (+ (* x1 x3) (+ (* x1 x5) (+ (* x1 x6) (+ (* x2 x5) (+ (- (* x2 x3)) (+ (- (* x5 x6)) (+ (- (* x1 x4)) (* x3 x6))))))))))
+
+  (+ (- (+ (+ (- (* (- x2) x3) (* x1 x4)) (* x2 x5)) (* x3 x6)) (* x5 x6)) (* x1 (+ (+ (- (+ (+ (- x1) x2) x3) x4) x5) x6))))
+</code></pre></details></section></body></html>
