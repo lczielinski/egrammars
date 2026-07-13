@@ -1,82 +1,94 @@
 # egrammars
 
-Synthesize numerically-accurate branch-on-the-input programs by grammar-constrained
-decoding over an e-graph of equivalent forms
-([casa](https://github.com/large-loris-models/casa) + egglog).
+Synthesize numerically-accurate FPCore rewrites — optionally branching on the input —
+with LLM sampling ([casa](https://github.com/large-loris-models/casa)) checked or
+constrained by an e-graph (egglog).
 
-## Pipeline
+## Two decoding modes
 
-1. **Generate** ([run.py](src/run.py)): the model reasons once, then draws
-   `--samples` distinct programs in one ASAP call under a light static *syntax* grammar, 
-   branching however it likes with an **arbitrary** threshold. 
-2. **Verify** ([egrammar.py](src/egrammar.py)): [regions.py](src/regions.py) splits the
-   `if`-tree; each branch's guards narrow the box, and `egrammar.equivalent` adds the arm
-   to the reference's e-graph and proves them equal *over that sub-box* — the interval
-   analysis ([rules.egglog](rules.egglog)), seeded from the narrowed box, bridges them
-   only where it proves the domain-conditional preconditions. A program with any
-   non-equivalent branch is dropped; `if` is total, so per-branch validity implies
-   whole-program validity. Semantics live in the checker; the grammar only enforces
-   syntax.
-3. **Bound** ([fptaylor_check.py](src/fptaylor_check.py)): FPTaylor bounds each branch
-   over the sub-interval where it applies.
+**`--decoding light` (default) — generate freely, verify after.** The model reasons
+once, then samples `--samples` distinct programs under a light *syntax* grammar
+([decoding.py](src/decoding.py)): any well-formed program, branching on any
+variable/threshold. Each candidate is then verified ([verify.py](src/verify.py)):
+its `if`-tree is split, each branch's guards narrow the input box, and
+[prove.py](src/prove.py) proves the branch equal to the reference over that sub-box
+(egglog saturation with the interval analysis in [rules.egglog](rules.egglog) seeded
+from the box — domain-conditional rewrites fire only where sound). Any non-equivalent
+branch drops the program; `if` is total, so per-branch validity implies whole-program
+validity. Unproven candidates are classified by sampling: numerically equal (a
+missing e-graph rule) vs. genuinely non-equivalent.
+
+**`--decoding egraph` — correct by construction.** The grammar itself is the set of
+programs provably equivalent to the reference: [egrammar.py](src/egrammar.py)
+saturates the e-graph over the box and compiles it to a CFG (one nonterminal per
+e-class). Branching needs the grammar to depend on the model's own output: the head
+grammar offers either a whole-box equivalent form or the opening
+`(if (op var NUMBER)`; when the model emits a conditional, `DynamicRegionRecognizer`
+([decoding.py](src/decoding.py)) reads the threshold, narrows the box by the guard,
+rebuilds the e-grammar over each arm's sub-box, and swaps it in mid-decode — to the
+model it is one uninterrupted generation.
+
+Both modes then bound each surviving program's worst-case double rounding error with
+FPTaylor ([fptaylor_check.py](src/fptaylor_check.py)), per branch over its sub-box.
+
+## Layout
+
+```
+src/
+  run.py            CLI, per-benchmark pipeline, GPU sharding
+  generate.py       prompt, reasoning handoff, ASAP sampling
+  decoding.py       syntax/head/arm grammars, mid-decode grammar swapping
+  egrammar.py       e-graph -> lark grammar compiler
+  prove.py          egglog equivalence prover
+  verify.py         per-branch proving + numeric classification of failures
+  fptaylor_check.py FPTaylor error bounds (runs automatically after generation)
+  summary.py        per-run results table
+  benchmarks.py     reference terms and interval boxes
+  regions.py        box arithmetic and if-tree splitting
+  paths.py          repo layout and per-run result directories
+```
 
 ## Usage
 
 ```bash
-uv run src/run.py x_by_xy          # one benchmark (default model: openai/gpt-oss-120b)
-uv run src/run.py                  # every benchmark, model loaded once
-uv run src/run.py --summary-only   # re-print the results table
-uv run src/fptaylor_check.py x_by_xy   # bound a run's programs (also runs after run.py)
+uv run src/run.py x_by_xy                     # one benchmark
+uv run src/run.py all                         # whole suite, one shard per GPU
+uv run src/run.py all --decoding egraph       # constrained decoding
+uv run src/run.py --summary-only              # re-print the latest run's table
 ```
 
-`run.py` writes `equivalents/<name>-NNN.json` (proven programs plus an `attempts` log of
-every candidate the model tried and why each was rejected), `fptaylor_check.py` writes
-`fptaylor/<name>-NNN.json`. Flags: `--samples --max-attempts --temperature --model
---effort --time-budget --shard`.
-
-## Benchmark suite (FPBench + Herbie)
-
-FPCore is the common ground with [Herbie](https://herbie.uwplse.org) and
-[FPBench](https://fpbench.org): all three tools consume it. The frozen suite lives under
-`benchmarks/`:
+Every invocation writes one self-contained directory,
+`results/<timestamp>-<decoding>/` (name it with `--run NAME`):
 
 ```
-benchmarks/
-  egglog/          one <name>.egglog per benchmark: the reference term the tool rewrites
-  intervals.json   per-benchmark input box {var: "[lo,hi]"}, loaded into INTERVALS
+results/2026-07-13-142530-light/
+  equivalents/<benchmark>.json   proven programs + every attempt and why rejected
+  fptaylor/<benchmark>.json      error bounds (written right after each benchmark)
+  summary.md                     aggregate table
+  log/gpu<i>.log                 per-shard logs when sharded
 ```
 
-Every benchmark was filtered to *this* tool's subset — only `+ - * / sqrt`, integer
-literals, and a branch-free reference (`let`/`let*` inlined, variadic operators folded
-left). The `Num i64` e-graph rules out transcendentals, loops, arrays, and non-integer
-constants.
+`all` shards across every visible GPU, all shards writing into the same run
+directory; the parent summarizes when they finish.
+`--summary-only [--run NAME]` re-summarizes the latest (or named) run. Other flags:
+`--samples --temperature --model --saturation --time-budget`.
 
-- **33 FPBench cores** (`delta`, `kepler*`, `rigidbody*`, `nmse_*`, …): the FPBench suite
-  filtered to the subset, with trivially-accurate and duplicate cores dropped. Their
-  boxes were read from each core's `:pre` (hand-refined; a wide default where `:pre` left
-  a variable unbounded).
-- **14 Herbie cores**: of Herbie's 730 cores, 312 are subset-expressible; after dropping
-  the 200+ auto-extracted `haskell.fpcore` entries (no `:pre`), cores already covered by
-  the FPBench 33, and — crucially — cores where no subset-expressible rewrite lowers the
-  *worst-case* bound this tool measures (their real fix is average-case, or needs
-  overflow-scaling / `fma` the subset can't express), 14 genuinely-improvable programs
-  remain: catastrophic cancellation (`kahan_p9`, `conte_x_minus_sqrt`, `expand_square`,
-  `complex_square_real`, `som_setup_w`), near-pole / difference-of-ratios
-  (`conte_near_pole`, `asymptote_c`), summation order (`martel_p6`), factoring
-  (`fastmath_dist4`), and more. Each was verified to admit a lower-error equivalent under
-  the FPTaylor harness before inclusion.
+## Benchmarks (FPBench + Herbie)
 
-Run one benchmark (`uv run src/run.py kepler0`), all of them (`uv run src/run.py`), or one
-shard per GPU ([scripts/run_gpus.sh](scripts/run_gpus.sh)).
+`benchmarks/egglog/<name>.egglog` holds each reference term;
+`benchmarks/intervals.json` the input box. All are filtered to this tool's subset:
+`+ - * / sqrt`, integer literals, branch-free reference (the `Num i64` e-graph rules
+out transcendentals and non-integer constants).
 
-Note the metric mismatch: this tool reports *sound worst-case* FPTaylor bounds over the
-box, whereas Herbie reports *average-case* bits/ULP error over sampled points — a
-like-for-like comparison means bounding Herbie's output with the same harness.
+- **33 FPBench cores**, boxes from each core's `:pre`.
+- **14 Herbie cores**: of 312 subset-expressible cores, those remaining after
+  dropping duplicates, cores without a `:pre`, and cores where no subset-expressible
+  rewrite lowers the *worst-case* bound this tool measures. Note Herbie itself
+  reports average-case error over sampled points, so its numbers aren't directly
+  comparable to the FPTaylor bounds here.
 
 ## Requirements
 
-- casa (torch, transformers, llguidance, xgrammar) + egglog.
-- FPTaylor: the `fptaylor` binary on PATH with its opam environment active
-  (`eval $(opam env)`; otherwise its native libs `dllnums.so` / `interval.cmi` fail to
-  load and every bound comes back unbounded), and a per-benchmark box in `INTERVALS`
-  ([fptaylor_check.py](src/fptaylor_check.py)) — which also seeds the interval analysis.
+- casa (torch, transformers, llguidance) + egglog.
+- FPTaylor: the `fptaylor` binary on PATH with its opam env active
+  (`eval $(opam env)`), else every bound comes back unbounded.

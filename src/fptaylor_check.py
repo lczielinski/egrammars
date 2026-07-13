@@ -1,30 +1,22 @@
 """Bound each harvested program's IEEE-754 double rounding error with FPTaylor
 (needs the `fptaylor` binary on PATH). A branching program is split on `if` and each
-branch bounded over the sub-interval where it applies.
+branch bounded over the sub-box where it applies. Runs automatically after
+generation (run.py); `check` reads <run>/equivalents/<benchmark>.json and writes
+<run>/fptaylor/<benchmark>.json."""
 
-    uv run src/fptaylor_check.py x_by_xy [--run N]
-"""
-
-import argparse
 import json
 import os
 import re
 import subprocess
 import tempfile
 
+import benchmarks
 import paths
 import regions
 
 EPS = 2.0 ** -52  # double-precision ulp
 CONFIG = "abs-error = true\nrel-error = true\n"
 TIMEOUT = 120
-
-def _imported_intervals() -> dict:
-    f = paths.INTERVALS_FILE
-    return json.loads(f.read_text()) if f.exists() else {}
-
-
-INTERVALS = _imported_intervals()
 
 
 def fmt(v):
@@ -50,7 +42,7 @@ def to_fptaylor(n):
 
 
 def build_input(expr: str, box: dict) -> str:
-    decls = "\n".join(f"  float64 {v} in [{iv.strip('[]')}];" for v, iv in box.items())
+    decls = "\n".join(f"  float64 {v} in [{lo}, {hi}];" for v, (lo, hi) in box.items())
     return f"Variables\n{decls}\n\nExpressions\n  result rnd64= {expr};\n"
 
 
@@ -98,7 +90,7 @@ def analyze(expr: str, box: dict, cfg_path: str) -> dict:
 
 
 def _combine(branches: list) -> dict:
-    """One program result from its branches: worst error across them."""
+    """Worst error across a program's branches."""
     def worst(key):
         vals = [b[key] for b in branches if b.get(key) is not None]
         return max(vals) if vals else None
@@ -113,7 +105,7 @@ def _combine(branches: list) -> dict:
 
 
 def analyze_program(ast, box: dict, cfg_path: str) -> dict:
-    """Analyze one program, splitting on `if` and bounding each branch over its box."""
+    """Split on `if` and bound each branch over the sub-box its guards select."""
     leaves = list(regions.split_branches(regions.body_of(ast)))
     if len(leaves) == 1:
         return analyze(to_fptaylor(leaves[0][1]), box, cfg_path)
@@ -129,21 +121,14 @@ def analyze_program(ast, box: dict, cfg_path: str) -> dict:
     return _combine(branches)
 
 
-def check(benchmark: str, run: int | None = None, eq_dir=None, ft_dir=None):
-    """Bound one equivalents run and write <ft_dir>/<benchmark>-NNN.json (both dirs
-    default to the top-level equivalents/ and fptaylor/; pass the run subdirs to scope
-    a run)."""
-    eq_dir = eq_dir or paths.EQUIVALENTS
-    ft_dir = ft_dir or paths.FPTAYLOR
-    if run is not None:
-        n, src = run, paths.path_for(eq_dir, benchmark, run)
-    else:
-        n, src = paths.latest(eq_dir, benchmark)
-    if src is None or not src.exists():
-        raise FileNotFoundError(f"no equivalents file for {benchmark!r} in {eq_dir}")
-    box = INTERVALS.get(benchmark)
+def check(benchmark: str, run) -> None:
+    """Bound one benchmark's proven programs in run directory `run`."""
+    src = paths.equivalents_path(run, benchmark)
+    if not src.exists():
+        raise FileNotFoundError(f"no equivalents file {src}")
+    box = benchmarks.INTERVALS.get(benchmark)
     if box is None:
-        raise KeyError(f"no interval box for {benchmark!r} (have: {', '.join(sorted(INTERVALS))})")
+        raise KeyError(f"no interval box for {benchmark!r}")
 
     data = json.loads(src.read_text())
     with tempfile.NamedTemporaryFile("w", suffix=".cfg", delete=False) as f:
@@ -175,7 +160,7 @@ def check(benchmark: str, run: int | None = None, eq_dir=None, ft_dir=None):
         os.unlink(cfg_path)
 
     ranked = sorted(results, key=rank_key)
-    print(f"\n{'=' * 70}\nranked by relative error, best first\n{'=' * 70}")
+    print(f"\nranked by relative error, best first")
     for rank, r in enumerate(ranked):
         if r.get("timeout"):
             label = "timeout"
@@ -185,8 +170,8 @@ def check(benchmark: str, run: int | None = None, eq_dir=None, ft_dir=None):
             label = "unbounded"
         print(f"{rank:2d}. {label:>13}  abs={fmt(r['abs_err'])}  {r['program']}")
 
-    ft_dir.mkdir(parents=True, exist_ok=True)
-    dst = paths.path_for(ft_dir, benchmark, n)
+    dst = paths.fptaylor_path(run, benchmark)
+    dst.parent.mkdir(parents=True, exist_ok=True)
     dst.write_text(json.dumps({
         "benchmark": benchmark, "reference": data.get("reference"),
         "config": data.get("config"), "intervals": box,
@@ -194,25 +179,4 @@ def check(benchmark: str, run: int | None = None, eq_dir=None, ft_dir=None):
                 "program's error is the worst over its branches (see `branches`).",
         "reference_result": reference_result, "results": ranked,
     }, indent=2))
-    print(f"\nread {src}\nwrote {len(results)} results to {dst}")
-    return dst
-
-
-def main() -> None:
-    ap = argparse.ArgumentParser(description=__doc__,
-                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("benchmark")
-    ap.add_argument("--run", type=int, default=None)
-    ap.add_argument("--run-dir", default=None, metavar="NAME",
-                    help="run subdirectory under equivalents/ and fptaylor/ (default: top level)")
-    args = ap.parse_args()
-    eq_dir = paths.EQUIVALENTS / args.run_dir if args.run_dir else None
-    ft_dir = paths.FPTAYLOR / args.run_dir if args.run_dir else None
-    try:
-        check(args.benchmark, args.run, eq_dir=eq_dir, ft_dir=ft_dir)
-    except (FileNotFoundError, KeyError) as e:
-        ap.error(str(e))
-
-
-if __name__ == "__main__":
-    main()
+    print(f"wrote {dst}")
