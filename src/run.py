@@ -1,14 +1,26 @@
 """Generate numerically-accurate FPCore rewrites and verify each is equivalent.
 
-The model reasons once, then samples programs under a light FPCore syntax grammar,
-branching freely. Each candidate is verified afterwards: every branch's guards narrow the
-input box and egglog proves the arm equivalent to the reference over that sub-box
-(egrammar.equivalent); a program with any non-equivalent branch is dropped. FPTaylor then
-bounds the survivors. Every candidate the model tried is recorded in the `attempts` field
-with why it was rejected (missing rule vs. genuinely non-equivalent).
+Two decoding modes produce the candidate programs; both feed the same verification:
+
+  --decoding light  (default): the model reasons once, then samples programs under a
+    light FPCore syntax grammar, branching freely. Nothing constrains the candidate to
+    be equivalent -- that is checked afterwards.
+  --decoding egraph: grammar-constrained decoding (ASAP) where the grammar IS the set
+    of programs provably equivalent to the reference, compiled from the interval-seeded
+    e-graph (region_grammar). The model first emits either a whole-box-equivalent form
+    or the opening of a single `(if (op var NUMBER) ...`; once that threshold is known,
+    each arm's box is narrowed by its guard and a region grammar is rebuilt on the fly
+    over the sub-box, so every sampled program is equivalent by construction.
+
+Each candidate is verified regardless: every branch's guards narrow the input box and
+egglog proves the arm equivalent to the reference over that sub-box (egrammar.equivalent);
+a program with any non-equivalent branch is dropped. FPTaylor then bounds the survivors.
+Every candidate the model tried is recorded in the `attempts` field with why it was
+rejected (missing rule vs. genuinely non-equivalent).
 
     uv run src/run.py x_by_xy              # one benchmark
     uv run src/run.py                      # every benchmark, model loaded once
+    uv run src/run.py x_by_xy --decoding egraph   # e-graph-constrained decoding
     uv run src/run.py --shard 0/8          # one shard per GPU (see scripts/run_gpus.sh)
     uv run src/run.py --summary-only       # re-print the results table, no generation
 """
@@ -16,17 +28,22 @@ with why it was rejected (missing rule vs. genuinely non-equivalent).
 import argparse
 import json
 import os
+import re
 import warnings
 
 import egrammar
 import fptaylor_check
 import paths
+import region_grammar
 import regions
 
 os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 warnings.filterwarnings("ignore", category=FutureWarning, module="kernels")
 
 MODEL_ID = "openai/gpt-oss-120b"
+
+# The opening `(if (op var NUMBER)` the head grammar can emit, to read back the threshold.
+COND = re.compile(r"\(if \((<=|>=|<|>) (\w+) (-?\d+(?:\.\d+)?)\)")
 
 
 def program_prompt(reference: str, box: dict | None) -> str:
@@ -162,6 +179,148 @@ def asap_samples(llm, grammar_str, args, base_ids):
     return [r.text.strip() for r in res]
 
 
+def head_grammar(benchmark, box, variables, runs):
+    """Emit either a complete no-branch program (whole-box region grammar), or the opening
+    `(FPCore (v) (if (op var <NUMBER>)` -- an arbitrary threshold, stopping at the `)`.
+    The shared `(FPCore (v) ` prefix is factored into one literal so the two alternatives
+    don't collide in the lexer when a token straddles that boundary."""
+    vs = " ".join(variables)
+    cond = " | ".join(f'"({op} " operand " " NUMBER ")"' for op in ("<", ">", "<=", ">="))
+    return "\n".join([
+        f'start: "(FPCore ({vs}) " body',
+        'body: e0 ")" | "(if " cond',
+        region_grammar.region_rules(benchmark, box, runs),
+        f"cond: {cond}",
+        "operand: " + " | ".join(f'"{v}"' for v in variables),
+        r'NUMBER: /-?[0-9]+(\.[0-9]+)?/',
+    ]) + "\n"
+
+
+def arm_grammar(benchmark, box, runs, closes):
+    """A leaf over `box`, with a leading space and `closes` trailing `)` (0 for the
+    then-arm; 2 for the else-arm, to close the `if` and the `FPCore`)."""
+    suffix = "".join(' ")"' for _ in range(closes))
+    return f'start: " " e0{suffix}\n{region_grammar.region_rules(benchmark, box, runs)}\n'
+
+
+class DynamicRegionRecognizer:
+    """A grammar recognizer that swaps its own grammar mid-generation, so an `if`-program
+    is decoded in ONE pass: it starts on the head grammar and, the moment that grammar
+    accepts `...(if (op var n)`, rebuilds the then-arm's region grammar over the sub-box
+    the guard selects and continues; likewise then-arm -> else-arm. A drop-in for casa's
+    LlguidanceTokenRecognizer, so `casa.ASAP` runs the whole program as a single sample
+    with its oracle trie/reweighting intact -- the swap points are a deterministic
+    function of the emitted prefix, so the trie's per-prefix masks stay valid."""
+
+    def __init__(self, llm, benchmark, box, saturation):
+        import llguidance
+        import llguidance.hf
+        import llguidance.torch
+        self._llg = llguidance
+        self.llm = llm
+        self.benchmark = benchmark
+        self.box = box
+        self.saturation = saturation
+        self.variables = regions.variables_of(egrammar.read_reference(benchmark))
+        self.ll_tokenizer = llguidance.hf.from_tokenizer(llm.tokenizer)
+        self._limits = llguidance.LLParserLimits(
+            max_items_in_row=int(os.environ.get("CASA_MAX_ITEMS_IN_ROW", "200000")))
+        self._bitmask = llguidance.torch.allocate_token_bitmask(
+            1, self.ll_tokenizer.vocab_size)
+        self._head_str = head_grammar(benchmark, regions.float_box(box),
+                                      self.variables, saturation)
+        self._arm_cache: dict[tuple, str] = {}  # (side, op, var, thr) -> arm grammar str
+        self.reset()
+
+    def _matcher(self, grammar_str):
+        return self._llg.LLMatcher(
+            self.ll_tokenizer, self._llg.grammar_from("grammar", grammar_str),
+            log_level=int(os.environ.get("LLGUIDANCE_LOG_LEVEL", "1")), limits=self._limits)
+
+    def _arm_str(self, side, op, var, thr):
+        key = (side, op, var, thr)
+        if key not in self._arm_cache:
+            guard = (op, var, thr) if side == "then" else (regions.NEGATE[op], var, thr)
+            sub = regions.narrow_box(self.box, [guard]) or self.box
+            self._arm_cache[key] = arm_grammar(self.benchmark, regions.float_box(sub),
+                                               self.saturation, 0 if side == "then" else 2)
+        return self._arm_cache[key]
+
+    def reset(self):
+        self.stage = "head"            # head -> then -> else -> done
+        self.current_index = 0         # absolute count of tokens consumed so far
+        self.active = self._matcher(self._head_str)
+        self._guard = None
+
+    @property
+    def ll_matcher(self):
+        return self.active
+
+    def try_advance_token_ids(self, token_ids) -> bool:
+        toks = token_ids.tolist() if hasattr(token_ids, "tolist") else list(token_ids)
+        new = toks[self.current_index:]
+        if not new:
+            return True
+        consumed = self.active.try_consume_tokens(new)
+        if (consumed == 0 and len(new) == 1 and new[0] == self.ll_tokenizer.eos_token
+                and self.active.is_accepting()):
+            consumed = 1  # a lone EOS in an accepting state counts as consumed
+        self.current_index += consumed
+        if consumed != len(new):
+            return False
+        self._maybe_transition(toks)
+        return True
+
+    def _maybe_transition(self, toks) -> None:
+        """At a segment boundary (the active grammar just accepted) advance head -> then
+        -> else. One token can close at most one segment, so this runs at most once."""
+        while self.stage in ("head", "then") and self.active.is_accepting():
+            if self.stage == "head":
+                text = self.llm.tokenizer.decode(
+                    toks[:self.current_index], skip_special_tokens=True).strip()
+                m = COND.search(text)
+                if m is None:          # a complete no-branch program was emitted
+                    self.stage = "done"
+                    break
+                self._guard = (m.group(1), m.group(2), m.group(3))
+                self.active = self._matcher(self._arm_str("then", *self._guard))
+                self.stage = "then"
+            else:                      # then-arm complete -> open the else-arm
+                self.active = self._matcher(self._arm_str("else", *self._guard))
+                self.stage = "else"
+
+    def filter_vocab(self):
+        self._llg.torch.fill_next_token_bitmask(self.active, self._bitmask, 0)
+        return self._bitmask
+
+
+def region_grammar_object(llm, benchmark, box, args):
+    """A casa.Grammar whose recognizer swaps grammars on the fly (DynamicRegionRecognizer)
+    for branching, or the plain whole-domain region grammar when there is no box."""
+    import casa
+    if box is None:
+        return casa.Grammar.from_string(
+            region_grammar.build_region(benchmark, None, args.saturation)[1], llm.tokenizer)
+    grammar = casa.Grammar.from_string(
+        head_grammar(benchmark, regions.float_box(box),
+                     regions.variables_of(egrammar.read_reference(benchmark)),
+                     args.saturation), llm.tokenizer)
+    grammar.recognizer = DynamicRegionRecognizer(llm, benchmark, box, args.saturation)
+    return grammar
+
+
+def egraph_samples(llm, benchmark, box, args, base_ids):
+    """Up to `args.samples` distinct programs from ONE ASAP call over the e-graph grammar,
+    the grammar swapping in place when the model opens an `if` (see
+    DynamicRegionRecognizer). The oracle trie persists across the samples for dedup."""
+    import casa
+    grammar = region_grammar_object(llm, benchmark, box, args)
+    res = casa.ASAP(llm, grammar, verbose=True, temperature=args.temperature).sample(
+        prompt_ids=base_ids, n_samples=args.samples, max_attempts=args.max_attempts)
+    free_cuda()
+    return [r.text.strip() for r in res]
+
+
 def validate(benchmark, box, program, timeout) -> bool:
     """True if every branch is equivalent to the reference over the region its guards
     select. `if` is total, so per-branch validity implies whole-program validity. Each
@@ -222,8 +381,11 @@ def run_benchmark(llm, benchmark: str, args) -> None:
     print(f"\n{'=' * 70}\n{benchmark}   box: {box or '(none)'}\n{reference}\n{'=' * 70}")
 
     base_ids = initial_ids(llm, program_prompt(reference, box), args)
-    candidates = asap_samples(llm, syntax_grammar(regions.variables_of(reference)),
-                              args, base_ids)
+    if args.decoding == "egraph":
+        candidates = egraph_samples(llm, benchmark, box, args, base_ids)
+    else:
+        candidates = asap_samples(llm, syntax_grammar(regions.variables_of(reference)),
+                                  args, base_ids)
     programs, attempts = evaluate_candidates(
         benchmark, reference, box, candidates, timeout=args.time_budget)
 
@@ -238,7 +400,7 @@ def run_benchmark(llm, benchmark: str, args) -> None:
         {"benchmark": benchmark, "reference": reference,
          "config": {"model": args.model, "temperature": args.temperature,
                     "effort": args.effort, "samples": args.samples,
-                    "max_attempts": args.max_attempts,
+                    "max_attempts": args.max_attempts, "decoding": args.decoding,
                     "time_budget": args.time_budget, "box": box},
          "programs": programs, "attempts": attempts}, indent=2))
     print(f"wrote {summary}")
@@ -361,6 +523,13 @@ def main() -> None:
     p.add_argument("--temperature", type=float, default=1.0)
     p.add_argument("--model", default=MODEL_ID)
     p.add_argument("--effort", choices=["low", "medium", "high"], default="medium")
+    p.add_argument("--decoding", choices=["light", "egraph"], default="light",
+                   help="light: sample under a static syntax grammar, verify after; "
+                        "egraph: grammar-constrained decoding over the e-graph of "
+                        "equivalent programs, rebuilt per arm when an `if` is emitted")
+    p.add_argument("--saturation", type=int, default=region_grammar.SATURATION_RUNS,
+                   metavar="RUNS", help="egraph decoding: e-graph saturation rounds when "
+                        "compiling the region grammar")
     p.add_argument("--time-budget", type=float, default=10.0, metavar="SECONDS",
                    help="per-check budget: saturate each branch until proven or this many "
                         "seconds elapse")
