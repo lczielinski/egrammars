@@ -29,5 +29,6 @@ for i in "${!pids[@]}"; do
 done
 
 echo; echo "===== combined summary ====="
-uv run src/run.py --summary-only
+# forward "$@" so --run/--decoding pick the same subdir the shards wrote to
+uv run src/run.py --summary-only "$@"
 exit $fail

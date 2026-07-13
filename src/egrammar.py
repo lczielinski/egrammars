@@ -77,10 +77,6 @@ def _nodes(eg) -> int:
     return sum(n for _, n in eg.run_program(*eg.parse_program("(print-size)"))[0].sizes)
 
 
-# Two proof passes (see `equivalent`), sound from either: `_run_aggressive` fires every
-# rule at once (fast, proves anything that doesn't blow up); `_run_throttled` fires the
-# combinatorial `expand` rules one step at a time, renormalizing in between, to rescue the
-# proofs that would otherwise blow the graph up. (egg's per-rule backoff scheduler by hand.)
 _CHEAP = "(run-schedule (repeat 4 (run)))"   # bounded cheap normalization (saturate can hang)
 _EXPAND = "(run expand 1)"                   # one throttled expansion step
 

@@ -12,12 +12,6 @@ Two decoding modes produce the candidate programs; both feed the same verificati
     each arm's box is narrowed by its guard and a region grammar is rebuilt on the fly
     over the sub-box, so every sampled program is equivalent by construction.
 
-Each candidate is verified regardless: every branch's guards narrow the input box and
-egglog proves the arm equivalent to the reference over that sub-box (egrammar.equivalent);
-a program with any non-equivalent branch is dropped. FPTaylor then bounds the survivors.
-Every candidate the model tried is recorded in the `attempts` field with why it was
-rejected (missing rule vs. genuinely non-equivalent).
-
     uv run src/run.py x_by_xy              # one benchmark
     uv run src/run.py                      # every benchmark, model loaded once
     uv run src/run.py x_by_xy --decoding egraph   # e-graph-constrained decoding
@@ -395,18 +389,19 @@ def run_benchmark(llm, benchmark: str, args) -> None:
     for rec in attempts:
         print(attempt_line(rec))
 
-    n, summary = paths.next_path(paths.EQUIVALENTS, benchmark)
+    eq_dir, ft_dir = paths.EQUIVALENTS / args.run, paths.FPTAYLOR / args.run
+    n, summary = paths.next_path(eq_dir, benchmark)
     summary.write_text(json.dumps(
         {"benchmark": benchmark, "reference": reference,
          "config": {"model": args.model, "temperature": args.temperature,
                     "effort": args.effort, "samples": args.samples,
                     "max_attempts": args.max_attempts, "decoding": args.decoding,
-                    "time_budget": args.time_budget, "box": box},
+                    "run": args.run, "time_budget": args.time_budget, "box": box},
          "programs": programs, "attempts": attempts}, indent=2))
     print(f"wrote {summary}")
     if programs:
         try:
-            fptaylor_check.check(benchmark, run=n)
+            fptaylor_check.check(benchmark, run=n, eq_dir=eq_dir, ft_dir=ft_dir)
         except (KeyError, FileNotFoundError) as e:
             print(f"skipping fptaylor: {e}")
 
@@ -420,9 +415,10 @@ def _metric(r):
     return (None, None)
 
 
-def _benchmark_row(b):
-    """Per-benchmark stats from its latest equivalents (+ fptaylor) run, or None."""
-    _, esrc = paths.latest(paths.EQUIVALENTS, b)
+def _benchmark_row(b, eq_dir, ft_dir):
+    """Per-benchmark stats from its latest equivalents (+ fptaylor) file in this run's
+    subdirs, or None."""
+    _, esrc = paths.latest(eq_dir, b)
     if esrc is None:
         return None
     attempts = json.loads(esrc.read_text()).get("attempts", [])
@@ -435,7 +431,7 @@ def _benchmark_row(b):
            "non_equiv": v(lambda a: unproven(a) and verd(a) == "different"),
            "indeterminate": v(lambda a: unproven(a) and verd(a) == "indeterminate"),
            "best_ulp": None, "verdict": "unmeasurable" if valid else "no-valid"}
-    _, fsrc = paths.latest(paths.FPTAYLOR, b)
+    _, fsrc = paths.latest(ft_dir, b)
     if fsrc is not None:
         fd = json.loads(fsrc.read_text())
         results = fd.get("results", [])
@@ -459,12 +455,15 @@ def _benchmark_row(b):
     return row
 
 
-def summarize(benchmarks: list[str]) -> None:
-    """Aggregate the latest runs into console output and summary.md: fraction of candidates
-    valid / missing-rule / non-equivalent, and of benchmarks improved over the reference."""
-    rows = [r for r in (_benchmark_row(b) for b in benchmarks) if r]
+def summarize(run: str) -> None:
+    """Aggregate one run's subdir into console output and equivalents/<run>/summary.md:
+    fraction of candidates valid / missing-rule / non-equivalent, and of benchmarks
+    improved over the reference. Enumerates whatever benchmarks the subdir contains."""
+    eq_dir, ft_dir = paths.EQUIVALENTS / run, paths.FPTAYLOR / run
+    benchmarks = paths.benchmarks_in(eq_dir)
+    rows = [r for r in (_benchmark_row(b, eq_dir, ft_dir) for b in benchmarks) if r]
     if not rows:
-        print("no results found (run some benchmarks first)")
+        print(f"no results found in {eq_dir} (run some benchmarks first)")
         return
 
     tot = sum(r["candidates"] for r in rows) or 1
@@ -504,8 +503,9 @@ def summarize(benchmarks: list[str]) -> None:
         ulp = f"{r['best_ulp']:.1f}" if r["best_ulp"] is not None else "-"
         lines.append(f"| {r['benchmark']} | {r['candidates']} | {r['valid']} | {ulp} | {r['verdict']} |")
 
+    lines[0] = f"# Benchmark run summary — {run}"
     text = "\n".join(lines) + "\n"
-    out = paths.ROOT / "summary.md"
+    out = eq_dir / "summary.md"
     out.write_text(text)
     print(text)
     print(f"wrote {out}")
@@ -527,6 +527,10 @@ def main() -> None:
                    help="light: sample under a static syntax grammar, verify after; "
                         "egraph: grammar-constrained decoding over the e-graph of "
                         "equivalent programs, rebuilt per arm when an `if` is emitted")
+    p.add_argument("--run", default=None, metavar="NAME",
+                   help="subdirectory under equivalents/ and fptaylor/ for this run's files "
+                        "(default: the --decoding method, so `light` and `egraph` land in "
+                        "separate dirs). Point --summary-only at it to summarize just that run.")
     p.add_argument("--saturation", type=int, default=region_grammar.SATURATION_RUNS,
                    metavar="RUNS", help="egraph decoding: e-graph saturation rounds when "
                         "compiling the region grammar")
@@ -534,6 +538,7 @@ def main() -> None:
                    help="per-check budget: saturate each branch until proven or this many "
                         "seconds elapse")
     args = p.parse_args()
+    args.run = args.run or args.decoding  # default each method to its own subdir
 
     benchmarks = [args.benchmark] if args.benchmark else shard(all_benchmarks(), args.shard)
 
@@ -548,7 +553,7 @@ def main() -> None:
                 print(f"!! {b} failed: {e!r}")
 
     if len(benchmarks) > 1 or args.summary_only:
-        summarize(benchmarks)
+        summarize(args.run)
 
 
 if __name__ == "__main__":

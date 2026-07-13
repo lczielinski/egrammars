@@ -129,14 +129,18 @@ def analyze_program(ast, box: dict, cfg_path: str) -> dict:
     return _combine(branches)
 
 
-def check(benchmark: str, run: int | None = None):
-    """Bound one equivalents run and write fptaylor/<benchmark>-NNN.json."""
+def check(benchmark: str, run: int | None = None, eq_dir=None, ft_dir=None):
+    """Bound one equivalents run and write <ft_dir>/<benchmark>-NNN.json (both dirs
+    default to the top-level equivalents/ and fptaylor/; pass the run subdirs to scope
+    a run)."""
+    eq_dir = eq_dir or paths.EQUIVALENTS
+    ft_dir = ft_dir or paths.FPTAYLOR
     if run is not None:
-        n, src = run, paths.path_for(paths.EQUIVALENTS, benchmark, run)
+        n, src = run, paths.path_for(eq_dir, benchmark, run)
     else:
-        n, src = paths.latest(paths.EQUIVALENTS, benchmark)
+        n, src = paths.latest(eq_dir, benchmark)
     if src is None or not src.exists():
-        raise FileNotFoundError(f"no equivalents file for {benchmark!r} in {paths.EQUIVALENTS}")
+        raise FileNotFoundError(f"no equivalents file for {benchmark!r} in {eq_dir}")
     box = INTERVALS.get(benchmark)
     if box is None:
         raise KeyError(f"no interval box for {benchmark!r} (have: {', '.join(sorted(INTERVALS))})")
@@ -181,8 +185,8 @@ def check(benchmark: str, run: int | None = None):
             label = "unbounded"
         print(f"{rank:2d}. {label:>13}  abs={fmt(r['abs_err'])}  {r['program']}")
 
-    paths.FPTAYLOR.mkdir(parents=True, exist_ok=True)
-    dst = paths.path_for(paths.FPTAYLOR, benchmark, n)
+    ft_dir.mkdir(parents=True, exist_ok=True)
+    dst = paths.path_for(ft_dir, benchmark, n)
     dst.write_text(json.dumps({
         "benchmark": benchmark, "reference": data.get("reference"),
         "config": data.get("config"), "intervals": box,
@@ -199,9 +203,13 @@ def main() -> None:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("benchmark")
     ap.add_argument("--run", type=int, default=None)
+    ap.add_argument("--run-dir", default=None, metavar="NAME",
+                    help="run subdirectory under equivalents/ and fptaylor/ (default: top level)")
     args = ap.parse_args()
+    eq_dir = paths.EQUIVALENTS / args.run_dir if args.run_dir else None
+    ft_dir = paths.FPTAYLOR / args.run_dir if args.run_dir else None
     try:
-        check(args.benchmark, args.run)
+        check(args.benchmark, args.run, eq_dir=eq_dir, ft_dir=ft_dir)
     except (FileNotFoundError, KeyError) as e:
         ap.error(str(e))
 

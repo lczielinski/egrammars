@@ -39,3 +39,14 @@ def latest(folder: Path, benchmark: str) -> tuple[int | None, Path | None]:
     if not runs:
         return None, None
     return runs[-1], path_for(folder, benchmark, runs[-1])
+
+
+def benchmarks_in(folder: Path) -> list[str]:
+    """Distinct benchmark names that have a `<name>-NNN.json` file in `folder`."""
+    if not folder.exists():
+        return []
+    names = set()
+    for p in folder.glob("*-*.json"):
+        if m := re.fullmatch(r"(.+)-(\d+)", p.stem):
+            names.add(m.group(1))
+    return sorted(names)
