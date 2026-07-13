@@ -1,0 +1,126 @@
+{
+  "benchmark": "test03_nonlin2",
+  "reference": "(FPCore (x y) (/ (+ x y) (- x y)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-13-183808-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "x": [
+        0.0,
+        1.0
+      ],
+      "y": [
+        -1.0,
+        -0.1
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (x y) (/ (+ x y) (- x y)))",
+    "(FPCore (x y) (/ (* (+ x y) (- x y)) (* (- x y) (- x y))))",
+    "(FPCore (x y) (/ (- (* (+ x y) x) (* (+ x y) y)) (- (- (* x x) (* y x)) (* y (- x y)))))",
+    "(FPCore (x y) (/ (* (- x y) (+ (* (- x y) (- (* x x) (* y x))) (* (- x y) (* y (+ x (- y)))))) (- (* x (+ (* x (* (- x y) (+ x (- y)))) (* (- x y) (* (* -1 y) (+ x (- y)))))) (- (* x (+ (* (- (* x y) (* y y)) (* -1 y)) (* (* (- x y) y) x))) (* (+ x (* -1 y)) (* y (* (- x y) y)))))))",
+    "(FPCore (x y) (/ (+ x y) (+ x (- y))))",
+    "(FPCore (x y) (/ (+ x y) (+ x (* -1 y))))",
+    "(FPCore (x y) (+ (/ (* (- x y) (- (* (- (* x y) (* y y)) x) (* (* y (- x y)) y))) (- (- (- (* (- x y) (* x (* x x))) (* y (* (- x y) (* x x)))) (* (* x (- x y)) (* (- x y) y))) (* (- (* x y) (* y y)) (* (- x y) (- x y))))) (- (/ (* (- (* x y) (* x x)) (* (- y x) x)) (* (* (* (- x y) (- x y)) (- y x)) (+ y (- x)))) (/ (+ (* (* y (- x y)) (* x (* -1 y))) (* y (* (- x y) (* x x)))) (* (- (- (* y y) (* x y)) (* x (- y x))) (+ (- (* (- x y) y)) (- (* x x) (* x y))))))))",
+    "(FPCore (x y) (+ (/ (+ (* (- x y) (* (- x y) (* x x))) (+ (* y (* x (+ (- (- (* x y) (* x x))) (* y (+ (- x) y))))) (* y (* (- x y) (* (- x y) (* -1 y)))))) (- (- (- (* (* x x) (* y (+ (* -1 x) y))) (* (* x x) (+ (* x y) (* x (* -1 x))))) (* (* y (+ (* -1 y) x)) (* x (+ (* -1 y) x)))) (* (* y (* (+ (* -1 y) x) (+ (* -1 y) x))) (+ (* -1 y) x)))) (/ (* (+ x (* -1 y)) (* (+ x (* -1 y)) (* x (* -1 y)))) (* (* (+ x (* -1 y)) (+ x (* -1 y))) (* (+ x (* -1 y)) (+ x (* -1 y)))))))",
+    "(FPCore (x y) (+ (/ x (- x y)) (/ y (- x y))))",
+    "(FPCore (x y) (/ (* (* (+ x (* -1 y)) (+ x (* -1 y))) (* (- x y) (+ x y))) (+ (+ (* x (- (* x (- (* y y) (* x y))) (* x (* x (- y x))))) (* (* (* -1 y) (- x y)) (+ (* y y) (+ (* x (- y)) (* (+ x (- y)) x))))) (* (+ x (* -1 y)) (* (+ x (* -1 y)) (* (- y) x))))))",
+    "(FPCore (x y) (/ (+ y x) (- x y)))",
+    "(FPCore (x y) (* (/ (+ x y) (- (* (- x y) x) (- (* y x) (* y y)))) (+ x (- y))))",
+    "(FPCore (x y) (+ (/ (* (- x y) (- (* (- (* y x) (* y y)) x) (* (* y (+ (* -1 y) x)) y))) (- (+ (- (* (* (* -1 y) x) (* y (+ (* -1 x) y))) (* (* x (- y)) (+ (* x y) (* x (- x))))) (- (* x (* (- x y) (* x x))) (* y (* (- x y) (* x x))))) (* (* (* y (- x y)) (+ (* -1 y) x)) (+ (* -1 y) x)))) (/ (* x (- x y)) (+ (* y (+ (* -1 x) y)) (* (* -1 x) (- y x))))))",
+    "(FPCore (x y) (/ (* (- x y) (+ (* (- x y) (- (* x y) (* y y))) (* (* (- x y) (- x y)) x))) (- (* (- x y) (- (* x (+ (* x x) (* (* -1 y) x))) (* x (+ (* x y) (* y (* -1 y)))))) (* (* (* (- x y) (- x y)) (- x y)) y))))",
+    "(FPCore (x y) (/ (* (* (+ x (* -1 y)) (+ x (* -1 y))) (+ (* x y) (+ (* x (- y)) (+ (* x x) (* y (- y)))))) (* (* (+ x (* -1 y)) (+ x (* -1 y))) (+ (* x x) (* (- y) (+ x (- x y)))))))",
+    "(FPCore (x y) (* (/ 1 (- x y)) (+ x y)))",
+    "(FPCore (x y) (/ (* (+ x y) (+ x (- y))) (- (* x (- x y)) (* y (- x y)))))",
+    "(FPCore (x y) (/ (* (+ x y) (+ x (- y))) (- (- (* x x) (* y x)) (* y (- x y)))))",
+    "(FPCore (x y) (/ (* (* (- x y) (- x y)) (+ (* x x) (+ (* y (- y)) (+ (* x y) (* x (- y)))))) (+ (* (- x y) (- (* x (- (* y y) (* x y))) (* x (- (* y x) (* x x))))) (* (- (* x (- y)) (* (- y) y)) (- (* x (- x y)) (* y (- x y)))))))",
+    "(FPCore (x y) (+ (* (/ 1 (- x y)) (* x (/ (- y) (+ x (- y))))) (* (/ 1 (- x y)) (* (/ 1 (- x y)) (+ (* y (- x y)) (* x x))))))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (x y) (/ (+ x y) (- x y)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (/ (* (+ x y) (- x y)) (* (- x y) (- x y))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (/ (- (* (+ x y) x) (* (+ x y) y)) (- (- (* x x) (* y x)) (* y (- x y)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (/ (* (- x y) (+ (* (- x y) (- (* x x) (* y x))) (* (- x y) (* y (+ x (- y)))))) (- (* x (+ (* x (* (- x y) (+ x (- y)))) (* (- x y) (* (* -1 y) (+ x (- y)))))) (- (* x (+ (* (- (* x y) (* y y)) (* -1 y)) (* (* (- x y) y) x))) (* (+ x (* -1 y)) (* y (* (- x y) y)))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ x y) (+ x (- y))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ x y) (+ x (* -1 y))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (+ (/ (* (- x y) (- (* (- (* x y) (* y y)) x) (* (* y (- x y)) y))) (- (- (- (* (- x y) (* x (* x x))) (* y (* (- x y) (* x x)))) (* (* x (- x y)) (* (- x y) y))) (* (- (* x y) (* y y)) (* (- x y) (- x y))))) (- (/ (* (- (* x y) (* x x)) (* (- y x) x)) (* (* (* (- x y) (- x y)) (- y x)) (+ y (- x)))) (/ (+ (* (* y (- x y)) (* x (* -1 y))) (* y (* (- x y) (* x x)))) (* (- (- (* y y) (* x y)) (* x (- y x))) (+ (- (* (- x y) y)) (- (* x x) (* x y))))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (+ (/ (+ (* (- x y) (* (- x y) (* x x))) (+ (* y (* x (+ (- (- (* x y) (* x x))) (* y (+ (- x) y))))) (* y (* (- x y) (* (- x y) (* -1 y)))))) (- (- (- (* (* x x) (* y (+ (* -1 x) y))) (* (* x x) (+ (* x y) (* x (* -1 x))))) (* (* y (+ (* -1 y) x)) (* x (+ (* -1 y) x)))) (* (* y (* (+ (* -1 y) x) (+ (* -1 y) x))) (+ (* -1 y) x)))) (/ (* (+ x (* -1 y)) (* (+ x (* -1 y)) (* x (* -1 y)))) (* (* (+ x (* -1 y)) (+ x (* -1 y))) (* (+ x (* -1 y)) (+ x (* -1 y)))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (+ (/ x (- x y)) (/ y (- x y))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (/ (* (* (+ x (* -1 y)) (+ x (* -1 y))) (* (- x y) (+ x y))) (+ (+ (* x (- (* x (- (* y y) (* x y))) (* x (* x (- y x))))) (* (* (* -1 y) (- x y)) (+ (* y y) (+ (* x (- y)) (* (+ x (- y)) x))))) (* (+ x (* -1 y)) (* (+ x (* -1 y)) (* (- y) x))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ y x) (- x y)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (* (/ (+ x y) (- (* (- x y) x) (- (* y x) (* y y)))) (+ x (- y))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (+ (/ (* (- x y) (- (* (- (* y x) (* y y)) x) (* (* y (+ (* -1 y) x)) y))) (- (+ (- (* (* (* -1 y) x) (* y (+ (* -1 x) y))) (* (* x (- y)) (+ (* x y) (* x (- x))))) (- (* x (* (- x y) (* x x))) (* y (* (- x y) (* x x))))) (* (* (* y (- x y)) (+ (* -1 y) x)) (+ (* -1 y) x)))) (/ (* x (- x y)) (+ (* y (+ (* -1 x) y)) (* (* -1 x) (- y x))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (/ (* (- x y) (+ (* (- x y) (- (* x y) (* y y))) (* (* (- x y) (- x y)) x))) (- (* (- x y) (- (* x (+ (* x x) (* (* -1 y) x))) (* x (+ (* x y) (* y (* -1 y)))))) (* (* (* (- x y) (- x y)) (- x y)) y))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (/ (* (* (+ x (* -1 y)) (+ x (* -1 y))) (+ (* x y) (+ (* x (- y)) (+ (* x x) (* y (- y)))))) (* (* (+ x (* -1 y)) (+ x (* -1 y))) (+ (* x x) (* (- y) (+ x (- x y)))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (* (/ 1 (- x y)) (+ x y)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (/ (* (+ x y) (+ x (- y))) (- (* x (- x y)) (* y (- x y)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (/ (* (+ x y) (+ x (- y))) (- (- (* x x) (* y x)) (* y (- x y)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (/ (* (* (- x y) (- x y)) (+ (* x x) (+ (* y (- y)) (+ (* x y) (* x (- y)))))) (+ (* (- x y) (- (* x (- (* y y) (* x y))) (* x (- (* y x) (* x x))))) (* (- (* x (- y)) (* (- y) y)) (- (* x (- x y)) (* y (- x y)))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (+ (* (/ 1 (- x y)) (* x (/ (- y) (+ x (- y))))) (* (/ 1 (- x y)) (* (/ 1 (- x y)) (+ (* y (- x y)) (* x x))))))",
+      "proven_equivalent": true
+    }
+  ]
+}

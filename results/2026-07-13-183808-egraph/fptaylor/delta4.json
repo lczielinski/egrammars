@@ -1,0 +1,344 @@
+{
+  "benchmark": "delta4",
+  "reference": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (- (+ (+ (- (* (- x2) x3) (* x1 x4)) (* x2 x5)) (* x3 x6)) (* x5 x6)) (* x1 (+ (+ (- (+ (+ (- x1) x2) x3) x4) x5) x6))))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-13-183808-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "x1": [
+        4.0,
+        6.3504
+      ],
+      "x2": [
+        4.0,
+        6.3504
+      ],
+      "x3": [
+        4.0,
+        6.3504
+      ],
+      "x4": [
+        4.0,
+        6.3504
+      ],
+      "x5": [
+        4.0,
+        6.3504
+      ],
+      "x6": [
+        4.0,
+        6.3504
+      ]
+    }
+  },
+  "intervals": {
+    "x1": [
+      4.0,
+      6.3504
+    ],
+    "x2": [
+      4.0,
+      6.3504
+    ],
+    "x3": [
+      4.0,
+      6.3504
+    ],
+    "x4": [
+      4.0,
+      6.3504
+    ],
+    "x5": [
+      4.0,
+      6.3504
+    ],
+    "x6": [
+      4.0,
+      6.3504
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "(((((((-(x2)) * x3) - (x1 * x4)) + (x2 * x5)) + (x3 * x6)) - (x5 * x6)) + (x1 * ((((((-(x1)) + x2) + x3) - x4) + x5) + x6)))",
+    "enclosure": [
+      -19.5537,
+      70.7191
+    ],
+    "abs_err": 5.770726e-14,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (- (+ (+ (- (* (- x2) x3) (* x1 x4)) (* x2 x5)) (* x3 x6)) (* x5 x6)) (* x1 (+ (+ (- (+ (+ (- x1) x2) x3) x4) x5) x6))))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "((x1 * ((((-(x1)) + x2) + x3) - x4)) + (((x1 * x5) + (x1 * x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * (-(x2))) - (x4 * x1)))) - (x5 * x6))))",
+      "enclosure": [
+        -19.59686,
+        70.60265
+      ],
+      "abs_err": 5.933177e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (+ (* x1 x5) (* x1 x6)) (- (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1)))) (* x5 x6)))))"
+    },
+    {
+      "fptaylor_expr": "((x1 * ((((-(x1)) + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + (((x1 * x5) + (-((x5 * x6)))) + ((x3 * x6) + ((x3 * (-(x2))) - (x4 * x1)))))))",
+      "enclosure": [
+        -19.59686,
+        70.74034
+      ],
+      "abs_err": 5.264145e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (* x2 x5) (+ (* x1 x6) (+ (+ (* x1 x5) (- (* x5 x6))) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1))))))))"
+    },
+    {
+      "fptaylor_expr": "((x1 * ((((-(x1)) + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + (((x1 * x5) + (-((x5 * x6)))) + ((x3 * x6) + ((x3 * (-(x2))) - (x1 * x4)))))))",
+      "enclosure": [
+        -19.59686,
+        70.74034
+      ],
+      "abs_err": 5.264145e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (* x2 x5) (+ (* x1 x6) (+ (+ (* x1 x5) (- (* x5 x6))) (+ (* x3 x6) (- (* x3 (- x2)) (* x1 x4))))))))"
+    },
+    {
+      "fptaylor_expr": "((x1 * ((((-(x1)) + x2) + x3) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * (-(x2))) - (x4 * x1)))) - (x5 * x6))))",
+      "enclosure": [
+        -19.59686,
+        70.60265
+      ],
+      "abs_err": 5.783765e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (* x1 (+ x5 x6)) (- (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1)))) (* x5 x6)))))"
+    },
+    {
+      "fptaylor_expr": "((x1 * (((-(x1)) + (x2 + x3)) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * (-(x2))) - (x1 * x4)))) - (x5 * x6))))",
+      "enclosure": [
+        -19.59686,
+        70.60265
+      ],
+      "abs_err": 6.347243e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* x1 (- (+ (- x1) (+ x2 x3)) x4)) (+ (* x1 (+ x5 x6)) (- (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x1 x4)))) (* x5 x6)))))"
+    },
+    {
+      "fptaylor_expr": "((x1 * ((((x2 + x3) + (-(x1))) - x4) + (x5 + x6))) + (((x2 * x5) + ((-((x2 * x3))) + ((-((x1 * x4))) + (x6 * x3)))) - (x5 * x6)))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* x1 (+ (- (+ (+ x2 x3) (- x1)) x4) (+ x5 x6))) (- (+ (* x2 x5) (+ (- (* x2 x3)) (+ (- (* x1 x4)) (* x6 x3)))) (* x5 x6))))"
+    },
+    {
+      "fptaylor_expr": "((x1 * ((((-(x1)) + x2) + x3) - x4)) + ((x2 * x5) + ((x1 * x6) + (((-((x3 * x2))) + ((-((x5 * x6))) + ((-((x4 * x1))) + (x3 * x6)))) + (x5 * x1)))))",
+      "enclosure": [
+        -19.59686,
+        70.62407
+      ],
+      "abs_err": 5.311452e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (* x2 x5) (+ (* x1 x6) (+ (+ (- (* x3 x2)) (+ (- (* x5 x6)) (+ (- (* x4 x1)) (* x3 x6)))) (* x5 x1))))))"
+    },
+    {
+      "fptaylor_expr": "((x1 * ((((-(x1)) + x2) + x3) - x4)) + ((x2 * x5) + ((-((x1 * x4))) + ((-((x5 * x6))) + ((x3 * (x6 + (-(x2)))) + (x1 * (x5 + x6)))))))",
+      "enclosure": [
+        -19.56014,
+        70.60274
+      ],
+      "abs_err": 5.098766e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (* x2 x5) (+ (- (* x1 x4)) (+ (- (* x5 x6)) (+ (* x3 (+ x6 (- x2))) (* x1 (+ x5 x6))))))))"
+    },
+    {
+      "fptaylor_expr": "((x1 * ((x2 + (x3 + (-(x1)))) - x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * (-(x2))) - (x4 * x1)))) - (x5 * x6))))",
+      "enclosure": [
+        -19.59686,
+        70.60265
+      ],
+      "abs_err": 5.783765e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* x1 (- (+ x2 (+ x3 (- x1))) x4)) (+ (* x1 (+ x5 x6)) (- (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1)))) (* x5 x6)))))"
+    },
+    {
+      "fptaylor_expr": "(((x1 * (((x2 + x3) + (-(x1))) - x4)) + (x1 * (x5 + x6))) + (((x2 * x5) + ((x3 * x6) + ((x3 * (-(x2))) - (x4 * x1)))) - (x5 * x6)))",
+      "enclosure": [
+        -19.59686,
+        70.60265
+      ],
+      "abs_err": 6.702515e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (+ (* x1 (- (+ (+ x2 x3) (- x1)) x4)) (* x1 (+ x5 x6))) (- (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1)))) (* x5 x6))))"
+    },
+    {
+      "fptaylor_expr": "((x1 * ((((-(x1)) + x2) + x3) - x4)) + ((x2 * x5) + ((-((x3 * x2))) + (((x6 * x3) + (-(((x4 * x1) + (x5 * x6))))) + (x1 * (x5 + x6))))))",
+      "enclosure": [
+        -19.59686,
+        70.62398
+      ],
+      "abs_err": 5.890897e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (* x2 x5) (+ (- (* x3 x2)) (+ (+ (* x6 x3) (- (+ (* x4 x1) (* x5 x6)))) (* x1 (+ x5 x6)))))))"
+    },
+    {
+      "fptaylor_expr": "((x1 * (((x2 + x3) + (-(x1))) - x4)) + ((x2 * x5) + ((-((x2 * x3))) + (((x3 * x6) + (-(((x1 * x4) + (x5 * x6))))) + (x1 * (x6 + x5))))))",
+      "enclosure": [
+        -19.59686,
+        70.62398
+      ],
+      "abs_err": 6.454375e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* x1 (- (+ (+ x2 x3) (- x1)) x4)) (+ (* x2 x5) (+ (- (* x2 x3)) (+ (+ (* x3 x6) (- (+ (* x1 x4) (* x5 x6)))) (* x1 (+ x6 x5)))))))"
+    },
+    {
+      "fptaylor_expr": "((x1 * (((((x2 + x3) + x5) + x6) + (-(x1))) + (-(x4)))) + (((x2 * x5) + (((-(x2)) * x3) + ((x6 * x3) + (-((x4 * x1)))))) - (x5 * x6)))",
+      "enclosure": [
+        -19.5537,
+        70.60265
+      ],
+      "abs_err": 8.24258e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* x1 (+ (+ (+ (+ (+ x2 x3) x5) x6) (- x1)) (- x4))) (- (+ (* x2 x5) (+ (* (- x2) x3) (+ (* x6 x3) (- (* x4 x1))))) (* x5 x6))))"
+    },
+    {
+      "fptaylor_expr": "((x1 * ((((x2 + x3) + x5) + x6) + (-(x1)))) + (((-(x4)) * x1) + (((x2 * x5) + ((x3 * x6) + ((x3 * (-(x2))) - (x4 * x1)))) - (x5 * x6))))",
+      "enclosure": [
+        -19.61201,
+        70.6761
+      ],
+      "abs_err": 9.366091e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* x1 (+ (+ (+ (+ x2 x3) x5) x6) (- x1))) (+ (* (- x4) x1) (- (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1)))) (* x5 x6)))))"
+    },
+    {
+      "fptaylor_expr": "(((x1 * (((-(x1)) + x2) + x3)) - (x1 * x4)) + ((x1 * (x5 + x6)) + (((x2 * x5) + ((x3 * x6) + ((x3 * (-(x2))) - (x4 * x1)))) - (x5 * x6))))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (- (* x1 (+ (+ (- x1) x2) x3)) (* x1 x4)) (+ (* x1 (+ x5 x6)) (- (+ (* x2 x5) (+ (* x3 x6) (- (* x3 (- x2)) (* x4 x1)))) (* x5 x6)))))"
+    },
+    {
+      "fptaylor_expr": "(((x1 + x3) * x6) + ((x1 * (((x2 + x3) + (-(x1))) - x4)) + ((x1 * x5) + ((x2 * x5) + ((x3 * (-(x2))) + (-(((x5 * x6) + (x4 * x1)))))))))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* (+ x1 x3) x6) (+ (* x1 (- (+ (+ x2 x3) (- x1)) x4)) (+ (* x1 x5) (+ (* x2 x5) (+ (* x3 (- x2)) (- (+ (* x5 x6) (* x4 x1)))))))))"
+    },
+    {
+      "fptaylor_expr": "((x2 * x1) + ((x3 * x1) + ((x1 * (-((x4 + x1)))) + ((x5 * x1) + ((x6 * x1) + (((x2 * x5) + ((x3 * x6) + ((x3 * (-(x2))) + (-((x1 * x4)))))) - (x5 * x6)))))))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* x2 x1) (+ (* x3 x1) (+ (* x1 (- (+ x4 x1))) (+ (* x5 x1) (+ (* x6 x1) (- (+ (* x2 x5) (+ (* x3 x6) (+ (* x3 (- x2)) (- (* x1 x4))))) (* x5 x6))))))))"
+    },
+    {
+      "fptaylor_expr": "((x1 * (((((-((x1 + x4))) + x2) + x3) + x5) + x6)) + (((x2 * x5) + ((-((x2 * x3))) + ((-((x1 * x4))) + (x3 * x6)))) - (x5 * x6)))",
+      "enclosure": [
+        -19.5537,
+        70.66087
+      ],
+      "abs_err": 5.890514e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* x1 (+ (+ (+ (+ (- (+ x1 x4)) x2) x3) x5) x6)) (- (+ (* x2 x5) (+ (- (* x2 x3)) (+ (- (* x1 x4)) (* x3 x6)))) (* x5 x6))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 6.542313e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((x1 * ((((-(x1)) + x2) + x3) - x4)) + ((x2 * x5) + ((x3 * x6) + ((x5 * x1) + ((x6 * x1) + ((x3 * (-(x2))) + ((-((x1 * x4))) + (-((x5 * x6))))))))))",
+          "enclosure": [
+            -19.59686,
+            70.62398
+          ],
+          "abs_err": 6.542313e-14,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "x4 >= 0",
+          "region": {
+            "x1": [
+              4.0,
+              6.3504
+            ],
+            "x2": [
+              4.0,
+              6.3504
+            ],
+            "x3": [
+              4.0,
+              6.3504
+            ],
+            "x4": [
+              4.0,
+              6.3504
+            ],
+            "x5": [
+              4.0,
+              6.3504
+            ],
+            "x6": [
+              4.0,
+              6.3504
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (if (< x4 0) (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (* x2 x5) (+ (* x3 x6) (+ (* x5 x1) (+ (* x6 x1) (+ (* x3 (- x2)) (+ (- (* x1 x4)) (- (* x5 x6))))))))) (+ (* x1 (- (+ (+ (- x1) x2) x3) x4)) (+ (* x2 x5) (+ (* x3 x6) (+ (* x5 x1) (+ (* x6 x1) (+ (* x3 (- x2)) (+ (- (* x1 x4)) (- (* x5 x6)))))))))))"
+    },
+    {
+      "fptaylor_expr": "((x1 * (-((x1 + x4)))) + ((x2 * x1) + ((x1 * x3) + ((x1 * x5) + ((x1 * x6) + ((x2 * x5) + ((-((x2 * x3))) + ((-((x5 * x6))) + ((-((x1 * x4))) + (x3 * x6))))))))))",
+      "enclosure": [
+        -19.67031,
+        70.71901
+      ],
+      "abs_err": 8.912906e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* x1 (- (+ x1 x4))) (+ (* x2 x1) (+ (* x1 x3) (+ (* x1 x5) (+ (* x1 x6) (+ (* x2 x5) (+ (- (* x2 x3)) (+ (- (* x5 x6)) (+ (- (* x1 x4)) (* x3 x6)))))))))))"
+    }
+  ]
+}

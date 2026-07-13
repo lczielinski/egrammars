@@ -1,0 +1,130 @@
+{
+  "benchmark": "rigidbody1",
+  "reference": "(FPCore (x1 x2 x3) (- (- (- (- (* x1 x2)) (* (* 2 x2) x3)) x1) x3))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-13-183808-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "x1": [
+        -15.0,
+        15.0
+      ],
+      "x2": [
+        -15.0,
+        15.0
+      ],
+      "x3": [
+        -15.0,
+        15.0
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (x1 x2 x3) (- (+ (+ (* x1 x2) (* 2 (* x2 x3))) (+ x1 x3))))",
+    "(FPCore (x1 x2 x3) (- (+ (- (+ (* x1 x2) (* 2 (* x2 x3)))) (- x1)) x3))",
+    "(FPCore (x1 x2 x3) (- (+ (+ (* x1 x2) (+ (* 2 (* x2 x3)) x1)) x3)))",
+    "(FPCore (x1 x2 x3) (- (+ (+ (* x2 x1) (* 2 (* x2 x3))) (+ x1 x3))))",
+    "(FPCore (x1 x2 x3) (- (+ (+ (* x1 x2) (* (* 2 x2) x3)) (+ x1 x3))))",
+    "(FPCore (x1 x2 x3) (+ (- (* x1 x2)) (- (+ (* 2 (* x2 x3)) (+ x1 x3)))))",
+    "(FPCore (x1 x2 x3) (+ (- (+ (* x1 x2) (* 2 (* x2 x3)))) (- (+ x1 x3))))",
+    "(FPCore (x1 x2 x3) (- (+ (* x1 x2) (+ (* 2 (* x2 x3)) (+ x1 x3)))))",
+    "(FPCore (x1 x2 x3) (+ (- (- (* x1 x2)) (* 2 (* x2 x3))) (- (+ x1 x3))))",
+    "(FPCore (x1 x2 x3) (+ (+ (- (+ (* x1 x2) (* 2 (* x2 x3)))) (- x1)) (- x3)))",
+    "(FPCore (x1 x2 x3) (+ (+ (+ (* x2 (* -2 x3)) (- (* x1 x2))) (- x1)) (- x3)))",
+    "(FPCore (x1 x2 x3) (- (+ (- (* x1 x2)) (- (+ (* 2 (* x2 x3)) x1))) x3))",
+    "(FPCore (x1 x2 x3) (- (- (- (- (* x1 x2)) (* 2 (* x2 x3))) x1) x3))",
+    "(FPCore (x1 x2 x3) (+ (- (+ (+ (* x1 x2) (* 2 (* x2 x3))) x1)) (- x3)))",
+    "(FPCore (x1 x2 x3) (+ (- (- (- (* x1 x2)) (* 2 (* x2 x3))) x1) (- x3)))",
+    "(FPCore (x1 x2 x3) (- (- (+ (+ (* x1 x2) (* 2 (* x2 x3))) x1)) x3))",
+    "(FPCore (x1 x2 x3) (+ (* -2 (* x2 x3)) (- (+ (* x1 x2) (+ x1 x3)))))",
+    "(FPCore (x1 x2 x3) (+ (+ (- (* x1 x2)) (- (* 2 (* x2 x3)))) (- (+ x1 x3))))",
+    "(FPCore (x1 x2 x3) (+ (+ (+ (- (* x1 x2)) (- (* 2 (* x2 x3)))) (- x1)) (- x3)))",
+    "(FPCore (x1 x2 x3) (+ (+ (* -2 (* x2 x3)) (- (* x1 x2))) (- (+ x1 x3))))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (x1 x2 x3) (- (+ (+ (* x1 x2) (* 2 (* x2 x3))) (+ x1 x3))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (- (+ (- (+ (* x1 x2) (* 2 (* x2 x3)))) (- x1)) x3))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (- (+ (+ (* x1 x2) (+ (* 2 (* x2 x3)) x1)) x3)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (- (+ (+ (* x2 x1) (* 2 (* x2 x3))) (+ x1 x3))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (- (+ (+ (* x1 x2) (* (* 2 x2) x3)) (+ x1 x3))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (+ (- (* x1 x2)) (- (+ (* 2 (* x2 x3)) (+ x1 x3)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (+ (- (+ (* x1 x2) (* 2 (* x2 x3)))) (- (+ x1 x3))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (- (+ (* x1 x2) (+ (* 2 (* x2 x3)) (+ x1 x3)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (+ (- (- (* x1 x2)) (* 2 (* x2 x3))) (- (+ x1 x3))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (+ (+ (- (+ (* x1 x2) (* 2 (* x2 x3)))) (- x1)) (- x3)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (+ (+ (+ (* x2 (* -2 x3)) (- (* x1 x2))) (- x1)) (- x3)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (- (+ (- (* x1 x2)) (- (+ (* 2 (* x2 x3)) x1))) x3))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (- (- (- (- (* x1 x2)) (* 2 (* x2 x3))) x1) x3))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (+ (- (+ (+ (* x1 x2) (* 2 (* x2 x3))) x1)) (- x3)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (+ (- (- (- (* x1 x2)) (* 2 (* x2 x3))) x1) (- x3)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (- (- (+ (+ (* x1 x2) (* 2 (* x2 x3))) x1)) x3))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (+ (* -2 (* x2 x3)) (- (+ (* x1 x2) (+ x1 x3)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (+ (+ (- (* x1 x2)) (- (* 2 (* x2 x3)))) (- (+ x1 x3))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (+ (+ (+ (- (* x1 x2)) (- (* 2 (* x2 x3)))) (- x1)) (- x3)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x1 x2 x3) (+ (+ (* -2 (* x2 x3)) (- (* x1 x2))) (- (+ x1 x3))))",
+      "proven_equivalent": true
+    }
+  ]
+}

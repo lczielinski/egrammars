@@ -1,0 +1,134 @@
+{
+  "benchmark": "martel_p6",
+  "reference": "(FPCore (a b c d) (* (+ a (+ b (+ c d))) 2))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-13-183808-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "a": [
+        -14.0,
+        -13.0
+      ],
+      "b": [
+        -3.0,
+        -2.0
+      ],
+      "c": [
+        3.0,
+        3.5
+      ],
+      "d": [
+        12.5,
+        13.5
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (a b c d) (* (+ a (+ b (+ c d))) 2))",
+    "(FPCore (a b c d) (* 2 (+ a (+ b (+ c d)))))",
+    "(FPCore (a b c d) (* (+ a (+ (+ b c) d)) 2))",
+    "(FPCore (a b c d) (+ (* 2 a) (* 2 (+ b (+ c d)))))",
+    "(FPCore (a b c d) (* (+ a (+ b (+ d c))) 2))",
+    "(FPCore (a b c d) (* (+ (+ a (+ b c)) d) 2))",
+    "(FPCore (a b c d) (* (+ b (+ c (+ d a))) 2))",
+    "(FPCore (a b c d) (+ (* 2 a) (+ (* 2 b) (+ (* 2 c) (* 2 d)))))",
+    "(FPCore (a b c d) (+ (* 2 (+ a (+ b c))) (* 2 d)))",
+    "(FPCore (a b c d) (* (+ a (+ d (+ b c))) 2))",
+    "(FPCore (a b c d) (+ (* a 2) (* (+ b (+ c d)) 2)))",
+    "(FPCore (a b c d) (+ (* (+ a (+ b c)) 2) (* d 2)))",
+    "(FPCore (a b c d) (* (+ a (+ c (+ b d))) 2))",
+    "(FPCore (a b c d) (* (+ d (+ c (+ b a))) 2))",
+    "(FPCore (a b c d) (if (< a 0) (* (+ a (+ b (+ c d))) 2) (* (+ a (+ b (+ c d))) 2)))",
+    "(FPCore (a b c d) (if (< a -13.5) (* (+ a (+ b (+ c d))) 2) (* (+ a (+ b (+ c d))) 2)))",
+    "(FPCore (a b c d) (* (+ c (+ d (+ a b))) 2))",
+    "(FPCore (a b c d) (+ (* a 2) (+ (* b 2) (+ (* c 2) (* d 2)))))",
+    "(FPCore (a b c d) (+ (+ (* 2 a) (* 2 b)) (+ (* 2 c) (* 2 d))))",
+    "(FPCore (a b c d) (* (+ a (+ (+ c d) b)) 2))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (a b c d) (* (+ a (+ b (+ c d))) 2))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (* 2 (+ a (+ b (+ c d)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (* (+ a (+ (+ b c) d)) 2))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (+ (* 2 a) (* 2 (+ b (+ c d)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (* (+ a (+ b (+ d c))) 2))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (* (+ (+ a (+ b c)) d) 2))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (* (+ b (+ c (+ d a))) 2))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (+ (* 2 a) (+ (* 2 b) (+ (* 2 c) (* 2 d)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (+ (* 2 (+ a (+ b c))) (* 2 d)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (* (+ a (+ d (+ b c))) 2))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (+ (* a 2) (* (+ b (+ c d)) 2)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (+ (* (+ a (+ b c)) 2) (* d 2)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (* (+ a (+ c (+ b d))) 2))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (* (+ d (+ c (+ b a))) 2))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (if (< a 0) (* (+ a (+ b (+ c d))) 2) (* (+ a (+ b (+ c d))) 2)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (if (< a -13.5) (* (+ a (+ b (+ c d))) 2) (* (+ a (+ b (+ c d))) 2)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (* (+ c (+ d (+ a b))) 2))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (+ (* a 2) (+ (* b 2) (+ (* c 2) (* d 2)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (+ (+ (* 2 a) (* 2 b)) (+ (* 2 c) (* 2 d))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c d) (* (+ a (+ (+ c d) b)) 2))",
+      "proven_equivalent": true
+    }
+  ]
+}

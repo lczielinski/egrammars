@@ -1,0 +1,126 @@
+{
+  "benchmark": "excel_x0",
+  "reference": "(FPCore (x0 x1) (- (/ x0 (- 1 x1)) x0))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-13-183808-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "x0": [
+        1.0,
+        3.0
+      ],
+      "x1": [
+        0.0001,
+        0.02
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (x0 x1) (if (< x1 0) (* x0 (- (/ 1 (- 1 x1)) 1)) (+ (/ x0 (- 1 x1)) (- x0))))",
+    "(FPCore (x0 x1) (* x0 (- (/ 1 (- 1 x1)) 1)))",
+    "(FPCore (x0 x1) (- (/ x0 (- 1 x1)) x0))",
+    "(FPCore (x0 x1) (+ (* x0 (/ 1 (- 1 x1))) (- x0)))",
+    "(FPCore (x0 x1) (+ (* (/ 1 (- 1 x1)) x0) (- x0)))",
+    "(FPCore (x0 x1) (+ (- x0) (/ x0 (- 1 x1))))",
+    "(FPCore (x0 x1) (+ (/ x0 (- 1 x1)) (- x0)))",
+    "(FPCore (x0 x1) (- (* x0 (/ 1 (- 1 x1))) x0))",
+    "(FPCore (x0 x1) (+ (* -1 x0) (/ x0 (- 1 x1))))",
+    "(FPCore (x0 x1) (+ (* x0 (/ 1 (- 1 x1))) (* -1 x0)))",
+    "(FPCore (x0 x1) (- (* (/ 1 (- 1 x1)) x0) x0))",
+    "(FPCore (x0 x1) (+ (* (/ 1 (- 1 x1)) x0) (* -1 x0)))",
+    "(FPCore (x0 x1) (+ (/ x0 (- 1 x1)) (* -1 x0)))",
+    "(FPCore (x0 x1) (+ (* x0 (/ 1 (+ (- x1) 1))) (* -1 x0)))",
+    "(FPCore (x0 x1) (if (>= x1 0) (- (/ x0 (- 1 x1)) x0) (+ (/ x0 (- 1 x1)) (- x0))))",
+    "(FPCore (x0 x1) (+ (* -1 x0) (/ x0 (+ 1 (- x1)))))",
+    "(FPCore (x0 x1) (if (<= x1 0) (+ (* x0 (/ 1 (- 1 x1))) (- x0)) (+ (* x0 (/ 1 (- 1 x1))) (- x0))))",
+    "(FPCore (x0 x1) (- (/ x0 (+ (- x1) 1)) x0))",
+    "(FPCore (x0 x1) (+ (* -1 x0) (* (/ 1 (- 1 x1)) x0)))",
+    "(FPCore (x0 x1) (+ (- x0) (* x0 (/ 1 (- 1 x1)))))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (x0 x1) (if (< x1 0) (* x0 (- (/ 1 (- 1 x1)) 1)) (+ (/ x0 (- 1 x1)) (- x0))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (* x0 (- (/ 1 (- 1 x1)) 1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (- (/ x0 (- 1 x1)) x0))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (+ (* x0 (/ 1 (- 1 x1))) (- x0)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (+ (* (/ 1 (- 1 x1)) x0) (- x0)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (+ (- x0) (/ x0 (- 1 x1))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (+ (/ x0 (- 1 x1)) (- x0)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (- (* x0 (/ 1 (- 1 x1))) x0))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (+ (* -1 x0) (/ x0 (- 1 x1))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (+ (* x0 (/ 1 (- 1 x1))) (* -1 x0)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (- (* (/ 1 (- 1 x1)) x0) x0))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (+ (* (/ 1 (- 1 x1)) x0) (* -1 x0)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (+ (/ x0 (- 1 x1)) (* -1 x0)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (+ (* x0 (/ 1 (+ (- x1) 1))) (* -1 x0)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (if (>= x1 0) (- (/ x0 (- 1 x1)) x0) (+ (/ x0 (- 1 x1)) (- x0))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (+ (* -1 x0) (/ x0 (+ 1 (- x1)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (if (<= x1 0) (+ (* x0 (/ 1 (- 1 x1))) (- x0)) (+ (* x0 (/ 1 (- 1 x1))) (- x0))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (- (/ x0 (+ (- x1) 1)) x0))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (+ (* -1 x0) (* (/ 1 (- 1 x1)) x0)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x0 x1) (+ (- x0) (* x0 (/ 1 (- 1 x1)))))",
+      "proven_equivalent": true
+    }
+  ]
+}

@@ -1,0 +1,308 @@
+{
+  "benchmark": "beta_a",
+  "reference": "(FPCore (m v) (* (- (/ (* m (- 1 m)) v) 1) m))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-13-183808-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "m": [
+        0.4,
+        0.6
+      ],
+      "v": [
+        0.2,
+        0.25
+      ]
+    }
+  },
+  "intervals": {
+    "m": [
+      0.4,
+      0.6
+    ],
+    "v": [
+      0.2,
+      0.25
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "((((m * (1 - m)) / v) - 1) * m)",
+    "enclosure": [
+      -0.03000001,
+      0.1400782
+    ],
+    "abs_err": 2.220447e-16,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (m v) (* (- (/ (* m (- 1 m)) v) 1) m))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "(((m / v) + (-1 * (((m * (m * v)) / (v * v)) + 1))) * m)",
+      "enclosure": [
+        -0.08387574,
+        0.2055097
+      ],
+      "abs_err": 8.001438e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (* (+ (/ m v) (* -1 (+ (/ (* m (* m v)) (* v v)) 1))) m))"
+    },
+    {
+      "fptaylor_expr": "(((m / v) + (-(((m * (m / v)) + 1)))) * m)",
+      "enclosure": [
+        -0.06115385,
+        0.1763116
+      ],
+      "abs_err": 2.844947e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (* (+ (/ m v) (- (+ (* m (/ m v)) 1))) m))"
+    },
+    {
+      "fptaylor_expr": "(((m * ((v / (v * v)) - (m / v))) - 1) * m)",
+      "enclosure": [
+        -0.08754808,
+        0.2198864
+      ],
+      "abs_err": 5.778928e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (* (- (* m (- (/ v (* v v)) (/ m v))) 1) m))"
+    },
+    {
+      "fptaylor_expr": "(((m / v) + (-((((m * m) / v) + 1)))) * m)",
+      "enclosure": [
+        -0.06115385,
+        0.1763116
+      ],
+      "abs_err": 4.468648e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (* (+ (/ m v) (- (+ (/ (* m m) v) 1))) m))"
+    },
+    {
+      "fptaylor_expr": "(((m / v) * (-((m * m)))) + (m * ((m / v) + (-(1)))))",
+      "enclosure": [
+        -0.0697476,
+        0.1862654
+      ],
+      "abs_err": 5.073633e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (+ (* (/ m v) (- (* m m))) (* m (+ (/ m v) (- 1)))))"
+    },
+    {
+      "fptaylor_expr": "((((m * (1 - m)) / v) - 1) * m)",
+      "enclosure": [
+        -0.03000001,
+        0.1400782
+      ],
+      "abs_err": 2.220447e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (* (- (/ (* m (- 1 m)) v) 1) m))"
+    },
+    {
+      "fptaylor_expr": "(((m / v) + (-1 * (((m * m) / v) + 1))) * m)",
+      "enclosure": [
+        -0.06115385,
+        0.1763116
+      ],
+      "abs_err": 5.800916e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (* (+ (/ m v) (* -1 (+ (/ (* m m) v) 1))) m))"
+    },
+    {
+      "fptaylor_expr": "(((m / v) * (m * (1 - m))) + (-1 * m))",
+      "enclosure": [
+        -0.03593751,
+        0.1463282
+      ],
+      "abs_err": 3.006157e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (+ (* (/ m v) (* m (- 1 m))) (* -1 m)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 3.764798e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((((v * ((m * (-(m))) + m)) / (v * v)) + (-(1))) * m)",
+          "enclosure": [
+            -0.05302501,
+            0.1715481
+          ],
+          "abs_err": 3.764798e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "v >= 0",
+          "region": {
+            "m": [
+              0.4,
+              0.6
+            ],
+            "v": [
+              0.2,
+              0.25
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (m v) (if (< v 0) (* (+ (* m (- (/ v (* v v)) (/ m v))) (- 1)) m) (* (+ (/ (* v (+ (* m (- m)) m)) (* v v)) (- 1)) m)))"
+    },
+    {
+      "fptaylor_expr": "(((m * ((1 - m) * (1 / v))) - 1) * m)",
+      "enclosure": [
+        -0.03000001,
+        0.1400782
+      ],
+      "abs_err": 2.83662e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (* (- (* m (* (- 1 m) (/ 1 v))) 1) m))"
+    },
+    {
+      "fptaylor_expr": "(((m / v) * (m * (1 - m))) + ((-(1)) * m))",
+      "enclosure": [
+        -0.03593751,
+        0.1463282
+      ],
+      "abs_err": 3.006157e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (+ (* (/ m v) (* m (- 1 m))) (* (- 1) m)))"
+    },
+    {
+      "fptaylor_expr": "((((m / v) - ((m * (m * v)) / (v * v))) * m) + (m * (-(1))))",
+      "enclosure": [
+        -0.08925204,
+        0.2117597
+      ],
+      "abs_err": 6.946726e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (+ (* (- (/ m v) (/ (* m (* m v)) (* v v))) m) (* m (- 1))))"
+    },
+    {
+      "fptaylor_expr": "(((m * ((1 - m) / v)) + (-(1))) * m)",
+      "enclosure": [
+        -0.03000001,
+        0.1400782
+      ],
+      "abs_err": 2.18714e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (* (+ (* m (/ (- 1 m) v)) (- 1)) m))"
+    },
+    {
+      "fptaylor_expr": "(((m / v) * (m * (1 - m))) - m)",
+      "enclosure": [
+        -0.03593751,
+        0.1463282
+      ],
+      "abs_err": 2.643719e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (- (* (/ m v) (* m (- 1 m))) m))"
+    },
+    {
+      "fptaylor_expr": "(((m * (m - (m * m))) / v) + (-1 * m))",
+      "enclosure": [
+        -0.04484376,
+        0.1557422
+      ],
+      "abs_err": 3.556184e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (+ (/ (* m (- m (* m m))) v) (* -1 m)))"
+    },
+    {
+      "fptaylor_expr": "(((m * (((v * v) - ((m * v) * v)) / (v * (v * v)))) - 1) * m)",
+      "enclosure": [
+        -0.1003594,
+        0.2455079
+      ],
+      "abs_err": 6.203051e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (* (- (* m (/ (- (* v v) (* (* m v) v)) (* v (* v v)))) 1) m))"
+    },
+    {
+      "fptaylor_expr": "(((m / v) * (m * (1 - m))) + (-(m)))",
+      "enclosure": [
+        -0.03593751,
+        0.1463282
+      ],
+      "abs_err": 2.643719e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (+ (* (/ m v) (* m (- 1 m))) (- m)))"
+    },
+    {
+      "fptaylor_expr": "((((m * (1 - m)) / v) + (-(1))) * m)",
+      "enclosure": [
+        -0.03000001,
+        0.1400782
+      ],
+      "abs_err": 2.220447e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (* (+ (/ (* m (- 1 m)) v) (- 1)) m))"
+    },
+    {
+      "fptaylor_expr": "(((v * (((-((m * m))) + m) * ((1 / v) * (1 / v)))) - 1) * m)",
+      "enclosure": [
+        -0.05302501,
+        0.1715481
+      ],
+      "abs_err": 5.009531e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (* (- (* v (* (+ (- (* m m)) m) (* (/ 1 v) (/ 1 v)))) 1) m))"
+    },
+    {
+      "fptaylor_expr": "((((m * (1 - m)) * (1 / v)) + (-(1))) * m)",
+      "enclosure": [
+        -0.03000001,
+        0.1400782
+      ],
+      "abs_err": 2.782497e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (* (+ (* (* m (- 1 m)) (/ 1 v)) (- 1)) m))"
+    }
+  ]
+}

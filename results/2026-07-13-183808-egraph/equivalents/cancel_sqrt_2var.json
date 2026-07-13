@@ -1,0 +1,126 @@
+{
+  "benchmark": "cancel_sqrt_2var",
+  "reference": "(FPCore (y x) (+ y (sqrt (+ (* y y) (* x x)))))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-13-183808-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "y": [
+        -10.0,
+        10.0
+      ],
+      "x": [
+        1.0,
+        10.0
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (* (* (+ y (- (sqrt (+ (* y y) (* x x))))) (+ y (- (sqrt (+ (* y y) (* x x)))))) (+ (- (sqrt (+ (* y y) (* x x)))) y)))))",
+    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (- y (sqrt (+ (* y y) (* x x))))) (- y (sqrt (+ (* y y) (* x x))))) (+ (* (- y (sqrt (+ (* y y) (* x x)))) (- (* y y) (* y (sqrt (+ (* y y) (* x x)))))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y (- (sqrt (+ (* y y) (* x x))))) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x)))))))))))",
+    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (+ (/ (* y y) (- y (sqrt (+ (* y y) (* x x))))) (/ (* (* (+ y (- (sqrt (+ (* y y) (* x x))))) (- (+ (* y y) (* x x)))) (+ y (- (sqrt (+ (* y y) (* x x)))))) (+ (* (+ y (- (sqrt (+ (* y y) (* x x))))) (- (* y y) (* (sqrt (+ (* y y) (* x x))) y))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (- (sqrt (+ (* y y) (* x x)))))))))))",
+    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (- y (sqrt (+ (* y y) (* x x))))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y y) (* (- (sqrt (+ (* y y) (* x x)))) y))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (+ (* y (- (sqrt (+ (* y y) (* x x))))) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x)))))))))))",
+    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (- y (sqrt (+ (* y y) (* x x))))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (- (sqrt (+ (* y y) (* x x)))))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) y))))))",
+    "(FPCore (y x) (if (<= y 0) (/ (* (* (- y (sqrt (+ (* y y) (* x x)))) (- (* x x))) (+ y (- (sqrt (+ (* y y) (* x x)))))) (+ (* (- y (sqrt (+ (* y y) (* x x)))) (+ (* y y) (* (- (sqrt (+ (* y y) (* x x)))) y))) (* (- y (sqrt (+ (* y y) (* x x)))) (+ (* (- (sqrt (+ (* y y) (* x x)))) y) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x))))))))) (+ y (sqrt (+ (* y y) (* x x))))))",
+    "(FPCore (y x) (if (> y -0.0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (- y (sqrt (+ (* y y) (* x x))))) (- y (sqrt (+ (* y y) (* x x))))) (* (* (+ (sqrt (+ (* y y) (* x x))) (- y)) (+ (- y) (sqrt (+ (* y y) (* x x))))) (+ (- (sqrt (+ (* y y) (* x x)))) y)))))",
+    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (* (/ 1 (* (- (sqrt (+ (* y y) (* x x))) y) (+ (- y) (sqrt (+ (* y y) (* x x)))))) (* (+ (* y y) (- (+ (* y y) (* x x)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)))))",
+    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (* (* (+ (sqrt (+ (* y y) (* x x))) (- y)) (+ (sqrt (+ (* y y) (* x x))) (- y))) (+ (- (sqrt (+ (* y y) (* x x)))) y)))))",
+    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y y) (* y (- (sqrt (+ (* y y) (* x x))))))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (- (sqrt (+ (* y y) (* x x))))))))))",
+    "(FPCore (y x) (if (< y 0) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (+ y (- (sqrt (+ (* y y) (* x x)))))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ y (- (sqrt (+ (* y y) (* x x))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (- (sqrt (+ (* y y) (* x x)))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) y)))) (+ y (sqrt (+ (* y y) (* x x))))))",
+    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y y) (* y (- (sqrt (+ (* y y) (* x x))))))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (- (sqrt (+ (* y y) (* x x))))))))))",
+    "(FPCore (y x) (if (> y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (* (* (+ (sqrt (+ (* y y) (* x x))) (- y)) (+ (sqrt (+ (* y y) (* x x))) (- y))) (+ (- (sqrt (+ (* y y) (* x x)))) y)))))",
+    "(FPCore (y x) (if (>= y 0) (- (+ (* (* y (/ 1 (- y (sqrt (+ (* y y) (* x x)))))) (/ (* y y) (+ y (- (sqrt (+ (* y y) (* x x))))))) (/ (* y (* (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* y y) (+ (* y (- (sqrt (+ (* y y) (* x x))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (- (sqrt (+ (* y y) (* x x))))))))) (+ (/ (* x x) (- y (sqrt (+ (* y y) (* x x))))) (/ (* y y) (+ (- (sqrt (+ (* y y) (* x x)))) y)))) (+ y (sqrt (+ (* y y) (* x x))))))",
+    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (- (/ (* x x) (- y (sqrt (+ (* y y) (* x x))))))))",
+    "(FPCore (y x) (if (> y -0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (- y (sqrt (+ (* y y) (* x x))))) (+ y (- (sqrt (+ (* y y) (* x x)))))) (+ (* (- y (sqrt (+ (* y y) (* x x)))) (* (- y (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x)))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) y))))))",
+    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y y) (* (- (sqrt (+ (* y y) (* x x)))) y))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y (- (sqrt (+ (* y y) (* x x))))) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x)))))))))))",
+    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (+ (* y y) (- (+ (* y y) (* x x)))) (- y (sqrt (+ (* y y) (* x x)))))))",
+    "(FPCore (y x) (if (> y -0.0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (- y (sqrt (+ (* y y) (* x x))))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* (- (sqrt (+ (* y y) (* x x)))) y) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x))))))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (- (* y y) (* y (sqrt (+ (* y y) (* x x))))))))))",
+    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y y) (* (- (sqrt (+ (* y y) (* x x)))) y))) (* (- y (sqrt (+ (* y y) (* x x)))) (+ (* y (- (sqrt (+ (* y y) (* x x))))) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x)))))))))))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (* (* (+ y (- (sqrt (+ (* y y) (* x x))))) (+ y (- (sqrt (+ (* y y) (* x x)))))) (+ (- (sqrt (+ (* y y) (* x x)))) y)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (- y (sqrt (+ (* y y) (* x x))))) (- y (sqrt (+ (* y y) (* x x))))) (+ (* (- y (sqrt (+ (* y y) (* x x)))) (- (* y y) (* y (sqrt (+ (* y y) (* x x)))))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y (- (sqrt (+ (* y y) (* x x))))) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x)))))))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (+ (/ (* y y) (- y (sqrt (+ (* y y) (* x x))))) (/ (* (* (+ y (- (sqrt (+ (* y y) (* x x))))) (- (+ (* y y) (* x x)))) (+ y (- (sqrt (+ (* y y) (* x x)))))) (+ (* (+ y (- (sqrt (+ (* y y) (* x x))))) (- (* y y) (* (sqrt (+ (* y y) (* x x))) y))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (- (sqrt (+ (* y y) (* x x)))))))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (- y (sqrt (+ (* y y) (* x x))))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y y) (* (- (sqrt (+ (* y y) (* x x)))) y))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (+ (* y (- (sqrt (+ (* y y) (* x x))))) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x)))))))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (- y (sqrt (+ (* y y) (* x x))))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (- (sqrt (+ (* y y) (* x x)))))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) y))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (<= y 0) (/ (* (* (- y (sqrt (+ (* y y) (* x x)))) (- (* x x))) (+ y (- (sqrt (+ (* y y) (* x x)))))) (+ (* (- y (sqrt (+ (* y y) (* x x)))) (+ (* y y) (* (- (sqrt (+ (* y y) (* x x)))) y))) (* (- y (sqrt (+ (* y y) (* x x)))) (+ (* (- (sqrt (+ (* y y) (* x x)))) y) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x))))))))) (+ y (sqrt (+ (* y y) (* x x))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (> y -0.0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (- y (sqrt (+ (* y y) (* x x))))) (- y (sqrt (+ (* y y) (* x x))))) (* (* (+ (sqrt (+ (* y y) (* x x))) (- y)) (+ (- y) (sqrt (+ (* y y) (* x x))))) (+ (- (sqrt (+ (* y y) (* x x)))) y)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (* (/ 1 (* (- (sqrt (+ (* y y) (* x x))) y) (+ (- y) (sqrt (+ (* y y) (* x x)))))) (* (+ (* y y) (- (+ (* y y) (* x x)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (* (* (+ (sqrt (+ (* y y) (* x x))) (- y)) (+ (sqrt (+ (* y y) (* x x))) (- y))) (+ (- (sqrt (+ (* y y) (* x x)))) y)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y y) (* y (- (sqrt (+ (* y y) (* x x))))))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (- (sqrt (+ (* y y) (* x x))))))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (< y 0) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (+ y (- (sqrt (+ (* y y) (* x x)))))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ y (- (sqrt (+ (* y y) (* x x))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (- (sqrt (+ (* y y) (* x x)))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) y)))) (+ y (sqrt (+ (* y y) (* x x))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y y) (* y (- (sqrt (+ (* y y) (* x x))))))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (- (sqrt (+ (* y y) (* x x))))))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (> y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (* (* (+ (sqrt (+ (* y y) (* x x))) (- y)) (+ (sqrt (+ (* y y) (* x x))) (- y))) (+ (- (sqrt (+ (* y y) (* x x)))) y)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (>= y 0) (- (+ (* (* y (/ 1 (- y (sqrt (+ (* y y) (* x x)))))) (/ (* y y) (+ y (- (sqrt (+ (* y y) (* x x))))))) (/ (* y (* (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* y y) (+ (* y (- (sqrt (+ (* y y) (* x x))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (- (sqrt (+ (* y y) (* x x))))))))) (+ (/ (* x x) (- y (sqrt (+ (* y y) (* x x))))) (/ (* y y) (+ (- (sqrt (+ (* y y) (* x x)))) y)))) (+ y (sqrt (+ (* y y) (* x x))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (- (/ (* x x) (- y (sqrt (+ (* y y) (* x x))))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (> y -0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (- y (sqrt (+ (* y y) (* x x))))) (+ y (- (sqrt (+ (* y y) (* x x)))))) (+ (* (- y (sqrt (+ (* y y) (* x x)))) (* (- y (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x)))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) y))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y y) (* (- (sqrt (+ (* y y) (* x x)))) y))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y (- (sqrt (+ (* y y) (* x x))))) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x)))))))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (+ (* y y) (- (+ (* y y) (* x x)))) (- y (sqrt (+ (* y y) (* x x)))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (> y -0.0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (- y (sqrt (+ (* y y) (* x x))))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* (- (sqrt (+ (* y y) (* x x)))) y) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x))))))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (- (* y y) (* y (sqrt (+ (* y y) (* x x))))))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y y) (* (- (sqrt (+ (* y y) (* x x)))) y))) (* (- y (sqrt (+ (* y y) (* x x)))) (+ (* y (- (sqrt (+ (* y y) (* x x))))) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x)))))))))))",
+      "proven_equivalent": true
+    }
+  ]
+}
