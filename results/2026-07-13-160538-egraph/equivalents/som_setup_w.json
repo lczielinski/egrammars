@@ -1,0 +1,130 @@
+{
+  "benchmark": "som_setup_w",
+  "reference": "(FPCore (es ca rone_es) (- (* (* (- 1 (* es (* ca ca))) rone_es) (* (- 1 (* es (* ca ca))) rone_es)) 1))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-13-160538-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "es": [
+        0.0,
+        0.1
+      ],
+      "ca": [
+        -1.0,
+        1.0
+      ],
+      "rone_es": [
+        1.0,
+        1.05
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (* (- 1 (* es (* ca ca))) rone_es) 1)))",
+    "(FPCore (es ca rone_es) (* (- (* (+ -1 (* es (* ca ca))) rone_es) 1) (+ (* (+ -1 (* es (* ca ca))) rone_es) 1)))",
+    "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (* (- (* es (* ca ca))) rone_es) (+ 1 rone_es))))",
+    "(FPCore (es ca rone_es) (* (+ (* (- 1 (* es (* ca ca))) rone_es) 1) (- (* (- 1 (* es (* ca ca))) rone_es) 1)))",
+    "(FPCore (es ca rone_es) (* (- (* (+ (- (* es (* ca ca))) 1) rone_es) 1) (+ (* (+ (- (* es (* ca ca))) 1) rone_es) 1)))",
+    "(FPCore (es ca rone_es) (* (- (* (+ (- 1) (* es (* ca ca))) rone_es) 1) (+ (* (+ (- 1) (* es (* ca ca))) rone_es) 1)))",
+    "(FPCore (es ca rone_es) (* (- (+ (* (- 1) (* es (* ca (* ca rone_es)))) rone_es) 1) (+ (* (- 1) (* es (* ca (* ca rone_es)))) (+ rone_es 1))))",
+    "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (* (+ (- (* es (* ca ca))) 1) rone_es) 1)))",
+    "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ 1 (* (- 1 (* es (* ca ca))) rone_es))))",
+    "(FPCore (es ca rone_es) (* (- (+ (- (* es (* ca (* ca rone_es)))) rone_es) 1) (+ (* (- 1 (* es (* ca ca))) rone_es) 1)))",
+    "(FPCore (es ca rone_es) (+ (* (* (- 1 (* es (* ca ca))) rone_es) (* (- 1 (* es (* ca ca))) rone_es)) (- 1)))",
+    "(FPCore (es ca rone_es) (+ (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (* (- 1) (* es (* ca (* ca rone_es)))) 1)) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) rone_es)))",
+    "(FPCore (es ca rone_es) (* (- (* (- (* es (* ca ca)) 1) rone_es) 1) (+ (* (- (* es (* ca ca)) 1) rone_es) 1)))",
+    "(FPCore (es ca rone_es) (* (- (* (+ (* es (* ca ca)) -1) rone_es) 1) (+ (* (+ (* es (* ca ca)) -1) rone_es) 1)))",
+    "(FPCore (es ca rone_es) (- (* (- 1 (* es (* ca ca))) (* (- 1 (* es (* ca ca))) (* rone_es rone_es))) 1))",
+    "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (- (* (* es (* ca ca)) rone_es)) (+ rone_es 1))))",
+    "(FPCore (es ca rone_es) (* (- (- (* es (* ca (* ca rone_es))) rone_es) 1) (+ (- (* es (* ca (* ca rone_es))) rone_es) 1)))",
+    "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (* (* es (* ca ca)) (- rone_es)) (+ rone_es 1))))",
+    "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (+ (* (- 1) (* es (* ca (* ca rone_es)))) rone_es) 1)))",
+    "(FPCore (es ca rone_es) (* (+ (* (* (* (* es ca) ca) rone_es) -1) (+ 1 rone_es)) (- (+ (* (* (* (* es ca) ca) rone_es) -1) rone_es) 1)))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (* (- 1 (* es (* ca ca))) rone_es) 1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (* (- (* (+ -1 (* es (* ca ca))) rone_es) 1) (+ (* (+ -1 (* es (* ca ca))) rone_es) 1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (* (- (* es (* ca ca))) rone_es) (+ 1 rone_es))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (* (+ (* (- 1 (* es (* ca ca))) rone_es) 1) (- (* (- 1 (* es (* ca ca))) rone_es) 1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (* (- (* (+ (- (* es (* ca ca))) 1) rone_es) 1) (+ (* (+ (- (* es (* ca ca))) 1) rone_es) 1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (* (- (* (+ (- 1) (* es (* ca ca))) rone_es) 1) (+ (* (+ (- 1) (* es (* ca ca))) rone_es) 1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (* (- (+ (* (- 1) (* es (* ca (* ca rone_es)))) rone_es) 1) (+ (* (- 1) (* es (* ca (* ca rone_es)))) (+ rone_es 1))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (* (+ (- (* es (* ca ca))) 1) rone_es) 1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ 1 (* (- 1 (* es (* ca ca))) rone_es))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (* (- (+ (- (* es (* ca (* ca rone_es)))) rone_es) 1) (+ (* (- 1 (* es (* ca ca))) rone_es) 1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (+ (* (* (- 1 (* es (* ca ca))) rone_es) (* (- 1 (* es (* ca ca))) rone_es)) (- 1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (+ (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (* (- 1) (* es (* ca (* ca rone_es)))) 1)) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) rone_es)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (* (- (* (- (* es (* ca ca)) 1) rone_es) 1) (+ (* (- (* es (* ca ca)) 1) rone_es) 1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (* (- (* (+ (* es (* ca ca)) -1) rone_es) 1) (+ (* (+ (* es (* ca ca)) -1) rone_es) 1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (- (* (- 1 (* es (* ca ca))) (* (- 1 (* es (* ca ca))) (* rone_es rone_es))) 1))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (- (* (* es (* ca ca)) rone_es)) (+ rone_es 1))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (* (- (- (* es (* ca (* ca rone_es))) rone_es) 1) (+ (- (* es (* ca (* ca rone_es))) rone_es) 1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (* (* es (* ca ca)) (- rone_es)) (+ rone_es 1))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (+ (* (- 1) (* es (* ca (* ca rone_es)))) rone_es) 1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (es ca rone_es) (* (+ (* (* (* (* es ca) ca) rone_es) -1) (+ 1 rone_es)) (- (+ (* (* (* (* es ca) ca) rone_es) -1) rone_es) 1)))",
+      "proven_equivalent": true
+    }
+  ]
+}

@@ -1,0 +1,597 @@
+{
+  "benchmark": "conte_x_minus_sqrt",
+  "reference": "(FPCore (x eps) (- x (sqrt (- (* x x) eps))))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-13-160538-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "x": [
+        2.0,
+        1000.0
+      ],
+      "eps": [
+        0.0,
+        1.0
+      ]
+    }
+  },
+  "intervals": {
+    "x": [
+      2.0,
+      1000.0
+    ],
+    "eps": [
+      0.0,
+      1.0
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "(x - sqrt(((x * x) - eps)))",
+    "enclosure": [
+      -0.05839749,
+      0.2755634
+    ],
+    "abs_err": 1.382089e-13,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (x eps) (- x (sqrt (- (* x x) eps))))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.233774e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(x - sqrt(((x * x) - eps)))",
+          "enclosure": [
+            -0.007614136,
+            0.007614136
+          ],
+          "abs_err": 1.382088e-13,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "eps <= 0",
+          "region": {
+            "x": [
+              2.0,
+              1000.0
+            ],
+            "eps": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((-((x * sqrt((((-(eps)) * ((1 / x) * (1 / x))) + 1))))) + x)",
+          "enclosure": [
+            -0.05839749,
+            0.2755634
+          ],
+          "abs_err": 2.233774e-13,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "eps > 0",
+          "region": {
+            "x": [
+              2.0,
+              1000.0
+            ],
+            "eps": [
+              0.0,
+              1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x eps) (if (<= eps 0) (- x (sqrt (- (* x x) eps))) (+ (- (* x (sqrt (+ (* (- eps) (* (/ 1 x) (/ 1 x))) 1)))) x)))"
+    },
+    {
+      "fptaylor_expr": "((sqrt(x) - (sqrt(x) * sqrt((((-(eps)) * (1 / (sqrt(x) * (x * sqrt(x))))) + 1)))) * sqrt(x))",
+      "enclosure": [
+        -0.02791449,
+        0.276596
+      ],
+      "abs_err": 2.22708e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x eps) (* (- (sqrt x) (* (sqrt x) (sqrt (+ (* (- eps) (/ 1 (* (sqrt x) (* x (sqrt x))))) 1)))) (sqrt x)))"
+    },
+    {
+      "fptaylor_expr": "(x + (-(sqrt(((x * x) - eps)))))",
+      "enclosure": [
+        -0.05839749,
+        0.2755634
+      ],
+      "abs_err": 1.382089e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x eps) (+ x (- (sqrt (- (* x x) eps)))))"
+    },
+    {
+      "fptaylor_expr": "((-((x * sqrt((((-(eps)) * (1 / (x * x))) + 1))))) + x)",
+      "enclosure": [
+        -0.05839749,
+        0.2755634
+      ],
+      "abs_err": 2.233774e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x eps) (+ (- (* x (sqrt (+ (* (- eps) (/ 1 (* x x))) 1)))) x))"
+    },
+    {
+      "fptaylor_expr": "(x - sqrt(((x * x) - eps)))",
+      "enclosure": [
+        -0.05839749,
+        0.2755634
+      ],
+      "abs_err": 1.382089e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x eps) (- x (sqrt (- (* x x) eps))))"
+    },
+    {
+      "fptaylor_expr": "((-(sqrt(((x * x) - eps)))) + x)",
+      "enclosure": [
+        -0.05839749,
+        0.2755634
+      ],
+      "abs_err": 1.382089e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x eps) (+ (- (sqrt (- (* x x) eps))) x))"
+    },
+    {
+      "fptaylor_expr": "((((x * sqrt(((((-(eps)) * (1 / x)) * (((1 / sqrt(sqrt(x))) * (1 / sqrt(sqrt(x)))) * ((1 / sqrt(sqrt(x))) * (1 / sqrt(sqrt(x)))))) + 1))) * (x * sqrt(((((-(eps)) * (1 / x)) * (((1 / sqrt(sqrt(x))) * (1 / sqrt(sqrt(x)))) * ((1 / sqrt(sqrt(x))) * (1 / sqrt(sqrt(x)))))) + 1)))) / ((-((x * sqrt(((((-(eps)) * (1 / x)) * (((1 / sqrt(sqrt(x))) * (1 / sqrt(sqrt(x)))) * ((1 / sqrt(sqrt(x))) * (1 / sqrt(sqrt(x)))))) + 1))))) + (-(x)))) - ((x * x) / ((-((x * sqrt(((((-(eps)) * (1 / x)) * (((1 / sqrt(sqrt(x))) * (1 / sqrt(sqrt(x)))) * ((1 / sqrt(sqrt(x))) * (1 / sqrt(sqrt(x)))))) + 1))))) + (-(x)))))",
+      "enclosure": [
+        -0.08919689,
+        0.2801212
+      ],
+      "abs_err": 3.592502e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x eps) (- (/ (* (* x (sqrt (+ (* (* (- eps) (/ 1 x)) (* (* (/ 1 (sqrt (sqrt x))) (/ 1 (sqrt (sqrt x)))) (* (/ 1 (sqrt (sqrt x))) (/ 1 (sqrt (sqrt x)))))) 1))) (* x (sqrt (+ (* (* (- eps) (/ 1 x)) (* (* (/ 1 (sqrt (sqrt x))) (/ 1 (sqrt (sqrt x)))) (* (/ 1 (sqrt (sqrt x))) (/ 1 (sqrt (sqrt x)))))) 1)))) (+ (- (* x (sqrt (+ (* (* (- eps) (/ 1 x)) (* (* (/ 1 (sqrt (sqrt x))) (/ 1 (sqrt (sqrt x)))) (* (/ 1 (sqrt (sqrt x))) (/ 1 (sqrt (sqrt x)))))) 1)))) (- x))) (/ (* x x) (+ (- (* x (sqrt (+ (* (* (- eps) (/ 1 x)) (* (* (/ 1 (sqrt (sqrt x))) (/ 1 (sqrt (sqrt x)))) (* (/ 1 (sqrt (sqrt x))) (/ 1 (sqrt (sqrt x)))))) 1)))) (- x)))))"
+    },
+    {
+      "fptaylor_expr": "((((-((x * sqrt((((-(eps)) * ((1 / sqrt(x)) * (1 / (sqrt(x) * x)))) + 1))))) * (-((x * sqrt((((-(eps)) * ((1 / sqrt(x)) * (1 / (sqrt(x) * x)))) + 1)))))) / ((-((x * sqrt((((-(eps)) * ((1 / sqrt(x)) * (1 / (sqrt(x) * x)))) + 1))))) + (-(x)))) - ((x * x) / ((-(sqrt(((x * x) - eps)))) + (-(x)))))",
+      "enclosure": [
+        -0.08919689,
+        0.2801212
+      ],
+      "abs_err": 3.7518e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x eps) (- (/ (* (- (* x (sqrt (+ (* (- eps) (* (/ 1 (sqrt x)) (/ 1 (* (sqrt x) x)))) 1)))) (- (* x (sqrt (+ (* (- eps) (* (/ 1 (sqrt x)) (/ 1 (* (sqrt x) x)))) 1))))) (+ (- (* x (sqrt (+ (* (- eps) (* (/ 1 (sqrt x)) (/ 1 (* (sqrt x) x)))) 1)))) (- x))) (/ (* x x) (+ (- (sqrt (- (* x x) eps))) (- x)))))"
+    },
+    {
+      "fptaylor_expr": "((sqrt(x) + (-((sqrt(x) * sqrt((((-(eps)) * (1 / (x * x))) + 1)))))) * sqrt(x))",
+      "enclosure": [
+        -0.02791449,
+        0.276596
+      ],
+      "abs_err": 2.227075e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x eps) (* (+ (sqrt x) (- (* (sqrt x) (sqrt (+ (* (- eps) (/ 1 (* x x))) 1))))) (sqrt x)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 1.382089e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(x - sqrt(((x * x) - eps)))",
+          "enclosure": [
+            -0.007614136,
+            0.007614136
+          ],
+          "abs_err": 1.382088e-13,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "eps < 0",
+          "region": {
+            "x": [
+              2.0,
+              1000.0
+            ],
+            "eps": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((-(sqrt(((x * x) - eps)))) + x)",
+          "enclosure": [
+            -0.05839749,
+            0.2755634
+          ],
+          "abs_err": 1.382089e-13,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "eps >= 0",
+          "region": {
+            "x": [
+              2.0,
+              1000.0
+            ],
+            "eps": [
+              0.0,
+              1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x eps) (if (< eps 0) (- x (sqrt (- (* x x) eps))) (+ (- (sqrt (- (* x x) eps))) x)))"
+    },
+    {
+      "fptaylor_expr": "((((x * sqrt((((-(eps)) * ((((1 / sqrt(sqrt(x))) * (1 / sqrt(sqrt(x)))) * (1 / sqrt(x))) * (((1 / sqrt(sqrt(x))) * (1 / sqrt(sqrt(x)))) / sqrt(x)))) + 1))) * ((sqrt(sqrt(x)) * (sqrt(sqrt(x)) * sqrt((((-(eps)) * ((((1 / sqrt(sqrt(x))) * (1 / sqrt(sqrt(x)))) * (1 / sqrt(x))) * (((1 / sqrt(sqrt(x))) * (1 / sqrt(sqrt(x)))) / sqrt(x)))) + 1)))) * sqrt(x))) / ((-((sqrt(sqrt(x)) * (sqrt(sqrt(x)) * (sqrt(sqrt(x)) * (sqrt(sqrt(x)) * sqrt((((-(eps)) * ((1 / sqrt(x)) * (1 / (sqrt(x) * x)))) + 1)))))))) + (-(x)))) - ((x * x) / ((-(((sqrt(sqrt(x)) * (sqrt(sqrt(x)) * sqrt((((-(eps)) * ((1 / sqrt(x)) * (1 / (sqrt(x) * x)))) + 1)))) * sqrt(x)))) - x)))",
+      "enclosure": [
+        -0.08919689,
+        0.2801212
+      ],
+      "abs_err": 6.290832e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x eps) (- (/ (* (* x (sqrt (+ (* (- eps) (* (* (* (/ 1 (sqrt (sqrt x))) (/ 1 (sqrt (sqrt x)))) (/ 1 (sqrt x))) (/ (* (/ 1 (sqrt (sqrt x))) (/ 1 (sqrt (sqrt x)))) (sqrt x)))) 1))) (* (* (sqrt (sqrt x)) (* (sqrt (sqrt x)) (sqrt (+ (* (- eps) (* (* (* (/ 1 (sqrt (sqrt x))) (/ 1 (sqrt (sqrt x)))) (/ 1 (sqrt x))) (/ (* (/ 1 (sqrt (sqrt x))) (/ 1 (sqrt (sqrt x)))) (sqrt x)))) 1)))) (sqrt x))) (+ (- (* (sqrt (sqrt x)) (* (sqrt (sqrt x)) (* (sqrt (sqrt x)) (* (sqrt (sqrt x)) (sqrt (+ (* (- eps) (* (/ 1 (sqrt x)) (/ 1 (* (sqrt x) x)))) 1))))))) (- x))) (/ (* x x) (- (- (* (* (sqrt (sqrt x)) (* (sqrt (sqrt x)) (sqrt (+ (* (- eps) (* (/ 1 (sqrt x)) (/ 1 (* (sqrt x) x)))) 1)))) (sqrt x))) x))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.233774e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-((x * sqrt((((-(eps)) * (1 / (x * x))) + 1))))) + x)",
+          "enclosure": [
+            -0.05839749,
+            0.2755634
+          ],
+          "abs_err": 2.233774e-13,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "eps >= 0",
+          "region": {
+            "x": [
+              2.0,
+              1000.0
+            ],
+            "eps": [
+              0.0,
+              1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((-(sqrt(((x * x) - eps)))) + x)",
+          "enclosure": [
+            -0.007614136,
+            0.007614136
+          ],
+          "abs_err": 1.382088e-13,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "eps < 0",
+          "region": {
+            "x": [
+              2.0,
+              1000.0
+            ],
+            "eps": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x eps) (if (>= eps 0) (+ (- (* x (sqrt (+ (* (- eps) (/ 1 (* x x))) 1)))) x) (+ (- (sqrt (- (* x x) eps))) x)))"
+    },
+    {
+      "fptaylor_expr": "((sqrt(x) - (sqrt(x) * sqrt((((1 / (x * x)) * (-(eps))) + 1)))) * sqrt(x))",
+      "enclosure": [
+        -0.02791449,
+        0.276596
+      ],
+      "abs_err": 2.227075e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x eps) (* (- (sqrt x) (* (sqrt x) (sqrt (+ (* (/ 1 (* x x)) (- eps)) 1)))) (sqrt x)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.233774e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((sqrt(x) - (sqrt(x) * sqrt((1 + ((-(eps)) * (1 / (x * x))))))) * sqrt(x))",
+          "enclosure": [
+            -0.007628575,
+            0.007628575
+          ],
+          "abs_err": 2.227075e-13,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "eps < 0",
+          "region": {
+            "x": [
+              2.0,
+              1000.0
+            ],
+            "eps": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(x + (-((x * sqrt((1 + ((-(eps)) * (1 / (x * x)))))))))",
+          "enclosure": [
+            -0.05839749,
+            0.2755634
+          ],
+          "abs_err": 2.233774e-13,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "eps >= 0",
+          "region": {
+            "x": [
+              2.0,
+              1000.0
+            ],
+            "eps": [
+              0.0,
+              1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x eps) (if (< eps 0) (* (- (sqrt x) (* (sqrt x) (sqrt (+ 1 (* (- eps) (/ 1 (* x x))))))) (sqrt x)) (+ x (- (* x (sqrt (+ 1 (* (- eps) (/ 1 (* x x))))))))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 1.382089e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(x + (-(sqrt(((x * x) - eps)))))",
+          "enclosure": [
+            -0.007614136,
+            0.007614136
+          ],
+          "abs_err": 1.382088e-13,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "eps < 0",
+          "region": {
+            "x": [
+              2.0,
+              1000.0
+            ],
+            "eps": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(x + (-(sqrt(((x * x) - eps)))))",
+          "enclosure": [
+            -0.05839749,
+            0.2755634
+          ],
+          "abs_err": 1.382089e-13,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "eps >= 0",
+          "region": {
+            "x": [
+              2.0,
+              1000.0
+            ],
+            "eps": [
+              0.0,
+              1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x eps) (if (< eps 0) (+ x (- (sqrt (- (* x x) eps)))) (+ x (- (sqrt (- (* x x) eps))))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.233774e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-((x * sqrt((((-(eps)) * ((((1 / sqrt(sqrt(x))) * (1 / sqrt(sqrt(x)))) * (1 / sqrt(x))) * (1 / x))) + 1))))) + x)",
+          "enclosure": [
+            -0.05839749,
+            0.2755634
+          ],
+          "abs_err": 2.233774e-13,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "eps > 0",
+          "region": {
+            "x": [
+              2.0,
+              1000.0
+            ],
+            "eps": [
+              0.0,
+              1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(x + (-(sqrt(((x * x) - eps)))))",
+          "enclosure": [
+            -0.007614136,
+            0.007614136
+          ],
+          "abs_err": 1.382088e-13,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "eps <= 0",
+          "region": {
+            "x": [
+              2.0,
+              1000.0
+            ],
+            "eps": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x eps) (if (> eps 0) (+ (- (* x (sqrt (+ (* (- eps) (* (* (* (/ 1 (sqrt (sqrt x))) (/ 1 (sqrt (sqrt x)))) (/ 1 (sqrt x))) (/ 1 x))) 1)))) x) (+ x (- (sqrt (- (* x x) eps))))))"
+    },
+    {
+      "fptaylor_expr": "((-((x * sqrt((((-(eps)) * ((1 / sqrt(x)) * ((1 / sqrt(x)) * (1 / x)))) + 1))))) + x)",
+      "enclosure": [
+        -0.05839749,
+        0.2755634
+      ],
+      "abs_err": 2.233774e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x eps) (+ (- (* x (sqrt (+ (* (- eps) (* (/ 1 (sqrt x)) (* (/ 1 (sqrt x)) (/ 1 x)))) 1)))) x))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.243186e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((sqrt(x) - (sqrt(x) * sqrt(((((x * x) * (-(eps))) / (x * (x * (x * x)))) + 1)))) * sqrt(x))",
+          "enclosure": [
+            -0.007628575,
+            0.007628575
+          ],
+          "abs_err": 2.227075e-13,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "eps < 0",
+          "region": {
+            "x": [
+              2.0,
+              1000.0
+            ],
+            "eps": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((sqrt(((x * x) + (-(eps)))) * sqrt(((x * x) + (-(eps))))) / ((-(sqrt(((x * x) + (-(eps)))))) + (-(x)))) - ((x * x) / ((-(sqrt(((x * x) + (-(eps)))))) + (-(x)))))",
+          "enclosure": [
+            -0.08919689,
+            0.2801212
+          ],
+          "abs_err": 2.243186e-13,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "eps >= 0",
+          "region": {
+            "x": [
+              2.0,
+              1000.0
+            ],
+            "eps": [
+              0.0,
+              1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x eps) (if (< eps 0) (* (- (sqrt x) (* (sqrt x) (sqrt (+ (/ (* (* x x) (- eps)) (* x (* x (* x x)))) 1)))) (sqrt x)) (- (/ (* (sqrt (+ (* x x) (- eps))) (sqrt (+ (* x x) (- eps)))) (+ (- (sqrt (+ (* x x) (- eps)))) (- x))) (/ (* x x) (+ (- (sqrt (+ (* x x) (- eps)))) (- x))))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((sqrt(x) - (sqrt(x) * sqrt((((0 - ((x * (x * eps)) * ((x * (x * x)) * x))) / ((x * (x * (x * x))) * ((x * (x * x)) * x))) + 1)))) * sqrt(x))",
+          "enclosure": [
+            -Infinity,
+            Infinity
+          ],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "x >= 0",
+          "region": {
+            "x": [
+              2.0,
+              1000.0
+            ],
+            "eps": [
+              0.0,
+              1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x eps) (if (>= x 0) (* (- (sqrt x) (* (sqrt x) (sqrt (+ (/ (- 0 (* (* x (* x eps)) (* (* x (* x x)) x))) (* (* x (* x (* x x))) (* (* x (* x x)) x))) 1)))) (sqrt x)) (+ x (- (sqrt (- (* x x) eps))))))"
+    }
+  ]
+}

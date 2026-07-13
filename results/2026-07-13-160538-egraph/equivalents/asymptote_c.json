@@ -1,0 +1,182 @@
+{
+  "benchmark": "asymptote_c",
+  "reference": "(FPCore (x) (- (/ x (+ x 1)) (/ (+ x 1) (- x 1))))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-13-160538-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "x": [
+        2.0,
+        100.0
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (x) (- (/ (* (+ (* x x) -1) (+ (* x (- 1 x)) (* (- x 1) (* x x)))) (/ (* (+ (* x x) -1) (+ (* x x) -1)) (/ 1 (- x 1)))) (/ (* (+ (* x x) -1) (+ (* (* x x) (+ x 1)) (* (+ 1 x) -1))) (/ (* (+ (* x x) -1) (+ (* x x) -1)) (/ 1 (+ x -1))))))",
+    "(FPCore (x) (- (/ (/ (* (- (* x x) x) (+ (* x x) -1)) (/ 1 (- x 1))) (/ (* (* (+ 1 x) (- x 1)) (+ -1 (* x x))) (/ 1 (+ x -1)))) (/ (* (+ (* (- x 1) (* x x)) (- 1 x)) (* (+ x 1) (+ x 1))) (/ (* (* (+ -1 x) (+ 1 x)) (+ (* x x) -1)) (/ 1 (- x 1))))))",
+    "(FPCore (x) (+ (- (/ (+ (* x x) x) (* (- x 1) (+ x -1)))) (+ (/ (/ (+ x 1) (- x 1)) (+ x -1)) (/ x (+ x 1)))))",
+    "(FPCore (x) (+ (- (/ (+ (* x x) x) (* (- x 1) (+ x -1)))) (+ (* (/ (+ x 1) (- x 1)) (/ -1 (- 1 x))) (/ x (+ x 1)))))",
+    "(FPCore (x) (+ (/ (- (* (* (- x 1) (+ x 1)) (* (+ x 1) (+ x 1)))) (* (* (- x 1) (+ x 1)) (* (- x 1) (+ x 1)))) (/ x (+ x 1))))",
+    "(FPCore (x) (+ (* -1 (/ (+ (* x x) x) (* (- 1 x) (- 1 x)))) (+ (* (/ 1 (+ x -1)) (/ (+ x 1) (- x 1))) (/ x (+ x 1)))))",
+    "(FPCore (x) (+ (/ (+ (* -1 (* (+ 1 x) (+ 1 x))) (* x x)) (+ (* x x) -1)) (/ (* x -1) (* (+ x 1) (- x 1)))))",
+    "(FPCore (x) (+ (/ (* -1 (* (+ (* x x) -1) (* (+ 1 x) (+ 1 x)))) (* (+ (* x x) -1) (+ (* x x) -1))) (/ x (+ x 1))))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (x) (- (/ (+ (* (* (- (* x x) x) (+ (* x x) -1)) (* (- (* x x) x) (+ (* x x) (- x)))) (* (* (- (* x x) x) (+ (* x x) -1)) (* (* (- x 1) (+ x -1)) (+ (* -1 x) (- 1 x))))) (* (* (* (+ x 1) (+ x -1)) (+ (* x x) -1)) (* (* (- x 1) (+ x -1)) (* (- 1 x) (- 1 x))))) (/ (* (* (* (+ x 1) (+ x -1)) (+ (* x x) -1)) (* (+ (* x x) -1) (* (- x 1) (+ x -1)))) (* (* (+ (* x x) -1) (* (- x 1) (+ x 1))) (* (* (+ x -1) (+ x -1)) (* (+ x -1) (+ x -1)))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 1.783479524092536e-14,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x) (- (/ (+ (* (* (- (* x x) x) (+ (* x x) -1)) (* (* (- x) (- x 1)) (* (* x -1) (+ x -1)))) (* (* (* x (- x 1)) (* (- x 1) (+ x 1))) (* (* (+ x -1) (- x 1)) (+ (* x -1) (- 1 x))))) (* (* (* (- x 1) (+ x 1)) (* (+ x 1) (- x 1))) (* (* (+ x -1) (- x 1)) (* (+ x -1) (+ x -1))))) (/ (* (* (* (- x 1) (+ x 1)) (* (+ x 1) (- x 1))) (* (+ (* x x) -1) (* (+ x -1) (- x 1)))) (* (* (+ (* x x) -1) (* (+ x -1) (+ x 1))) (* (* (- x 1) (- x 1)) (* (+ x -1) (- x 1)))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 1.783479524092536e-14,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x) (- (/ (+ (* (* (+ (* -1 x) (* x x)) (* (- x 1) (+ x 1))) (* (- x 1) (* x (- 1 x)))) (* (* (- (* x x) x) (* (+ 1 x) (- x 1))) (* (* (- x 1) (+ x -1)) (+ (* x x) (- 1 x))))) (* (* (+ (* x x) -1) (+ (* x x) -1)) (* (* (+ x -1) (+ x -1)) (* (+ x -1) (+ x -1))))) (/ (* (* (+ (* x x) -1) (+ (* x x) -1)) (* (+ (* x x) -1) (* (+ x -1) (+ x -1)))) (* (* (+ (* x x) -1) (* (+ x -1) (+ x 1))) (* (* (+ x -1) (+ x -1)) (* (+ x -1) (+ x -1)))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 1.4186951202038993e-14,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x) (- (/ (+ (* (* (+ (* -1 x) (* x x)) (* (+ 1 x) (+ x -1))) (* (+ (* -1 x) (* x x)) (+ (* -1 x) (* x x)))) (* (* (- (* x x) x) (* (- x 1) (+ x 1))) (* (* (+ x -1) (+ x -1)) (+ (* x -1) (- 1 x))))) (* (* (+ (* x x) -1) (+ (* x x) -1)) (* (* (+ -1 x) (+ x -1)) (* (+ -1 x) (+ x -1))))) (/ (* (* (* (+ 1 x) (+ x 1)) (* (- x 1) (- x 1))) (* (* (+ -1 x) (+ x -1)) (* (+ x -1) (+ 1 x)))) (* (* (+ -1 (* x x)) (+ (* x x) -1)) (* (* (+ -1 x) (+ x -1)) (* (+ x -1) (+ x -1)))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 2.6854186961971942e-14,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x) (- (/ (* (+ (* x x) -1) (+ (* x (- 1 x)) (* (- x 1) (* x x)))) (/ (* (+ (* x x) -1) (+ (* x x) -1)) (/ 1 (- x 1)))) (/ (* (+ (* x x) -1) (+ (* (* x x) (+ x 1)) (* (+ 1 x) -1))) (/ (* (+ (* x x) -1) (+ (* x x) -1)) (/ 1 (+ x -1))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (/ (/ (* (- (* x x) x) (+ (* x x) -1)) (/ 1 (- x 1))) (/ (* (* (+ 1 x) (- x 1)) (+ -1 (* x x))) (/ 1 (+ x -1)))) (/ (* (+ (* (- x 1) (* x x)) (- 1 x)) (* (+ x 1) (+ x 1))) (/ (* (* (+ -1 x) (+ 1 x)) (+ (* x x) -1)) (/ 1 (- x 1))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (/ (- (* (* (* x (- x 1)) (* (- x 1) (+ x 1))) (* (+ (* -1 x) (* x x)) (* (- x 1) (- x 1)))) (* (* (* x (- x 1)) (* (- x 1) (+ x 1))) (* (+ x -1) (* (- x 1) (+ x -1))))) (* (* (* (+ x 1) (- x 1)) (+ (* x x) -1)) (* (* (+ x -1) (- x 1)) (* (- x 1) (+ x -1))))) (/ (* (* (* (+ x -1) (- x 1)) (* (- x 1) (+ x 1))) (* (* (+ x 1) (- x 1)) (* (- x 1) (+ x 1)))) (* (* (* (+ x -1) (- x 1)) (* (- x 1) (+ x -1))) (* (* (+ x 1) (- x 1)) (* (- x 1) (+ x 1)))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 1.123901093375412e-14,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x) (- (/ (* x (* (* (* (- 1 x) (- 1 x)) (+ 1 x)) (* (* (- 1 x) (- 1 x)) (* (- 1 x) (- 1 x))))) (* (* (* (- 1 x) (- 1 x)) (* (- 1 x) (- 1 x))) (* (* (- 1 x) (- 1 x)) (* (+ 1 x) (+ 1 x))))) (/ (* (* (* (- 1 x) (- 1 x)) (* (- x 1) (+ x 1))) (* (* (- x 1) (+ x 1)) (* (+ x 1) (+ x -1)))) (* (* (+ (* x x) -1) (* (+ x -1) (+ x 1))) (* (* (+ x -1) (+ x -1)) (* (+ x -1) (+ x -1)))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 1.404876366719261e-14,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x) (- (/ (+ (* (* (- (* x x) x) (* (- x 1) (+ x 1))) (* (- (* x x) x) (* (- x 1) (+ x -1)))) (* (* (- (* x x) x) (* (- x 1) (+ x 1))) (* (* (- x 1) (+ x -1)) (- 1 x)))) (* (* (+ (* x x) -1) (* (- x 1) (+ x 1))) (* (* (- x 1) (+ x -1)) (* (- x 1) (+ x -1))))) (/ (* (* (* (- x 1) (+ x 1)) (* (- x 1) (+ x -1))) (* (* (- x 1) (+ x -1)) (* (+ x 1) (+ x 1)))) (* (* (* (+ x 1) (+ x -1)) (* (+ x -1) (+ x 1))) (* (* (+ x -1) (+ x -1)) (* (+ x -1) (+ x -1)))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 2.0140640221478958e-14,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x) (* (- (+ (* (* (- (* x x) x) (* (- x 1) (+ x 1))) (* (- 1 x) (+ (- x) (* x x)))) (* (* (* (+ x 1) x) (* (- 1 x) (- 1 x))) (* (* (+ x -1) (- x 1)) (+ (- 1 x) (* x x))))) (* (* (+ (* x x) -1) (* (- x 1) (+ x 1))) (* (* (+ -1 x) (- x 1)) (+ (* x x) -1)))) (/ 1 (* (* (* (- x 1) (+ x 1)) (* (- x 1) (+ x 1))) (* (* (- x 1) (+ x -1)) (* (- x 1) (+ x -1)))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 1.7675003431044365e-14,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x) (+ (- (/ (+ (* x x) x) (* (- x 1) (+ x -1)))) (+ (/ (/ (+ x 1) (- x 1)) (+ x -1)) (/ x (+ x 1)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ (- (/ (+ (* x x) x) (* (- x 1) (+ x -1)))) (+ (* (/ (+ x 1) (- x 1)) (/ -1 (- 1 x))) (/ x (+ x 1)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ (/ (+ (* (- 0 (* (+ (- 1 x) (* (- x 1) (* x x))) (/ (+ (* x x) -1) (/ 1 (+ x -1))))) (* (- x 1) (+ x 1))) (* (- x) (* (* (+ x 1) (+ x -1)) (* (* (+ x -1) (+ x -1)) (* (+ x -1) (+ x -1)))))) (* (* (+ (* x x) -1) (* (* (+ x -1) (+ x -1)) (* (+ x -1) (+ x -1)))) (* (+ -1 x) (+ x 1)))) (/ (* x x) (+ -1 (* x x)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 1.8595554630786893e-14,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x) (+ (/ (- (* (* (- x 1) (+ x 1)) (* (+ x 1) (+ x 1)))) (* (* (- x 1) (+ x 1)) (* (- x 1) (+ x 1)))) (/ x (+ x 1))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (/ (- (+ (* (- 1 x) x) (* (- x 1) (* x x))) (* (/ (+ 1 x) (- x 1)) (* (- x 1) (* (- x 1) (+ 1 x))))) (* (- x 1) (* (- x 1) (+ 1 x)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 7.381660781120612e-15,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x) (+ (* -1 (/ (+ (* x x) x) (* (- 1 x) (- 1 x)))) (+ (* (/ 1 (+ x -1)) (/ (+ x 1) (- x 1))) (/ x (+ x 1)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ (/ (+ (* -1 (* (+ 1 x) (+ 1 x))) (* x x)) (+ (* x x) -1)) (/ (* x -1) (* (+ x 1) (- x 1)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ (/ (+ (* -1 (* (+ 1 x) (* x x))) (+ (* x (* (+ 1 x) (* x x))) (* (+ (+ (* x -1) -1) (* (+ x 1) (- x))) (+ (* x x) -1)))) (* (+ (* x x) -1) (* (+ 1 x) (+ x -1)))) (/ (- x) (* (+ 1 x) (- x 1)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 9.149012408734874e-15,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x) (- (/ (* (+ 1 x) (* (- (* x x) x) (+ (* x x) -1))) (* (+ (* -1 (+ 1 x)) (* (* x x) (+ 1 x))) (+ (* x x) -1))) (/ (* (+ 1 x) (* (+ (* x x) -1) (* (+ 1 x) (+ 1 x)))) (* (+ (* -1 (+ 1 x)) (* (* x x) (+ 1 x))) (+ (* x x) -1)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 1.3837849924829282e-14,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x) (+ (/ (* -1 (* (+ (* x x) -1) (* (+ 1 x) (+ 1 x)))) (* (+ (* x x) -1) (+ (* x x) -1))) (/ x (+ x 1))))",
+      "proven_equivalent": true
+    }
+  ]
+}

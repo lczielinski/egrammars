@@ -1,0 +1,122 @@
+{
+  "benchmark": "expand_square",
+  "reference": "(FPCore (x) (- (* (+ x 1) (+ x 1)) 1))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-13-160538-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "x": [
+        -1.0,
+        1.0
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (x) (+ (* x x) (* 2 x)))",
+    "(FPCore (x) (+ (* x x) (+ x x)))",
+    "(FPCore (x) (+ (* (- 1 (+ x 1)) (- 1 (+ x 1))) (* 2 x)))",
+    "(FPCore (x) (+ (* 2 x) (* x x)))",
+    "(FPCore (x) (+ (* x 2) (* x x)))",
+    "(FPCore (x) (* x (+ x 2)))",
+    "(FPCore (x) (+ (+ x x) (* x x)))",
+    "(FPCore (x) (* (+ x 2) x))",
+    "(FPCore (x) (+ (* x x) (* x 2)))",
+    "(FPCore (x) (if (>= x 0) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+    "(FPCore (x) (if (< x 0) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+    "(FPCore (x) (if (< x -0.5) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+    "(FPCore (x) (if (< x -0.0) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+    "(FPCore (x) (if (<= x -0.5) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+    "(FPCore (x) (if (>= x -1) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+    "(FPCore (x) (if (<= x -0.0) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+    "(FPCore (x) (if (<= x -1.0) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+    "(FPCore (x) (if (<= x 0) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+    "(FPCore (x) (+ (* 2 x) (* (- 1 (+ 1 x)) (- 1 (+ 1 x)))))",
+    "(FPCore (x) (if (< x -1) (* x (+ x 2)) (+ (* x x) (* 2 x))))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (x) (+ (* x x) (* 2 x)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ (* x x) (+ x x)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ (* (- 1 (+ x 1)) (- 1 (+ x 1))) (* 2 x)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ (* 2 x) (* x x)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ (* x 2) (* x x)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (* x (+ x 2)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ (+ x x) (* x x)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (* (+ x 2) x))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ (* x x) (* x 2)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (>= x 0) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (< x 0) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (< x -0.5) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (< x -0.0) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (<= x -0.5) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (>= x -1) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (<= x -0.0) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (<= x -1.0) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (<= x 0) (+ (* x x) (* 2 x)) (+ (* x x) (* 2 x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ (* 2 x) (* (- 1 (+ 1 x)) (- 1 (+ 1 x)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (< x -1) (* x (+ x 2)) (+ (* x x) (* 2 x))))",
+      "proven_equivalent": true
+    }
+  ]
+}
