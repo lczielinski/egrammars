@@ -10,6 +10,7 @@ the e-class productions for splicing into decoding.py's head/arm grammars.
 from __future__ import annotations
 
 import json
+import re
 from collections import defaultdict
 from dataclasses import dataclass
 
@@ -19,6 +20,11 @@ import prove
 SATURATION_RUNS = 6
 NODE_CAP = 100_000
 START = "__start__"
+
+# All rules unified, minus the block rules.egglog marks grammar-excluded (recursive
+# rules that are safe under the prover's throttling but flood a full saturation).
+GRAMMAR_RULES = re.sub(r";; BEGIN grammar-excluded.*?;; END grammar-excluded\n", "",
+                       prove.RULES_UNIFIED, flags=re.S)
 
 
 @dataclass(frozen=True, order=True)
@@ -37,7 +43,7 @@ def saturate(benchmark_source: str, runs: int = SATURATION_RUNS, seeds: str = ""
     unlike prove's throttled proving schedule."""
     from egglog.bindings import EGraph
 
-    source = prove.RULES_UNIFIED + benchmark_source + seeds
+    source = GRAMMAR_RULES + benchmark_source + seeds
     source += f"\n(relation {START} (Math))\n({START} start)"  # mark the root e-class
     egraph = EGraph()
     with prove.quiet_stderr():

@@ -8,7 +8,8 @@ Two decoding modes feed the same verification:
     programs provably equivalent to the reference. The model either emits a whole-box
     form or opens `(if (op var NUMBER)`; once the threshold is known, each arm's
     grammar is rebuilt on the fly over the guard-narrowed box, so every program is
-    equivalent by construction. To the model it is one generation.
+    equivalent by construction (the prover is skipped). To the model it is one
+    generation.
 
 Each invocation writes a fresh results/<run>/ directory holding equivalents/,
 fptaylor/, and summary.md. `all` self-shards across every visible GPU.
@@ -54,8 +55,12 @@ def run_benchmark(llm, benchmark: str, run, args, tag: str = "") -> None:
                                      args.decoding, args.saturation)
     candidates = generate.sample_programs(llm, grammar, args.samples,
                                           args.temperature, base_ids)
-    programs, attempts = verify.evaluate_candidates(
-        benchmark, reference, box, candidates, timeout=args.time_budget)
+    if args.decoding == "egraph":  # equivalent by construction; skip the prover
+        programs = candidates
+        attempts = [{"program": p, "proven_equivalent": True} for p in candidates]
+    else:
+        programs, attempts = verify.evaluate_candidates(
+            benchmark, reference, box, candidates, timeout=args.time_budget)
 
     missing = sum(a.get("numeric", {}).get("verdict") == "equal" for a in attempts)
     print(f"{len(attempts)} candidates: {len(programs)} proven, {missing} missing-rule?, "

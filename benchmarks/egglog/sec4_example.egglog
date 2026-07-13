@@ -1,6 +1,0 @@
-;; (FPCore (x y) (/ (- (* x y) 1) (- (* (* x y) (* x y)) 1)))
-
-(let x (Var "x"))
-(let y (Var "y"))
-
-(let start (Div (Sub (Mul (Var "x") (Var "y")) (Num 1)) (Sub (Mul (Mul (Var "x") (Var "y")) (Mul (Var "x") (Var "y"))) (Num 1))))

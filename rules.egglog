@@ -109,6 +109,9 @@
 (rule ((= e (Div a (Mul a y))) (< (hi a) 0.0)) ((union e (Div (Num 1) y))))
 
 ;; sqrt(a+b) = sqrt(a)*sqrt(1 + b/a), pivot proven positive. Recurses (RHS re-exposes a
-;; sqrt-of-sum), so it lives in `expand` where it is throttled rather than saturated.
+;; sqrt-of-sum): throttled in the prover; EXCLUDED from grammar compilation (egrammar.py
+;; runs all rules unified, where this rule floods the grammar with deep sqrt spellings).
+;; BEGIN grammar-excluded
 (rule ((= e (Sqrt (Add a b))) (> (lo a) 0.0))
     ((union e (Mul (Sqrt a) (Sqrt (Add (Num 1) (Div b a)))))) :ruleset expand)
+;; END grammar-excluded

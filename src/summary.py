@@ -5,15 +5,6 @@ import json
 import paths
 
 
-def _metric(r):
-    """Comparable error for a result: relative ulps if defined, else absolute error."""
-    if r and r.get("rel_err_ulps") is not None:
-        return ("rel_ulp", r["rel_err_ulps"])
-    if r and r.get("abs_err") is not None:
-        return ("abs", r["abs_err"])
-    return (None, None)
-
-
 def _benchmark_row(b, run):
     """Stats from a benchmark's equivalents (+ fptaylor) file in `run`, or None."""
     esrc = paths.equivalents_path(run, b)
@@ -28,28 +19,25 @@ def _benchmark_row(b, run):
            "missing_rule": v(lambda a: unproven(a) and verd(a) == "equal"),
            "non_equiv": v(lambda a: unproven(a) and verd(a) == "different"),
            "indeterminate": v(lambda a: unproven(a) and verd(a) == "indeterminate"),
-           "best_ulp": None, "verdict": "unmeasurable" if valid else "no-valid"}
+           "best_ulp": None, "metric": None,
+           "verdict": "unmeasurable" if valid else "no-valid"}
     fsrc = paths.fptaylor_path(run, b)
     if fsrc.exists():
         fd = json.loads(fsrc.read_text())
         results = fd.get("results", [])
+        reference = fd.get("reference_result") or {}
         row["best_ulp"] = next((r["rel_err_ulps"] for r in results
                                 if r.get("rel_err_ulps") is not None), None)
         if row["valid"]:
-            best_k, best_m = None, None
-            for r in results:
-                k, m = _metric(r)
-                if m is not None and (best_m is None or m < best_m):
-                    best_k, best_m = k, m
-            rk, rm = _metric(fd.get("reference_result"))
-            if rm is None or best_m is None or rk != best_k:
-                row["verdict"] = "unmeasurable"
-            elif best_m < rm * 0.99:
-                row["verdict"] = "improved"
-            elif best_m > rm * 1.01:
-                row["verdict"] = "worse"
-            else:
-                row["verdict"] = "no-change"
+            # compare on relative error; fall back to absolute where rel is undefined
+            for key, label in (("rel_err_ulps", "rel"), ("abs_err", "abs")):
+                cands = [r[key] for r in results if r.get(key) is not None]
+                if cands and reference.get(key) is not None:
+                    best, ref = min(cands), reference[key]
+                    row["metric"] = label
+                    row["verdict"] = ("improved" if best < ref * 0.99 else
+                                      "worse" if best > ref * 1.01 else "no-change")
+                    break
     return row
 
 
@@ -91,12 +79,15 @@ def summarize(run) -> None:
         f"- had a missing-rule candidate: {with_missing}/{nb} ({pct(with_missing, nb)})",
         "",
         "## Per-benchmark",
+        "(abs) = rel error undefined over the box; compared on absolute error instead",
+        "",
         "| benchmark | candidates | valid | best rel (ulp) | vs reference |",
         "|---|--:|--:|--:|---|",
     ]
     for r in sorted(rows, key=lambda r: (r["verdict"] != "improved", r["benchmark"])):
         ulp = f"{r['best_ulp']:.1f}" if r["best_ulp"] is not None else "-"
-        lines.append(f"| {r['benchmark']} | {r['candidates']} | {r['valid']} | {ulp} | {r['verdict']} |")
+        vs = r["verdict"] + (" (abs)" if r["metric"] == "abs" else "")
+        lines.append(f"| {r['benchmark']} | {r['candidates']} | {r['valid']} | {ulp} | {vs} |")
 
     text = "\n".join(lines) + "\n"
     out = run / "summary.md"

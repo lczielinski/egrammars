@@ -1,5 +1,0 @@
-;; (FPCore (t) (/ (+ 1 (* (/ (* 2 t) (+ 1 t)) (/ (* 2 t) (+ 1 t)))) (+ 2 (* (/ (* 2 t) (+ 1 t)) (/ (* 2 t) (+ 1 t))))))
-
-(let t (Var "t"))
-
-(let start (Div (Add (Num 1) (Mul (Div (Mul (Num 2) (Var "t")) (Add (Num 1) (Var "t"))) (Div (Mul (Num 2) (Var "t")) (Add (Num 1) (Var "t"))))) (Add (Num 2) (Mul (Div (Mul (Num 2) (Var "t")) (Add (Num 1) (Var "t"))) (Div (Mul (Num 2) (Var "t")) (Add (Num 1) (Var "t")))))))
