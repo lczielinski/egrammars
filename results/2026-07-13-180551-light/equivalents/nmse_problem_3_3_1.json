@@ -111,10 +111,10 @@
       "program": "(FPCore (x) (/ -1 (* x (+ x 0.0))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 0.8236094911624667,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {

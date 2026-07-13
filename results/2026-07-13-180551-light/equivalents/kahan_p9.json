@@ -21,7 +21,6 @@
   },
   "programs": [
     "(FPCore (x y) (/ (- (* x x) (* y y)) (+ (* x x) (* y y))))",
-    "(FPCore (x y) (/ (- (* x x) (* y y)) (+ (* x x) (* y (sqrt 1)))))",
     "(FPCore (x y) (/ (- (* x x) (* y y)) (+ (* x x) (+ (* y y) 0))))"
   ],
   "attempts": [
@@ -33,15 +32,21 @@
       "program": "(FPCore (x y) (/ (- (* x x) (* y y)) (+ (* x x) (* y 0))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 0.9999961966889694,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (x y) (/ (- (* x x) (* y y)) (+ (* x x) (* y (sqrt 1)))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.9997328063092172,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (x y) (/ (- (* x x) (* y 2)) (+ (* x x) (* y y))))",
@@ -117,10 +122,10 @@
       "program": "(FPCore (x y) (/ (- (* x x) (* y (sqrt (+ (* y y) 0)))) (+ (* x x) (* y y))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9999923933779389,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
@@ -201,10 +206,10 @@
       "program": "(FPCore (x y) (/ (- (* x x) (* y y)) (+ (* x x) (* y (- y y)))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 0.9999961966889694,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     }
   ]

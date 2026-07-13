@@ -56,18 +56,6 @@
       "program": "(FPCore (x y) (/ (- (* x x) (* y y)) (+ (* x x) (* y y))))"
     },
     {
-      "fptaylor_expr": "(((x * x) - (y * y)) / ((x * x) + (y * sqrt(1))))",
-      "enclosure": [
-        -Infinity,
-        Infinity
-      ],
-      "abs_err": null,
-      "rel_err": null,
-      "rel_err_derived": false,
-      "rel_err_ulps": null,
-      "program": "(FPCore (x y) (/ (- (* x x) (* y y)) (+ (* x x) (* y (sqrt 1)))))"
-    },
-    {
       "fptaylor_expr": "(((x * x) - (y * y)) / ((x * x) + ((y * y) + 0)))",
       "enclosure": [
         -60.03516,

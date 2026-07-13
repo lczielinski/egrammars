@@ -73,10 +73,10 @@
       "program": "(FPCore (a b c d e f g h i) (+ (* a (- (* e i) (* f h))) (- (* b (- (* d i) (- (* f g) 0))))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.993389911373026,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {

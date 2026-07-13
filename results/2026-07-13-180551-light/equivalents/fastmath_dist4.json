@@ -161,10 +161,10 @@
       "program": "(FPCore (d1 d2 d3 d4) (* d2 (- d1 d1)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.0,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {

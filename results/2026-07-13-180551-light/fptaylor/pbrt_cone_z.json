@@ -56,18 +56,6 @@
       "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (- 1 maxCos)) maxCos))"
     },
     {
-      "fptaylor_expr": "(((1 - ux) * (sqrt(1) - sqrt(maxCos))) + maxCos)",
-      "enclosure": [
-        -Infinity,
-        Infinity
-      ],
-      "abs_err": null,
-      "rel_err": null,
-      "rel_err_derived": false,
-      "rel_err_ulps": null,
-      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (- (sqrt 1) (sqrt maxCos))) maxCos))"
-    },
-    {
       "fptaylor_expr": "(((sqrt(1) - ux) * (sqrt(1) - maxCos)) + maxCos)",
       "enclosure": [
         0.0,

@@ -148,10 +148,10 @@
       "program": "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (* (- 1 (* es (* ca ca))) rone_es) 0)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 0.5224575566688546,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {

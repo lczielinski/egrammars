@@ -33,7 +33,6 @@
 ;; factoring / conjugate rewrites (structural, growing)
 (rewrite (Sub (Mul a a) (Mul b b)) (Mul (Sub a b) (Add a b)) :ruleset expand)
 (rewrite (Sub (Mul a a) (Num 1)) (Mul (Sub a (Num 1)) (Add a (Num 1))) :ruleset expand)
-(rewrite (Add p (Sqrt d)) (Div (Sub (Mul p p) d) (Sub p (Sqrt d))) :ruleset expand)
 
 ;; default ruleset: folding, identities, cancellation, normalization (non-growing)
 (rewrite (Add (Num a) (Num b)) (Num (+ a b)))
@@ -45,6 +44,7 @@
 (rewrite (Sub a (Add a b)) (Neg b))
 (rewrite (Add (Neg a) (Neg b)) (Neg (Add a b)))
 (rewrite (Div (Neg a) (Neg b)) (Div a b))
+(birewrite (Neg (Sub a b)) (Sub b a))
 
 (rewrite (Mul (Num 1) x) x)
 (rewrite (Div x (Num 1)) x)
@@ -91,14 +91,18 @@
 (rule ((= e (Div a b)) (= la (lo a)) (= lb (lo b)) (= ha (hi a)) (= hb (hi b)) (< hb 0.0))
     ((set (lo e) (min (min (/ la lb) (/ la hb)) (min (/ ha lb) (/ ha hb))))
     (set (hi e) (max (max (/ la lb) (/ la hb)) (max (/ ha lb) (/ ha hb))))))
-;; sqrt: loose sound upper bound sqrt(t) <= t+1 for t >= 0.
-(rule ((= e (Sqrt a)) (>= (lo a) 0.0) (= ha (hi a)))
-    ((set (lo e) 0.0) (set (hi e) (+ ha 1.0))))
+;; sqrt: sound bounds for t >= 0: min(t,1) <= sqrt(t) <= t+1.
+(rule ((= e (Sqrt a)) (>= (lo a) 0.0) (= la (lo a)) (= ha (hi a)))
+    ((set (lo e) (min la 1.0)) (set (hi e) (+ ha 1.0))))
 
 ;; sqrt-factoring: sound only where every sqrt operand is proven >= 0
 (rule ((= e (Sqrt (Mul a b))) (>= (lo a) 0.0) (>= (lo b) 0.0)) ((union e (Mul (Sqrt a) (Sqrt b)))))
 (rule ((= e (Sqrt (Div a b))) (>= (lo a) 0.0) (> (lo b) 0.0)) ((union e (Div (Sqrt a) (Sqrt b)))))
 (rule ((= e (Mul (Sqrt a) (Sqrt a))) (>= (lo a) 0.0)) ((union e a)))
+
+;; conjugate: p + sqrt(d) = (p^2 - d) / (p - sqrt(d))
+(rule ((= e (Add p (Sqrt d))) (<= (hi p) 0.0) (> (lo d) 0.0))
+    ((union e (Div (Sub (Mul p p) d) (Sub p (Sqrt d))))) :ruleset expand)
 
 ;; division cancellation: sound only where the cancelled factor a is proven != 0
 (rule ((= e (Div (Mul a x) (Mul a y))) (> (lo a) 0.0)) ((union e (Div x y))))

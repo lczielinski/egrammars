@@ -26,7 +26,8 @@ grammar offers either a whole-box equivalent form or the opening
 `(if (op var NUMBER)`; when the model emits a conditional, `DynamicRegionRecognizer`
 ([decoding.py](src/decoding.py)) reads the threshold, narrows the box by the guard,
 rebuilds the e-grammar over each arm's sub-box, and swaps it in mid-decode — to the
-model it is one uninterrupted generation.
+model it is one uninterrupted generation. Every sample is equivalent by
+construction, so this mode skips the prover.
 
 Both modes then bound each surviving program's worst-case double rounding error with
 FPTaylor ([fptaylor_check.py](src/fptaylor_check.py)), per branch over its sub-box.
@@ -42,6 +43,7 @@ src/
   prove.py          egglog equivalence prover
   verify.py         per-branch proving + numeric classification of failures
   fptaylor_check.py FPTaylor error bounds (runs automatically after generation)
+  compare.py        score a run against Herbie, inside Herbie's own harness (CLI)
   summary.py        per-run results table
   benchmarks.py     reference terms and interval boxes
   regions.py        box arithmetic and if-tree splitting
@@ -73,6 +75,24 @@ directory; the parent summarizes when they finish.
 `--summary-only [--run NAME]` re-summarizes the latest (or named) run. Other flags:
 `--samples --temperature --model --saturation --time-budget`.
 
+## Comparing against Herbie
+
+```bash
+uv run src/compare.py [--run NAME] [--timeout SECONDS]
+```
+
+Everything is measured by Herbie itself: each benchmark becomes one FPCore whose
+body is the reference and whose proven programs are attached as `:alt` targets, and
+a single `herbie report` scores all three — reference (`start`), our best (`target`),
+Herbie's own rewrite (`end`) — on the same sampled points with Herbie's Rival ground
+truth and average-bits metric. By default Herbie runs on the repo's arithmetic-only
+platform ([herbie_platform.rkt](herbie_platform.rkt): `+ - * / sqrt`, `if`) so the
+comparison is search-vs-search rather than vocabulary (`--platform default` lifts
+that). When `fptaylor` is also on PATH, a second table bounds the worst-case error of
+all three programs over the box. Writes `<run>/herbie.{json,md}`; Herbie's raw
+input/report land under `<run>/herbie/`. Needs `herbie` on PATH, or racket with the
+herbie package (`make install` in a Herbie checkout).
+
 ## Benchmarks (FPBench + Herbie)
 
 `benchmarks/egglog/<name>.egglog` holds each reference term;
@@ -80,12 +100,14 @@ directory; the parent summarizes when they finish.
 `+ - * / sqrt`, integer literals, branch-free reference (the `Num i64` e-graph rules
 out transcendentals and non-integer constants).
 
-- **33 FPBench cores**, boxes from each core's `:pre`.
-- **14 Herbie cores**: of 312 subset-expressible cores, those remaining after
+- **28 FPBench cores**, boxes from each core's `:pre`.
+- **13 Herbie cores**: of 312 subset-expressible cores, those remaining after
   dropping duplicates, cores without a `:pre`, and cores where no subset-expressible
   rewrite lowers the *worst-case* bound this tool measures. Note Herbie itself
   reports average-case error over sampled points, so its numbers aren't directly
   comparable to the FPTaylor bounds here.
+- **3 handwritten branching cores** (`cancel_sqrt_*`): the input box straddles the
+  fragile point so no whole-box rewrite exists, but each sign region has one.
 
 ## Requirements
 

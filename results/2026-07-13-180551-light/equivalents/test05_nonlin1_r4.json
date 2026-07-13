@@ -19,8 +19,6 @@
     "(FPCore (x) (/ 1 (+ x 1)))",
     "(FPCore (x) (/ 1 (+ 1 x)))",
     "(FPCore (x) (/ 01 (+ x 1)))",
-    "(FPCore (x) (/ 1 (+ (sqrt x) (sqrt x))))",
-    "(FPCore (x) (/ 2 (+ (* 2 x) 2)))",
     "(FPCore (x) (* (/ 1 (+ x 1)) 1))"
   ],
   "attempts": [
@@ -96,10 +94,10 @@
       "program": "(FPCore (x) (/ 0 (+ x 0)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.0,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
@@ -138,7 +136,13 @@
     },
     {
       "program": "(FPCore (x) (/ 1 (+ (sqrt x) (sqrt x))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.057145419112660946,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (x) (/ 0 (+ x -1)))",
@@ -154,15 +158,21 @@
       "program": "(FPCore (x) (/ 1 (+ x 0)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 0.4997119640534957,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (x) (/ 2 (+ (* 2 x) 2)))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 2.9443479030047015e-14,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
     },
     {
       "program": "(FPCore (x) (/ 255 (/ 1 (+ x 1))))",

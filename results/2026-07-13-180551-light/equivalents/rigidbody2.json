@@ -83,10 +83,10 @@
       "program": "(FPCore (x1 x2 x3) (- (+ (* x1 (* x2 (* x3 (- 2 0)))) (* 6 (* x3 x3))) x2))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9533757601588633,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
@@ -127,10 +127,10 @@
       "program": "(FPCore (x1 x2 x3) (- 1 0))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.8631199772374636,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {

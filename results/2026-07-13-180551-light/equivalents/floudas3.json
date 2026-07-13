@@ -48,10 +48,10 @@
       "program": "(FPCore (x1 x2) (+ (- (* -12 x1) (* 7 0.0)) (* x2 x2)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.6831599896309177,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
@@ -86,10 +86,10 @@
       "program": "(FPCore (x1 x2) (+ (- (* -12 x1) (* 7 x2)) (* 0 x2)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 0.41274315776610765,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {

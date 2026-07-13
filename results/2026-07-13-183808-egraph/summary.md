@@ -10,10 +10,10 @@ Benchmarks with results: **40**   |   candidates evaluated: **780**
 
 ## Benchmarks
 - produced >=1 valid rewrite: **39/40 (97.5%)**
-- accuracy improved over reference: **21/40 (52.5%)**
+- accuracy improved over reference: **22/40 (55.0%)**
 - valid rewrite but no accuracy gain: 14/40
 - best valid rewrite was worse than reference: 2/40
-- unmeasurable (box straddles zero / singularity): 2/40
+- unmeasurable (box straddles zero / singularity): 1/40
 - no valid rewrite found: 1/40
 - had a missing-rule candidate: 0/40 (0.0%)
 
@@ -42,6 +42,7 @@ Benchmarks with results: **40**   |   candidates evaluated: **780**
 | rigidbody1 | 20 | 20 | - | improved (abs) |
 | rigidbody2 | 20 | 20 | - | improved (abs) |
 | som_setup_w | 20 | 20 | - | improved (abs) |
+| sum | 20 | 20 | 0.8 | improved |
 | test05_nonlin1_r4 | 20 | 20 | 0.8 | improved |
 | asymptote_c | 20 | 20 | 68.8 | worse |
 | beta_b | 20 | 20 | - | no-change (abs) |
@@ -59,6 +60,5 @@ Benchmarks with results: **40**   |   candidates evaluated: **780**
 | nmse_problem_3_3_1 | 20 | 20 | 118862.9 | no-change (abs) |
 | nmse_problem_3_3_3 | 20 | 20 | - | no-change (abs) |
 | sine | 20 | 20 | - | no-change (abs) |
-| sum | 20 | 20 | 0.8 | unmeasurable |
 | test03_nonlin2 | 20 | 20 | - | no-change (abs) |
 | test04_dqmom9 | 20 | 20 | - | unmeasurable |

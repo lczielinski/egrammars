@@ -65,10 +65,10 @@
       "program": "(FPCore (x1 x2 x3 x4) (- (* x4 (+ (+ (+ (+ (+ (+ -1 (* x4 (+ (+ (+ (+ (+ (+ (- (* x1 x1)) (* x1 x2)) (* x1 x3)) (- (* x1 x4))) x2) x3) (- (* x2 x3))))) (* (- x2 x3) (- x2 x3))) 0) 0) 0) 0))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.3506949258978942,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
@@ -139,10 +139,10 @@
       "program": "(FPCore (x1 x2 x3 x4) (- (* 0 x4) 0))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.0,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
@@ -219,10 +219,10 @@
       "program": "(FPCore (x1 x2 x3 x4) (- (* x4 (+ (+ (+ (+ (+ (+ (- (* x1 x1)) (* x1 x2)) (* x1 x3)) (- (* 1 x1) (* x1 x4))) (* 0 x1)) x2) x3)) (- (* x2 x3))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9997110650550571,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     }
   ]

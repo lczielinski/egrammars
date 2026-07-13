@@ -22,7 +22,6 @@
     "(FPCore (x) (* x (+ x (+ 2 0))))",
     "(FPCore (x) (* x (+ x 02)))",
     "(FPCore (x) (* x (- (+ x 2) 0)))",
-    "(FPCore (x) (* x (+ (sqrt x) (sqrt 2))))",
     "(FPCore (x) (/ (* x (+ x 2)) 1))"
   ],
   "attempts": [
@@ -48,10 +47,10 @@
       "program": "(FPCore (x) (* x (+ x 0)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.995439147203619,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
@@ -102,7 +101,13 @@
     },
     {
       "program": "(FPCore (x) (* x (+ (sqrt x) (sqrt 2))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.2598439609089019,
+        "samples": 207,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (x) (/ (* x (+ x 2)) 1))",

@@ -15,9 +15,7 @@
       ]
     }
   },
-  "programs": [
-    "(FPCore (x) (/ 2 (* x (- (* (sqrt (* x x)) (sqrt 1)) 0))))"
-  ],
+  "programs": [],
   "attempts": [
     {
       "program": "(FPCore (x) (/ 2 (* x (- (* x x) 1))))",
@@ -73,20 +71,20 @@
       "program": "(FPCore (x) (/ 2 (* x (- (* x 0) 1))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.2889732149257576,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (x) (/ 2 (* x (- (* x x) 0))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 0.22418868877923262,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
@@ -103,10 +101,10 @@
       "program": "(FPCore (x) (/ 2 (* x (- (/ (* x x) 1) 0))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 0.22418868877923262,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
@@ -131,7 +129,13 @@
     },
     {
       "program": "(FPCore (x) (/ 2 (* x (- (* (sqrt (* x x)) (sqrt 1)) 0))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9899933144876655,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (x) (/ 2 (* x (* (- (* x x) 1) 1))))",
@@ -157,20 +161,20 @@
       "program": "(FPCore (x) (/ 2 (* x (- (* x -1) 0))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.6103103586457348,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (x) (/ 2 (* x (- (+ (* x x) 0) 1))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "equal",
+        "max_rel_diff": 1.0661417707807076e-12,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
       }
     },
     {

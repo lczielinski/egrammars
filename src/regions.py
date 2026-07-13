@@ -31,13 +31,18 @@ def body_of(program):
 
 
 def split_branches(node):
-    """Yield (guards, leaf) per leaf: the guard down `then`, its negation down `else`."""
+    """Yield (guards, leaf) per leaf: the guard down `then`, its negation down `else`.
+    A condition that isn't a simple `(op atom atom)` contributes no guard (sound:
+    narrowing by fewer guards only widens the region)."""
     if isinstance(node, list) and node and node[0] == "if":
-        _, (op, lhs, rhs), then, els = node
+        _, cond, then, els = node
+        simple = (isinstance(cond, list) and len(cond) == 3 and cond[0] in NEGATE
+                  and isinstance(cond[1], str) and isinstance(cond[2], str))
+        op, lhs, rhs = cond if simple else (None, None, None)
         for conds, expr in split_branches(then):
-            yield [(op, lhs, rhs), *conds], expr
+            yield ([(op, lhs, rhs)] if simple else []) + conds, expr
         for conds, expr in split_branches(els):
-            yield [(NEGATE[op], lhs, rhs), *conds], expr
+            yield ([(NEGATE[op], lhs, rhs)] if simple else []) + conds, expr
     else:
         yield [], node
 

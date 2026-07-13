@@ -141,10 +141,10 @@
       "program": "(FPCore (m v) (- (/ (* m (- 1 1)) v) (- 1 m)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.2453934950518761,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
@@ -161,10 +161,10 @@
       "program": "(FPCore (m v) (- (+ (/ (* m (- 1 m)) v) (* 0 (- 1 m))) (- 1 m)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.0542912192146061,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
@@ -191,10 +191,10 @@
       "program": "(FPCore (m v) (- (/ (+ (* m (- 1 m)) (* -1 0)) v) (- 1 m)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.0542912192146061,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {

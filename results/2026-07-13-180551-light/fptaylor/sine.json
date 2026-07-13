@@ -72,18 +72,6 @@
       "program": "(FPCore (x) (* x (+ 1 (* (* x x) (+ (/ (- 1) 6) (* (* x x) (+ (/ 1 120) (* (* x x) (/ -1 5040)))))))))"
     },
     {
-      "fptaylor_expr": "(x * (1 + ((x * sqrt(1)) * (sqrt(1) * sqrt(1)))))",
-      "enclosure": [
-        -0.2624126,
-        4.038198
-      ],
-      "abs_err": 1.826505e-15,
-      "rel_err": null,
-      "rel_err_derived": false,
-      "rel_err_ulps": null,
-      "program": "(FPCore (x) (* x (+ 1 (* (* x (sqrt 1)) (* (sqrt 1) (sqrt 1))))))"
-    },
-    {
       "fptaylor_expr": "(x * (1 + ((x * x) * (((-1 * 1) / 6) + ((x * x) * ((1 / 120) + ((x * x) * ((-1 * 1) / 5040))))))))",
       "enclosure": [
         -1.017687,

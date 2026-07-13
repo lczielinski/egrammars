@@ -21,16 +21,9 @@
   },
   "programs": [
     "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y))))",
-    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (* x y))) y))))",
     "(FPCore (y x) (if (> y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y))))",
     "(FPCore (y x) (if (> y -0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y))))",
-    "(FPCore (y x) (if (>= y 0) (- (+ y (sqrt (+ (* y y) (* x x))))) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y))))",
-    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (* y x))) y))))",
-    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y 0) (* x x))) y))))",
     "(FPCore (y x) (if (> y -0.0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y))))",
-    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (+ (* x x) (* x x)))) y))))",
-    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* y y)))) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y))))",
-    "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (* x 0))) y))))",
     "(FPCore (y x) (if (< y 0) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y)) (+ y (sqrt (+ (* y y) (* x x))))))"
   ],
   "attempts": [
@@ -50,7 +43,13 @@
     },
     {
       "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (* x y))) y))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.561774543770553,
+        "samples": 291,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (y x) (if (> y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y))))",
@@ -62,7 +61,13 @@
     },
     {
       "program": "(FPCore (y x) (if (>= y 0) (- (+ y (sqrt (+ (* y y) (* x x))))) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 2.0,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x y)))) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y))))",
@@ -76,7 +81,13 @@
     },
     {
       "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (* y x))) y))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.561774543770553,
+        "samples": 291,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* y x) (- (sqrt (+ (* y y) (* x x))) y))))",
@@ -90,7 +101,13 @@
     },
     {
       "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y 0) (* x x))) y))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.437897902086027,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x 10)))) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y))))",
@@ -108,7 +125,13 @@
     },
     {
       "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (+ (* x x) (* x x)))) y))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.2917154579338956,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (- (* y y) (* x x))) y))))",
@@ -132,7 +155,13 @@
     },
     {
       "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* y y)))) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9598763285815438,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* (sqrt (+ (* y y) (* x x))) (* x x))))) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y))))",
@@ -146,7 +175,13 @@
     },
     {
       "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (* x 0))) y))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9887002496064496,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y (sqrt (+ (* y y) (* x x)))) (* x x))) y))))",

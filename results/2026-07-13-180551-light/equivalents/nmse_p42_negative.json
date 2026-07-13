@@ -190,10 +190,10 @@
       "program": "(FPCore (a b c) (/ (* 2 c) (+ (sqrt (- (* b b) (* 4 (+ (* a c) 0)))) (- b))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "equal",
+        "max_rel_diff": 1.1403051561384876e-14,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
       }
     },
     {

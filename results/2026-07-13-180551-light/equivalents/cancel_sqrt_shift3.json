@@ -15,33 +15,37 @@
       ]
     }
   },
-  "programs": [
-    "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 1)) (- x 3))))",
-    "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 1)) (- x 13))))",
-    "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 1)))))",
-    "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 1)) (- x 33))))",
-    "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 1)) (- x 363))))",
-    "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x (sqrt 9)) (- x (sqrt 9))) 1)) (- x (sqrt 9)))))",
-    "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 0)) (- x 3))))",
-    "(FPCore (x) (/ 1 (- (sqrt (+ (* (* (- x 3) (- x 3)) 1) 0)) (- x 3))))",
-    "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 01)) (- x 3))))",
-    "(FPCore (x) (/ 01 (- (sqrt (+ (* (- x 3) (- x 3)) 1)) (- x 3))))",
-    "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 1)) (- x 300))))",
-    "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 1)) (- x 7))))",
-    "(FPCore (x) (/ 0 1))"
-  ],
+  "programs": [],
   "attempts": [
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 1)) (- x 3))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 2.830008153071665e-14,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
     },
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 1)) (- x 13))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.992931862608363,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 1)))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.9855227527332748,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 1)) (+ -1 (* -1 x)))))",
@@ -55,15 +59,33 @@
     },
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 1)) (- x 33))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9976327997383324,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 1)) (- x 363))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9998023043250452,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x (sqrt 9)) (- x (sqrt 9))) 1)) (- x (sqrt 9)))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 2.830008153071665e-14,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
     },
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 13)) 1)) (- x 3))))",
@@ -77,7 +99,13 @@
     },
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 0)) (- x 3))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9710455054665501,
+        "samples": 255,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 33)) 1)) (- x 3))))",
@@ -91,15 +119,33 @@
     },
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ (* (* (- x 3) (- x 3)) 1) 0)) (- x 3))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9710455054665501,
+        "samples": 255,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 01)) (- x 3))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 2.830008153071665e-14,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
     },
     {
       "program": "(FPCore (x) (/ 01 (- (sqrt (+ (* (- x 3) (- x 3)) 1)) (- x 3))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 2.830008153071665e-14,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
     },
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 1)) (- x 12))))",
@@ -123,11 +169,23 @@
     },
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 1)) (- x 300))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9997603789274595,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 1)) (- x 7))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9825150357156817,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 3) (- x 3)) 2)) (- x 3))))",
@@ -141,7 +199,13 @@
     },
     {
       "program": "(FPCore (x) (/ 0 1))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.0,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ (* (- x 15) (- x 15)) 1)) (- x 15))))",

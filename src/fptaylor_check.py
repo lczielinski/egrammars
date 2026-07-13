@@ -121,6 +121,17 @@ def analyze_program(ast, box: dict, cfg_path: str) -> dict:
     return _combine(branches)
 
 
+def bound_program(ast, box: dict) -> dict:
+    """Worst-case bounds for one program AST over `box` (standalone helper)."""
+    with tempfile.NamedTemporaryFile("w", suffix=".cfg", delete=False) as f:
+        f.write(CONFIG)
+        cfg_path = f.name
+    try:
+        return analyze_program(ast, box, cfg_path)
+    finally:
+        os.unlink(cfg_path)
+
+
 def check(benchmark: str, run) -> None:
     """Bound one benchmark's proven programs in run directory `run`."""
     src = paths.equivalents_path(run, benchmark)

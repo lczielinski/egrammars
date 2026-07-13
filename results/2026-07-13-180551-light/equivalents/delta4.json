@@ -79,10 +79,10 @@
       "program": "(FPCore (x1 x2 x3 x4 x5 x6) (- (+ (* x1 x2) (+ (* x1 x3) (+ (* x1 x5) (+ (* x1 x6) (+ (* x2 x5) (* x3 x6)))))) 0))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.0128835313718973,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
@@ -183,10 +183,10 @@
       "program": "(FPCore (x1 x2 x3 x4 x5 x6) (- (+ (* x1 x2) (+ (* x1 x3) (+ (* x1 x5) (+ (* x1 x6) (+ (* x2 x5) (+ (* x3 x6) 0)))))) (+ (* x1 x1) (+ (* 2 (* x1 x4)) (+ (* x2 x3) (+ (* x5 x6) 0))))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "equal",
+        "max_rel_diff": 9.493474004495728e-15,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
       }
     },
     {
@@ -203,10 +203,10 @@
       "program": "(FPCore (x1 x2 x3 x4 x5 x6) (- (+ (* x1 x2) (+ (* x1 x3) (+ (* x1 x5) (+ (* x1 x6) (+ (* x2 x5) (* x3 x6)))))) (- (+ (* x1 x1) (+ (* 2 (* x1 x4)) (+ (* x2 x3) (* x5 x6)))) 0)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "equal",
+        "max_rel_diff": 9.493474004495728e-15,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
       }
     },
     {
@@ -217,10 +217,10 @@
       "program": "(FPCore (x1 x2 x3 x4 x5 x6) (- (+ (* x1 x2) (+ (* x1 x3) (+ (* x1 x5) (+ (* x1 x6) (+ (* x2 x5) (+ (* x3 x6) 0)))))) (+ (* x1 x1) (+ (* 2 (* x1 x4)) (+ (* x2 x3) (* x5 x6))))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "equal",
+        "max_rel_diff": 9.493474004495728e-15,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
       }
     }
   ]

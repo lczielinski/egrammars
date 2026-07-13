@@ -53,200 +53,200 @@
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 3 (+ (/ (* m0 a0) a0) (/ (* m1 a1) a1))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9993387498673698,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 3 (+ (/ (* m0 a0) (* a0 w0)) (/ (* m1 a1) (* a1 w1)))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9866559729037685,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 0.0 (+ (/ (* m0 a0) w0) (/ (* m1 a1) w1))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.0,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 3 (+ (/ (* m0 a0) w0) (/ (* m1 a1) w1))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.957113348535805,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 30 (/ (+ (* m0 a0) (* m0 a0)) w0)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9712015264008187,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 30 (+ (/ (* m0 a0) w0) (/ (* m1 a1) w1))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9745112069126485,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 35 (/ (+ (/ (* m0 a0) w0) (/ (* m1 a1) w1)) (/ (* m2 a2) w2))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9476288707487905,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 30.0 (/ (+ (* m0 a0) (* m0 a0)) w0)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9712015264008187,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 3 (/ (+ (* m0 a0) (* m0 a0)) w0)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9582401720656222,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 33 (+ (/ (* m0 a0) w0) (/ (* m1 a1) w1))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9328686039137535,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 0.0 (+ 0.0 (+ (/ (* m0 a0) w0) (+ (/ (* m1 a1) w1) (/ (* m2 a2) w2))))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.0,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 3 (/ (+ (/ (* m0 a0) w0) (/ (* m1 a1) w1)) (/ (* m2 a2) w2))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.960754202749288,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 300 (/ (+ (* m0 a0) (* m0 a0)) w0)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9541330740892968,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 303 (+ (/ (* m0 a0) w0) (/ (* m1 a1) w1))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9954444613040767,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 3 (/ (* m0 a0) w0)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9491711526850968,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 3 (- (+ (/ (* m0 a0) w0) (/ (* m1 a1) w1)) (/ (* m2 a2) w2))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9985321776269493,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (+ (* 3 (/ (* m0 a0) a0)) (/ (* 3 (* m1 a1)) w1)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9742213689586838,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 30.0 (+ (/ (* m0 a0) w0) (/ (* m1 a1) w1))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9745112069126485,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 3 (+ (/ (* m0 (sqrt a0)) (sqrt a0)) (/ (* m1 (sqrt a1)) (sqrt a1)))))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9993387498673698,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     },
     {
       "program": "(FPCore (m0 m1 m2 w0 w1 w2 a0 a1 a2) (* 5 (/ (+ (* m0 a0) (* m0 a0)) w0)))",
       "proven_equivalent": false,
       "numeric": {
-        "verdict": "indeterminate",
-        "max_rel_diff": 0.0,
-        "samples": 0,
-        "hint": "no finite sample point in the box"
+        "verdict": "different",
+        "max_rel_diff": 1.9905268053545133,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
       }
     }
   ]

@@ -19,6 +19,7 @@ import prove
 
 SATURATION_RUNS = 6
 NODE_CAP = 100_000
+MAX_SPELLINGS = 8
 START = "__start__"
 
 # All rules unified, minus the block rules.egglog marks grammar-excluded (recursive
@@ -263,6 +264,26 @@ def _strongly_connected_components(eclasses: EClassMapping) -> dict[str, str]:
     return scc
 
 
+def limit_spellings(eclasses: EClassMapping, k: int = MAX_SPELLINGS) -> EClassMapping:
+    """Keep the k smallest-completion spellings per e-class. Program size multiplies
+    across classes, so uncapped spelling counts make the language monster-heavy and
+    the sampler wanders; the cap keeps rewrite diversity but bounds the depth."""
+    size = {c: float("inf") for c in eclasses}
+
+    def nsize(e: ENode) -> float:
+        return 1 + sum(size[c] for c in e.children)
+
+    changed = True
+    while changed:
+        changed = False
+        for c, enodes in eclasses.items():
+            if (best := min(nsize(e) for e in enodes)) < size[c]:
+                size[c], changed = best, True
+
+    return {c: set(sorted(enodes, key=lambda e: (nsize(e), e))[:k])
+            for c, enodes in eclasses.items()}
+
+
 SPELLING = {"Add": "+", "Sub": "-", "Mul": "*", "Div": "/", "Neg": "-", "Sqrt": "sqrt"}
 
 
@@ -317,7 +338,7 @@ def build(benchmark: str, box: dict[str, tuple[float, float]] | None = None,
     seeds = prove.seeds(box) if box else ""
     root, eclasses = extract(saturate(benchmarks.read_source(benchmark), runs, seeds))
     root, eclasses = strip_identity_enodes(root, eclasses)
-    return intersect(root, eclasses)
+    return intersect(root, limit_spellings(eclasses))
 
 
 def rules(benchmark: str, box: dict[str, tuple[float, float]] | None = None,

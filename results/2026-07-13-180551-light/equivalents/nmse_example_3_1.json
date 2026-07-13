@@ -17,19 +17,13 @@
   },
   "programs": [
     "(FPCore (x) (/ 1 (+ (sqrt (+ x 1)) (sqrt x))))",
-    "(FPCore (x) (/ 1 (+ (sqrt (+ x (sqrt 0))) (sqrt x))))",
     "(FPCore (x) (/ 1 (+ (sqrt (- x -1)) (sqrt x))))",
-    "(FPCore (x) (/ 0 0))",
-    "(FPCore (x) (/ 1 (+ (sqrt (+ x 0)) (sqrt x))))",
     "(FPCore (x) (/ 1 (/ (+ (sqrt (+ x 1)) (sqrt x)) 1)))",
     "(FPCore (x) (/ 1 (+ (sqrt (+ 1 x)) (sqrt x))))",
-    "(FPCore (x) (/ 1 (+ (sqrt (+ x 2)) (sqrt x))))",
     "(FPCore (x) (/ 1 (- (+ (sqrt (+ x 1)) (sqrt x)) 0)))",
     "(FPCore (x) (/ 1 (+ (sqrt (+ x 01)) (sqrt x))))",
     "(FPCore (x) (/ 1 (+ (sqrt (/ (+ x 1) 1)) (sqrt x))))",
-    "(FPCore (x) (/ 1 (* (+ (sqrt (+ x 1)) (sqrt x)) 1)))",
-    "(FPCore (x) (/ 5 (+ (sqrt (+ x 1)) (sqrt x))))",
-    "(FPCore (x) (/ 0 (+ (sqrt (+ x 1)) (sqrt 0))))"
+    "(FPCore (x) (/ 1 (* (+ (sqrt (+ x 1)) (sqrt x)) 1)))"
   ],
   "attempts": [
     {
@@ -48,7 +42,13 @@
     },
     {
       "program": "(FPCore (x) (/ 1 (+ (sqrt (+ x (sqrt 0))) (sqrt x))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.5147187694626577,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (x) (/ 1 (- (* (sqrt (+ x 1)) (sqrt (+ x 1))) (* (sqrt x) (sqrt x)))))",
@@ -76,7 +76,13 @@
     },
     {
       "program": "(FPCore (x) (/ 0 0))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
     },
     {
       "program": "(FPCore (x) (/ 1 (- (sqrt (+ x 1)) (sqrt x))))",
@@ -90,7 +96,13 @@
     },
     {
       "program": "(FPCore (x) (/ 1 (+ (sqrt (+ x 0)) (sqrt x))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.5147187694626577,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (x) (/ 1 (/ (+ (sqrt (+ x 1)) (sqrt x)) 1)))",
@@ -102,7 +114,13 @@
     },
     {
       "program": "(FPCore (x) (/ 1 (+ (sqrt (+ x 2)) (sqrt x))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.222311903200682,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (x) (/ 2 (* (sqrt (+ x 1)) (sqrt (+ x 1)))))",
@@ -132,7 +150,13 @@
     },
     {
       "program": "(FPCore (x) (/ 5 (+ (sqrt (+ x 1)) (sqrt x))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.8000000000000065,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     },
     {
       "program": "(FPCore (x) (/ 0 1))",
@@ -146,7 +170,13 @@
     },
     {
       "program": "(FPCore (x) (/ 0 (+ (sqrt (+ x 1)) (sqrt 0))))",
-      "proven_equivalent": true
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.0,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
     }
   ]
 }

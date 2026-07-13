@@ -108,18 +108,6 @@
       "program": "(FPCore (x) (* x (- (+ x 2) 0)))"
     },
     {
-      "fptaylor_expr": "(x * (sqrt(x) + sqrt(2)))",
-      "enclosure": [
-        -Infinity,
-        Infinity
-      ],
-      "abs_err": null,
-      "rel_err": null,
-      "rel_err_derived": false,
-      "rel_err_ulps": null,
-      "program": "(FPCore (x) (* x (+ (sqrt x) (sqrt 2))))"
-    },
-    {
       "fptaylor_expr": "((x * (x + 2)) / 1)",
       "enclosure": [
         -1.015625,

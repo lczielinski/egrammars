@@ -66,7 +66,13 @@ def _eval(node, env: dict):
     if head == "-" and len(node) == 2:
         return -_eval(node[1], env)
     a, b = _eval(node[1], env), _eval(node[2], env)
-    return {"+": a + b, "-": a - b, "*": a * b, "/": a / b}[head]
+    if head == "+":
+        return a + b
+    if head == "-":
+        return a - b
+    if head == "*":
+        return a * b
+    return a / b
 
 
 def classify(reference: str, candidate: str, box: dict | None,

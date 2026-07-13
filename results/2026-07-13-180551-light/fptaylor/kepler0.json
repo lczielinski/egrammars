@@ -110,18 +110,6 @@
       "rel_err_derived": false,
       "rel_err_ulps": 4.279311809088154,
       "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* (- x2 x6) (- x5 x3)) (* x1 (+ (- x1) (+ x2 (+ x3 (+ (- x4) (+ x5 x6))))))))"
-    },
-    {
-      "fptaylor_expr": "(((x2 - x6) * (x5 - sqrt(0))) + (x1 * ((((((-(x1)) + x2) + x3) - x4) + x5) + x6)))",
-      "enclosure": [
-        -Infinity,
-        Infinity
-      ],
-      "abs_err": null,
-      "rel_err": null,
-      "rel_err_derived": false,
-      "rel_err_ulps": null,
-      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* (- x2 x6) (- x5 (sqrt 0))) (* x1 (+ (+ (- (+ (+ (- x1) x2) x3) x4) x5) x6))))"
     }
   ]
 }
