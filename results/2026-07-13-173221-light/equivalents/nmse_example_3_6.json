@@ -1,0 +1,207 @@
+{
+  "benchmark": "nmse_example_3_6",
+  "reference": "(FPCore (x) (- (/ 1 (sqrt x)) (/ 1 (sqrt (+ x 1)))))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "light",
+    "run": "2026-07-13-173221-light",
+    "time_budget": 10.0,
+    "box": {
+      "x": [
+        0.0001,
+        100.0
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (x) (/ 1 (* (sqrt x) (* (sqrt (+ x 1)) (+ (sqrt x) (sqrt (+ x 1)))))))",
+    "(FPCore (x) (/ 1 (+ (* (sqrt x) (sqrt (+ x 1))) (* (sqrt x) (sqrt (+ x 1))))))",
+    "(FPCore (x) (- (/ 1 (sqrt x)) (/ 1 (sqrt (+ x 1)))))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (x) (/ 1 (* (sqrt x) (sqrt (+ x 1)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9501099894398177,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (/ 1 (* (sqrt x) (sqrt (+ x 0.0)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (x) (/ 1 (* (sqrt x) (+ (sqrt x) (sqrt (+ x 1))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9004677160436203,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (/ 1 (* (sqrt x) (sqrt (+ x 2)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9498634763924804,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (/ 0 1))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.0,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (/ 0 0))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (x) (/ 1 (* (sqrt x) (* (sqrt (+ x 1)) (+ (sqrt x) (sqrt (+ x 1)))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (/ 0 (* (sqrt x) (sqrt (+ x 1)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.0,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (/ 1 (* (sqrt x) (sqrt (+ 1 x)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9501099894398177,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (/ 12 (* (sqrt x) (sqrt (+ x 1)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9958424991199848,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (/ 1 (+ (* (sqrt x) (sqrt (+ x 1))) (* (sqrt x) (sqrt (+ x 1))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (/ 1 (* (sqrt x) (- (sqrt (+ x 1)) (sqrt x)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9997522628360153,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (/ 2 (* (sqrt x) (sqrt (+ x 1)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9750549947199089,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (/ 1 (* (sqrt x) (sqrt (+ x 71)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9350764884163331,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (/ 1 (* (sqrt x) (sqrt (+ x 1.0)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9501099894398177,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (/ 1 (* (sqrt x) (sqrt (+ x 0)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (x) (/ 1 (* (sqrt x) (sqrt (+ x 0.1)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9503328972808153,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (- (/ 1 (sqrt x)) (/ 1 (sqrt (+ x 1)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (/ 1 (* (sqrt x) (sqrt (+ x 124)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9256903224255061,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x) (/ 1 (* (sqrt x) (sqrt (+ x (sqrt 1))))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9501099894398177,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    }
+  ]
+}

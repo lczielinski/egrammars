@@ -1,0 +1,201 @@
+{
+  "benchmark": "test03_nonlin2",
+  "reference": "(FPCore (x y) (/ (+ x y) (- x y)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "light",
+    "run": "2026-07-13-173221-light",
+    "time_budget": 10.0,
+    "box": {
+      "x": [
+        0.0,
+        1.0
+      ],
+      "y": [
+        -1.0,
+        -0.1
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (x y) (/ (+ x y) (- x y)))",
+    "(FPCore (x y) (* (/ 1 (- x y)) (+ x y)))",
+    "(FPCore (x y) (/ (* (+ x y) 1) (- x y)))",
+    "(FPCore (x y) (if (< y -0.5) (/ (+ x y) (- x y)) (/ (+ x y) (- x y))))",
+    "(FPCore (x y) (/ (+ y x) (- x y)))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (x y) (/ (+ x y) (- x y)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ x (sqrt (* y y))) (- x y)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.9994244936247105,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ x (sqrt (* y y))) (- x (sqrt (* y y)))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9999999591114699,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ x (sqrt (+ y y))) (- x y)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (x y) (* (/ 1 (- x y)) (+ x y)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ x 0.0) (- x y)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (x y) (/ (* (+ x y) 1) (- x y)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ x (sqrt (sqrt y))) (- x y)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ x (if (< y -0.5) y y)) (- x y)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 0.0,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ x (if (< y 0) y y)) (- x (if (< y 0) y y))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 0.0,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ x (if (< y -0.5) y (+ y 0))) (- x y)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 0.0,
+        "samples": 237,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ x (if (< y 0) y 0)) (- x y)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 0.0,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ x (if (< y -0.5) y (- y))) (- x y)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.8973528955225498,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ x (sqrt y)) (- x y)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (x y) (if (< y -0.5) (/ (+ x y) (- x y)) (/ (+ x y) (- x y))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ x (sqrt 0)) (- x y)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ x (sqrt (+ (* y y) 0))) (- x y)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ y x) (- x y)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ x (sqrt (* y 0))) (- x y)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (x y) (/ (+ x (sqrt (sqrt (+ y y)))) (- x y)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    }
+  ]
+}

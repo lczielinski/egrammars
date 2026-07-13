@@ -1,0 +1,186 @@
+{
+  "benchmark": "pbrt_cone_z",
+  "reference": "(FPCore (ux maxCos) (+ (- 1 ux) (* ux maxCos)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "light",
+    "run": "2026-07-13-180551-light",
+    "time_budget": 10.0,
+    "box": {
+      "ux": [
+        2.328306437e-10,
+        1.0
+      ],
+      "maxCos": [
+        0.0,
+        1.0
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (ux maxCos) (+ (* (- 1 ux) (- 1 maxCos)) maxCos))",
+    "(FPCore (ux maxCos) (+ (* (- 1 ux) (- (sqrt 1) (sqrt maxCos))) maxCos))",
+    "(FPCore (ux maxCos) (+ (* (- (sqrt 1) ux) (- (sqrt 1) maxCos)) maxCos))",
+    "(FPCore (ux maxCos) (+ (* (- 1 ux) (* (- 1 maxCos) 1)) maxCos))",
+    "(FPCore (ux maxCos) (+ (* (- 1 ux) (* 1 (- 1 maxCos))) maxCos))",
+    "(FPCore (ux maxCos) (+ (* (+ -1 ux) (+ -1 maxCos)) maxCos))",
+    "(FPCore (ux maxCos) (- (+ (* (- 1 ux) (- 1 maxCos)) maxCos) 0))",
+    "(FPCore (ux maxCos) (+ (* (* (- 1 ux) (- 1 maxCos)) 1) maxCos))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (- 1 maxCos)) maxCos))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (- 0 maxCos)) maxCos))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.99995619204471,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (- (sqrt 1) (sqrt maxCos))) maxCos))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (- (sqrt 1) ux) (- (sqrt 1) maxCos)) maxCos))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (* -1 maxCos)) maxCos))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.99995619204471,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (- 0 1) ux) (* ux maxCos)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.9866790863237527,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (* (- 1 maxCos) 1)) maxCos))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (/ 1 maxCos)) maxCos))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9981559785309805,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (- 0 1)) maxCos))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.997215510236023,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (* 1 (- 1 maxCos))) maxCos))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (- 2.0 maxCos)) maxCos))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.4999890477712801,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (/ 1 (+ 1 maxCos))) maxCos))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.32256522406317517,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (+ -1 ux) (+ -1 maxCos)) maxCos))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (/ 1 (+ 1 (* -1 maxCos)))) maxCos))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9992867424763672,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (* -1 ux) (- 1 maxCos)) maxCos))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.9893858078355036,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (- 0 0)) maxCos))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "indeterminate",
+        "max_rel_diff": 0.0,
+        "samples": 0,
+        "hint": "no finite sample point in the box"
+      }
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (* -1 ux) (* -1 maxCos)) maxCos))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.9972155102360228,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (ux maxCos) (- (+ (* (- 1 ux) (- 1 maxCos)) maxCos) 0))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (* (- 1 ux) (- 1 maxCos)) 1) maxCos))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (+ -1 maxCos)) maxCos))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.9953732179309813,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    }
+  ]
+}

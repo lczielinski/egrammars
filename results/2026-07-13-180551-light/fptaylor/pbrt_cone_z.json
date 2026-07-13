@@ -1,0 +1,143 @@
+{
+  "benchmark": "pbrt_cone_z",
+  "reference": "(FPCore (ux maxCos) (+ (- 1 ux) (* ux maxCos)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "light",
+    "run": "2026-07-13-180551-light",
+    "time_budget": 10.0,
+    "box": {
+      "ux": [
+        2.328306437e-10,
+        1.0
+      ],
+      "maxCos": [
+        0.0,
+        1.0
+      ]
+    }
+  },
+  "intervals": {
+    "ux": [
+      2.328306437e-10,
+      1.0
+    ],
+    "maxCos": [
+      0.0,
+      1.0
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "((1 - ux) + (ux * maxCos))",
+    "enclosure": [
+      0.0,
+      1.019532
+    ],
+    "abs_err": 2.220447e-16,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (ux maxCos) (+ (- 1 ux) (* ux maxCos)))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "(((1 - ux) * (1 - maxCos)) + maxCos)",
+      "enclosure": [
+        0.0,
+        1.019532
+      ],
+      "abs_err": 2.775558e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (- 1 maxCos)) maxCos))"
+    },
+    {
+      "fptaylor_expr": "(((1 - ux) * (sqrt(1) - sqrt(maxCos))) + maxCos)",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (- (sqrt 1) (sqrt maxCos))) maxCos))"
+    },
+    {
+      "fptaylor_expr": "(((sqrt(1) - ux) * (sqrt(1) - maxCos)) + maxCos)",
+      "enclosure": [
+        0.0,
+        1.019532
+      ],
+      "abs_err": 4.440893e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (ux maxCos) (+ (* (- (sqrt 1) ux) (- (sqrt 1) maxCos)) maxCos))"
+    },
+    {
+      "fptaylor_expr": "(((1 - ux) * ((1 - maxCos) * 1)) + maxCos)",
+      "enclosure": [
+        0.0,
+        1.019532
+      ],
+      "abs_err": 2.775558e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (* (- 1 maxCos) 1)) maxCos))"
+    },
+    {
+      "fptaylor_expr": "(((1 - ux) * (1 * (1 - maxCos))) + maxCos)",
+      "enclosure": [
+        0.0,
+        1.019532
+      ],
+      "abs_err": 2.775558e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (* 1 (- 1 maxCos))) maxCos))"
+    },
+    {
+      "fptaylor_expr": "(((-1 + ux) * (-1 + maxCos)) + maxCos)",
+      "enclosure": [
+        0.0,
+        1.019532
+      ],
+      "abs_err": 2.775558e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (ux maxCos) (+ (* (+ -1 ux) (+ -1 maxCos)) maxCos))"
+    },
+    {
+      "fptaylor_expr": "((((1 - ux) * (1 - maxCos)) + maxCos) - 0)",
+      "enclosure": [
+        0.0,
+        1.019532
+      ],
+      "abs_err": 3.885781e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (ux maxCos) (- (+ (* (- 1 ux) (- 1 maxCos)) maxCos) 0))"
+    },
+    {
+      "fptaylor_expr": "((((1 - ux) * (1 - maxCos)) * 1) + maxCos)",
+      "enclosure": [
+        0.0,
+        1.019532
+      ],
+      "abs_err": 2.775558e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (ux maxCos) (+ (* (* (- 1 ux) (- 1 maxCos)) 1) maxCos))"
+    }
+  ]
+}

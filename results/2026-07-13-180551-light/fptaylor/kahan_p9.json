@@ -1,0 +1,83 @@
+{
+  "benchmark": "kahan_p9",
+  "reference": "(FPCore (x y) (/ (* (- x y) (+ x y)) (+ (* x x) (* y y))))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "light",
+    "run": "2026-07-13-180551-light",
+    "time_budget": 10.0,
+    "box": {
+      "x": [
+        0.001,
+        1.0
+      ],
+      "y": [
+        -1.0,
+        1.0
+      ]
+    }
+  },
+  "intervals": {
+    "x": [
+      0.001,
+      1.0
+    ],
+    "y": [
+      -1.0,
+      1.0
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "(((x - y) * (x + y)) / ((x * x) + (y * y)))",
+    "enclosure": [
+      -113.2046,
+      146.3092
+    ],
+    "abs_err": 3.971188e-12,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (x y) (/ (* (- x y) (+ x y)) (+ (* x x) (* y y))))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "(((x * x) - (y * y)) / ((x * x) + (y * y)))",
+      "enclosure": [
+        -60.03516,
+        77.52253
+      ],
+      "abs_err": 1.966799e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x y) (/ (- (* x x) (* y y)) (+ (* x x) (* y y))))"
+    },
+    {
+      "fptaylor_expr": "(((x * x) - (y * y)) / ((x * x) + (y * sqrt(1))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x y) (/ (- (* x x) (* y y)) (+ (* x x) (* y (sqrt 1)))))"
+    },
+    {
+      "fptaylor_expr": "(((x * x) - (y * y)) / ((x * x) + ((y * y) + 0)))",
+      "enclosure": [
+        -60.03516,
+        77.52253
+      ],
+      "abs_err": 2.578394e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x y) (/ (- (* x x) (* y y)) (+ (* x x) (+ (* y y) 0))))"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "benchmark": "nmse_p42_negative",
+  "reference": "(FPCore (a b c) (/ (- (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "light",
+    "run": "2026-07-13-180551-light",
+    "time_budget": 10.0,
+    "box": {
+      "a": [
+        1.0,
+        100.0
+      ],
+      "b": [
+        -100.0,
+        100.0
+      ],
+      "c": [
+        -100.0,
+        -1.0
+      ]
+    }
+  },
+  "intervals": {
+    "a": [
+      1.0,
+      100.0
+    ],
+    "b": [
+      -100.0,
+      100.0
+    ],
+    "c": [
+      -100.0,
+      -1.0
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "(((-(b)) - sqrt(((b * b) - (4 * (a * c))))) / (2 * a))",
+    "enclosure": [
+      -101.4374,
+      0.01441018
+    ],
+    "abs_err": 2.292151e-14,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (a b c) (/ (- (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "(((2 * c) + 0) / (sqrt(((b * b) - (4 * (a * c)))) + (-(b))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c) (/ (+ (* 2 c) 0) (+ (sqrt (- (* b b) (* 4 (* a c)))) (- b))))"
+    },
+    {
+      "fptaylor_expr": "((2 * c) / (sqrt(((b * b) - (4 * (a * c)))) + (-1 * b)))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c) (/ (* 2 c) (+ (sqrt (- (* b b) (* 4 (* a c)))) (* -1 b))))"
+    }
+  ]
+}

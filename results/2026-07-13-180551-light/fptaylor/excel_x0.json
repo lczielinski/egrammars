@@ -1,0 +1,119 @@
+{
+  "benchmark": "excel_x0",
+  "reference": "(FPCore (x0 x1) (- (/ x0 (- 1 x1)) x0))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "light",
+    "run": "2026-07-13-180551-light",
+    "time_budget": 10.0,
+    "box": {
+      "x0": [
+        1.0,
+        3.0
+      ],
+      "x1": [
+        0.0001,
+        0.02
+      ]
+    }
+  },
+  "intervals": {
+    "x0": [
+      1.0,
+      3.0
+    ],
+    "x1": [
+      0.0001,
+      0.02
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "((x0 / (1 - x1)) - x0)",
+    "enclosure": [
+      -0.00771249,
+      0.06903699
+    ],
+    "abs_err": 4.023836e-16,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (x0 x1) (- (/ x0 (- 1 x1)) x0))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "((x0 / (1 - x1)) * x1)",
+      "enclosure": [
+        0.00010001,
+        0.06122449
+      ],
+      "abs_err": 1.137835e-17,
+      "rel_err": 2.577916e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 116.0990153699244,
+      "program": "(FPCore (x0 x1) (* (/ x0 (- 1 x1)) x1))"
+    },
+    {
+      "fptaylor_expr": "((x0 * x1) / (1 - x1))",
+      "enclosure": [
+        0.00010001,
+        0.06122449
+      ],
+      "abs_err": 1.047771e-17,
+      "rel_err": 2.814783e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 126.76655669928807,
+      "program": "(FPCore (x0 x1) (/ (* x0 x1) (- 1 x1)))"
+    },
+    {
+      "fptaylor_expr": "((x0 * x1) / (01 - x1))",
+      "enclosure": [
+        0.00010001,
+        0.06122449
+      ],
+      "abs_err": 1.047771e-17,
+      "rel_err": 2.814783e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 126.76655669928807,
+      "program": "(FPCore (x0 x1) (/ (* x0 x1) (- 01 x1)))"
+    },
+    {
+      "fptaylor_expr": "(((x0 * x1) + 0) / (1 - x1))",
+      "enclosure": [
+        0.00010001,
+        0.06122449
+      ],
+      "abs_err": 1.401796e-17,
+      "rel_err": 3.9418e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 177.5228901116902,
+      "program": "(FPCore (x0 x1) (/ (+ (* x0 x1) 0) (- 1 x1)))"
+    },
+    {
+      "fptaylor_expr": "((x0 * sqrt((x1 * x1))) / (1 - sqrt((x1 * x1))))",
+      "enclosure": [
+        0.00010001,
+        0.06122449
+      ],
+      "abs_err": 1.115683e-16,
+      "rel_err": 3.84472e-13,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1731.5079559343894,
+      "program": "(FPCore (x0 x1) (/ (* x0 (sqrt (* x1 x1))) (- 1 (sqrt (* x1 x1)))))"
+    },
+    {
+      "fptaylor_expr": "((x0 * x1) / (0 - 0))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x0 x1) (/ (* x0 x1) (- 0 0)))"
+    }
+  ]
+}

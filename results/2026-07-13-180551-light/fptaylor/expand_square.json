@@ -1,0 +1,135 @@
+{
+  "benchmark": "expand_square",
+  "reference": "(FPCore (x) (- (* (+ x 1) (+ x 1)) 1))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "light",
+    "run": "2026-07-13-180551-light",
+    "time_budget": 10.0,
+    "box": {
+      "x": [
+        -1.0,
+        1.0
+      ]
+    }
+  },
+  "intervals": {
+    "x": [
+      -1.0,
+      1.0
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "(((x + 1) * (x + 1)) - 1)",
+    "enclosure": [
+      -1.0,
+      3.0
+    ],
+    "abs_err": 1.110224e-15,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (x) (- (* (+ x 1) (+ x 1)) 1))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "(x * (x + 2))",
+      "enclosure": [
+        -1.015625,
+        3.0
+      ],
+      "abs_err": 4.440893e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (+ x 2)))"
+    },
+    {
+      "fptaylor_expr": "(x * ((x + 2) / 1))",
+      "enclosure": [
+        -1.015625,
+        3.0
+      ],
+      "abs_err": 4.440893e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (/ (+ x 2) 1)))"
+    },
+    {
+      "fptaylor_expr": "(x * (2 + x))",
+      "enclosure": [
+        -1.015625,
+        3.0
+      ],
+      "abs_err": 4.440893e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (+ 2 x)))"
+    },
+    {
+      "fptaylor_expr": "(x * (x + (2 + 0)))",
+      "enclosure": [
+        -1.015625,
+        3.0
+      ],
+      "abs_err": 5.551116e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (+ x (+ 2 0))))"
+    },
+    {
+      "fptaylor_expr": "(x * (x + 02))",
+      "enclosure": [
+        -1.015625,
+        3.0
+      ],
+      "abs_err": 4.440893e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (+ x 02)))"
+    },
+    {
+      "fptaylor_expr": "(x * ((x + 2) - 0))",
+      "enclosure": [
+        -1.015625,
+        3.0
+      ],
+      "abs_err": 6.661339e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (- (+ x 2) 0)))"
+    },
+    {
+      "fptaylor_expr": "(x * (sqrt(x) + sqrt(2)))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (+ (sqrt x) (sqrt 2))))"
+    },
+    {
+      "fptaylor_expr": "((x * (x + 2)) / 1)",
+      "enclosure": [
+        -1.015625,
+        3.0
+      ],
+      "abs_err": 4.440893e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ (* x (+ x 2)) 1))"
+    }
+  ]
+}

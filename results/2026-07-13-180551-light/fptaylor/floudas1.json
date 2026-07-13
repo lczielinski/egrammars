@@ -1,0 +1,91 @@
+{
+  "benchmark": "floudas1",
+  "reference": "(FPCore (x1 x2 x3 x4 x5 x6) (- (- (- (- (- (* -25 (* (- x1 2) (- x1 2))) (* (- x2 2) (- x2 2))) (* (- x3 1) (- x3 1))) (* (- x4 4) (- x4 4))) (* (- x5 1) (- x5 1))) (* (- x6 4) (- x6 4))))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "light",
+    "run": "2026-07-13-180551-light",
+    "time_budget": 10.0,
+    "box": {
+      "x1": [
+        0.0,
+        6.0
+      ],
+      "x2": [
+        0.0,
+        6.0
+      ],
+      "x3": [
+        1.0,
+        5.0
+      ],
+      "x4": [
+        0.0,
+        6.0
+      ],
+      "x5": [
+        0.0,
+        6.0
+      ],
+      "x6": [
+        0.0,
+        10.0
+      ]
+    }
+  },
+  "intervals": {
+    "x1": [
+      0.0,
+      6.0
+    ],
+    "x2": [
+      0.0,
+      6.0
+    ],
+    "x3": [
+      1.0,
+      5.0
+    ],
+    "x4": [
+      0.0,
+      6.0
+    ],
+    "x5": [
+      0.0,
+      6.0
+    ],
+    "x6": [
+      0.0,
+      10.0
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "((((((-25 * ((x1 - 2) * (x1 - 2))) - ((x2 - 2) * (x2 - 2))) - ((x3 - 1) * (x3 - 1))) - ((x4 - 4) * (x4 - 4))) - ((x5 - 1) * (x5 - 1))) - ((x6 - 4) * (x6 - 4)))",
+    "enclosure": [
+      -509.0,
+      0.004150391
+    ],
+    "abs_err": 2.851053e-13,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (x1 x2 x3 x4 x5 x6) (- (- (- (- (- (* -25 (* (- x1 2) (- x1 2))) (* (- x2 2) (- x2 2))) (* (- x3 1) (- x3 1))) (* (- x4 4) (- x4 4))) (* (- x5 1) (- x5 1))) (* (- x6 4) (- x6 4))))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "(-(((25 * ((x1 - 2) * (x1 - 2))) + (((x2 - 2) * (x2 - 2)) + (((x3 - 1) * (x3 - 1)) + (((x4 - 4) * (x4 - 4)) + (((x5 - 1) * (x5 - 1)) + ((x6 - 4) * (x6 - 4)))))))))",
+      "enclosure": [
+        -509.0,
+        0.00378418
+      ],
+      "abs_err": 1.962875e-13,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x1 x2 x3 x4 x5 x6) (- (+ (* 25 (* (- x1 2) (- x1 2))) (+ (* (- x2 2) (- x2 2)) (+ (* (- x3 1) (- x3 1)) (+ (* (- x4 4) (- x4 4)) (+ (* (- x5 1) (- x5 1)) (* (- x6 4) (- x6 4)))))))))"
+    }
+  ]
+}

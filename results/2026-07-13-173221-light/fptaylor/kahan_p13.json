@@ -1,0 +1,51 @@
+{
+  "benchmark": "kahan_p13",
+  "reference": "(FPCore (t) (/ (+ 1 (* (/ (* 2 t) (+ 1 t)) (/ (* 2 t) (+ 1 t)))) (+ 2 (* (/ (* 2 t) (+ 1 t)) (/ (* 2 t) (+ 1 t))))))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "light",
+    "run": "2026-07-13-173221-light",
+    "time_budget": 10.0,
+    "box": {
+      "t": [
+        1.0,
+        100.0
+      ]
+    }
+  },
+  "intervals": {
+    "t": [
+      1.0,
+      100.0
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "((1 + (((2 * t) / (1 + t)) * ((2 * t) / (1 + t)))) / (2 + (((2 * t) / (1 + t)) * ((2 * t) / (1 + t)))))",
+    "enclosure": [
+      0.6573465,
+      0.8472371
+    ],
+    "abs_err": 3.263416e-16,
+    "rel_err": 4.720844e-16,
+    "rel_err_derived": false,
+    "rel_err_ulps": 2.126079127927424,
+    "program": "(FPCore (t) (/ (+ 1 (* (/ (* 2 t) (+ 1 t)) (/ (* 2 t) (+ 1 t)))) (+ 2 (* (/ (* 2 t) (+ 1 t)) (/ (* 2 t) (+ 1 t))))))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "(((5 * (t * t)) + ((2 * t) + 1)) / ((6 * (t * t)) + ((4 * t) + sqrt(0))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (t) (/ (+ (* 5 (* t t)) (+ (* 2 t) 1)) (+ (* 6 (* t t)) (+ (* 4 t) (sqrt 0)))))"
+    }
+  ]
+}
