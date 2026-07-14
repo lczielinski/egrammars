@@ -1,0 +1,122 @@
+{
+  "benchmark": "sine",
+  "reference": "(FPCore (x) (- (+ (- x (/ (* (* x x) x) 6.0)) (/ (* (* (* (* x x) x) x) x) 120)) (/ (* (* (* (* (* (* x x) x) x) x) x) x) 5040)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-13-215006-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "x": [
+        -1.57079632679,
+        1.57079632679
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (x) (+ x (+ (* (* x x) (* (* x x) (* (/ 1 120) x))) (+ (* (* x x) (* (/ x 6) -1)) (* (* x x) (* (/ (* x (* x (* x (* x x)))) 5040) -1))))))",
+    "(FPCore (x) (+ x (+ (* (* x x) (* (* x x) (* (/ 1 120) x))) (+ (* (* x x) (* (/ (* x (* x (* x (* x x)))) 5040) -1)) (- (/ (* (* x x) x) 6))))))",
+    "(FPCore (x) (- (+ x (+ (* (* x x) (* (* x x) (* (/ 1 120) x))) (* (* x x) (* (/ x 6) -1)))) (* (* x x) (* (* x x) (* (/ 1 5040) (* x (* x x)))))))",
+    "(FPCore (x) (+ x (+ (* (* x x) (* (* x x) (* (/ 1 120) x))) (* (* x (* x (* x (/ (+ 5040 (* (* x (* x (* x x))) 6)) 30240)))) -1))))",
+    "(FPCore (x) (- (+ (+ x (* (* x x) (/ (* (* x x) x) 120))) (- (/ (* (* x x) x) 6))) (/ (* (* (* (* (* (* x x) x) x) x) x) x) 5040)))",
+    "(FPCore (x) (- (+ (- x (/ (* (* x x) x) 6)) (/ (* (* (* (* x x) x) x) x) 120)) (/ (* (* (* (* (* (* x x) x) x) x) x) x) 5040)))",
+    "(FPCore (x) (- (+ (+ (- (/ (* (* x x) x) 6)) (/ (* (* (* (* x x) x) x) x) 120)) x) (/ (* (* (* (* (* (* x x) x) x) x) x) x) 5040)))",
+    "(FPCore (x) (+ (+ x (* (* x x) (* (* x x) (* (/ 1 120) x)))) (* (* x (* x (/ (+ (* x 5040) (* (* x (* x (* x (* x x)))) 6)) 30240))) -1)))",
+    "(FPCore (x) (- (+ (* (* x x) (* (* x x) (* (/ 1 120) x))) (- x (/ (* (* x x) x) 6))) (/ (* (* (* (* x x) x) x) (* x (* x x))) 5040)))",
+    "(FPCore (x) (- (+ (- (/ (* (* x x) x) 6)) (* x (+ (/ (* (* x x) (* x x)) 120) 1))) (/ (* (* (* x x) (* x x)) (* x (* x x))) 5040)))",
+    "(FPCore (x) (- (+ (+ x (* (* x x) (* (* x x) (* (/ 1 120) x)))) (* (* x x) (* (/ x 6) -1))) (* (* x x) (* (* x x) (/ (* x (* x x)) 5040)))))",
+    "(FPCore (x) (- (+ (+ x (- (* (* x x) (/ x 6)))) (* (* x x) (/ (* (* x x) x) 120))) (* (* x x) (* (* x x) (/ (* (* x x) x) 5040)))))",
+    "(FPCore (x) (- (+ (- x (/ (* x (* x x)) 6)) (/ (* x (* x (* x (* x x)))) 120)) (/ (* x (* x (* x (* x (* x (* x x)))))) 5040)))",
+    "(FPCore (x) (+ x (+ (* (* x x) (* (* x x) (* (/ 1 120) x))) (* (* x (* x (* x (+ (/ 1 6) (* (/ 1 5040) (* x (* x (* x x)))))))) -1))))",
+    "(FPCore (x) (if (< x 0) (+ x (+ (* (* x x) (/ (* (* x x) x) 120)) (* (* x (* x (* x (+ (* (* x x) (/ (* x x) 5040)) (/ 1 6))))) -1))) (+ x (+ (* (* x x) (/ (* (* x x) x) 120)) (* (* x (* x (* x (+ (* (* x x) (/ (* x x) 5040)) (/ 1 6))))) -1)))))",
+    "(FPCore (x) (- (+ (+ (- (* (* x x) (/ x 6))) (/ (* (* x x) (* x (* x x))) 120)) x) (/ (* (* x x) (* (* x x) (* x (* x x)))) 5040)))",
+    "(FPCore (x) (- (+ (+ (* (* x x) (* (* x x) (* (/ 1 120) x))) (* (* x x) (* (/ x 6) -1))) x) (* (* x x) (* (* x x) (* (/ 1 5040) (* x (* x x)))))))",
+    "(FPCore (x) (- (+ (+ x (- (/ (* (* x x) x) 6))) (/ (* (* (* (* x x) x) x) x) 120)) (/ (* (* (* (* (* (* x x) x) x) x) x) x) 5040)))",
+    "(FPCore (x) (+ (+ x (* (* x x) (/ (* (* x x) x) 120))) (- (* (* x x) (/ (+ (* x 5040) (* (* (* x x) (* x (* x x))) 6)) 30240)))))",
+    "(FPCore (x) (- (+ (+ (/ (* (* x x) (* x (* x x))) 120) (* x (* (* x (* x (/ 1 6))) -1))) x) (* (* x x) (/ (* (* x x) (* x (* x x))) 5040))))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (x) (+ x (+ (* (* x x) (* (* x x) (* (/ 1 120) x))) (+ (* (* x x) (* (/ x 6) -1)) (* (* x x) (* (/ (* x (* x (* x (* x x)))) 5040) -1))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ x (+ (* (* x x) (* (* x x) (* (/ 1 120) x))) (+ (* (* x x) (* (/ (* x (* x (* x (* x x)))) 5040) -1)) (- (/ (* (* x x) x) 6))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (+ x (+ (* (* x x) (* (* x x) (* (/ 1 120) x))) (* (* x x) (* (/ x 6) -1)))) (* (* x x) (* (* x x) (* (/ 1 5040) (* x (* x x)))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ x (+ (* (* x x) (* (* x x) (* (/ 1 120) x))) (* (* x (* x (* x (/ (+ 5040 (* (* x (* x (* x x))) 6)) 30240)))) -1))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (+ (+ x (* (* x x) (/ (* (* x x) x) 120))) (- (/ (* (* x x) x) 6))) (/ (* (* (* (* (* (* x x) x) x) x) x) x) 5040)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (+ (- x (/ (* (* x x) x) 6)) (/ (* (* (* (* x x) x) x) x) 120)) (/ (* (* (* (* (* (* x x) x) x) x) x) x) 5040)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (+ (+ (- (/ (* (* x x) x) 6)) (/ (* (* (* (* x x) x) x) x) 120)) x) (/ (* (* (* (* (* (* x x) x) x) x) x) x) 5040)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ (+ x (* (* x x) (* (* x x) (* (/ 1 120) x)))) (* (* x (* x (/ (+ (* x 5040) (* (* x (* x (* x (* x x)))) 6)) 30240))) -1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (+ (* (* x x) (* (* x x) (* (/ 1 120) x))) (- x (/ (* (* x x) x) 6))) (/ (* (* (* (* x x) x) x) (* x (* x x))) 5040)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (+ (- (/ (* (* x x) x) 6)) (* x (+ (/ (* (* x x) (* x x)) 120) 1))) (/ (* (* (* x x) (* x x)) (* x (* x x))) 5040)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (+ (+ x (* (* x x) (* (* x x) (* (/ 1 120) x)))) (* (* x x) (* (/ x 6) -1))) (* (* x x) (* (* x x) (/ (* x (* x x)) 5040)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (+ (+ x (- (* (* x x) (/ x 6)))) (* (* x x) (/ (* (* x x) x) 120))) (* (* x x) (* (* x x) (/ (* (* x x) x) 5040)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (+ (- x (/ (* x (* x x)) 6)) (/ (* x (* x (* x (* x x)))) 120)) (/ (* x (* x (* x (* x (* x (* x x)))))) 5040)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ x (+ (* (* x x) (* (* x x) (* (/ 1 120) x))) (* (* x (* x (* x (+ (/ 1 6) (* (/ 1 5040) (* x (* x (* x x)))))))) -1))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (< x 0) (+ x (+ (* (* x x) (/ (* (* x x) x) 120)) (* (* x (* x (* x (+ (* (* x x) (/ (* x x) 5040)) (/ 1 6))))) -1))) (+ x (+ (* (* x x) (/ (* (* x x) x) 120)) (* (* x (* x (* x (+ (* (* x x) (/ (* x x) 5040)) (/ 1 6))))) -1)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (+ (+ (- (* (* x x) (/ x 6))) (/ (* (* x x) (* x (* x x))) 120)) x) (/ (* (* x x) (* (* x x) (* x (* x x)))) 5040)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (+ (+ (* (* x x) (* (* x x) (* (/ 1 120) x))) (* (* x x) (* (/ x 6) -1))) x) (* (* x x) (* (* x x) (* (/ 1 5040) (* x (* x x)))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (+ (+ x (- (/ (* (* x x) x) 6))) (/ (* (* (* (* x x) x) x) x) 120)) (/ (* (* (* (* (* (* x x) x) x) x) x) x) 5040)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ (+ x (* (* x x) (/ (* (* x x) x) 120))) (- (* (* x x) (/ (+ (* x 5040) (* (* (* x x) (* x (* x x))) 6)) 30240)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (+ (+ (/ (* (* x x) (* x (* x x))) 120) (* x (* (* x (* x (/ 1 6))) -1))) x) (* (* x x) (/ (* (* x x) (* x (* x x))) 5040))))",
+      "proven_equivalent": true
+    }
+  ]
+}

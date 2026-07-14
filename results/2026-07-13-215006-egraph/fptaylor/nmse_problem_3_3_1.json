@@ -1,0 +1,746 @@
+{
+  "benchmark": "nmse_problem_3_3_1",
+  "reference": "(FPCore (x) (- (/ 1 (+ x 1)) (/ 1 x)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-13-215006-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "x": [
+        0.1,
+        100.0
+      ]
+    }
+  },
+  "intervals": {
+    "x": [
+      0.1,
+      100.0
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "((1 / (x + 1)) - (1 / x))",
+    "enclosure": [
+      -9.164968,
+      0.009588639
+    ],
+    "abs_err": 1.923622e-15,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (x) (- (/ 1 (+ x 1)) (/ 1 x)))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 1.401656804016568e-12,
+      "rel_err_derived": true,
+      "rel_err_ulps": 6312.501060270336,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -0.5
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 3.223701e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 1.4518258622353895,
+          "condition": "x < 1",
+          "region": {
+            "x": [
+              0.1,
+              1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -0.5,
+            -9.90099e-05
+          ],
+          "abs_err": 1.387779e-16,
+          "rel_err": 1.401656804016568e-12,
+          "rel_err_derived": true,
+          "rel_err_ulps": 6312.501060270336,
+          "condition": "x >= 1",
+          "region": {
+            "x": [
+              1.0,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (< x 1) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 1.401656804016568e-12,
+      "rel_err_derived": true,
+      "rel_err_ulps": 6312.501060270336,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -0.5
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 3.223701e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 1.4518258622353895,
+          "condition": "x < 1.0",
+          "region": {
+            "x": [
+              0.1,
+              1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -0.5,
+            -9.90099e-05
+          ],
+          "abs_err": 1.387779e-16,
+          "rel_err": 1.401656804016568e-12,
+          "rel_err_derived": true,
+          "rel_err_ulps": 6312.501060270336,
+          "condition": "x >= 1.0",
+          "region": {
+            "x": [
+              1.0,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (< x 1.0) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 2.865609398656094e-12,
+      "rel_err_derived": true,
+      "rel_err_ulps": 12905.557419976976,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -1.333333
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 3.185087e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 1.4344356626342611,
+          "condition": "x < 0.5",
+          "region": {
+            "x": [
+              0.1,
+              0.5
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -1.333334,
+            -9.90099e-05
+          ],
+          "abs_err": 2.837237e-16,
+          "rel_err": 2.865609398656094e-12,
+          "rel_err_derived": true,
+          "rel_err_ulps": 12905.557419976976,
+          "condition": "x >= 0.5",
+          "region": {
+            "x": [
+              0.5,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (< x 0.5) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 6.9073638090736385e-12,
+      "rel_err_derived": true,
+      "rel_err_ulps": 31108.00107665649,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -3.199999
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 3.339311e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 1.5038919775274198,
+          "condition": "x < 0.25",
+          "region": {
+            "x": [
+              0.1,
+              0.25
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -3.200001,
+            -9.90099e-05
+          ],
+          "abs_err": 6.838974e-16,
+          "rel_err": 6.9073638090736385e-12,
+          "rel_err_derived": true,
+          "rel_err_ulps": 31108.00107665649,
+          "condition": "x >= 0.25",
+          "region": {
+            "x": [
+              0.25,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (< x 0.25) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 2.6392855663928556e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 118862.85493331193,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.90099e-05
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.6392855663928556e-11,
+          "rel_err_derived": true,
+          "rel_err_ulps": 118862.85493331193,
+          "condition": "x >= 0",
+          "region": {
+            "x": [
+              0.1,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (< x 0) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": "((-1 / x) / (x + 1))",
+      "enclosure": [
+        -9.09091,
+        -9.90099e-05
+      ],
+      "abs_err": 2.613154e-15,
+      "rel_err": 2.6392855663928556e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 118862.85493331193,
+      "program": "(FPCore (x) (/ (/ -1 x) (+ x 1)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 2.6392855663928556e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 118862.85493331193,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.90099e-05
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.6392855663928556e-11,
+          "rel_err_derived": true,
+          "rel_err_ulps": 118862.85493331193,
+          "condition": "x >= 0.0",
+          "region": {
+            "x": [
+              0.1,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (< x 0.0) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 2.6392855663928556e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 118862.85493331193,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.90099e-05
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.6392855663928556e-11,
+          "rel_err_derived": true,
+          "rel_err_ulps": 118862.85493331193,
+          "condition": "x >= 0",
+          "region": {
+            "x": [
+              0.1,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (>= x 0) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 2.6392855663928556e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 118862.85493331193,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.090909
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.874469e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 1.2945457517288042,
+          "condition": "x < 0.1",
+          "region": {
+            "x": [
+              0.1,
+              0.1
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.90099e-05
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.6392855663928556e-11,
+          "rel_err_derived": true,
+          "rel_err_ulps": 118862.85493331193,
+          "condition": "x >= 0.1",
+          "region": {
+            "x": [
+              0.1,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (< x 0.1) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 2.6392855663928556e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 118862.85493331193,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.90099e-05
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.6392855663928556e-11,
+          "rel_err_derived": true,
+          "rel_err_ulps": 118862.85493331193,
+          "condition": "x > 0",
+          "region": {
+            "x": [
+              0.1,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (<= x 0) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 2.6392855663928556e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 118862.85493331193,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.90099e-05
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.6392855663928556e-11,
+          "rel_err_derived": true,
+          "rel_err_ulps": 118862.85493331193,
+          "condition": "x >= 0.1",
+          "region": {
+            "x": [
+              0.1,
+              100.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.090909
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.874469e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 1.2945457517288042,
+          "condition": "x < 0.1",
+          "region": {
+            "x": [
+              0.1,
+              0.1
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (>= x 0.1) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 2.6392855663928556e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 118862.85493331193,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.90099e-05
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.6392855663928556e-11,
+          "rel_err_derived": true,
+          "rel_err_ulps": 118862.85493331193,
+          "condition": "x >= 0.0",
+          "region": {
+            "x": [
+              0.1,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (>= x 0.0) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 2.6392855663928556e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 118862.85493331193,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.90099e-05
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.6392855663928556e-11,
+          "rel_err_derived": true,
+          "rel_err_ulps": 118862.85493331193,
+          "condition": "x >= 0.000001",
+          "region": {
+            "x": [
+              0.1,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (< x 0.000001) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 2.6392855663928556e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 118862.85493331193,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.90099e-05
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.6392855663928556e-11,
+          "rel_err_derived": true,
+          "rel_err_ulps": 118862.85493331193,
+          "condition": "x >= -0",
+          "region": {
+            "x": [
+              0.1,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (< x -0) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 2.6392855663928556e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 118862.85493331193,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.90099e-05
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.6392855663928556e-11,
+          "rel_err_derived": true,
+          "rel_err_ulps": 118862.85493331193,
+          "condition": "x > 0.0",
+          "region": {
+            "x": [
+              0.1,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (<= x 0.0) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 2.6392855663928556e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 118862.85493331193,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.90099e-05
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.6392855663928556e-11,
+          "rel_err_derived": true,
+          "rel_err_ulps": 118862.85493331193,
+          "condition": "x > 0",
+          "region": {
+            "x": [
+              0.1,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (> x 0) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 2.6392855663928556e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 118862.85493331193,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.90099e-05
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.6392855663928556e-11,
+          "rel_err_derived": true,
+          "rel_err_ulps": 118862.85493331193,
+          "condition": "x <= 100.0",
+          "region": {
+            "x": [
+              0.1,
+              100.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.900991e-05,
+            -9.90099e-05
+          ],
+          "abs_err": 2.232943e-20,
+          "rel_err": 2.2552724525527247e-16,
+          "rel_err_derived": true,
+          "rel_err_ulps": 1.0156844176935396,
+          "condition": "x > 100.0",
+          "region": {
+            "x": [
+              100.0,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (<= x 100.0) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 2.6392855663928556e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 118862.85493331193,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.090909
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.874469e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 1.2945457517288042,
+          "condition": "x <= 0.1",
+          "region": {
+            "x": [
+              0.1,
+              0.1
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.90099e-05
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.6392855663928556e-11,
+          "rel_err_derived": true,
+          "rel_err_ulps": 118862.85493331193,
+          "condition": "x > 0.1",
+          "region": {
+            "x": [
+              0.1,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (<= x 0.1) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 2.6392855663928556e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 118862.85493331193,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.90099e-05
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.6392855663928556e-11,
+          "rel_err_derived": true,
+          "rel_err_ulps": 118862.85493331193,
+          "condition": "x >= 0.00001",
+          "region": {
+            "x": [
+              0.1,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (< x 0.00001) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.613154e-15,
+      "rel_err": 2.6392855663928556e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 118862.85493331193,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-1 / x) / (x + 1))",
+          "enclosure": [
+            -9.09091,
+            -9.90099e-05
+          ],
+          "abs_err": 2.613154e-15,
+          "rel_err": 2.6392855663928556e-11,
+          "rel_err_derived": true,
+          "rel_err_ulps": 118862.85493331193,
+          "condition": "x >= -0.0",
+          "region": {
+            "x": [
+              0.1,
+              100.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (>= x -0.0) (/ (/ -1 x) (+ x 1)) (/ (/ -1 x) (+ x 1))))"
+    }
+  ]
+}

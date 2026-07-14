@@ -1,0 +1,1315 @@
+{
+  "benchmark": "nmse_problem_3_2_1_negative",
+  "reference": "(FPCore (a b2 c) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-13-215006-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "a": [
+        1.0,
+        100.0
+      ],
+      "b2": [
+        -100.0,
+        100.0
+      ],
+      "c": [
+        -100.0,
+        -1.0
+      ]
+    }
+  },
+  "intervals": {
+    "a": [
+      1.0,
+      100.0
+    ],
+    "b2": [
+      -100.0,
+      100.0
+    ],
+    "c": [
+      -100.0,
+      -1.0
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+    "enclosure": [
+      -200.8829,
+      0.1903029
+    ],
+    "abs_err": 4.583332e-14,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (a b2 c) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.584391e-14,
+      "rel_err": 5.181787533367503e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 233366.9640438697,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(((-((a * c))) * (1 / (b2 - sqrt(((b2 * b2) - (a * c)))))) / a)",
+          "enclosure": [
+            -9.105055,
+            -8.892634e-05
+          ],
+          "abs_err": 4.607974e-15,
+          "rel_err": 5.181787533367503e-11,
+          "rel_err_derived": true,
+          "rel_err_ulps": 233366.9640438697,
+          "condition": "b2 <= -1",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              -1.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.08924596
+          ],
+          "abs_err": 4.584391e-14,
+          "rel_err": 7.470323e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 3.3643343879137246,
+          "condition": "b2 > -1",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -1.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (<= b2 -1) (/ (* (- (* a c)) (/ 1 (- b2 (sqrt (- (* b2 b2) (* a c)))))) a) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.583332e-14,
+      "rel_err": 1.1304257345547647e-10,
+      "rel_err_derived": true,
+      "rel_err_ulps": 509098.49169108574,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.09922354
+          ],
+          "abs_err": 4.583332e-14,
+          "rel_err": 4.495141e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 2.024431533257784,
+          "condition": "b2 > -0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -0.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((a * c) / (sqrt(((b2 * b2) - (a * c))) - b2)) / a)",
+          "enclosure": [
+            -10.06104,
+            -4.142135e-05
+          ],
+          "abs_err": 4.682376e-15,
+          "rel_err": 1.1304257345547647e-10,
+          "rel_err_derived": true,
+          "rel_err_ulps": 509098.49169108574,
+          "condition": "b2 <= -0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              -0.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (> b2 -0) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a) (/ (/ (* a c) (- (sqrt (- (* b2 b2) (* a c))) b2)) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.583332e-14,
+      "rel_err": 1.1304257345547647e-10,
+      "rel_err_derived": true,
+      "rel_err_ulps": 509098.49169108574,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.09922354
+          ],
+          "abs_err": 4.583332e-14,
+          "rel_err": 4.495141e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 2.024431533257784,
+          "condition": "b2 >= 0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              0.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-((a * c))) / (b2 - sqrt(((b2 * b2) - (a * c))))) / a)",
+          "enclosure": [
+            -10.06104,
+            -4.142135e-05
+          ],
+          "abs_err": 4.682376e-15,
+          "rel_err": 1.1304257345547647e-10,
+          "rel_err_derived": true,
+          "rel_err_ulps": 509098.49169108574,
+          "condition": "b2 < 0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              0.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (>= b2 0) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a) (/ (/ (- (* a c)) (- b2 (sqrt (- (* b2 b2) (* a c))))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.583332e-14,
+      "rel_err": 1.2941388921413714e-10,
+      "rel_err_derived": true,
+      "rel_err_ulps": 582828.3432413547,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(((c * a) / ((-(b2)) + sqrt(((b2 * b2) - (a * c))))) / a)",
+          "enclosure": [
+            -10.06104,
+            -4.142135e-05
+          ],
+          "abs_err": 5.360498e-15,
+          "rel_err": 1.2941388921413714e-10,
+          "rel_err_derived": true,
+          "rel_err_ulps": 582828.3432413547,
+          "condition": "b2 < 0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              0.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.09922354
+          ],
+          "abs_err": 4.583332e-14,
+          "rel_err": 4.495141e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 2.024431533257784,
+          "condition": "b2 >= 0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              0.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (< b2 0) (/ (/ (* c a) (+ (- b2) (sqrt (- (* b2 b2) (* a c))))) a) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.583332e-14,
+      "rel_err": 1.3453455766168895e-10,
+      "rel_err_derived": true,
+      "rel_err_ulps": 605889.7837536369,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(((-((a * c))) * (1 / (b2 - sqrt(((b2 * b2) - (a * c)))))) / a)",
+          "enclosure": [
+            -10.06104,
+            -4.142135e-05
+          ],
+          "abs_err": 5.572603e-15,
+          "rel_err": 1.3453455766168895e-10,
+          "rel_err_derived": true,
+          "rel_err_ulps": 605889.7837536369,
+          "condition": "b2 < 0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              0.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.09922354
+          ],
+          "abs_err": 4.583332e-14,
+          "rel_err": 4.495141e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 2.024431533257784,
+          "condition": "b2 >= 0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              0.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (< b2 0) (/ (* (- (* a c)) (/ 1 (- b2 (sqrt (- (* b2 b2) (* a c)))))) a) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.583332e-14,
+      "rel_err": 1.3453455766168895e-10,
+      "rel_err_derived": true,
+      "rel_err_ulps": 605889.7837536369,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.09922354
+          ],
+          "abs_err": 4.583332e-14,
+          "rel_err": 4.495141e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 2.024431533257784,
+          "condition": "b2 > 0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              0.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-((a * c))) * (1 / (b2 - sqrt(((b2 * b2) - (a * c)))))) / a)",
+          "enclosure": [
+            -10.06104,
+            -4.142135e-05
+          ],
+          "abs_err": 5.572603e-15,
+          "rel_err": 1.3453455766168895e-10,
+          "rel_err_derived": true,
+          "rel_err_ulps": 605889.7837536369,
+          "condition": "b2 <= 0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              0.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (> b2 0) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a) (/ (* (- (* a c)) (/ 1 (- b2 (sqrt (- (* b2 b2) (* a c)))))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.583332e-14,
+      "rel_err": 1.3453455766168895e-10,
+      "rel_err_derived": true,
+      "rel_err_ulps": 605889.7837536369,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(((-((a * c))) * (1 / (b2 - sqrt(((b2 * b2) - (a * c)))))) / a)",
+          "enclosure": [
+            -10.06104,
+            -4.142135e-05
+          ],
+          "abs_err": 5.572603e-15,
+          "rel_err": 1.3453455766168895e-10,
+          "rel_err_derived": true,
+          "rel_err_ulps": 605889.7837536369,
+          "condition": "b2 <= 0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              0.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.09922354
+          ],
+          "abs_err": 4.583332e-14,
+          "rel_err": 4.495141e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 2.024431533257784,
+          "condition": "b2 > 0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              0.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (<= b2 0) (/ (* (- (* a c)) (/ 1 (- b2 (sqrt (- (* b2 b2) (* a c)))))) a) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 3.963357e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((((((((-(b2)) * (-(b2))) - (a * c)) * b2) - (((b2 * b2) - (a * c)) * sqrt(((b2 * b2) - (a * c))))) - ((b2 * b2) * ((-(sqrt(((b2 * b2) - (a * c))))) + b2))) / (((b2 - sqrt(((b2 * b2) - (a * c)))) * (-1 * sqrt(((b2 * b2) - (a * c))))) + ((b2 + (-1 * sqrt(((b2 * b2) - (a * c))))) * b2))) / a)",
+          "enclosure": [
+            -10.09815,
+            0.5164951
+          ],
+          "abs_err": 3.963357e-12,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 <= -0.0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              -0.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.09922354
+          ],
+          "abs_err": 4.583332e-14,
+          "rel_err": 4.495141e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 2.024431533257784,
+          "condition": "b2 > -0.0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -0.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (<= b2 -0.0) (/ (/ (- (- (* (- (* (- b2) (- b2)) (* a c)) b2) (* (- (* b2 b2) (* a c)) (sqrt (- (* b2 b2) (* a c))))) (* (* b2 b2) (+ (- (sqrt (- (* b2 b2) (* a c)))) b2))) (+ (* (- b2 (sqrt (- (* b2 b2) (* a c)))) (* -1 (sqrt (- (* b2 b2) (* a c))))) (* (+ b2 (* -1 (sqrt (- (* b2 b2) (* a c))))) b2))) a) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.583332e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -10.06026,
+            0.1903029
+          ],
+          "abs_err": 1.739019e-14,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 < 0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              0.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.09922354
+          ],
+          "abs_err": 4.583332e-14,
+          "rel_err": 4.495141e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 2.024431533257784,
+          "condition": "b2 >= 0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              0.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (< b2 0) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.583332e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.09922354
+          ],
+          "abs_err": 4.583332e-14,
+          "rel_err": 4.495141e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 2.024431533257784,
+          "condition": "b2 > -0.0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -0.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -10.06026,
+            0.1903029
+          ],
+          "abs_err": 1.739019e-14,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 <= -0.0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              -0.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (> b2 -0.0) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 3.92115e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((((((((-(b2)) * (-(b2))) - (a * c)) * b2) - (((b2 * b2) - (a * c)) * sqrt(((b2 * b2) - (a * c))))) - ((((-(b2)) * (-(b2))) * (-(sqrt(((b2 * b2) - (a * c)))))) + (((-(b2)) * (-(b2))) * b2))) / (((b2 - sqrt(((b2 * b2) - (a * c)))) * (-(sqrt(((b2 * b2) - (a * c)))))) + ((b2 - sqrt(((b2 * b2) - (a * c)))) * b2))) / a)",
+          "enclosure": [
+            -10.09815,
+            0.5164951
+          ],
+          "abs_err": 3.92115e-12,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 < -0.0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              -0.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.09922354
+          ],
+          "abs_err": 4.583332e-14,
+          "rel_err": 4.495141e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 2.024431533257784,
+          "condition": "b2 >= -0.0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -0.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (< b2 -0.0) (/ (/ (- (- (* (- (* (- b2) (- b2)) (* a c)) b2) (* (- (* b2 b2) (* a c)) (sqrt (- (* b2 b2) (* a c))))) (+ (* (* (- b2) (- b2)) (- (sqrt (- (* b2 b2) (* a c))))) (* (* (- b2) (- b2)) b2))) (+ (* (- b2 (sqrt (- (* b2 b2) (* a c)))) (- (sqrt (- (* b2 b2) (* a c))))) (* (- b2 (sqrt (- (* b2 b2) (* a c)))) b2))) a) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.565975e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(((-1 * sqrt(((b2 * b2) - (a * c)))) + (-(b2))) / a)",
+          "enclosure": [
+            -12.58131,
+            0.1946395
+          ],
+          "abs_err": 2.451462e-14,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 < 2.2204460492503131",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              2.220446049250313
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.1242617
+          ],
+          "abs_err": 4.565975e-14,
+          "rel_err": 4.364239e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 1.9654785134155786,
+          "condition": "b2 >= 2.2204460492503131",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              2.220446049250313,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (< b2 2.2204460492503131) (/ (+ (* -1 (sqrt (- (* b2 b2) (* a c)))) (- b2)) a) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.583332e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -10.06026,
+            0.1903029
+          ],
+          "abs_err": 1.739019e-14,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 <= -0.0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              -0.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.09922354
+          ],
+          "abs_err": 4.583332e-14,
+          "rel_err": 4.495141e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 2.024431533257784,
+          "condition": "b2 > -0.0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -0.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (<= b2 -0.0) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.584391e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.08924596
+          ],
+          "abs_err": 4.584391e-14,
+          "rel_err": 7.470323e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 3.3643343879137246,
+          "condition": "b2 > -1",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -1.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((((((b2 * b2) - (a * c)) * b2) - (((b2 * b2) - (a * c)) * sqrt(((b2 * b2) - (a * c))))) - (((b2 * b2) * (-1 * sqrt(((b2 * b2) - (a * c))))) + ((b2 * b2) * b2))) / (((b2 - sqrt(((b2 * b2) - (a * c)))) * (-1 * sqrt(((b2 * b2) - (a * c))))) + ((b2 + (-(sqrt(((b2 * b2) - (a * c)))))) * b2))) / a)",
+          "enclosure": [
+            -9.136667,
+            1.346586
+          ],
+          "abs_err": 3.460525e-14,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 <= -1",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              -1.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (> b2 -1) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a) (/ (/ (- (- (* (- (* b2 b2) (* a c)) b2) (* (- (* b2 b2) (* a c)) (sqrt (- (* b2 b2) (* a c))))) (+ (* (* b2 b2) (* -1 (sqrt (- (* b2 b2) (* a c))))) (* (* b2 b2) b2))) (+ (* (- b2 (sqrt (- (* b2 b2) (* a c)))) (* -1 (sqrt (- (* b2 b2) (* a c))))) (* (+ b2 (- (sqrt (- (* b2 b2) (* a c))))) b2))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 5.27364e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(((-1 * sqrt(((b2 * b2) - (a * c)))) + (-(b2))) / a)",
+          "enclosure": [
+            -16.28792,
+            0.200068
+          ],
+          "abs_err": 2.454343e-14,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 < 5.0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              5.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-1 * sqrt(((b2 * b2) - (a * c)))) + (-(b2))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.1614569
+          ],
+          "abs_err": 5.27364e-14,
+          "rel_err": 5.260597e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 2.3691622688946348,
+          "condition": "b2 >= 5.0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              5.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (< b2 5.0) (/ (+ (* -1 (sqrt (- (* b2 b2) (* a c)))) (- b2)) a) (/ (+ (* -1 (sqrt (- (* b2 b2) (* a c)))) (- b2)) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.583332e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -10.06026,
+            0.1903029
+          ],
+          "abs_err": 1.739019e-14,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 < 00",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              0.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.09922354
+          ],
+          "abs_err": 4.583332e-14,
+          "rel_err": 4.495141e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 2.024431533257784,
+          "condition": "b2 >= 00",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              0.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (< b2 00) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 3.935255e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((((((((-(b2)) * (-(b2))) - (a * c)) * b2) - (((b2 * b2) - (a * c)) * sqrt(((b2 * b2) - (a * c))))) - ((((-(b2)) * (-(b2))) * (-1 * sqrt(((b2 * b2) - (a * c))))) + (((-(b2)) * (-(b2))) * b2))) / (((b2 - sqrt(((b2 * b2) - (a * c)))) * (-(sqrt(((b2 * b2) - (a * c)))))) + (((-1 * sqrt(((b2 * b2) - (a * c)))) + b2) * b2))) / a)",
+          "enclosure": [
+            -10.09815,
+            0.5164951
+          ],
+          "abs_err": 3.935255e-12,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 < 0.0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              0.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.09922354
+          ],
+          "abs_err": 4.583332e-14,
+          "rel_err": 4.495141e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 2.024431533257784,
+          "condition": "b2 >= 0.0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              0.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (< b2 0.0) (/ (/ (- (- (* (- (* (- b2) (- b2)) (* a c)) b2) (* (- (* b2 b2) (* a c)) (sqrt (- (* b2 b2) (* a c))))) (+ (* (* (- b2) (- b2)) (* -1 (sqrt (- (* b2 b2) (* a c))))) (* (* (- b2) (- b2)) b2))) (+ (* (- b2 (sqrt (- (* b2 b2) (* a c)))) (- (sqrt (- (* b2 b2) (* a c))))) (* (+ (* -1 (sqrt (- (* b2 b2) (* a c)))) b2) b2))) a) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 3.935104e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((((((((-(b2)) * (-(b2))) - (a * c)) * b2) - (((b2 * b2) - (a * c)) * sqrt(((b2 * b2) - (a * c))))) - (((b2 * b2) * (-1 * sqrt(((b2 * b2) - (a * c))))) + ((b2 * b2) * b2))) / ((b2 - sqrt(((b2 * b2) - (a * c)))) * ((-1 * sqrt(((b2 * b2) - (a * c)))) + b2))) / a)",
+          "enclosure": [
+            -10.09815,
+            0.5164951
+          ],
+          "abs_err": 3.935104e-12,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 <= -0.0000001",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              -1e-07
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.09922354
+          ],
+          "abs_err": 4.583332e-14,
+          "rel_err": 4.495141e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 2.024431533257784,
+          "condition": "b2 > -0.0000001",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -1e-07,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (<= b2 -0.0000001) (/ (/ (- (- (* (- (* (- b2) (- b2)) (* a c)) b2) (* (- (* b2 b2) (* a c)) (sqrt (- (* b2 b2) (* a c))))) (+ (* (* b2 b2) (* -1 (sqrt (- (* b2 b2) (* a c))))) (* (* b2 b2) b2))) (* (- b2 (sqrt (- (* b2 b2) (* a c)))) (+ (* -1 (sqrt (- (* b2 b2) (* a c)))) b2))) a) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 3.909131e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((1 / a) * ((((((b2 * b2) - (a * c)) * b2) - (((b2 * b2) - (a * c)) * sqrt(((b2 * b2) - (a * c))))) - (((-(b2)) * (-(b2))) * (b2 + (-1 * sqrt(((b2 * b2) - (a * c))))))) / (((-(b2)) + sqrt(((b2 * b2) - (a * c)))) * ((-(b2)) + sqrt(((b2 * b2) - (a * c)))))))",
+          "enclosure": [
+            -10.09754,
+            0.5164951
+          ],
+          "abs_err": 3.909131e-12,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 < 0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              0.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.09922354
+          ],
+          "abs_err": 4.583332e-14,
+          "rel_err": 4.495141e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 2.024431533257784,
+          "condition": "b2 >= 0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              0.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (< b2 0) (* (/ 1 a) (/ (- (- (* (- (* b2 b2) (* a c)) b2) (* (- (* b2 b2) (* a c)) (sqrt (- (* b2 b2) (* a c))))) (* (* (- b2) (- b2)) (+ b2 (* -1 (sqrt (- (* b2 b2) (* a c))))))) (* (+ (- b2) (sqrt (- (* b2 b2) (* a c)))) (+ (- b2) (sqrt (- (* b2 b2) (* a c))))))) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.583332e-14,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(((-(b2)) + (-(sqrt(((b2 * b2) - (a * c)))))) / a)",
+          "enclosure": [
+            -10.06026,
+            0.1903029
+          ],
+          "abs_err": 1.739019e-14,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "b2 < 0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              -100.0,
+              0.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(((-(b2)) - sqrt(((b2 * b2) - (a * c)))) / a)",
+          "enclosure": [
+            -200.8829,
+            -0.09922354
+          ],
+          "abs_err": 4.583332e-14,
+          "rel_err": 4.495141e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 2.024431533257784,
+          "condition": "b2 >= 0",
+          "region": {
+            "a": [
+              1.0,
+              100.0
+            ],
+            "b2": [
+              0.0,
+              100.0
+            ],
+            "c": [
+              -100.0,
+              -1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b2 c) (if (< b2 0) (/ (+ (- b2) (- (sqrt (- (* b2 b2) (* a c))))) a) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+    }
+  ]
+}

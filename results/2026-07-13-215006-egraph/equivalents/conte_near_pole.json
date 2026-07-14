@@ -1,0 +1,122 @@
+{
+  "benchmark": "conte_near_pole",
+  "reference": "(FPCore (x) (/ 10 (- 1 (* x x))))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-13-215006-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "x": [
+        1.0001,
+        1.001
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (x) (/ 10 (* (- 1 x) (+ x 1))))",
+    "(FPCore (x) (/ 10 (- 1 (* x x))))",
+    "(FPCore (x) (* (/ -1 (* (- x 1) (+ x 1))) 10))",
+    "(FPCore (x) (if (< x 1.00055) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))",
+    "(FPCore (x) (/ 10 (+ (- (* x x)) 1)))",
+    "(FPCore (x) (/ 10 (- (+ x 1) (* x (+ x 1)))))",
+    "(FPCore (x) (/ 10 (+ 1 (- (* x x)))))",
+    "(FPCore (x) (if (< x 1) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))",
+    "(FPCore (x) (/ 10 (* (+ 1 x) (- 1 x))))",
+    "(FPCore (x) (/ 10 (* (+ x 1) (- 1 x))))",
+    "(FPCore (x) (if (< x 1.0005) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))",
+    "(FPCore (x) (if (< x 0) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))",
+    "(FPCore (x) (/ 10 (* (- 1 x) (+ 1 x))))",
+    "(FPCore (x) (if (>= x 0) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))",
+    "(FPCore (x) (/ 10 (- (+ x 1) (* (+ x 1) x))))",
+    "(FPCore (x) (if (>= x 1) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))",
+    "(FPCore (x) (if (<= x 1) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))",
+    "(FPCore (x) (if (> x 0) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))",
+    "(FPCore (x) (/ 10 (* (+ 1 (- x)) (+ x 1))))",
+    "(FPCore (x) (if (<= x 1.00055) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (x) (/ 10 (* (- 1 x) (+ x 1))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (/ 10 (- 1 (* x x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (* (/ -1 (* (- x 1) (+ x 1))) 10))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (< x 1.00055) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (/ 10 (+ (- (* x x)) 1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (/ 10 (- (+ x 1) (* x (+ x 1)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (/ 10 (+ 1 (- (* x x)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (< x 1) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (/ 10 (* (+ 1 x) (- 1 x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (/ 10 (* (+ x 1) (- 1 x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (< x 1.0005) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (< x 0) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (/ 10 (* (- 1 x) (+ 1 x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (>= x 0) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (/ 10 (- (+ x 1) (* (+ x 1) x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (>= x 1) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (<= x 1) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (> x 0) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (/ 10 (* (+ 1 (- x)) (+ x 1))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (<= x 1.00055) (/ 10 (- 1 (* x x))) (/ 10 (- 1 (* x x)))))",
+      "proven_equivalent": true
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "benchmark": "fastmath_dist4",
+  "reference": "(FPCore (d1 d2 d3 d4) (- (+ (- (* d1 d2) (* d1 d3)) (* d4 d1)) (* d1 d1)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-13-215006-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "d1": [
+        1.0,
+        100.0
+      ],
+      "d2": [
+        1.0,
+        100.0
+      ],
+      "d3": [
+        1.0,
+        100.0
+      ],
+      "d4": [
+        1.0,
+        100.0
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (d1 d2 d3 d4) (* d1 (- (+ d2 (+ d4 (- d3))) d1)))",
+    "(FPCore (d1 d2 d3 d4) (+ (* d1 (- d2 d3)) (* d1 (+ d4 (- d1)))))",
+    "(FPCore (d1 d2 d3 d4) (* d1 (+ (- (+ d1 (+ d3 (- d2)))) d4)))",
+    "(FPCore (d1 d2 d3 d4) (- (* d1 (+ d2 (+ d4 (- d3)))) (* d1 d1)))",
+    "(FPCore (d1 d2 d3 d4) (* d1 (- (+ d4 (+ d2 (- d3))) d1)))",
+    "(FPCore (d1 d2 d3 d4) (* d1 (+ (- d2 d3) (+ d4 (- d1)))))",
+    "(FPCore (d1 d2 d3 d4) (+ (* d1 (+ d2 d4)) (- (* d1 (+ d3 d1)))))",
+    "(FPCore (d1 d2 d3 d4) (* d1 (+ (+ d2 (- d3)) (+ d4 (- d1)))))",
+    "(FPCore (d1 d2 d3 d4) (+ (+ (* d1 d2) (* d1 d4)) (- (* d1 (+ d3 d1)))))",
+    "(FPCore (d1 d2 d3 d4) (+ (- (* d1 d2) (* d1 d3)) (* d1 (+ d4 (- d1)))))",
+    "(FPCore (d1 d2 d3 d4) (+ (+ (- (* d1 d1)) (* d1 (- d3))) (+ (* d1 d2) (* d1 d4))))",
+    "(FPCore (d1 d2 d3 d4) (if (< d1 0) (* d1 (- (+ d2 (+ d4 (- d3))) d1)) (* d1 (- (+ d2 (+ d4 (- d3))) d1))))",
+    "(FPCore (d1 d2 d3 d4) (* d1 (- (+ (+ d2 d4) (- d3)) d1)))",
+    "(FPCore (d1 d2 d3 d4) (* (+ d2 (+ d4 (+ (- d3) (- d1)))) d1))",
+    "(FPCore (d1 d2 d3 d4) (+ (* d1 (+ d2 (- d3))) (* d1 (+ d4 (- d1)))))",
+    "(FPCore (d1 d2 d3 d4) (if (< d2 0) (* d1 (- (+ d2 (+ d4 (- d3))) d1)) (* d1 (- (+ d2 (+ d4 (- d3))) d1))))",
+    "(FPCore (d1 d2 d3 d4) (- (* d1 (+ (+ d2 d4) (- d3))) (* d1 d1)))",
+    "(FPCore (d1 d2 d3 d4) (* d1 (+ (+ (- d2 d3) (- d1)) d4)))",
+    "(FPCore (d1 d2 d3 d4) (+ (* d1 (+ (- d3) d2)) (* d1 (+ (- d1) d4))))",
+    "(FPCore (d1 d2 d3 d4) (* d1 (+ d2 (+ d4 (+ (- d3) (- d1))))))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (- (+ d2 (+ d4 (- d3))) d1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (+ (* d1 (- d2 d3)) (* d1 (+ d4 (- d1)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (- (+ d1 (+ d3 (- d2)))) d4)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (- (* d1 (+ d2 (+ d4 (- d3)))) (* d1 d1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (- (+ d4 (+ d2 (- d3))) d1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (- d2 d3) (+ d4 (- d1)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (+ (* d1 (+ d2 d4)) (- (* d1 (+ d3 d1)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (+ d2 (- d3)) (+ d4 (- d1)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (+ (+ (* d1 d2) (* d1 d4)) (- (* d1 (+ d3 d1)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (+ (- (* d1 d2) (* d1 d3)) (* d1 (+ d4 (- d1)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (+ (+ (- (* d1 d1)) (* d1 (- d3))) (+ (* d1 d2) (* d1 d4))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (if (< d1 0) (* d1 (- (+ d2 (+ d4 (- d3))) d1)) (* d1 (- (+ d2 (+ d4 (- d3))) d1))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (- (+ (+ d2 d4) (- d3)) d1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (* (+ d2 (+ d4 (+ (- d3) (- d1)))) d1))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (+ (* d1 (+ d2 (- d3))) (* d1 (+ d4 (- d1)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (if (< d2 0) (* d1 (- (+ d2 (+ d4 (- d3))) d1)) (* d1 (- (+ d2 (+ d4 (- d3))) d1))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (- (* d1 (+ (+ d2 d4) (- d3))) (* d1 d1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (+ (- d2 d3) (- d1)) d4)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (+ (* d1 (+ (- d3) d2)) (* d1 (+ (- d1) d4))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ d2 (+ d4 (+ (- d3) (- d1))))))",
+      "proven_equivalent": true
+    }
+  ]
+}
