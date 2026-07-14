@@ -1,0 +1,2159 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/><title>Metrics for cancel_sqrt_2var</title><link rel="stylesheet" type="text/css" href="../report.css"/><script src="../report.js"></script></head><body><header><h1>cancel_sqrt_2var</h1><img src="../logo-car.png"/><nav><ul><li><a href="graph.html">Details</a></li></ul></nav></header><section id="process-info"><p class="header">Time bar (total: <span class="number">306.0ms</span>)</p><div class="timeline"><div class="timeline-phase timeline-start" data-id="timeline0" data-type="start" data-timespan="0.008056640625"></div><div class="timeline-phase timeline-analyze" data-id="timeline1" data-type="analyze" data-timespan="0.197998046875"></div><div class="timeline-phase timeline-sample" data-id="timeline2" data-type="sample" data-timespan="63.73583984375"></div><div class="timeline-phase timeline-preprocess" data-id="timeline3" data-type="preprocess" data-timespan="13.343994140625"></div><div class="timeline-phase timeline-sample" data-id="timeline4" data-type="sample" data-timespan="0.0361328125"></div><div class="timeline-phase timeline-series" data-id="timeline5" data-type="series" data-timespan="2.908935546875"></div><div class="timeline-phase timeline-rewrite" data-id="timeline6" data-type="rewrite" data-timespan="22.970947265625"></div><div class="timeline-phase timeline-reconstruct" data-id="timeline7" data-type="reconstruct" data-timespan="1.444091796875"></div><div class="timeline-phase timeline-eval" data-id="timeline8" data-type="eval" data-timespan="0.864990234375"></div><div class="timeline-phase timeline-prune" data-id="timeline9" data-type="prune" data-timespan="0.7080078125"></div><div class="timeline-phase timeline-sample" data-id="timeline10" data-type="sample" data-timespan="0.05810546875"></div><div class="timeline-phase timeline-series" data-id="timeline11" data-type="series" data-timespan="2.7978515625"></div><div class="timeline-phase timeline-rewrite" data-id="timeline12" data-type="rewrite" data-timespan="29.093017578125"></div><div class="timeline-phase timeline-reconstruct" data-id="timeline13" data-type="reconstruct" data-timespan="12.2861328125"></div><div class="timeline-phase timeline-eval" data-id="timeline14" data-type="eval" data-timespan="3.06884765625"></div><div class="timeline-phase timeline-prune" data-id="timeline15" data-type="prune" data-timespan="1.178955078125"></div><div class="timeline-phase timeline-sample" data-id="timeline16" data-type="sample" data-timespan="0.05908203125"></div><div class="timeline-phase timeline-series" data-id="timeline17" data-type="series" data-timespan="2.676025390625"></div><div class="timeline-phase timeline-rewrite" data-id="timeline18" data-type="rewrite" data-timespan="29.35498046875"></div><div class="timeline-phase timeline-reconstruct" data-id="timeline19" data-type="reconstruct" data-timespan="12.2880859375"></div><div class="timeline-phase timeline-eval" data-id="timeline20" data-type="eval" data-timespan="2.866943359375"></div><div class="timeline-phase timeline-prune" data-id="timeline21" data-type="prune" data-timespan="1.674072265625"></div><div class="timeline-phase timeline-sample" data-id="timeline22" data-type="sample" data-timespan="0.06396484375"></div><div class="timeline-phase timeline-series" data-id="timeline23" data-type="series" data-timespan="2.9189453125"></div><div class="timeline-phase timeline-rewrite" data-id="timeline24" data-type="rewrite" data-timespan="29.595947265625"></div><div class="timeline-phase timeline-reconstruct" data-id="timeline25" data-type="reconstruct" data-timespan="12.882080078125"></div><div class="timeline-phase timeline-eval" data-id="timeline26" data-type="eval" data-timespan="2.5869140625"></div><div class="timeline-phase timeline-prune" data-id="timeline27" data-type="prune" data-timespan="1.095947265625"></div><div class="timeline-phase timeline-regimes" data-id="timeline28" data-type="regimes" data-timespan="11.95703125"></div><div class="timeline-phase timeline-bsearch" data-id="timeline29" data-type="bsearch" data-timespan="0.003173828125"></div><div class="timeline-phase timeline-bsearch" data-id="timeline30" data-type="bsearch" data-timespan="0.001953125"></div><div class="timeline-phase timeline-bsearch" data-id="timeline31" data-type="bsearch" data-timespan="0.001953125"></div><div class="timeline-phase timeline-derivations" data-id="timeline32" data-type="derivations" data-timespan="5.48291015625"></div><div class="timeline-phase timeline-preprocess" data-id="timeline33" data-type="preprocess" data-timespan="25.783203125"></div><div class="timeline-phase timeline-end" data-id="timeline34" data-type="end" data-timespan="0.0029296875"></div><div class="timeline-phase timeline-gc" data-id="timeline35" data-type="gc" data-timespan="10"></div></div><div class="timeline-block timeline-start" id="timeline0"><h3><a href="#timeline0">start</a><span class="time">0.0ms (0.0%)</span></h3><dl></dl></div><div class="timeline-block timeline-analyze" id="timeline1"><h3><a href="#timeline1">analyze</a><span class="time">0.0ms (0.1%)</span></h3><dl><dt>Algorithm</dt><dd><table class="times"><tr><td>1×</td><td>search</td></tr></table></dd><dt>Search</dt><dd><table class="times"><tr><th>Probability</th><th>Valid</th><th>Unknown</th><th>Precondition</th><th>Infinite</th><th>Domain</th><th>Can't</th><th>Iter</th></tr><tr><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>100.0%</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>0</td></tr><tr><td>100.0%</td><td>0.0%</td><td>0.0%</td><td>100.0%</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>1</td></tr></table></dd><dt>Compiler</dt><dd><p>Compiled 26 to 15 computations (42.3% saved)</p></dd></dl></div><div class="timeline-block timeline-sample" id="timeline2"><h3><a href="#timeline2">sample</a><span class="time">64.0ms (20.8%)</span></h3><dl><dt>Samples</dt><dd><table class="times"><tr><td>39.0ms</td><td>8 256×</td><td>0</td><td>valid</td></tr></table></dd><dt>Precisions</dt><dd><details><summary>Click to see histograms. Total time spent on operations: 3.0ms</summary><details><summary><code>Hypot</code>: 2.0ms (68.2% of total, 0.0 MiB)</summary><canvas id="calls-10168" title="Histogram of precisions of the used operation"></canvas><script>histogram("calls-10168", [0], [2.494971000000039], {"max" : 10000})</script></details><details><summary><code>Add</code>: 0.0ms (0.0% of total, 0.0 MiB)</summary><canvas id="calls-33734" title="Histogram of precisions of the used operation"></canvas><script>histogram("calls-33734", [0], [0.4368859999999721], {"max" : 10000})</script></details></details></dd><dt>Bogosity</dt><dd><div class="bogosity"><div class="bogosity-valid" data-id="bogosity-valid" data-type="valid" data-timespan="0.00039760023355484014" title="valid (0.0%)"></div><div class="bogosity-unknown" data-id="bogosity-unknown" data-type="unknown" data-timespan="0" title="unknown (0.0%)"></div><div class="bogosity-infinite" data-id="bogosity-infinite" data-type="infinite" data-timespan="0" title="infinite (0.0%)"></div><div class="bogosity-unsamplable" data-id="bogosity-unsamplable" data-type="unsamplable" data-timespan="0" title="unsamplable (0.0%)"></div><div class="bogosity-invalid" data-id="bogosity-invalid" data-type="invalid" data-timespan="0.0" title="invalid (0.0%)"></div><div class="bogosity-precondition" data-id="bogosity-precondition" data-type="precondition" data-timespan="0.9996023997664452" title="precondition (100.0%)"></div></div></dd></dl></div><div class="timeline-block timeline-preprocess" id="timeline3"><h3><a href="#timeline3">preprocess</a><span class="time">13.0ms (4.4%)</span></h3><dl><dt>Iterations</dt><dd><p>Useful iterations: 0 (0.0ms)</p><table class="times"><tr><th>Iter</th><th>Nodes</th><th>Cost</th></tr><tr><td>0</td><td>7</td><td>10</td></tr><tr><td>1</td><td>37</td><td>10</td></tr><tr><td>2</td><td>115</td><td>10</td></tr><tr><td>3</td><td>319</td><td>10</td></tr><tr><td>4</td><td>925</td><td>10</td></tr></table></dd><dt>Stop Event</dt><dd><table class="times"><tr><td>1×</td><td>node-limit</td></tr><tr><td>1×</td><td>saturated</td></tr></table></dd><dt>Alt Table</dt><dd><details><summary>Click to see full alt table</summary><table class="times"><thead><tr><th>Status</th><th>Accuracy</th><th>Program</th></tr></thead><tr><td><span title="Selected for next iteration">▶</span></td><td>100.0%</td><td><pre>(+.f64 y (sqrt.f64 (+.f64 (*.f64 y y) (*.f64 x x))))</pre></td></tr></table></details></dd><dt>Compiler</dt><dd><p>Compiled 20 to 14 computations (30.0% saved)</p></dd></dl></div><div class="timeline-block timeline-sample" id="timeline4"><h3><a href="#timeline4">sample</a><span class="time">0.0ms (0.0%)</span></h3><dl><dt>Calls</dt><dd><details><summary>Call 1</summary><table><thead><tr><th>Inputs</th></tr></thead><tr><td><pre></pre></td></tr></table><table><thead><tr><th>Outputs</th></tr></thead><tr><td><pre></pre></td></tr></table></details></dd></dl></div><div class="timeline-block timeline-series" id="timeline5"><h3><a href="#timeline5">series</a><span class="time">3.0ms (1.0%)</span></h3><dl><dt>Iterations</dt><dd><p>Useful iterations: 0 (0.0ms)</p><table class="times"><tr><th>Iter</th><th>Nodes</th><th>Cost</th></tr><tr><td>0</td><td>58</td><td>235</td></tr></table></dd><dt>Stop Event</dt><dd><table class="times"><tr><td>1×</td><td>iter-limit</td></tr><tr><td>1×</td><td>saturated</td></tr></table></dd><dt>Counts</dt><dd>7 → 27</dd><dt>Calls</dt><dd><details><summary>Call 1</summary><table><thead><tr><th>Inputs</th></tr></thead><tr><td><pre>%1 = (*.f64 y y)
+%3 = (*.f64 x x)
+%4 = (+.f64 %1 %3)
+%5 = (sqrt.f64 %4)
+y
+%1
+x
+%3
+%4
+%5
+(+.f64 y %5)</pre></td></tr></table><table><thead><tr><th>Outputs</th></tr></thead><tr><td><pre>%4 = (* y y)
+%5 = (*.f64 y y)
+%9 = (+ %4 (* x x))
+%10 = (*.f64 x x)
+%14 = (sqrt %9)
+%15 = (sqrt.f64 %10)
+%22 = (+ y %14)
+%26 = (/.f64 %10 %5)
+%30 = (*.f64 #s(literal 1/2 binary64) %26)
+%32 = (*.f64 y (+.f64 #s(literal 1 binary64) %30))
+%59 = (sqrt.f64 %5)
+%63 = (+.f64 %59 (*.f64 #s(literal 1/2 binary64) (/.f64 %10 %59)))
+%69 = (/.f64 %5 %10)
+%75 = (*.f64 x (+.f64 #s(literal 1 binary64) (*.f64 #s(literal 1/2 binary64) %69)))
+%77 = (/.f64 y x)
+(approx y #s(literal 0 binary64))
+(approx y y)
+(approx %4 %5)
+(approx %9 %10)
+(approx %9 (+.f64 %10 %5))
+(approx %14 %15)
+(approx %14 (+.f64 %15 (*.f64 #s(literal 1/2 binary64) (/.f64 %5 %15))))
+(approx %22 (+.f64 y %15))
+(approx %9 (*.f64 %5 (+.f64 #s(literal 1 binary64) %26)))
+(approx %14 %32)
+(approx %22 (*.f64 #s(literal 2 binary64) y))
+(approx %22 (*.f64 y (+.f64 #s(literal 2 binary64) %30)))
+(approx %14 (*.f64 #s(literal -1 binary64) y))
+(approx %14 (*.f64 #s(literal -1 binary64) %32))
+(approx %22 (*.f64 #s(literal -1/2 binary64) (/.f64 %10 y)))
+(approx %22 (*.f64 #s(literal -1 binary64) (/.f64 (+.f64 (*.f64 #s(literal -1/8 binary64) (/.f64 (*.f64 %10 %10) %5)) (*.f64 #s(literal 1/2 binary64) %10)) y)))
+(approx x x)
+(approx %14 %59)
+(approx %14 %63)
+(approx %22 (+.f64 y %59))
+(approx %22 (+.f64 y %63))
+(approx %9 (*.f64 %10 (+.f64 #s(literal 1 binary64) %69)))
+(approx %14 %75)
+(approx %22 (*.f64 x (+.f64 #s(literal 1 binary64) %77)))
+(approx %14 (*.f64 #s(literal -1 binary64) x))
+(approx %14 (*.f64 #s(literal -1 binary64) %75))
+(approx %22 (*.f64 #s(literal -1 binary64) (*.f64 x (+.f64 #s(literal 1 binary64) (*.f64 #s(literal -1 binary64) %77)))))</pre></td></tr></table></details></dd><dt>Calls</dt><dd><p>6 calls:</p><canvas id="calls-1" title="Weighted histogram; height corresponds to percentage of runtime in that bucket."></canvas><script>histogram('calls-1', [0.488037109375,0.7099609375,0.112060546875,0.18603515625,0.18798828125,0.10986328125])</script><table class="times"><thead><tr><th>Time</th><th>Variable</th><th>Point</th></tr></thead><tr><td>1.0ms</td><td><pre>x</pre></td><td>inf</td></tr><tr><td>0.0ms</td><td><pre>x</pre></td><td>-inf</td></tr><tr><td>0.0ms</td><td><pre>y</pre></td><td>inf</td></tr><tr><td>0.0ms</td><td><pre>y</pre></td><td>-inf</td></tr><tr><td>0.0ms</td><td><pre>x</pre></td><td>0</td></tr></table></dd></dl></div><div class="timeline-block timeline-rewrite" id="timeline6"><h3><a href="#timeline6">rewrite</a><span class="time">23.0ms (7.5%)</span></h3><dl><dt>Iterations</dt><dd><p>Useful iterations: 0 (0.0ms)</p><table class="times"><tr><th>Iter</th><th>Nodes</th><th>Cost</th></tr><tr><td>0</td><td>7</td><td>33</td></tr><tr><td>1</td><td>37</td><td>33</td></tr><tr><td>2</td><td>115</td><td>33</td></tr><tr><td>3</td><td>319</td><td>33</td></tr><tr><td>4</td><td>925</td><td>33</td></tr><tr><td>0</td><td>4315</td><td>33</td></tr><tr><td>0</td><td>4547</td><td>33</td></tr></table></dd><dt>Stop Event</dt><dd><table class="times"><tr><td>1×</td><td>iter-limit</td></tr><tr><td>1×</td><td>iter-limit</td></tr><tr><td>1×</td><td>node-limit</td></tr><tr><td>1×</td><td>saturated</td></tr></table></dd><dt>Counts</dt><dd>7 → 47</dd><dt>Calls</dt><dd><details><summary>Call 1</summary><table><thead><tr><th>Inputs</th></tr></thead><tr><td><pre>%1 = (*.f64 y y)
+%3 = (*.f64 x x)
+%4 = (+.f64 %1 %3)
+%5 = (sqrt.f64 %4)
+y
+%1
+x
+%3
+%4
+%5
+(+.f64 y %5)</pre></td></tr></table><table><thead><tr><th>Outputs</th></tr></thead><tr><td><pre>%1 = (*.f64 y y)
+%2 = (sqrt.f64 %1)
+%4 = (sqrt.f64 (*.f64 %2 %1))
+%5 = (sqrt.f64 %2)
+%8 = (neg.f64 %2)
+%11 = (neg.f64 y)
+%15 = (*.f64 %11 y)
+%20 = (*.f64 x x)
+%21 = (sqrt.f64 %20)
+%23 = (sqrt.f64 (*.f64 %21 %20))
+%24 = (sqrt.f64 %21)
+%27 = (neg.f64 %21)
+%30 = (neg.f64 x)
+%33 = (*.f64 %30 x)
+%37 = (+.f64 %20 %1)
+%38 = (sqrt.f64 %37)
+%40 = (sqrt.f64 (*.f64 %38 %37))
+%41 = (sqrt.f64 %38)
+%44 = (neg.f64 %38)
+%50 = (*.f64 (+.f64 x y) (-.f64 x y))
+%55 = (*.f64 (+.f64 y x) (-.f64 y x))
+%65 = (neg.f64 %41)
+%66 = (neg.f64 %65)
+%68 = (sqrt.f64 %40)
+%69 = (sqrt.f64 %41)
+%76 = (+.f64 %38 y)
+y
+(*.f64 %4 %5)
+(*.f64 %5 %4)
+(*.f64 %8 %8)
+(*.f64 %2 %2)
+(*.f64 %11 %11)
+(*.f64 #s(literal 1 binary64) %1)
+%1
+(neg.f64 %15)
+(sqrt.f64 (*.f64 %1 %1))
+x
+(*.f64 %23 %24)
+(*.f64 %24 %23)
+(*.f64 %27 %27)
+(*.f64 %21 %21)
+(*.f64 %30 %30)
+(*.f64 #s(literal 1 binary64) %20)
+%20
+(neg.f64 %33)
+(sqrt.f64 (*.f64 %20 %20))
+(*.f64 %40 %41)
+(*.f64 %41 %40)
+(*.f64 %44 %44)
+(*.f64 #s(literal 1 binary64) %37)
+(*.f64 %38 %38)
+(/.f64 (*.f64 %37 %50) %50)
+(/.f64 (*.f64 %37 %55) %55)
+(neg.f64 (-.f64 %15 %20))
+(-.f64 %20 %15)
+(-.f64 %1 %33)
+(sqrt.f64 (*.f64 %37 %37))
+%37
+(+.f64 %1 %20)
+(*.f64 %66 %66)
+(*.f64 %68 %69)
+(*.f64 %65 %65)
+(*.f64 %69 %68)
+(*.f64 %41 %41)
+(*.f64 #s(literal 1 binary64) %38)
+(neg.f64 %44)
+%38
+(*.f64 #s(literal 1 binary64) %76)
+(neg.f64 (-.f64 %44 y))
+(-.f64 %38 %11)
+(-.f64 y %44)
+%76
+(+.f64 y %38)</pre></td></tr></table></details></dd></dl></div><div class="timeline-block timeline-reconstruct" id="timeline7"><h3><a href="#timeline7">reconstruct</a><span class="time">1.0ms (0.5%)</span></h3><dl><dt>Counts</dt><dd>74 → 38</dd><dt>Compiler</dt><dd><p>Compiled 831 to 132 computations (84.1% saved)</p></dd></dl></div><div class="timeline-block timeline-eval" id="timeline8"><h3><a href="#timeline8">eval</a><span class="time">1.0ms (0.3%)</span></h3><dl><dt>Compiler</dt><dd><p>Compiled 515 to 129 computations (75.0% saved)</p></dd></dl></div><div class="timeline-block timeline-prune" id="timeline9"><h3><a href="#timeline9">prune</a><span class="time">1.0ms (0.2%)</span></h3><dl><dt>Pruning</dt><dd><p>6 alts after pruning (5 fresh and 1 done)</p><table class="states"><thead><tr><th></th><th>Pruned</th><th>Kept</th><th>Total</th></tr></thead><tbody><tr><th>New</th><td>30</td><td>5</td><td>35</td></tr><tr><th>Fresh</th><td>0</td><td>0</td><td>0</td></tr><tr><th>Picked</th><td>0</td><td>1</td><td>1</td></tr><tr><th>Done</th><td>0</td><td>0</td><td>0</td></tr></tbody><tfoot><tr><th>Total</th><td>30</td><td>6</td><td>36</td></tr></tfoot></table></dd><dt>Taylor</dt><dd><table class="times"><thead><tr><th>Generated</th><th>Kept</th><th>% Kept</th><th># Vars</th><th>Transform</th><th>Order</th></tr></thead><tbody><tr><td>3×</td><td>2×</td><td>66.7%</td><td>2</td><td><code>-inf</code></td><td>0</td></tr><tr><td>5×</td><td>1×</td><td>20.0%</td><td>2</td><td><code>0</code></td><td>1</td></tr><tr><td>1×</td><td>1×</td><td>100.0%</td><td>2</td><td><code>inf</code></td><td>0</td></tr><tr><td>4×</td><td>1×</td><td>25.0%</td><td>2</td><td><code>0</code></td><td>0</td></tr><tr><td>6×</td><td>0×</td><td>0.0%</td><td>2</td><td><code>inf</code></td><td>1</td></tr><tr><td>1×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>zero</code></td><td>-1</td></tr><tr><td>1×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>0</code></td><td>0</td></tr><tr><td>4×</td><td>0×</td><td>0.0%</td><td>2</td><td><code>-inf</code></td><td>1</td></tr></tbody></table></dd><dt>Accuracy</dt><dd>100.0%</dd><dt>Counts</dt><dd>36 → 6</dd><dt>Alt Table</dt><dd><details><summary>Click to see full alt table</summary><table class="times"><thead><tr><th>Status</th><th>Accuracy</th><th>Program</th></tr></thead><tr><td><span title="Selected in a prior iteration">✓</span></td><td>100.0%</td><td><pre>(+.f64 y (sqrt.f64 (+.f64 (*.f64 y y) (*.f64 x x))))</pre></td></tr><tr><td><span title="Selected for next iteration">▶</span></td><td>98.9%</td><td><pre>(+.f64 y (sqrt.f64 (approx (+ (* y y) (* x x)) (*.f64 x x))))</pre></td></tr><tr><td><span title="Selected for next iteration">▶</span></td><td>99.2%</td><td><pre>%19 = (sqrt.f64 (*.f64 x x))
+(+.f64 y (approx (sqrt (+ (* y y) (* x x))) (+.f64 %19 (*.f64 #s(literal 1/2 binary64) (/.f64 (*.f64 y y) %19)))))</pre></td></tr><tr><td><span title="Selected for next iteration">▶</span></td><td>3.1%</td><td><pre>(+.f64 y (approx (sqrt (+ (* y y) (* x x))) (*.f64 #s(literal -1 binary64) y)))</pre></td></tr><tr><td><span title="Selected for next iteration">▶</span></td><td>3.9%</td><td><pre>(approx (+ y (sqrt (+ (* y y) (* x x)))) (*.f64 #s(literal 2 binary64) y))</pre></td></tr><tr><td><span title="Selected for next iteration">▶</span></td><td>3.4%</td><td><pre>(approx (+ y (sqrt (+ (* y y) (* x x)))) (*.f64 #s(literal -1/2 binary64) (/.f64 (*.f64 x x) y)))</pre></td></tr></table></details></dd><dt>Compiler</dt><dd><p>Compiled 53 to 23 computations (56.6% saved)</p></dd></dl></div><div class="timeline-block timeline-sample" id="timeline10"><h3><a href="#timeline10">sample</a><span class="time">0.0ms (0.0%)</span></h3><dl><dt>Calls</dt><dd><details><summary>Call 1</summary><table><thead><tr><th>Inputs</th></tr></thead><tr><td><pre></pre></td></tr></table><table><thead><tr><th>Outputs</th></tr></thead><tr><td><pre></pre></td></tr></table></details></dd></dl></div><div class="timeline-block timeline-series" id="timeline11"><h3><a href="#timeline11">series</a><span class="time">3.0ms (0.9%)</span></h3><dl><dt>Iterations</dt><dd><p>Useful iterations: 0 (0.0ms)</p><table class="times"><tr><th>Iter</th><th>Nodes</th><th>Cost</th></tr><tr><td>0</td><td>70</td><td>316</td></tr></table></dd><dt>Stop Event</dt><dd><table class="times"><tr><td>1×</td><td>iter-limit</td></tr><tr><td>1×</td><td>saturated</td></tr></table></dd><dt>Counts</dt><dd>25 → 36</dd><dt>Calls</dt><dd><details><summary>Call 1</summary><table><thead><tr><th>Inputs</th></tr></thead><tr><td><pre>%1 = (*.f64 y y)
+%3 = (*.f64 x x)
+%4 = (sqrt.f64 %3)
+%6 = (/.f64 %1 %4)
+%7 = (*.f64 #s(literal 1/2 binary64) %6)
+%8 = (+.f64 %4 %7)
+%10 = (*.f64 #s(literal 2 binary64) y)
+%12 = (*.f64 #s(literal -1 binary64) y)
+%14 = (/.f64 %3 y)
+%15 = (*.f64 #s(literal -1/2 binary64) %14)
+%18 = (+ (* y y) (* x x))
+%19 = (approx %18 %3)
+%20 = (sqrt %18)
+%21 = (approx %20 %8)
+%22 = (+ y %20)
+%24 = (approx %20 %12)
+%28 = (sqrt.f64 %19)
+y
+%1
+x
+%3
+%4
+#s(literal 1/2 binary64)
+%6
+%7
+%8
+#s(literal 2 binary64)
+%10
+#s(literal -1 binary64)
+%12
+#s(literal -1/2 binary64)
+%14
+%15
+%19
+%21
+(approx %22 %10)
+%24
+(approx %22 %15)
+(+.f64 y %24)
+(+.f64 y %21)
+%28
+(+.f64 y %28)</pre></td></tr></table><table><thead><tr><th>Outputs</th></tr></thead><tr><td><pre>%4 = (* y y)
+%5 = (*.f64 y y)
+%8 = (* x x)
+%9 = (sqrt %8)
+%10 = (/ %4 %9)
+%11 = (*.f64 x x)
+%12 = (sqrt.f64 %11)
+%13 = (/.f64 %5 %12)
+%16 = (* 1/2 %10)
+%18 = (*.f64 #s(literal 1/2 binary64) %13)
+%20 = (+ %9 %16)
+%34 = (/ %8 y)
+%35 = (/.f64 %11 y)
+%42 = (+ %4 %8)
+%46 = (sqrt %42)
+%47 = (+ y %46)
+%57 = (/.f64 %11 %5)
+%61 = (*.f64 #s(literal 1/2 binary64) %57)
+%63 = (*.f64 y (+.f64 #s(literal 1 binary64) %61))
+%80 = (/.f64 %5 x)
+%88 = (sqrt.f64 %5)
+%92 = (+.f64 %88 (*.f64 #s(literal 1/2 binary64) (/.f64 %11 %88)))
+%98 = (/.f64 %5 %11)
+%101 = (*.f64 x (+.f64 #s(literal 1 binary64) (*.f64 #s(literal 1/2 binary64) %98)))
+%106 = (/.f64 y x)
+(approx y #s(literal 0 binary64))
+(approx y y)
+(approx %4 %5)
+(approx %10 %13)
+(approx %16 %18)
+(approx %20 %12)
+(approx %20 (+.f64 %12 %18))
+(approx (* 2 y) (*.f64 #s(literal 2 binary64) y))
+(approx (* -1 y) (*.f64 #s(literal -1 binary64) y))
+(approx %34 %35)
+(approx (* -1/2 %34) (*.f64 #s(literal -1/2 binary64) %35))
+(approx %42 %11)
+(approx %42 (+.f64 %11 %5))
+(approx %47 (+.f64 y %12))
+(approx %20 (*.f64 %5 (+.f64 (*.f64 #s(literal 1/2 binary64) (/.f64 #s(literal 1 binary64) %12)) (/.f64 %12 %5))))
+(approx %42 (*.f64 %5 (+.f64 #s(literal 1 binary64) %57)))
+(approx %46 %63)
+(approx %47 (*.f64 y (+.f64 #s(literal 2 binary64) %61)))
+(approx %46 (*.f64 #s(literal -1 binary64) %63))
+(approx %47 (*.f64 #s(literal -1 binary64) (/.f64 (+.f64 (*.f64 #s(literal -1/8 binary64) (/.f64 (*.f64 %11 %11) %5)) (*.f64 #s(literal 1/2 binary64) %11)) y)))
+(approx x x)
+(approx %10 %80)
+(approx %16 (*.f64 #s(literal 1/2 binary64) %80))
+(approx %20 (/.f64 (+.f64 (*.f64 #s(literal 1/2 binary64) %5) %11) x))
+(approx %46 %88)
+(approx %46 %92)
+(approx %47 (+.f64 y %88))
+(approx %47 (+.f64 y %92))
+(approx %20 %101)
+(approx %42 (*.f64 %11 (+.f64 #s(literal 1 binary64) %98)))
+(approx %47 (*.f64 x (+.f64 #s(literal 1 binary64) %106)))
+(approx %9 (*.f64 #s(literal -1 binary64) x))
+(approx %10 (*.f64 #s(literal -1 binary64) %80))
+(approx %16 (*.f64 #s(literal -1/2 binary64) %80))
+(approx %20 (*.f64 #s(literal -1 binary64) %101))
+(approx %47 (*.f64 #s(literal -1 binary64) (*.f64 x (+.f64 #s(literal 1 binary64) (*.f64 #s(literal -1 binary64) %106)))))</pre></td></tr></table></details></dd><dt>Calls</dt><dd><p>6 calls:</p><canvas id="calls-2" title="Weighted histogram; height corresponds to percentage of runtime in that bucket."></canvas><script>histogram('calls-2', [0.10498046875,0.218994140625,0.266845703125,0.1689453125,0.322998046875,0.47412109375])</script><table class="times"><thead><tr><th>Time</th><th>Variable</th><th>Point</th></tr></thead><tr><td>0.0ms</td><td><pre>y</pre></td><td>0</td></tr><tr><td>0.0ms</td><td><pre>y</pre></td><td>inf</td></tr><tr><td>0.0ms</td><td><pre>x</pre></td><td>0</td></tr><tr><td>0.0ms</td><td><pre>x</pre></td><td>inf</td></tr><tr><td>0.0ms</td><td><pre>y</pre></td><td>-inf</td></tr></table></dd></dl></div><div class="timeline-block timeline-rewrite" id="timeline12"><h3><a href="#timeline12">rewrite</a><span class="time">29.0ms (9.5%)</span></h3><dl><dt>Iterations</dt><dd><p>Useful iterations: 0 (0.0ms)</p><table class="times"><tr><th>Iter</th><th>Nodes</th><th>Cost</th></tr><tr><td>0</td><td>19</td><td>137</td></tr><tr><td>1</td><td>99</td><td>137</td></tr><tr><td>2</td><td>386</td><td>137</td></tr><tr><td>3</td><td>2228</td><td>137</td></tr><tr><td>0</td><td>4842</td><td>137</td></tr><tr><td>0</td><td>5170</td><td>137</td></tr></table></dd><dt>Stop Event</dt><dd><table class="times"><tr><td>1×</td><td>iter-limit</td></tr><tr><td>1×</td><td>iter-limit</td></tr><tr><td>1×</td><td>node-limit</td></tr><tr><td>1×</td><td>saturated</td></tr></table></dd><dt>Counts</dt><dd>25 → 381</dd><dt>Calls</dt><dd><details><summary>Call 1</summary><table><thead><tr><th>Inputs</th></tr></thead><tr><td><pre>%1 = (*.f64 y y)
+%3 = (*.f64 x x)
+%4 = (sqrt.f64 %3)
+%6 = (/.f64 %1 %4)
+%7 = (*.f64 #s(literal 1/2 binary64) %6)
+%8 = (+.f64 %4 %7)
+%10 = (*.f64 #s(literal 2 binary64) y)
+%12 = (*.f64 #s(literal -1 binary64) y)
+%14 = (/.f64 %3 y)
+%15 = (*.f64 #s(literal -1/2 binary64) %14)
+%18 = (+ (* y y) (* x x))
+%19 = (approx %18 %3)
+%20 = (sqrt %18)
+%21 = (approx %20 %8)
+%22 = (+ y %20)
+%24 = (approx %20 %12)
+%28 = (sqrt.f64 %19)
+y
+%1
+x
+%3
+%4
+#s(literal 1/2 binary64)
+%6
+%7
+%8
+#s(literal 2 binary64)
+%10
+#s(literal -1 binary64)
+%12
+#s(literal -1/2 binary64)
+%14
+%15
+%19
+%21
+(approx %22 %10)
+%24
+(approx %22 %15)
+(+.f64 y %24)
+(+.f64 y %21)
+%28
+(+.f64 y %28)</pre></td></tr></table><table><thead><tr><th>Outputs</th></tr></thead><tr><td><pre>%2 = (*.f64 y y)
+%3 = (sqrt.f64 %2)
+%4 = (neg.f64 %3)
+%11 = (neg.f64 y)
+%15 = (*.f64 #s(literal -1 binary64) %4)
+%18 = (*.f64 #s(literal -1 binary64) %3)
+%21 = (*.f64 %4 #s(literal -1 binary64))
+%23 = (*.f64 %3 #s(literal -1 binary64))
+%25 = (neg.f64 %4)
+%32 = (*.f64 %11 y)
+%37 = (*.f64 %11 #s(literal 1 binary64))
+%42 = (*.f64 #s(literal 1/2 binary64) %2)
+%46 = (*.f64 %2 %2)
+%54 = (*.f64 x x)
+%55 = (sqrt.f64 %54)
+%56 = (*.f64 %55 %54)
+%57 = (sqrt.f64 %56)
+%59 = (sqrt.f64 (*.f64 %57 %54))
+%60 = (sqrt.f64 %55)
+%61 = (sqrt.f64 %60)
+%66 = (sqrt.f64 (*.f64 %60 %54))
+%67 = (sqrt.f64 %57)
+%70 = (sqrt.f64 (*.f64 %60 %56))
+%72 = (neg.f64 %57)
+%73 = (neg.f64 %60)
+%75 = (*.f64 %54 #s(literal -1 binary64))
+%78 = (neg.f64 %55)
+%79 = (*.f64 %78 #s(literal -1 binary64))
+%81 = (neg.f64 x)
+%82 = (*.f64 %81 #s(literal -1 binary64))
+%84 = (*.f64 %55 #s(literal -1 binary64))
+%86 = (*.f64 x #s(literal -1 binary64))
+%98 = (/.f64 %55 #s(literal -1 binary64))
+%101 = (*.f64 %81 x)
+%105 = (/.f64 x #s(literal -1 binary64))
+%108 = (*.f64 %57 #s(literal 1 binary64))
+%112 = (/.f64 %78 #s(literal -1 binary64))
+%118 = (/.f64 %81 #s(literal -1 binary64))
+%128 = (*.f64 %101 #s(literal 1 binary64))
+%131 = (*.f64 %54 %54)
+%139 = (*.f64 #s(literal 1/2 binary64) %54)
+%141 = (sqrt.f64 %70)
+%142 = (sqrt.f64 %61)
+%145 = (neg.f64 %73)
+%157 = (/.f64 #s(literal 1 binary64) %55)
+%167 = (/.f64 #s(literal 1 binary64) %73)
+%168 = (/.f64 %2 %73)
+%170 = (/.f64 %32 %60)
+%171 = (/.f64 #s(literal -1 binary64) %60)
+%175 = (/.f64 %3 %73)
+%177 = (/.f64 %4 %60)
+%181 = (/.f64 %2 %55)
+%182 = (sqrt.f64 %181)
+%183 = (neg.f64 %182)
+%185 = (/.f64 %11 %60)
+%186 = (neg.f64 %185)
+%188 = (/.f64 #s(literal 1 binary64) %60)
+%189 = (/.f64 %2 %60)
+%191 = (/.f64 %2 %54)
+%192 = (sqrt.f64 %191)
+%194 = (/.f64 %11 %55)
+%196 = (/.f64 %32 %55)
+%198 = (/.f64 #s(literal -1 binary64) %55)
+%202 = (/.f64 y %60)
+%213 = (/.f64 y %55)
+%264 = (/.f64 #s(literal 1/2 binary64) %73)
+%266 = (*.f64 %3 #s(literal 1/2 binary64))
+%272 = (*.f64 #s(literal -1/2 binary64) y)
+%277 = (*.f64 #s(literal 1/2 binary64) y)
+%288 = (/.f64 #s(literal 1/2 binary64) %55)
+%290 = (/.f64 %277 %55)
+%292 = (*.f64 #s(literal 1/2 binary64) %189)
+%301 = (/.f64 #s(literal 1/2 binary64) %60)
+%304 = (*.f64 #s(literal -1/2 binary64) %2)
+%325 = (*.f64 %181 #s(literal 1/2 binary64))
+%328 = (*.f64 #s(literal -1/2 binary64) %181)
+%369 = (-.f64 %54 %304)
+%383 = (/.f64 %369 %55)
+%394 = (+.f64 y y)
+%399 = (/.f64 #s(literal 1 binary64) y)
+%408 = (/.f64 #s(literal -1 binary64) y)
+%416 = (/.f64 %78 y)
+%419 = (/.f64 %55 y)
+%421 = (/.f64 %81 y)
+%423 = (/.f64 x y)
+%433 = (/.f64 %101 y)
+%458 = (/.f64 %54 y)
+%483 = (*.f64 #s(literal -1/2 binary64) %54)
+%484 = (*.f64 %483 #s(literal 1 binary64))
+%490 = (*.f64 #s(literal -1/2 binary64) x)
+%492 = (/.f64 #s(literal -1/2 binary64) y)
+%496 = (*.f64 %423 #s(literal -1/2 binary64))
+%529 = (*.f64 %433 #s(literal -1/2 binary64))
+%531 = (*.f64 #s(literal -1/2 binary64) %433)
+%534 = (/.f64 %54 %394)
+%546 = (+.f64 %54 %2)
+%547 = (sqrt.f64 %546)
+%548 = (neg.f64 %547)
+%562 = (sqrt.f64 %547)
+%563 = (*.f64 %562 %562)
+%564 = (neg.f64 %548)
+%566 = (neg.f64 (-.f64 %11 %547))
+%568 = (neg.f64 (-.f64 %548 y))
+%569 = (-.f64 %547 %11)
+%570 = (-.f64 y %548)
+%571 = (+.f64 %547 y)
+%572 = (+.f64 y %547)
+y
+(*.f64 (*.f64 #s(literal 1 binary64) %4) %4)
+(*.f64 (*.f64 %2 #s(literal 2 binary64)) #s(literal 1/2 binary64))
+(*.f64 (*.f64 #s(literal 1 binary64) %11) %11)
+(*.f64 %15 %15)
+(*.f64 %15 %3)
+(*.f64 %18 %18)
+(*.f64 %18 %4)
+(*.f64 %21 %21)
+(*.f64 %23 %23)
+(*.f64 %25 %25)
+(*.f64 %25 %3)
+(*.f64 %4 (*.f64 %4 #s(literal 1 binary64)))
+(*.f64 %4 %23)
+(*.f64 %4 %4)
+(*.f64 %32 #s(literal -1 binary64))
+(*.f64 %3 %21)
+(*.f64 %3 %25)
+(*.f64 %3 %3)
+(*.f64 %11 %37)
+(*.f64 %11 %11)
+(*.f64 #s(literal 1 binary64) %2)
+(*.f64 #s(literal -1 binary64) %32)
+(*.f64 #s(literal 2 binary64) %42)
+(*.f64 %2 #s(literal 1 binary64))
+%2
+(neg.f64 %32)
+(sqrt.f64 (*.f64 #s(literal 1 binary64) %46))
+(sqrt.f64 (*.f64 %46 #s(literal 1 binary64)))
+(sqrt.f64 %46)
+(+.f64 %42 %42)
+x
+(*.f64 %59 %61)
+(*.f64 (*.f64 %54 #s(literal 2 binary64)) #s(literal 1/2 binary64))
+(*.f64 %66 %67)
+(*.f64 %70 %61)
+(*.f64 %72 %73)
+(*.f64 %75 #s(literal -1 binary64))
+(*.f64 %67 %66)
+(*.f64 %79 %79)
+(*.f64 %82 %82)
+(*.f64 %84 %84)
+(*.f64 %86 %86)
+(*.f64 (*.f64 %78 %60) %73)
+(*.f64 %57 %60)
+(*.f64 %73 %72)
+(*.f64 %73 (*.f64 %60 %78))
+(*.f64 %61 %59)
+(*.f64 %61 %70)
+(*.f64 %78 (*.f64 %78 #s(literal 1 binary64)))
+(*.f64 %78 %98)
+(*.f64 %78 %78)
+(*.f64 %101 #s(literal -1 binary64))
+(*.f64 %81 (*.f64 %81 #s(literal 1 binary64)))
+(*.f64 %81 %105)
+(*.f64 %81 %81)
+(*.f64 %60 %108)
+(*.f64 %60 %57)
+(*.f64 #s(literal 1 binary64) %54)
+(*.f64 %55 %112)
+(*.f64 %55 %55)
+(*.f64 %54 #s(literal 1 binary64))
+(*.f64 x (*.f64 x #s(literal 1 binary64)))
+(*.f64 x %118)
+%54
+(/.f64 %101 #s(literal -1 binary64))
+(/.f64 #s(literal 1 binary64) (/.f64 #s(literal -1 binary64) %101))
+(/.f64 %54 #s(literal 1 binary64))
+(neg.f64 (/.f64 %54 #s(literal -1 binary64)))
+(neg.f64 (/.f64 %101 #s(literal 1 binary64)))
+(neg.f64 %128)
+(neg.f64 %101)
+(sqrt.f64 (*.f64 #s(literal 1 binary64) %131))
+(sqrt.f64 (*.f64 %131 #s(literal 1 binary64)))
+(sqrt.f64 (/.f64 %131 #s(literal 1 binary64)))
+(sqrt.f64 %131)
+(+.f64 %139 %139)
+(*.f64 %141 %142)
+(*.f64 %67 %61)
+(*.f64 %145 %145)
+(*.f64 %145 %60)
+(*.f64 %142 %141)
+(*.f64 %73 %73)
+(*.f64 %61 (sqrt.f64 %108))
+(*.f64 %61 %67)
+(*.f64 %60 %145)
+(*.f64 %60 %60)
+(*.f64 #s(literal 1 binary64) %55)
+(*.f64 %55 #s(literal 1 binary64))
+(/.f64 #s(literal 1 binary64) %157)
+(/.f64 %54 %55)
+(neg.f64 %78)
+(sqrt.f64 (/.f64 %131 %54))
+%55
+#s(literal 1/2 binary64)
+(*.f64 (*.f64 %157 %4) %4)
+(*.f64 (*.f64 %157 #s(literal -1 binary64)) %32)
+(*.f64 %167 %168)
+(*.f64 %170 %171)
+(*.f64 %168 %167)
+(*.f64 %171 %170)
+(*.f64 %175 %175)
+(*.f64 %175 %177)
+(*.f64 %177 %175)
+(*.f64 %177 %177)
+(*.f64 %183 %183)
+(*.f64 %186 %186)
+(*.f64 %188 %189)
+(*.f64 %192 %3)
+(*.f64 %194 %11)
+(*.f64 %196 #s(literal -1 binary64))
+(*.f64 %198 %32)
+(*.f64 %182 %182)
+(*.f64 %185 %185)
+(*.f64 %202 %202)
+(*.f64 %189 %188)
+(*.f64 %4 (*.f64 %3 %198))
+(*.f64 %4 (*.f64 %4 %157))
+(*.f64 %4 (/.f64 %3 %78))
+(*.f64 %4 (/.f64 %4 %55))
+(*.f64 %213 y)
+(*.f64 %157 %2)
+(*.f64 %32 %198)
+(*.f64 %3 (*.f64 %4 %198))
+(*.f64 %3 %192)
+(*.f64 %11 %194)
+(*.f64 #s(literal 1 binary64) %181)
+(*.f64 #s(literal -1 binary64) %196)
+(*.f64 %181 #s(literal 1 binary64))
+(*.f64 %2 %157)
+(*.f64 y %213)
+(/.f64 (sqrt.f64 (*.f64 %181 %2)) %60)
+(/.f64 (*.f64 %185 %11) %60)
+(/.f64 (*.f64 %202 y) %60)
+(/.f64 (*.f64 %188 %2) %60)
+(/.f64 (/.f64 %189 %61) %61)
+(/.f64 %170 %73)
+(/.f64 %168 %73)
+(/.f64 (neg.f64 %189) %73)
+(/.f64 %189 %60)
+(/.f64 %32 %78)
+(/.f64 #s(literal 1 binary64) (/.f64 %60 %189))
+(/.f64 #s(literal 1 binary64) (/.f64 %78 %32))
+(/.f64 #s(literal 1 binary64) (/.f64 %55 %2))
+%181
+(neg.f64 %196)
+(sqrt.f64 (*.f64 %191 %2))
+(sqrt.f64 (*.f64 %181 %181))
+(sqrt.f64 (*.f64 %2 %191))
+(sqrt.f64 (/.f64 %46 %54))
+(*.f64 (*.f64 #s(literal 1/2 binary64) %182) %182)
+(*.f64 (*.f64 #s(literal 1/2 binary64) %185) %185)
+(*.f64 (*.f64 #s(literal 1/2 binary64) %202) %202)
+(*.f64 %170 %264)
+(*.f64 (/.f64 %266 %73) %175)
+(*.f64 (/.f64 %266 %60) %182)
+(*.f64 (/.f64 %272 %73) %202)
+(*.f64 (/.f64 %272 %60) %185)
+(*.f64 (/.f64 %277 %73) %185)
+(*.f64 (/.f64 %277 %60) %202)
+(*.f64 %264 %170)
+(*.f64 %264 %168)
+(*.f64 %168 %264)
+(*.f64 %266 %192)
+(*.f64 %272 %194)
+(*.f64 %277 %213)
+(*.f64 %288 %2)
+(*.f64 %290 y)
+(*.f64 %292 %188)
+(*.f64 %196 #s(literal -1/2 binary64))
+(*.f64 %182 (*.f64 %182 #s(literal 1/2 binary64)))
+(*.f64 %185 (*.f64 %185 #s(literal 1/2 binary64)))
+(*.f64 %202 (*.f64 %202 #s(literal 1/2 binary64)))
+(*.f64 %189 %301)
+(*.f64 %301 %189)
+(*.f64 %304 %198)
+(*.f64 %4 (*.f64 %4 %288))
+(*.f64 %42 %157)
+(*.f64 %213 %277)
+(*.f64 %157 %42)
+(*.f64 %32 (*.f64 %198 #s(literal 1/2 binary64)))
+(*.f64 %32 (*.f64 #s(literal -1 binary64) %288))
+(*.f64 %32 (/.f64 #s(literal 1/2 binary64) %78))
+(*.f64 %3 (*.f64 %192 #s(literal 1/2 binary64)))
+(*.f64 %3 (*.f64 %3 %288))
+(*.f64 %11 (*.f64 %194 #s(literal 1/2 binary64)))
+(*.f64 %11 (*.f64 %11 %288))
+(*.f64 #s(literal 1 binary64) %325)
+(*.f64 #s(literal -1/2 binary64) %196)
+(*.f64 #s(literal -1 binary64) %328)
+%325
+(*.f64 #s(literal 1/2 binary64) %181)
+(*.f64 %2 %288)
+(*.f64 y %290)
+(/.f64 (*.f64 %301 %2) %60)
+(/.f64 (*.f64 %189 #s(literal 1/2 binary64)) %60)
+(/.f64 (/.f64 %292 %61) %61)
+(/.f64 (/.f64 %304 %60) %73)
+(/.f64 (/.f64 %42 %73) %73)
+(/.f64 (*.f64 %189 #s(literal 1 binary64)) (*.f64 %60 #s(literal 2 binary64)))
+(/.f64 (neg.f64 %292) %73)
+(/.f64 %292 %60)
+(/.f64 %189 (*.f64 #s(literal 2 binary64) %60))
+(/.f64 %304 %78)
+(/.f64 %42 %55)
+(/.f64 %32 (*.f64 %78 #s(literal 2 binary64)))
+(/.f64 %32 (*.f64 #s(literal 2 binary64) %78))
+(/.f64 #s(literal 1 binary64) (/.f64 %60 %292))
+(/.f64 #s(literal 1 binary64) (/.f64 %78 %304))
+(/.f64 #s(literal 1 binary64) (/.f64 %55 %42))
+(/.f64 %181 #s(literal 2 binary64))
+(/.f64 %2 (*.f64 %55 #s(literal 2 binary64)))
+(/.f64 %2 (*.f64 #s(literal 2 binary64) %55))
+(neg.f64 %328)
+(*.f64 %369 %157)
+(/.f64 (/.f64 %369 %73) %73)
+(/.f64 (/.f64 %369 %60) %60)
+(/.f64 (+.f64 %57 %292) %60)
+(/.f64 (+.f64 %101 %304) %78)
+(/.f64 (-.f64 %101 %42) %78)
+(/.f64 (neg.f64 %369) %78)
+%383
+(/.f64 #s(literal 1 binary64) (/.f64 %55 %369))
+(neg.f64 (-.f64 %78 %325))
+(neg.f64 (neg.f64 %383))
+(-.f64 %325 %78)
+(-.f64 %55 %328)
+(+.f64 %325 %55)
+(+.f64 %55 %325)
+#s(literal 2 binary64)
+(*.f64 #s(literal 1 binary64) %394)
+(*.f64 %394 #s(literal 1 binary64))
+(*.f64 #s(literal 2 binary64) y)
+(*.f64 y #s(literal 2 binary64))
+(/.f64 #s(literal 1 binary64) (*.f64 %399 #s(literal 1/2 binary64)))
+(neg.f64 (-.f64 %11 y))
+(-.f64 y %37)
+(-.f64 y %11)
+%394
+#s(literal -1 binary64)
+(*.f64 #s(literal -1 binary64) y)
+(*.f64 y #s(literal -1 binary64))
+(/.f64 #s(literal 1 binary64) %408)
+%11
+#s(literal -1/2 binary64)
+(*.f64 (*.f64 %399 %57) %60)
+(*.f64 (*.f64 %399 %78) %78)
+(*.f64 (*.f64 %399 %60) %57)
+(*.f64 %416 %98)
+(*.f64 %98 %416)
+(*.f64 %112 %419)
+(*.f64 %105 %421)
+(*.f64 %118 %423)
+(*.f64 %57 (*.f64 %60 %399))
+(*.f64 %57 (/.f64 %60 y))
+(*.f64 %421 %105)
+(*.f64 %421 %81)
+(*.f64 %419 %112)
+(*.f64 %419 %55)
+(*.f64 %433 #s(literal -1 binary64))
+(*.f64 %408 %101)
+(*.f64 %73 (*.f64 %73 %419))
+(*.f64 %423 %118)
+(*.f64 %423 x)
+(*.f64 %399 %54)
+(*.f64 %78 (*.f64 %55 %408))
+(*.f64 %78 (*.f64 %78 %399))
+(*.f64 %78 (/.f64 %55 %11))
+(*.f64 %78 %416)
+(*.f64 %101 %408)
+(*.f64 %81 (*.f64 x %408))
+(*.f64 %81 %421)
+(*.f64 %60 (*.f64 %60 %419))
+(*.f64 %60 (*.f64 %57 %399))
+(*.f64 %60 (/.f64 %57 y))
+(*.f64 #s(literal 1 binary64) %458)
+(*.f64 %55 (*.f64 %78 %408))
+(*.f64 %55 %419)
+(*.f64 %54 %399)
+(*.f64 x %423)
+(/.f64 %75 %11)
+(/.f64 (*.f64 #s(literal -1 binary64) %54) %11)
+(/.f64 %128 %11)
+(/.f64 %433 #s(literal -1 binary64))
+(/.f64 %101 %11)
+(/.f64 #s(literal 1 binary64) (/.f64 #s(literal -1 binary64) %433))
+(/.f64 #s(literal 1 binary64) (/.f64 %11 %101))
+(/.f64 #s(literal 1 binary64) (/.f64 y %54))
+(/.f64 %458 #s(literal 1 binary64))
+%458
+(neg.f64 (*.f64 %399 %101))
+(neg.f64 (/.f64 %433 #s(literal 1 binary64)))
+(neg.f64 %433)
+(*.f64 %484 %399)
+(*.f64 (*.f64 %81 #s(literal -1/2 binary64)) %421)
+(*.f64 (*.f64 #s(literal -1/2 binary64) %55) %419)
+(*.f64 %490 %423)
+(*.f64 %57 (*.f64 %60 %492))
+(*.f64 %492 %54)
+(*.f64 %496 x)
+(*.f64 %139 %408)
+(*.f64 %433 #s(literal 1/2 binary64))
+(*.f64 %483 %399)
+(*.f64 %423 %490)
+(*.f64 %399 %483)
+(*.f64 %78 (*.f64 %78 %492))
+(*.f64 %101 (*.f64 %408 #s(literal -1/2 binary64)))
+(*.f64 %101 (/.f64 #s(literal -1/2 binary64) %11))
+(*.f64 %81 (*.f64 %421 #s(literal -1/2 binary64)))
+(*.f64 %81 (*.f64 %81 %492))
+(*.f64 %60 (*.f64 %57 %492))
+(*.f64 %458 #s(literal -1/2 binary64))
+(*.f64 #s(literal -1/2 binary64) %458)
+(*.f64 #s(literal 1/2 binary64) %433)
+(*.f64 %55 (*.f64 %419 #s(literal -1/2 binary64)))
+(*.f64 %55 (*.f64 %55 %492))
+(*.f64 %54 %492)
+(*.f64 x %496)
+(/.f64 %484 y)
+(/.f64 (*.f64 %483 #s(literal -1 binary64)) %11)
+(/.f64 (/.f64 %139 #s(literal -1 binary64)) y)
+(/.f64 %529 #s(literal -1 binary64))
+(/.f64 %531 #s(literal -1 binary64))
+(/.f64 %139 %11)
+(/.f64 %534 #s(literal -1 binary64))
+(/.f64 %483 y)
+(/.f64 #s(literal 1 binary64) (/.f64 %11 %139))
+(/.f64 #s(literal 1 binary64) (/.f64 y %483))
+(neg.f64 %529)
+(neg.f64 (*.f64 %101 %492))
+(neg.f64 %531)
+(neg.f64 %534)
+(*.f64 %548 %548)
+(*.f64 %547 %547)
+(neg.f64 (+.f64 %32 %101))
+(neg.f64 (-.f64 %32 %54))
+(neg.f64 (-.f64 %101 %2))
+(-.f64 %54 %32)
+(-.f64 %2 %101)
+(sqrt.f64 (*.f64 %546 %546))
+%546
+(+.f64 %2 %54)
+%563
+%564
+%547
+%566
+%568
+%569
+%570
+%571
+%572
+%563
+%564
+%547
+%566
+%568
+%569
+%570
+%571
+%572
+%566
+%568
+%569
+%570
+%571
+%572
+%566
+%568
+%569
+%570
+%571
+%572
+%563
+%564
+%547
+%566
+%568
+%569
+%570
+%571
+%572</pre></td></tr></table></details></dd></dl></div><div class="timeline-block timeline-reconstruct" id="timeline13"><h3><a href="#timeline13">reconstruct</a><span class="time">12.0ms (4.0%)</span></h3><dl><dt>Counts</dt><dd>417 → 123</dd><dt>Compiler</dt><dd><p>Compiled 4 911 to 619 computations (87.4% saved)</p></dd></dl></div><div class="timeline-block timeline-eval" id="timeline14"><h3><a href="#timeline14">eval</a><span class="time">3.0ms (1.0%)</span></h3><dl><dt>Compiler</dt><dd><p>Compiled 2 602 to 481 computations (81.5% saved)</p></dd></dl></div><div class="timeline-block timeline-prune" id="timeline15"><h3><a href="#timeline15">prune</a><span class="time">1.0ms (0.4%)</span></h3><dl><dt>Pruning</dt><dd><p>7 alts after pruning (5 fresh and 2 done)</p><table class="states"><thead><tr><th></th><th>Pruned</th><th>Kept</th><th>Total</th></tr></thead><tbody><tr><th>New</th><td>121</td><td>5</td><td>126</td></tr><tr><th>Fresh</th><td>0</td><td>0</td><td>0</td></tr><tr><th>Picked</th><td>4</td><td>1</td><td>5</td></tr><tr><th>Done</th><td>0</td><td>1</td><td>1</td></tr></tbody><tfoot><tr><th>Total</th><td>125</td><td>7</td><td>132</td></tr></tfoot></table></dd><dt>Taylor</dt><dd><table class="times"><thead><tr><th>Generated</th><th>Kept</th><th>% Kept</th><th># Vars</th><th>Transform</th><th>Order</th></tr></thead><tbody><tr><td>2×</td><td>1×</td><td>50.0%</td><td>2</td><td><code>0</code></td><td>1</td></tr><tr><td>5×</td><td>1×</td><td>20.0%</td><td>1</td><td><code>zero</code></td><td>-1</td></tr><tr><td>2×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>-inf</code></td><td>1</td></tr><tr><td>2×</td><td>0×</td><td>0.0%</td><td>2</td><td><code>-inf</code></td><td>0</td></tr><tr><td>4×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>inf</code></td><td>1</td></tr><tr><td>1×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>-inf</code></td><td>0</td></tr><tr><td>3×</td><td>0×</td><td>0.0%</td><td>2</td><td><code>inf</code></td><td>1</td></tr><tr><td>3×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>0</code></td><td>1</td></tr><tr><td>5×</td><td>0×</td><td>0.0%</td><td>2</td><td><code>0</code></td><td>0</td></tr><tr><td>2×</td><td>0×</td><td>0.0%</td><td>2</td><td><code>-inf</code></td><td>1</td></tr><tr><td>2×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>0</code></td><td>0</td></tr></tbody></table></dd><dt>Accuracy</dt><dd>100.0%</dd><dt>Counts</dt><dd>132 → 7</dd><dt>Alt Table</dt><dd><details><summary>Click to see full alt table</summary><table class="times"><thead><tr><th>Status</th><th>Accuracy</th><th>Program</th></tr></thead><tr><td><span title="Selected for next iteration">▶</span></td><td>97.7%</td><td><pre>(+.f64 (approx y #s(literal 0 binary64)) (sqrt.f64 (approx (+ (* y y) (* x x)) (*.f64 x x))))</pre></td></tr><tr><td><span title="Selected in a prior iteration">✓</span></td><td>100.0%</td><td><pre>(+.f64 y (sqrt.f64 (+.f64 (*.f64 y y) (*.f64 x x))))</pre></td></tr><tr><td><span title="Selected in a prior iteration">✓</span></td><td>98.9%</td><td><pre>(+.f64 y (sqrt.f64 (approx (+ (* y y) (* x x)) (*.f64 x x))))</pre></td></tr><tr><td><span title="Selected for next iteration">▶</span></td><td>3.1%</td><td><pre>(+.f64 y (approx (sqrt (+ (* y y) (* x x))) (neg.f64 y)))</pre></td></tr><tr><td><span title="Selected for next iteration">▶</span></td><td>99.0%</td><td><pre>%1 = (* y y)
+%3 = (* x x)
+%13 = (sqrt %3)
+(+.f64 y (approx (sqrt (+ %1 %3)) (approx (+ %13 (* 1/2 (/ %1 %13))) (/.f64 (+.f64 (*.f64 #s(literal 1/2 binary64) (*.f64 y y)) (*.f64 x x)) x))))</pre></td></tr><tr><td><span title="Selected for next iteration">▶</span></td><td>3.9%</td><td><pre>(approx (+ y (sqrt (+ (* y y) (* x x)))) (+.f64 y y))</pre></td></tr><tr><td><span title="Selected for next iteration">▶</span></td><td>3.4%</td><td><pre>(approx (+ y (sqrt (+ (* y y) (* x x)))) (neg.f64 (/.f64 (*.f64 x x) (+.f64 y y))))</pre></td></tr></table></details></dd><dt>Compiler</dt><dd><p>Compiled 58 to 21 computations (63.8% saved)</p></dd></dl></div><div class="timeline-block timeline-sample" id="timeline16"><h3><a href="#timeline16">sample</a><span class="time">0.0ms (0.0%)</span></h3><dl><dt>Calls</dt><dd><details><summary>Call 1</summary><table><thead><tr><th>Inputs</th></tr></thead><tr><td><pre></pre></td></tr></table><table><thead><tr><th>Outputs</th></tr></thead><tr><td><pre></pre></td></tr></table></details></dd></dl></div><div class="timeline-block timeline-series" id="timeline17"><h3><a href="#timeline17">series</a><span class="time">3.0ms (0.9%)</span></h3><dl><dt>Iterations</dt><dd><p>Useful iterations: 0 (0.0ms)</p><table class="times"><tr><th>Iter</th><th>Nodes</th><th>Cost</th></tr><tr><td>0</td><td>82</td><td>372</td></tr></table></dd><dt>Stop Event</dt><dd><table class="times"><tr><td>1×</td><td>iter-limit</td></tr><tr><td>1×</td><td>saturated</td></tr></table></dd><dt>Counts</dt><dd>24 → 39</dd><dt>Calls</dt><dd><details><summary>Call 1</summary><table><thead><tr><th>Inputs</th></tr></thead><tr><td><pre>%1 = (*.f64 y y)
+%3 = (*.f64 x x)
+%6 = (approx y #s(literal 0 binary64))
+%7 = (* y y)
+%8 = (* x x)
+%9 = (+ %7 %8)
+%10 = (approx %9 %3)
+%11 = (neg.f64 y)
+%12 = (sqrt.f64 %10)
+%13 = (*.f64 #s(literal 1/2 binary64) %1)
+%14 = (+.f64 %13 %3)
+%15 = (/.f64 %14 x)
+%16 = (sqrt %8)
+%21 = (approx (+ %16 (* 1/2 (/ %7 %16))) %15)
+%22 = (+.f64 y y)
+%23 = (/.f64 %3 %22)
+%24 = (neg.f64 %23)
+%26 = (sqrt %9)
+%27 = (approx %26 %21)
+%29 = (approx %26 %11)
+%31 = (+ y %26)
+y
+%1
+x
+%3
+#s(literal 0 binary64)
+#s(literal 1/2 binary64)
+%6
+%10
+%11
+%12
+%13
+%14
+%15
+%21
+%22
+%23
+%24
+(+.f64 %6 %12)
+%27
+(+.f64 y %27)
+%29
+(+.f64 y %29)
+(approx %31 %24)
+(approx %31 %22)</pre></td></tr></table><table><thead><tr><th>Outputs</th></tr></thead><tr><td><pre>%4 = (* y y)
+%5 = (*.f64 y y)
+%8 = (* x x)
+%9 = (+ %4 %8)
+%10 = (*.f64 x x)
+%18 = (sqrt %9)
+%19 = (sqrt.f64 %10)
+%23 = (*.f64 #s(literal 1/2 binary64) (/.f64 %5 %19))
+%27 = (* 1/2 %4)
+%28 = (*.f64 #s(literal 1/2 binary64) %5)
+%30 = (+ %27 %8)
+%31 = (+.f64 %28 %10)
+%33 = (/ %30 x)
+%36 = (*.f64 #s(literal 1/2 binary64) (/.f64 %5 x))
+%39 = (+ y y)
+%43 = (/ %8 %39)
+%44 = (/.f64 %10 y)
+%51 = (+ y %18)
+%55 = (/.f64 %10 %5)
+%59 = (*.f64 #s(literal 1/2 binary64) %55)
+%61 = (*.f64 y (+.f64 #s(literal 1 binary64) %59))
+%73 = (sqrt %8)
+%76 = (+ %73 (* 1/2 (/ %4 %73)))
+%98 = (sqrt.f64 %5)
+%102 = (+.f64 %98 (*.f64 #s(literal 1/2 binary64) (/.f64 %10 %98)))
+%110 = (/.f64 %5 %10)
+%115 = (+.f64 #s(literal 1 binary64) (*.f64 #s(literal 1/2 binary64) %110))
+%116 = (*.f64 x %115)
+%120 = (/.f64 y x)
+(approx y #s(literal 0 binary64))
+(approx y y)
+(approx %4 %5)
+(approx %9 %10)
+(approx %9 (+.f64 %10 %5))
+(approx (neg y) (*.f64 #s(literal -1 binary64) y))
+(approx %18 %19)
+(approx %18 (+.f64 %19 %23))
+(approx %27 %28)
+(approx %30 %31)
+(approx %33 x)
+(approx %33 (+.f64 x %36))
+(approx %39 (*.f64 #s(literal 2 binary64) y))
+(approx %43 (*.f64 #s(literal 1/2 binary64) %44))
+(approx (neg %43) (*.f64 #s(literal -1/2 binary64) %44))
+(approx %51 (+.f64 y %19))
+(approx %9 (*.f64 %5 (+.f64 #s(literal 1 binary64) %55)))
+(approx %18 %61)
+(approx %30 (*.f64 %5 (+.f64 #s(literal 1/2 binary64) %55)))
+(approx %33 %36)
+(approx %33 (*.f64 %5 (+.f64 (*.f64 #s(literal 1/2 binary64) (/.f64 #s(literal 1 binary64) x)) (/.f64 x %5))))
+(approx %76 %23)
+(approx %76 (*.f64 %5 (+.f64 (*.f64 #s(literal 1/2 binary64) (/.f64 #s(literal 1 binary64) %19)) (/.f64 %19 %5))))
+(approx %51 (*.f64 y (+.f64 #s(literal 2 binary64) %59)))
+(approx %18 (*.f64 #s(literal -1 binary64) %61))
+(approx %51 (*.f64 #s(literal -1 binary64) (/.f64 (+.f64 (*.f64 #s(literal -1/8 binary64) (/.f64 (*.f64 %10 %10) %5)) (*.f64 #s(literal 1/2 binary64) %10)) y)))
+(approx %18 %98)
+(approx %18 %102)
+(approx %33 (/.f64 %31 x))
+(approx %51 (+.f64 y %98))
+(approx %51 (+.f64 y %102))
+(approx %9 (*.f64 %10 (+.f64 #s(literal 1 binary64) %110)))
+(approx %18 %116)
+(approx %30 (*.f64 %10 %115))
+(approx %51 (*.f64 x (+.f64 #s(literal 1 binary64) %120)))
+(approx %18 (*.f64 #s(literal -1 binary64) x))
+(approx %18 (*.f64 #s(literal -1 binary64) %116))
+(approx %33 (*.f64 #s(literal -1 binary64) (*.f64 x (-.f64 (*.f64 #s(literal -1/2 binary64) %110) #s(literal 1 binary64)))))
+(approx %51 (*.f64 #s(literal -1 binary64) (*.f64 x (+.f64 #s(literal 1 binary64) (*.f64 #s(literal -1 binary64) %120)))))</pre></td></tr></table></details></dd><dt>Calls</dt><dd><p>6 calls:</p><canvas id="calls-3" title="Weighted histogram; height corresponds to percentage of runtime in that bucket."></canvas><script>histogram('calls-3', [0.117919921875,0.212158203125,0.180908203125,0.263916015625,0.2490234375,0.22802734375])</script><table class="times"><thead><tr><th>Time</th><th>Variable</th><th>Point</th></tr></thead><tr><td>0.0ms</td><td><pre>y</pre></td><td>-inf</td></tr><tr><td>0.0ms</td><td><pre>y</pre></td><td>inf</td></tr><tr><td>0.0ms</td><td><pre>y</pre></td><td>0</td></tr><tr><td>0.0ms</td><td><pre>x</pre></td><td>inf</td></tr><tr><td>0.0ms</td><td><pre>x</pre></td><td>0</td></tr></table></dd></dl></div><div class="timeline-block timeline-rewrite" id="timeline18"><h3><a href="#timeline18">rewrite</a><span class="time">29.0ms (9.6%)</span></h3><dl><dt>Iterations</dt><dd><p>Useful iterations: 1 (0.0ms)</p><table class="times"><tr><th>Iter</th><th>Nodes</th><th>Cost</th></tr><tr><td>0</td><td>20</td><td>148</td></tr><tr><td>1</td><td>113</td><td>145</td></tr><tr><td>2</td><td>484</td><td>145</td></tr><tr><td>3</td><td>3316</td><td>145</td></tr><tr><td>0</td><td>3984</td><td>145</td></tr><tr><td>0</td><td>4608</td><td>145</td></tr></table></dd><dt>Stop Event</dt><dd><table class="times"><tr><td>1×</td><td>iter-limit</td></tr><tr><td>1×</td><td>iter-limit</td></tr><tr><td>1×</td><td>node-limit</td></tr><tr><td>1×</td><td>saturated</td></tr></table></dd><dt>Counts</dt><dd>24 → 371</dd><dt>Calls</dt><dd><details><summary>Call 1</summary><table><thead><tr><th>Inputs</th></tr></thead><tr><td><pre>%1 = (*.f64 y y)
+%3 = (*.f64 x x)
+%6 = (approx y #s(literal 0 binary64))
+%7 = (* y y)
+%8 = (* x x)
+%9 = (+ %7 %8)
+%10 = (approx %9 %3)
+%11 = (neg.f64 y)
+%12 = (sqrt.f64 %10)
+%13 = (*.f64 #s(literal 1/2 binary64) %1)
+%14 = (+.f64 %13 %3)
+%15 = (/.f64 %14 x)
+%16 = (sqrt %8)
+%21 = (approx (+ %16 (* 1/2 (/ %7 %16))) %15)
+%22 = (+.f64 y y)
+%23 = (/.f64 %3 %22)
+%24 = (neg.f64 %23)
+%26 = (sqrt %9)
+%27 = (approx %26 %21)
+%29 = (approx %26 %11)
+%31 = (+ y %26)
+y
+%1
+x
+%3
+#s(literal 0 binary64)
+#s(literal 1/2 binary64)
+%6
+%10
+%11
+%12
+%13
+%14
+%15
+%21
+%22
+%23
+%24
+(+.f64 %6 %12)
+%27
+(+.f64 y %27)
+%29
+(+.f64 y %29)
+(approx %31 %24)
+(approx %31 %22)</pre></td></tr></table><table><thead><tr><th>Outputs</th></tr></thead><tr><td><pre>%1 = (*.f64 y y)
+%6 = (sqrt.f64 %1)
+%7 = (neg.f64 %6)
+%8 = (neg.f64 %7)
+%20 = (neg.f64 y)
+%25 = (*.f64 y #s(literal 1 binary64))
+%27 = (*.f64 %20 y)
+%33 = (*.f64 #s(literal 1/2 binary64) %1)
+%36 = (*.f64 x x)
+%39 = (sqrt.f64 %36)
+%41 = (sqrt.f64 (*.f64 %39 %36))
+%42 = (sqrt.f64 %39)
+%43 = (sqrt.f64 %42)
+%46 = (neg.f64 %42)
+%49 = (neg.f64 %39)
+%55 = (*.f64 %36 x)
+%56 = (/.f64 #s(literal 1 binary64) x)
+%63 = (/.f64 %39 x)
+%67 = (*.f64 %36 %36)
+%73 = (neg.f64 x)
+%74 = (*.f64 %73 x)
+%86 = (*.f64 x %74)
+%88 = (*.f64 %74 x)
+%98 = (*.f64 #s(literal 1/2 binary64) %36)
+%100 = (*.f64 x #s(literal 1/2 binary64))
+%101 = (*.f64 %100 x)
+%104 = (+.f64 %36 %1)
+%105 = (sqrt.f64 %104)
+%106 = (neg.f64 %105)
+%122 = (sqrt.f64 %105)
+%123 = (*.f64 %122 %122)
+%124 = (*.f64 #s(literal 1 binary64) %105)
+%125 = (neg.f64 %106)
+%135 = (*.f64 #s(literal -1/2 binary64) y)
+%137 = (*.f64 %6 #s(literal 1/2 binary64))
+%141 = (*.f64 #s(literal 1/2 binary64) y)
+%151 = (*.f64 #s(literal -1/2 binary64) %1)
+%153 = (-.f64 %36 %151)
+%158 = (-.f64 %151 %36)
+%159 = (*.f64 %158 #s(literal 1 binary64))
+%163 = (*.f64 %153 #s(literal 1/2 binary64))
+%165 = (*.f64 #s(literal 1/2 binary64) %153)
+%171 = (-.f64 x (*.f64 %135 (/.f64 y x)))
+%172 = (*.f64 x %171)
+%175 = (/.f64 %172 %36)
+%179 = (/.f64 %153 %36)
+%181 = (/.f64 %33 x)
+%182 = (-.f64 %73 %181)
+%184 = (/.f64 #s(literal -1 binary64) x)
+%187 = (*.f64 x %153)
+%193 = (/.f64 %153 %39)
+%223 = (*.f64 %151 %73)
+%226 = (*.f64 %151 x)
+%227 = (*.f64 %36 %73)
+%230 = (*.f64 %33 %73)
+%240 = (*.f64 %73 %36)
+%256 = (*.f64 %33 x)
+%318 = (/.f64 %1 %39)
+%319 = (*.f64 %318 #s(literal 1/2 binary64))
+%333 = (+.f64 y y)
+%338 = (/.f64 #s(literal 1/2 binary64) y)
+%340 = (-.f64 %20 y)
+%344 = (/.f64 x %333)
+%353 = (*.f64 %344 %36)
+%355 = (/.f64 %39 #s(literal -2 binary64))
+%356 = (/.f64 %49 y)
+%358 = (/.f64 %49 #s(literal 2 binary64))
+%359 = (/.f64 %39 %20)
+%363 = (/.f64 %41 y)
+%364 = (/.f64 %42 #s(literal 2 binary64))
+%366 = (/.f64 %41 #s(literal 2 binary64))
+%367 = (/.f64 %42 y)
+%369 = (/.f64 %36 y)
+%377 = (/.f64 #s(literal 1 binary64) y)
+%379 = (/.f64 x %340)
+%381 = (/.f64 %39 %333)
+%383 = (/.f64 #s(literal -1/2 binary64) y)
+%385 = (/.f64 %73 y)
+%386 = (/.f64 x #s(literal -2 binary64))
+%389 = (/.f64 %39 y)
+%390 = (*.f64 %39 #s(literal 1/2 binary64))
+%393 = (/.f64 x y)
+%400 = (*.f64 %49 %338)
+%402 = (/.f64 %39 %340)
+%414 = (/.f64 %36 %333)
+%416 = (/.f64 %36 %340)
+%419 = (*.f64 %49 %383)
+%465 = (*.f64 x %340)
+%467 = (/.f64 %36 #s(literal -2 binary64))
+%474 = (*.f64 %73 %340)
+%563 = (+.f64 %105 y)
+%564 = (*.f64 #s(literal 1 binary64) %563)
+%566 = (neg.f64 (-.f64 %20 %105))
+%568 = (neg.f64 (-.f64 %106 y))
+%569 = (-.f64 %105 %20)
+%570 = (-.f64 y %106)
+%571 = (+.f64 y %105)
+y
+(*.f64 (*.f64 %1 #s(literal 2 binary64)) #s(literal 1/2 binary64))
+(*.f64 %8 %8)
+(*.f64 %8 %6)
+(*.f64 %7 (*.f64 %7 #s(literal 1 binary64)))
+(*.f64 %7 %7)
+(*.f64 %6 (*.f64 %6 #s(literal 1 binary64)))
+(*.f64 %6 %8)
+(*.f64 %6 %6)
+(*.f64 #s(literal 1 binary64) %1)
+(*.f64 %20 (*.f64 %20 #s(literal 1 binary64)))
+(*.f64 %20 %20)
+(*.f64 %1 #s(literal 1 binary64))
+(*.f64 y %25)
+%1
+(neg.f64 (*.f64 %27 #s(literal 1 binary64)))
+(neg.f64 %27)
+(sqrt.f64 (*.f64 %1 %1))
+(+.f64 %33 %33)
+x
+(*.f64 (*.f64 %36 #s(literal 2 binary64)) #s(literal 1/2 binary64))
+(*.f64 (*.f64 %41 %43) %43)
+(*.f64 (*.f64 %39 %46) %46)
+(*.f64 (*.f64 %49 %42) %46)
+(*.f64 %41 (*.f64 %42 #s(literal 1 binary64)))
+(*.f64 %41 %42)
+(*.f64 %55 %56)
+(*.f64 %46 (*.f64 %46 %39))
+(*.f64 %46 (*.f64 %42 %49))
+(*.f64 (*.f64 %39 x) %63)
+(*.f64 %43 (*.f64 %43 %41))
+(*.f64 %67 (*.f64 %56 %56))
+(*.f64 %49 (*.f64 %49 #s(literal 1 binary64)))
+(*.f64 %49 %49)
+(*.f64 %74 #s(literal -1 binary64))
+(*.f64 %73 %73)
+(*.f64 %42 (*.f64 %41 #s(literal 1 binary64)))
+(*.f64 %42 %41)
+(*.f64 #s(literal 1 binary64) %36)
+(*.f64 %39 (*.f64 %63 x))
+(*.f64 %39 %39)
+(*.f64 %36 #s(literal 1 binary64))
+%36
+(/.f64 %86 %73)
+(/.f64 %88 %73)
+(/.f64 (*.f64 %74 %36) %74)
+(/.f64 (*.f64 %36 %74) %74)
+(/.f64 %55 x)
+(/.f64 %67 %36)
+(neg.f64 %74)
+(sqrt.f64 %67)
+(+.f64 %98 %98)
+(+.f64 %101 %101)
+#s(literal 0 binary64)
+#s(literal 1/2 binary64)
+y
+(*.f64 %106 %106)
+(*.f64 #s(literal 1 binary64) %104)
+(*.f64 %105 %105)
+(neg.f64 (+.f64 %27 %74))
+(neg.f64 (-.f64 %27 %36))
+(neg.f64 (-.f64 %74 %1))
+(-.f64 %36 %27)
+(-.f64 %1 %74)
+(sqrt.f64 (*.f64 %104 %104))
+%104
+(+.f64 %1 %36)
+(*.f64 #s(literal 1 binary64) %20)
+%20
+%123
+%124
+%125
+%105
+(*.f64 (*.f64 #s(literal -1/2 binary64) %7) %6)
+(*.f64 (*.f64 #s(literal 1/2 binary64) %7) %7)
+(*.f64 (*.f64 #s(literal -1/2 binary64) %20) y)
+(*.f64 (*.f64 #s(literal -1/2 binary64) %6) %7)
+(*.f64 %135 %20)
+(*.f64 %137 %6)
+(*.f64 %7 (*.f64 %7 #s(literal 1/2 binary64)))
+(*.f64 %141 y)
+(*.f64 #s(literal -1/2 binary64) %27)
+(*.f64 %27 #s(literal -1/2 binary64))
+(*.f64 %6 %137)
+(*.f64 #s(literal 1 binary64) %33)
+(*.f64 %20 %135)
+%33
+(*.f64 %1 #s(literal 1/2 binary64))
+(*.f64 y %141)
+(/.f64 %1 #s(literal 2 binary64))
+(neg.f64 %151)
+(*.f64 (*.f64 %153 #s(literal 2 binary64)) #s(literal 1/2 binary64))
+(*.f64 #s(literal 1 binary64) %153)
+(*.f64 %153 #s(literal 1 binary64))
+(neg.f64 %159)
+(neg.f64 %158)
+(-.f64 %33 %74)
+%153
+(+.f64 %163 %163)
+(+.f64 %165 %165)
+(+.f64 %33 %36)
+(+.f64 %36 %33)
+(*.f64 (/.f64 %172 %74) %73)
+(*.f64 %175 x)
+(*.f64 (/.f64 %153 %74) %73)
+(*.f64 %179 x)
+(*.f64 %182 #s(literal -1 binary64))
+(*.f64 %184 %158)
+(*.f64 %172 %56)
+(*.f64 %187 (/.f64 #s(literal 1 binary64) %36))
+(*.f64 %56 %153)
+(*.f64 %158 %184)
+(*.f64 #s(literal 1 binary64) %171)
+(*.f64 %193 (/.f64 #s(literal 1 binary64) %63))
+(*.f64 %171 #s(literal 1 binary64))
+(*.f64 %153 %56)
+(/.f64 (*.f64 %153 #s(literal -1 binary64)) %73)
+(/.f64 (*.f64 #s(literal -1 binary64) %153) %73)
+(/.f64 (/.f64 %172 %73) #s(literal -1 binary64))
+(/.f64 (/.f64 %172 %39) %63)
+(/.f64 (/.f64 %187 %41) %42)
+(/.f64 (/.f64 %187 %49) %49)
+(/.f64 (/.f64 %187 %73) %73)
+(/.f64 (/.f64 %187 %42) %41)
+(/.f64 (/.f64 %187 %39) %39)
+(/.f64 (/.f64 %187 x) x)
+(/.f64 %175 %56)
+(/.f64 %159 %73)
+(/.f64 (+.f64 (*.f64 %181 %73) %74) %73)
+(/.f64 (+.f64 %223 %55) %36)
+(/.f64 (+.f64 %226 %227) %74)
+(/.f64 (+.f64 %230 %88) %74)
+(/.f64 (+.f64 %55 %223) %36)
+(/.f64 (+.f64 %88 %230) %74)
+(/.f64 (+.f64 %227 %226) %74)
+(/.f64 %179 %56)
+(/.f64 (+.f64 %226 %240) %74)
+(/.f64 (+.f64 %230 %86) %74)
+(/.f64 (+.f64 %55 (*.f64 %73 %151)) %36)
+(/.f64 (+.f64 %88 (*.f64 %73 %33)) %74)
+(/.f64 (+.f64 %227 (*.f64 x %151)) %74)
+(/.f64 (-.f64 %226 %55) %74)
+(/.f64 (-.f64 %256 %86) %36)
+(/.f64 (neg.f64 %172) %73)
+(/.f64 (neg.f64 %187) %74)
+(/.f64 %182 #s(literal -1 binary64))
+(/.f64 %172 x)
+(/.f64 %187 %36)
+(/.f64 %158 %73)
+(/.f64 #s(literal 1 binary64) (/.f64 x %172))
+(/.f64 #s(literal 1 binary64) (/.f64 %36 %187))
+(/.f64 #s(literal 1 binary64) (/.f64 %73 %158))
+(/.f64 #s(literal 1 binary64) (/.f64 x %153))
+(/.f64 %193 %63)
+(/.f64 %171 #s(literal 1 binary64))
+(/.f64 %153 x)
+(neg.f64 (*.f64 %56 %158))
+(neg.f64 (/.f64 %187 %74))
+(neg.f64 %182)
+(-.f64 %181 %73)
+%171
+(-.f64 x (*.f64 %151 %56))
+(-.f64 x (*.f64 #s(literal -1/2 binary64) (/.f64 %1 x)))
+(-.f64 x (*.f64 %27 (/.f64 #s(literal 1/2 binary64) x)))
+(-.f64 x (neg.f64 %181))
+(-.f64 x (/.f64 %33 %73))
+(-.f64 x (/.f64 %151 x))
+(+.f64 (/.f64 %256 %36) x)
+(+.f64 %181 x)
+(+.f64 x %181)
+(*.f64 #s(literal 1 binary64) %193)
+(*.f64 %153 (/.f64 #s(literal 1 binary64) %39))
+(/.f64 (/.f64 %153 %46) %46)
+(/.f64 (/.f64 %153 %42) %42)
+(/.f64 (+.f64 %41 (*.f64 %141 (/.f64 y %42))) %42)
+(/.f64 %158 %49)
+(/.f64 #s(literal 1 binary64) (/.f64 %39 %153))
+%193
+(neg.f64 (/.f64 %158 %39))
+(neg.f64 (-.f64 %49 %319))
+(neg.f64 (neg.f64 %193))
+(-.f64 %319 (/.f64 %74 %39))
+(-.f64 %319 %49)
+(-.f64 %39 (*.f64 #s(literal -1/2 binary64) %318))
+(+.f64 %319 %39)
+(+.f64 %39 %319)
+(*.f64 #s(literal -2 binary64) %20)
+(*.f64 #s(literal 1 binary64) %333)
+(*.f64 #s(literal 2 binary64) y)
+(*.f64 %333 #s(literal 1 binary64))
+(*.f64 y #s(literal 2 binary64))
+(/.f64 #s(literal 1 binary64) %338)
+(neg.f64 %340)
+(-.f64 y %20)
+(+.f64 %25 %25)
+%333
+(*.f64 (*.f64 %344 %39) %63)
+(*.f64 (*.f64 %338 %41) %42)
+(*.f64 (*.f64 %338 %49) %49)
+(*.f64 (*.f64 %338 %42) %41)
+(*.f64 %353 %56)
+(*.f64 %355 %356)
+(*.f64 %358 %359)
+(*.f64 %358 %356)
+(*.f64 %356 %358)
+(*.f64 %363 %364)
+(*.f64 %366 %367)
+(*.f64 %369 #s(literal 1/2 binary64))
+(*.f64 %364 %363)
+(*.f64 %367 %366)
+(*.f64 %41 (*.f64 %42 %338))
+(*.f64 %41 (/.f64 %42 %333))
+(*.f64 %101 %377)
+(*.f64 %379 %73)
+(*.f64 %381 %39)
+(*.f64 %383 %74)
+(*.f64 %385 %386)
+(*.f64 %386 %385)
+(*.f64 %389 %390)
+(*.f64 %390 %389)
+(*.f64 %393 %100)
+(*.f64 %100 %393)
+(*.f64 %46 (*.f64 %46 %381))
+(*.f64 %344 x)
+(*.f64 %338 %36)
+(*.f64 %49 %400)
+(*.f64 %49 %402)
+(*.f64 %74 %383)
+(*.f64 %73 (*.f64 #s(literal -1 binary64) %344))
+(*.f64 %73 %379)
+(*.f64 %42 (*.f64 %42 %381))
+(*.f64 %42 (*.f64 %41 %338))
+(*.f64 %42 (/.f64 %41 %333))
+(*.f64 #s(literal 1 binary64) %414)
+(*.f64 %416 #s(literal -1 binary64))
+(*.f64 %414 #s(literal 1 binary64))
+(*.f64 %39 %419)
+(*.f64 %39 (*.f64 %63 %344))
+(*.f64 %39 %381)
+(*.f64 %36 (*.f64 %56 %344))
+(*.f64 %36 %338)
+(*.f64 x %344)
+(/.f64 (*.f64 %390 %39) y)
+(/.f64 (*.f64 %344 %74) %73)
+(/.f64 %353 x)
+(/.f64 (*.f64 %73 %385) #s(literal 2 binary64))
+(/.f64 (*.f64 %39 %389) #s(literal 2 binary64))
+(/.f64 (*.f64 x %393) #s(literal 2 binary64))
+(/.f64 (*.f64 #s(literal -1 binary64) %36) %340)
+(/.f64 (*.f64 %74 %344) %73)
+(/.f64 (*.f64 %36 %344) x)
+(/.f64 %98 y)
+(/.f64 %369 #s(literal 2 binary64))
+(/.f64 (*.f64 %100 %74) (*.f64 y %73))
+(/.f64 (*.f64 %100 %36) (*.f64 y x))
+(/.f64 %240 (*.f64 %340 x))
+(/.f64 %86 (*.f64 %333 %73))
+(/.f64 (*.f64 %74 %100) (*.f64 %73 y))
+(/.f64 %88 (*.f64 %73 %333))
+(/.f64 (*.f64 %36 %100) (*.f64 x y))
+(/.f64 %227 %465)
+(/.f64 %467 %20)
+(/.f64 %101 y)
+(/.f64 %55 (*.f64 %340 %73))
+(/.f64 %55 (*.f64 %333 x))
+(/.f64 %55 %474)
+(/.f64 %55 (*.f64 x %333))
+(/.f64 %74 %340)
+(/.f64 #s(literal 1 binary64) (/.f64 y %101))
+(/.f64 #s(literal 1 binary64) (/.f64 %340 %74))
+(/.f64 #s(literal 1 binary64) (/.f64 %333 %36))
+%414
+(neg.f64 %416)
+(*.f64 (neg.f64 %386) %385)
+(*.f64 (neg.f64 %390) %389)
+(*.f64 (/.f64 %41 #s(literal -2 binary64)) %367)
+(*.f64 (/.f64 %42 #s(literal -2 binary64)) %363)
+(*.f64 %355 %389)
+(*.f64 %358 %389)
+(*.f64 %356 %390)
+(*.f64 %366 (/.f64 %42 %20))
+(*.f64 %364 (/.f64 %41 %20))
+(*.f64 %41 (*.f64 %42 %383))
+(*.f64 %41 (/.f64 %42 %340))
+(*.f64 %467 %377)
+(*.f64 %402 %39)
+(*.f64 %379 x)
+(*.f64 %383 %36)
+(*.f64 %385 %100)
+(*.f64 %386 (neg.f64 %385))
+(*.f64 %386 %393)
+(*.f64 %389 %358)
+(*.f64 %390 (neg.f64 %389))
+(*.f64 %390 %359)
+(*.f64 %390 %356)
+(*.f64 %393 %386)
+(*.f64 %100 %385)
+(*.f64 %46 (*.f64 %46 %402))
+(*.f64 %344 %73)
+(*.f64 %338 %74)
+(*.f64 %49 %419)
+(*.f64 %49 %381)
+(*.f64 %74 %338)
+(*.f64 %73 (*.f64 #s(literal -1 binary64) %379))
+(*.f64 %73 %344)
+(*.f64 %42 (*.f64 %42 %402))
+(*.f64 %42 (*.f64 %41 %383))
+(*.f64 %42 (/.f64 %41 %340))
+(*.f64 #s(literal 1 binary64) %416)
+(*.f64 %39 (*.f64 %63 %379))
+(*.f64 %39 %400)
+(*.f64 %39 %402)
+(*.f64 %36 (*.f64 %56 %379))
+(*.f64 %36 %383)
+(*.f64 x %379)
+(/.f64 (*.f64 %74 %379) %73)
+(/.f64 (*.f64 %36 %379) x)
+(/.f64 (/.f64 %74 y) #s(literal 2 binary64))
+(/.f64 %88 %474)
+(/.f64 %467 y)
+(/.f64 %101 %20)
+(/.f64 %55 %465)
+(/.f64 %74 %333)
+(/.f64 #s(literal 1 binary64) (/.f64 y %467))
+(/.f64 #s(literal 1 binary64) (/.f64 %333 %74))
+(/.f64 #s(literal 1 binary64) (/.f64 %340 %36))
+%416
+(neg.f64 %414)
+%564
+%566
+%568
+%569
+%570
+%563
+%571
+%123
+%124
+%125
+%105
+%564
+%566
+%568
+%569
+%570
+%563
+%571
+%123
+%124
+%125
+%105
+%564
+%566
+%568
+%569
+%570
+%563
+%571
+%564
+%566
+%568
+%569
+%570
+%563
+%571
+%564
+%566
+%568
+%569
+%570
+%563
+%571</pre></td></tr></table></details></dd></dl></div><div class="timeline-block timeline-reconstruct" id="timeline19"><h3><a href="#timeline19">reconstruct</a><span class="time">12.0ms (4.0%)</span></h3><dl><dt>Counts</dt><dd>410 → 118</dd><dt>Compiler</dt><dd><p>Compiled 4 891 to 630 computations (87.1% saved)</p></dd></dl></div><div class="timeline-block timeline-eval" id="timeline20"><h3><a href="#timeline20">eval</a><span class="time">3.0ms (0.9%)</span></h3><dl><dt>Compiler</dt><dd><p>Compiled 2 114 to 382 computations (81.9% saved)</p></dd></dl></div><div class="timeline-block timeline-prune" id="timeline21"><h3><a href="#timeline21">prune</a><span class="time">2.0ms (0.5%)</span></h3><dl><dt>Pruning</dt><dd><p>7 alts after pruning (4 fresh and 3 done)</p><table class="states"><thead><tr><th></th><th>Pruned</th><th>Kept</th><th>Total</th></tr></thead><tbody><tr><th>New</th><td>120</td><td>4</td><td>124</td></tr><tr><th>Fresh</th><td>0</td><td>0</td><td>0</td></tr><tr><th>Picked</th><td>3</td><td>2</td><td>5</td></tr><tr><th>Done</th><td>1</td><td>1</td><td>2</td></tr></tbody><tfoot><tr><th>Total</th><td>124</td><td>7</td><td>131</td></tr></tfoot></table></dd><dt>Taylor</dt><dd><table class="times"><thead><tr><th>Generated</th><th>Kept</th><th>% Kept</th><th># Vars</th><th>Transform</th><th>Order</th></tr></thead><tbody><tr><td>1×</td><td>1×</td><td>100.0%</td><td>2</td><td><code>0</code></td><td>0</td></tr><tr><td>5×</td><td>1×</td><td>20.0%</td><td>1</td><td><code>0</code></td><td>0</td></tr><tr><td>4×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>-inf</code></td><td>1</td></tr><tr><td>6×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>inf</code></td><td>1</td></tr><tr><td>4×</td><td>0×</td><td>0.0%</td><td>2</td><td><code>inf</code></td><td>1</td></tr><tr><td>1×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>-inf</code></td><td>0</td></tr><tr><td>2×</td><td>0×</td><td>0.0%</td><td>2</td><td><code>inf</code></td><td>0</td></tr><tr><td>5×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>0</code></td><td>1</td></tr><tr><td>4×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>zero</code></td><td>-1</td></tr><tr><td>1×</td><td>0×</td><td>0.0%</td><td>2</td><td><code>-inf</code></td><td>1</td></tr></tbody></table></dd><dt>Accuracy</dt><dd>100.0%</dd><dt>Counts</dt><dd>131 → 7</dd><dt>Alt Table</dt><dd><details><summary>Click to see full alt table</summary><table class="times"><thead><tr><th>Status</th><th>Accuracy</th><th>Program</th></tr></thead><tr><td><span title="Selected in a prior iteration">✓</span></td><td>97.7%</td><td><pre>(+.f64 (approx y #s(literal 0 binary64)) (sqrt.f64 (approx (+ (* y y) (* x x)) (*.f64 x x))))</pre></td></tr><tr><td><span title="Selected for next iteration">▶</span></td><td>5.3%</td><td><pre>(+.f64 (approx y #s(literal 0 binary64)) (approx (sqrt (+ (* y y) (* x x))) (sqrt.f64 (*.f64 y y))))</pre></td></tr><tr><td><span title="Selected in a prior iteration">✓</span></td><td>100.0%</td><td><pre>(+.f64 y (sqrt.f64 (+.f64 (*.f64 y y) (*.f64 x x))))</pre></td></tr><tr><td><span title="Selected in a prior iteration">✓</span></td><td>3.1%</td><td><pre>(+.f64 y (approx (sqrt (+ (* y y) (* x x))) (neg.f64 y)))</pre></td></tr><tr><td><span title="Selected for next iteration">▶</span></td><td>99.2%</td><td><pre>%1 = (* y y)
+%3 = (* x x)
+%12 = (sqrt %3)
+(+.f64 y (approx (sqrt (+ %1 %3)) (approx (+ %12 (* 1/2 (/ %1 %12))) (-.f64 x (*.f64 (*.f64 #s(literal -1/2 binary64) y) (/.f64 y x))))))</pre></td></tr><tr><td><span title="Selected for next iteration">▶</span></td><td>98.9%</td><td><pre>%1 = (* y y)
+%3 = (* x x)
+%12 = (sqrt %3)
+(+.f64 y (approx (sqrt (+ %1 %3)) (approx (+ %12 (* 1/2 (/ %1 %12))) (approx (/ (+ (* 1/2 %1) %3) x) x))))</pre></td></tr><tr><td><span title="Selected for next iteration">▶</span></td><td>3.4%</td><td><pre>(approx (+ y (sqrt (+ (* y y) (* x x)))) (/.f64 (*.f64 x x) (-.f64 (neg.f64 y) y)))</pre></td></tr></table></details></dd><dt>Compiler</dt><dd><p>Compiled 59 to 23 computations (61.0% saved)</p></dd></dl></div><div class="timeline-block timeline-sample" id="timeline22"><h3><a href="#timeline22">sample</a><span class="time">0.0ms (0.0%)</span></h3><dl><dt>Calls</dt><dd><details><summary>Call 1</summary><table><thead><tr><th>Inputs</th></tr></thead><tr><td><pre></pre></td></tr></table><table><thead><tr><th>Outputs</th></tr></thead><tr><td><pre></pre></td></tr></table></details></dd></dl></div><div class="timeline-block timeline-series" id="timeline23"><h3><a href="#timeline23">series</a><span class="time">3.0ms (1.0%)</span></h3><dl><dt>Iterations</dt><dd><p>Useful iterations: 0 (0.0ms)</p><table class="times"><tr><th>Iter</th><th>Nodes</th><th>Cost</th></tr><tr><td>0</td><td>80</td><td>317</td></tr></table></dd><dt>Stop Event</dt><dd><table class="times"><tr><td>1×</td><td>iter-limit</td></tr><tr><td>1×</td><td>saturated</td></tr></table></dd><dt>Counts</dt><dd>25 → 36</dd><dt>Calls</dt><dd><details><summary>Call 1</summary><table><thead><tr><th>Inputs</th></tr></thead><tr><td><pre>%1 = (*.f64 y y)
+%3 = (*.f64 x x)
+%6 = (sqrt.f64 %1)
+%7 = (/.f64 y x)
+%8 = (approx y #s(literal 0 binary64))
+%9 = (* y y)
+%10 = (* x x)
+%12 = (sqrt (+ %9 %10))
+%13 = (approx %12 %6)
+%14 = (neg.f64 y)
+%15 = (*.f64 #s(literal -1/2 binary64) y)
+%16 = (-.f64 %14 y)
+%21 = (approx (/ (+ (* 1/2 %9) %10) x) x)
+%22 = (*.f64 %15 %7)
+%23 = (-.f64 x %22)
+%24 = (/.f64 %3 %16)
+%26 = (sqrt %10)
+%29 = (+ %26 (* 1/2 (/ %9 %26)))
+%30 = (approx %29 %21)
+%31 = (approx %12 %30)
+%33 = (approx %29 %23)
+%34 = (approx %12 %33)
+y
+%1
+x
+%3
+#s(literal 0 binary64)
+#s(literal -1/2 binary64)
+%6
+%7
+%8
+%13
+%14
+%15
+%16
+%21
+%22
+%23
+%24
+(+.f64 %8 %13)
+%30
+%31
+(+.f64 y %31)
+%33
+%34
+(+.f64 y %34)
+(approx (+ y %12) %24)</pre></td></tr></table><table><thead><tr><th>Outputs</th></tr></thead><tr><td><pre>%4 = (* y y)
+%5 = (*.f64 y y)
+%8 = (/ y x)
+%9 = (/.f64 y x)
+%11 = (* x x)
+%13 = (sqrt (+ %4 %11))
+%14 = (*.f64 x x)
+%15 = (sqrt.f64 %14)
+%19 = (*.f64 #s(literal 1/2 binary64) (/.f64 %5 %15))
+%22 = (neg y)
+%27 = (* -1/2 y)
+%31 = (- %22 y)
+%38 = (/ (+ (* 1/2 %4) %11) x)
+%40 = (/.f64 %5 x)
+%41 = (*.f64 #s(literal 1/2 binary64) %40)
+%44 = (* %27 %8)
+%51 = (+ y %13)
+%56 = (*.f64 #s(literal 1/2 binary64) (/.f64 %14 %5))
+%58 = (*.f64 y (+.f64 #s(literal 1 binary64) %56))
+%73 = (sqrt %11)
+%76 = (+ %73 (* 1/2 (/ %4 %73)))
+%96 = (sqrt.f64 %5)
+%100 = (+.f64 %96 (*.f64 #s(literal 1/2 binary64) (/.f64 %14 %96)))
+%115 = (/.f64 %5 %14)
+%118 = (*.f64 x (+.f64 #s(literal 1 binary64) (*.f64 #s(literal 1/2 binary64) %115)))
+(approx y #s(literal 0 binary64))
+(approx y y)
+(approx %4 %5)
+(approx %8 %9)
+(approx %13 %15)
+(approx %13 (+.f64 %15 %19))
+(approx %22 (*.f64 #s(literal -1 binary64) y))
+(approx %27 (*.f64 #s(literal -1/2 binary64) y))
+(approx %31 (*.f64 #s(literal -2 binary64) y))
+(approx %38 x)
+(approx %38 (+.f64 x %41))
+(approx %44 (*.f64 #s(literal -1/2 binary64) %40))
+(approx (/ %11 %31) (*.f64 #s(literal -1/2 binary64) (/.f64 %14 y)))
+(approx %51 (+.f64 y %15))
+(approx %13 %58)
+(approx %38 %41)
+(approx %38 (*.f64 %5 (+.f64 (*.f64 #s(literal 1/2 binary64) (/.f64 #s(literal 1 binary64) x)) (/.f64 x %5))))
+(approx %51 (*.f64 #s(literal 2 binary64) y))
+(approx %51 (*.f64 y (+.f64 #s(literal 2 binary64) %56)))
+(approx %76 %19)
+(approx %76 (*.f64 %5 (+.f64 (*.f64 #s(literal 1/2 binary64) (/.f64 #s(literal 1 binary64) %15)) (/.f64 %15 %5))))
+(approx %13 (*.f64 #s(literal -1 binary64) %58))
+(approx %51 (*.f64 #s(literal -1 binary64) (/.f64 (+.f64 (*.f64 #s(literal -1/8 binary64) (/.f64 (*.f64 %14 %14) %5)) (*.f64 #s(literal 1/2 binary64) %14)) y)))
+(approx %11 %14)
+(approx %13 %96)
+(approx %13 %100)
+(approx %38 (/.f64 (+.f64 (*.f64 #s(literal 1/2 binary64) %5) %14) x))
+(approx (- x %44) (/.f64 (-.f64 %14 (*.f64 #s(literal -1/2 binary64) %5)) x))
+(approx %51 (+.f64 y %96))
+(approx %51 (+.f64 y %100))
+(approx %13 %118)
+(approx %51 (*.f64 x (+.f64 #s(literal 1 binary64) %9)))
+(approx %13 (*.f64 #s(literal -1 binary64) x))
+(approx %13 (*.f64 #s(literal -1 binary64) %118))
+(approx %38 (*.f64 #s(literal -1 binary64) (*.f64 x (-.f64 (*.f64 #s(literal -1/2 binary64) %115) #s(literal 1 binary64)))))
+(approx %51 (*.f64 #s(literal -1 binary64) (*.f64 x (+.f64 #s(literal 1 binary64) (*.f64 #s(literal -1 binary64) %9)))))</pre></td></tr></table></details></dd><dt>Calls</dt><dd><p>6 calls:</p><canvas id="calls-4" title="Weighted histogram; height corresponds to percentage of runtime in that bucket."></canvas><script>histogram('calls-4', [0.121826171875,0.18310546875,0.235107421875,0.236083984375,0.322998046875,0.30810546875])</script><table class="times"><thead><tr><th>Time</th><th>Variable</th><th>Point</th></tr></thead><tr><td>0.0ms</td><td><pre>y</pre></td><td>inf</td></tr><tr><td>0.0ms</td><td><pre>y</pre></td><td>0</td></tr><tr><td>0.0ms</td><td><pre>y</pre></td><td>-inf</td></tr><tr><td>0.0ms</td><td><pre>x</pre></td><td>0</td></tr><tr><td>0.0ms</td><td><pre>x</pre></td><td>inf</td></tr></table></dd></dl></div><div class="timeline-block timeline-rewrite" id="timeline24"><h3><a href="#timeline24">rewrite</a><span class="time">30.0ms (9.7%)</span></h3><dl><dt>Iterations</dt><dd><p>Useful iterations: 1 (0.0ms)</p><table class="times"><tr><th>Iter</th><th>Nodes</th><th>Cost</th></tr><tr><td>0</td><td>25</td><td>148</td></tr><tr><td>1</td><td>144</td><td>144</td></tr><tr><td>2</td><td>583</td><td>144</td></tr><tr><td>3</td><td>3875</td><td>144</td></tr><tr><td>0</td><td>3985</td><td>144</td></tr><tr><td>0</td><td>4143</td><td>144</td></tr></table></dd><dt>Stop Event</dt><dd><table class="times"><tr><td>1×</td><td>iter-limit</td></tr><tr><td>1×</td><td>iter-limit</td></tr><tr><td>1×</td><td>node-limit</td></tr><tr><td>1×</td><td>saturated</td></tr></table></dd><dt>Counts</dt><dd>25 → 400</dd><dt>Calls</dt><dd><details><summary>Call 1</summary><table><thead><tr><th>Inputs</th></tr></thead><tr><td><pre>%1 = (*.f64 y y)
+%3 = (*.f64 x x)
+%6 = (sqrt.f64 %1)
+%7 = (/.f64 y x)
+%8 = (approx y #s(literal 0 binary64))
+%9 = (* y y)
+%10 = (* x x)
+%12 = (sqrt (+ %9 %10))
+%13 = (approx %12 %6)
+%14 = (neg.f64 y)
+%15 = (*.f64 #s(literal -1/2 binary64) y)
+%16 = (-.f64 %14 y)
+%21 = (approx (/ (+ (* 1/2 %9) %10) x) x)
+%22 = (*.f64 %15 %7)
+%23 = (-.f64 x %22)
+%24 = (/.f64 %3 %16)
+%26 = (sqrt %10)
+%29 = (+ %26 (* 1/2 (/ %9 %26)))
+%30 = (approx %29 %21)
+%31 = (approx %12 %30)
+%33 = (approx %29 %23)
+%34 = (approx %12 %33)
+y
+%1
+x
+%3
+#s(literal 0 binary64)
+#s(literal -1/2 binary64)
+%6
+%7
+%8
+%13
+%14
+%15
+%16
+%21
+%22
+%23
+%24
+(+.f64 %8 %13)
+%30
+%31
+(+.f64 y %31)
+%33
+%34
+(+.f64 y %34)
+(approx (+ y %12) %24)</pre></td></tr></table><table><thead><tr><th>Outputs</th></tr></thead><tr><td><pre>%1 = (*.f64 y y)
+%6 = (sqrt.f64 %1)
+%8 = (sqrt.f64 (*.f64 %6 %1))
+%9 = (sqrt.f64 %6)
+%10 = (sqrt.f64 %9)
+%13 = (neg.f64 %9)
+%22 = (neg.f64 %6)
+%35 = (neg.f64 y)
+%36 = (*.f64 %35 #s(literal 1 binary64))
+%40 = (*.f64 %35 y)
+%46 = (*.f64 #s(literal 1/2 binary64) %1)
+%49 = (*.f64 x x)
+%52 = (sqrt.f64 %49)
+%54 = (sqrt.f64 (*.f64 %52 %49))
+%55 = (sqrt.f64 %52)
+%56 = (sqrt.f64 %55)
+%59 = (neg.f64 %55)
+%62 = (neg.f64 %52)
+%68 = (*.f64 %49 x)
+%69 = (/.f64 #s(literal 1 binary64) x)
+%76 = (/.f64 %52 x)
+%80 = (*.f64 %49 %49)
+%83 = (neg.f64 x)
+%84 = (*.f64 %83 x)
+%103 = (*.f64 x %84)
+%105 = (*.f64 %84 x)
+%111 = (*.f64 %49 #s(literal 1/2 binary64))
+%113 = (*.f64 #s(literal 1/2 binary64) %49)
+%119 = (neg.f64 %13)
+%121 = (sqrt.f64 %8)
+%131 = (/.f64 y %49)
+%133 = (/.f64 %35 x)
+%135 = (/.f64 #s(literal -1 binary64) x)
+%137 = (/.f64 y %52)
+%138 = (/.f64 #s(literal 1 binary64) %76)
+%141 = (/.f64 y x)
+%154 = (/.f64 %83 %35)
+%162 = (sqrt.f64 (+.f64 %49 %1))
+%163 = (sqrt.f64 %162)
+%164 = (*.f64 %163 %163)
+%165 = (neg.f64 %162)
+%166 = (neg.f64 %165)
+%169 = (*.f64 #s(literal -1/2 binary64) y)
+%171 = (*.f64 #s(literal 1 binary64) %35)
+%175 = (*.f64 #s(literal 1/2 binary64) y)
+%180 = (+.f64 y y)
+%182 = (-.f64 %35 y)
+%184 = (*.f64 %169 %141)
+%185 = (-.f64 x %184)
+%186 = (*.f64 x %185)
+%188 = (*.f64 (/.f64 %186 %84) %83)
+%189 = (/.f64 %186 %49)
+%190 = (*.f64 %189 x)
+%191 = (*.f64 %169 y)
+%192 = (-.f64 %49 %191)
+%194 = (*.f64 (/.f64 %192 %84) %83)
+%195 = (/.f64 %192 %49)
+%196 = (*.f64 %195 x)
+%197 = (-.f64 %184 x)
+%198 = (*.f64 %197 #s(literal -1 binary64))
+%199 = (-.f64 %191 %49)
+%200 = (*.f64 %135 %199)
+%201 = (*.f64 %186 %69)
+%202 = (*.f64 x %192)
+%204 = (*.f64 %202 (/.f64 #s(literal 1 binary64) %49))
+%205 = (*.f64 %69 %192)
+%206 = (*.f64 %199 %135)
+%207 = (*.f64 #s(literal 1 binary64) %185)
+%208 = (/.f64 %192 %52)
+%209 = (*.f64 %208 %138)
+%210 = (*.f64 %185 #s(literal 1 binary64))
+%211 = (*.f64 %192 %69)
+%213 = (/.f64 (*.f64 %192 #s(literal -1 binary64)) %83)
+%215 = (/.f64 (*.f64 #s(literal -1 binary64) %192) %83)
+%217 = (/.f64 (/.f64 %186 %52) %76)
+%219 = (/.f64 (/.f64 %202 %54) %55)
+%221 = (/.f64 (/.f64 %202 %62) %62)
+%223 = (/.f64 (/.f64 %202 %83) %83)
+%225 = (/.f64 (/.f64 %202 %55) %54)
+%227 = (/.f64 (/.f64 %202 %52) %52)
+%229 = (/.f64 (/.f64 %202 x) x)
+%230 = (/.f64 %189 %69)
+%232 = (/.f64 (*.f64 %199 #s(literal 1 binary64)) %83)
+%233 = (*.f64 %175 %141)
+%236 = (/.f64 (+.f64 (*.f64 %233 %83) %84) %83)
+%237 = (*.f64 %191 x)
+%238 = (*.f64 %49 %83)
+%240 = (/.f64 (+.f64 %237 %238) %84)
+%241 = (*.f64 %191 %83)
+%243 = (/.f64 (+.f64 %241 %68) %49)
+%244 = (*.f64 %46 %83)
+%246 = (/.f64 (+.f64 %244 %105) %84)
+%248 = (/.f64 (+.f64 %68 %241) %49)
+%250 = (/.f64 (+.f64 %105 %244) %84)
+%252 = (/.f64 (+.f64 %238 %237) %84)
+%253 = (/.f64 %195 %69)
+%254 = (*.f64 %83 %49)
+%256 = (/.f64 (+.f64 %237 %254) %84)
+%258 = (/.f64 (+.f64 %244 %103) %84)
+%259 = (*.f64 %83 %191)
+%261 = (/.f64 (+.f64 %68 %259) %49)
+%262 = (*.f64 %83 %46)
+%264 = (/.f64 (+.f64 %105 %262) %84)
+%265 = (*.f64 x %191)
+%267 = (/.f64 (+.f64 %238 %265) %84)
+%269 = (/.f64 (-.f64 %237 %68) %84)
+%270 = (*.f64 %46 x)
+%272 = (/.f64 (-.f64 %270 %103) %49)
+%274 = (/.f64 (-.f64 %68 %262) %49)
+%276 = (/.f64 (-.f64 %105 %259) %84)
+%278 = (/.f64 (-.f64 %238 %270) %84)
+%280 = (/.f64 (-.f64 %68 %265) %49)
+%282 = (/.f64 (neg.f64 %186) %83)
+%284 = (/.f64 (neg.f64 %202) %84)
+%285 = (/.f64 %197 #s(literal -1 binary64))
+%286 = (/.f64 %186 x)
+%287 = (/.f64 %202 %49)
+%288 = (/.f64 %199 %83)
+%290 = (/.f64 #s(literal 1 binary64) (/.f64 x %186))
+%292 = (/.f64 #s(literal 1 binary64) (/.f64 %49 %202))
+%294 = (/.f64 #s(literal 1 binary64) (/.f64 %83 %199))
+%296 = (/.f64 #s(literal 1 binary64) (/.f64 x %192))
+%297 = (/.f64 %208 %76)
+%298 = (/.f64 %185 #s(literal 1 binary64))
+%299 = (/.f64 %192 x)
+%300 = (neg.f64 %197)
+%301 = (-.f64 %233 %83)
+%303 = (+.f64 (/.f64 %270 %49) x)
+%304 = (+.f64 %233 x)
+%305 = (+.f64 x %233)
+%306 = (*.f64 %191 #s(literal 1 binary64))
+%310 = (/.f64 %191 %49)
+%312 = (/.f64 %169 %83)
+%332 = (*.f64 %141 #s(literal -1/2 binary64))
+%336 = (/.f64 #s(literal 1/2 binary64) x)
+%343 = (*.f64 %141 y)
+%370 = (/.f64 %1 %52)
+%371 = (*.f64 %370 #s(literal -1/2 binary64))
+%381 = (/.f64 x %182)
+%386 = (/.f64 #s(literal 1/2 binary64) %35)
+%393 = (*.f64 %381 %49)
+%395 = (/.f64 %49 #s(literal 2 binary64))
+%419 = (/.f64 x %180)
+%421 = (/.f64 %52 %182)
+%423 = (/.f64 #s(literal 1 binary64) %180)
+%447 = (/.f64 %49 %182)
+%501 = (neg.f64 (-.f64 %35 %162))
+%503 = (neg.f64 (-.f64 %165 y))
+%504 = (-.f64 %162 %35)
+%505 = (-.f64 y %165)
+%506 = (+.f64 %162 y)
+%507 = (+.f64 y %162)
+%509 = (*.f64 %192 (/.f64 #s(literal 1 binary64) %52))
+%511 = (/.f64 (/.f64 %192 %59) %59)
+%513 = (/.f64 (/.f64 %192 %55) %55)
+%517 = (/.f64 (+.f64 %54 (*.f64 %175 (/.f64 y %55))) %55)
+%518 = (/.f64 %199 %62)
+%520 = (/.f64 #s(literal 1 binary64) (/.f64 %52 %192))
+%522 = (neg.f64 (/.f64 %199 %52))
+%523 = (*.f64 %370 #s(literal 1/2 binary64))
+%525 = (neg.f64 (-.f64 %62 %523))
+%527 = (neg.f64 (neg.f64 %208))
+%529 = (-.f64 %523 (/.f64 %84 %52))
+%530 = (-.f64 %523 %62)
+%531 = (-.f64 %52 %371)
+%532 = (+.f64 %523 %52)
+%533 = (+.f64 %52 %523)
+y
+(*.f64 (*.f64 %1 #s(literal 2 binary64)) #s(literal 1/2 binary64))
+(*.f64 (*.f64 %8 %10) %10)
+(*.f64 (*.f64 %6 %13) %13)
+(*.f64 %8 (*.f64 %9 #s(literal 1 binary64)))
+(*.f64 %8 %9)
+(*.f64 %13 (*.f64 %13 %6))
+(*.f64 %22 (*.f64 %22 #s(literal 1 binary64)))
+(*.f64 %22 %22)
+(*.f64 %10 (*.f64 %10 %8))
+(*.f64 %9 (*.f64 %8 #s(literal 1 binary64)))
+(*.f64 %9 %8)
+(*.f64 %6 (*.f64 %6 #s(literal 1 binary64)))
+(*.f64 %6 %6)
+(*.f64 #s(literal 1 binary64) %1)
+(*.f64 %35 %36)
+(*.f64 %35 %35)
+(*.f64 %1 #s(literal 1 binary64))
+%1
+(neg.f64 (*.f64 %40 #s(literal 1 binary64)))
+(neg.f64 %40)
+(sqrt.f64 (*.f64 %1 %1))
+(+.f64 %46 %46)
+x
+(*.f64 (*.f64 %49 #s(literal 2 binary64)) #s(literal 1/2 binary64))
+(*.f64 (*.f64 %54 %56) %56)
+(*.f64 (*.f64 %52 %59) %59)
+(*.f64 (*.f64 %62 %55) %59)
+(*.f64 %54 (*.f64 %55 #s(literal 1 binary64)))
+(*.f64 %54 %55)
+(*.f64 %68 %69)
+(*.f64 %59 (*.f64 %59 %52))
+(*.f64 %59 (*.f64 %55 %62))
+(*.f64 (*.f64 %52 x) %76)
+(*.f64 %56 (*.f64 %56 %54))
+(*.f64 %80 (*.f64 %69 %69))
+(*.f64 %84 #s(literal -1 binary64))
+(*.f64 %62 (*.f64 %62 #s(literal 1 binary64)))
+(*.f64 %62 %62)
+(*.f64 %83 %83)
+(*.f64 %55 (*.f64 %54 #s(literal 1 binary64)))
+(*.f64 %55 %54)
+(*.f64 #s(literal 1 binary64) %49)
+(*.f64 %52 (*.f64 %76 x))
+(*.f64 %52 %52)
+(*.f64 %49 #s(literal 1 binary64))
+%49
+(/.f64 (*.f64 %84 %49) %84)
+(/.f64 (*.f64 %49 %84) %84)
+(/.f64 %103 %83)
+(/.f64 %105 %83)
+(/.f64 %68 x)
+(/.f64 %80 %49)
+(neg.f64 %84)
+(sqrt.f64 %80)
+(+.f64 %111 %111)
+(+.f64 %113 %113)
+#s(literal 0 binary64)
+#s(literal -1/2 binary64)
+(*.f64 (*.f64 %9 %10) %10)
+(*.f64 %119 %119)
+(*.f64 %121 %10)
+(*.f64 %13 %13)
+(*.f64 %10 (*.f64 %10 %9))
+(*.f64 %10 %121)
+(*.f64 %9 %9)
+(neg.f64 %22)
+%6
+(*.f64 (/.f64 y %84) %83)
+(*.f64 %131 x)
+(*.f64 %133 #s(literal -1 binary64))
+(*.f64 %135 %35)
+(*.f64 %137 %138)
+(*.f64 %69 y)
+(*.f64 #s(literal 1 binary64) %141)
+(*.f64 %35 %135)
+(*.f64 %141 #s(literal 1 binary64))
+(*.f64 y %69)
+(/.f64 (*.f64 y #s(literal -1 binary64)) %83)
+(/.f64 (*.f64 #s(literal -1 binary64) y) %83)
+(/.f64 %131 %69)
+(/.f64 %36 %83)
+(/.f64 %133 #s(literal -1 binary64))
+(/.f64 %137 %76)
+(/.f64 #s(literal 1 binary64) %154)
+(/.f64 #s(literal 1 binary64) (/.f64 x y))
+(/.f64 %35 %83)
+(/.f64 %141 #s(literal 1 binary64))
+%141
+(neg.f64 %133)
+y
+%164
+%166
+%162
+%35
+(*.f64 #s(literal 1/2 binary64) %35)
+(*.f64 %35 #s(literal 1/2 binary64))
+%169
+(*.f64 y #s(literal -1/2 binary64))
+(/.f64 %171 #s(literal 2 binary64))
+(/.f64 %36 #s(literal 2 binary64))
+(/.f64 %35 #s(literal 2 binary64))
+(neg.f64 %175)
+(*.f64 #s(literal 2 binary64) %171)
+(*.f64 #s(literal 2 binary64) %35)
+(*.f64 %35 #s(literal 2 binary64))
+(neg.f64 %180)
+%182
+(+.f64 %35 %35)
+%188
+%190
+%194
+%196
+%198
+%200
+%201
+%204
+%205
+%206
+%207
+%209
+%210
+%211
+%213
+%215
+%217
+%219
+%221
+%223
+%225
+%227
+%229
+%230
+%232
+%236
+%240
+%243
+%246
+%248
+%250
+%252
+%253
+%256
+%258
+%261
+%264
+%267
+%269
+%272
+%274
+%276
+%278
+%280
+%282
+%284
+%285
+%286
+%287
+%288
+%290
+%292
+%294
+%296
+%297
+%298
+%299
+%300
+%301
+%185
+%303
+%304
+%305
+(*.f64 %306 %69)
+(*.f64 (/.f64 %191 %84) %83)
+(*.f64 %310 x)
+(*.f64 %312 (/.f64 y #s(literal -1 binary64)))
+(*.f64 (/.f64 %169 %52) (/.f64 y %76))
+(*.f64 (/.f64 %169 %49) (/.f64 y %69))
+(*.f64 (/.f64 #s(literal -1/2 binary64) %52) (/.f64 %1 %76))
+(*.f64 (/.f64 #s(literal -1/2 binary64) %49) (/.f64 %1 %69))
+(*.f64 (/.f64 #s(literal -1/2 binary64) x) (/.f64 %1 #s(literal 1 binary64)))
+(*.f64 %131 (/.f64 %169 %69))
+(*.f64 %332 (/.f64 y #s(literal 1 binary64)))
+(*.f64 %332 y)
+(*.f64 %336 (/.f64 %1 #s(literal -1 binary64)))
+(*.f64 %133 (/.f64 %169 #s(literal -1 binary64)))
+(*.f64 %133 %175)
+(*.f64 %191 %69)
+(*.f64 %343 #s(literal -1/2 binary64))
+(*.f64 %137 (/.f64 %169 %76))
+(*.f64 %175 %133)
+(*.f64 %69 %191)
+(*.f64 %40 %336)
+(*.f64 %46 %135)
+(*.f64 #s(literal 1/2 binary64) (/.f64 %40 x))
+%184
+(*.f64 %35 (*.f64 %135 %169))
+(*.f64 %35 %312)
+(*.f64 %141 (/.f64 %169 #s(literal 1 binary64)))
+(*.f64 %141 %169)
+(*.f64 #s(literal -1/2 binary64) %343)
+(*.f64 %1 (*.f64 %69 #s(literal -1/2 binary64)))
+(*.f64 %1 (neg.f64 %336))
+(*.f64 y %332)
+(/.f64 (*.f64 %191 #s(literal -1 binary64)) %83)
+(/.f64 %306 x)
+(/.f64 %310 %69)
+(/.f64 %191 x)
+(/.f64 %371 %76)
+(/.f64 %233 #s(literal -1 binary64))
+(/.f64 #s(literal 1 binary64) (/.f64 %83 %46))
+(/.f64 #s(literal 1 binary64) (/.f64 x %191))
+(/.f64 %184 #s(literal 1 binary64))
+(/.f64 %46 %83)
+(neg.f64 %233)
+%188
+%190
+%194
+%196
+%198
+%200
+%201
+%204
+%205
+%206
+%207
+%209
+%210
+%211
+%213
+%215
+%217
+%219
+%221
+%223
+%225
+%227
+%229
+%230
+%232
+%236
+%240
+%243
+%246
+%248
+%250
+%252
+%253
+%256
+%258
+%261
+%264
+%267
+%269
+%272
+%274
+%276
+%278
+%280
+%282
+%284
+%285
+%286
+%287
+%288
+%290
+%292
+%294
+%296
+%297
+%298
+%299
+%300
+%301
+%185
+%303
+%304
+%305
+(*.f64 (*.f64 %381 %83) #s(literal -1 binary64))
+(*.f64 (*.f64 %381 %52) %76)
+(*.f64 (*.f64 %386 %54) %55)
+(*.f64 (*.f64 %386 %62) %62)
+(*.f64 (*.f64 %386 %55) %54)
+(*.f64 %393 %69)
+(*.f64 %395 (/.f64 #s(literal 1 binary64) %35))
+(*.f64 (/.f64 %54 #s(literal 2 binary64)) (/.f64 %55 %35))
+(*.f64 (/.f64 %62 #s(literal 2 binary64)) (/.f64 %62 %35))
+(*.f64 (/.f64 %83 #s(literal 2 binary64)) %154)
+(*.f64 (/.f64 %55 #s(literal 2 binary64)) (/.f64 %54 %35))
+(*.f64 (/.f64 %52 #s(literal 2 binary64)) (/.f64 %52 %35))
+(*.f64 (/.f64 x #s(literal 2 binary64)) (/.f64 x %35))
+(*.f64 %54 (*.f64 %55 %386))
+(*.f64 %54 (/.f64 %55 %182))
+(*.f64 %419 %83)
+(*.f64 %421 %52)
+(*.f64 %423 %84)
+(*.f64 %59 (*.f64 %59 %421))
+(*.f64 %381 x)
+(*.f64 %386 %49)
+(*.f64 %84 %423)
+(*.f64 %62 (*.f64 %62 %386))
+(*.f64 %62 (/.f64 %62 %182))
+(*.f64 %62 (*.f64 %52 %423))
+(*.f64 %62 (/.f64 %52 %180))
+(*.f64 %83 (*.f64 #s(literal -1 binary64) %381))
+(*.f64 %83 %419)
+(*.f64 %55 (*.f64 %55 %421))
+(*.f64 %55 (*.f64 %54 %386))
+(*.f64 %55 (/.f64 %54 %182))
+(*.f64 #s(literal 1 binary64) %447)
+(*.f64 %52 (*.f64 %62 %423))
+(*.f64 %52 (*.f64 %76 %381))
+(*.f64 %52 %421)
+(*.f64 %447 #s(literal 1 binary64))
+(*.f64 %49 (*.f64 %69 %381))
+(*.f64 %49 %386)
+(*.f64 x (*.f64 #s(literal 1 binary64) %381))
+(*.f64 x %381)
+(/.f64 (*.f64 %381 %84) %83)
+(/.f64 %393 x)
+(/.f64 (*.f64 #s(literal -1 binary64) %49) %180)
+(/.f64 (*.f64 %84 %381) %83)
+(/.f64 (*.f64 %49 %381) x)
+(/.f64 %395 %35)
+(/.f64 %254 (*.f64 %180 x))
+(/.f64 %103 (*.f64 %182 %83))
+(/.f64 %105 (*.f64 %83 %182))
+(/.f64 %238 (*.f64 x %180))
+(/.f64 %68 (*.f64 %180 %83))
+(/.f64 %68 (*.f64 %182 x))
+(/.f64 %68 (*.f64 %83 %180))
+(/.f64 %68 (*.f64 x %182))
+(/.f64 %84 %180)
+(/.f64 #s(literal 1 binary64) (/.f64 %180 %84))
+(/.f64 #s(literal 1 binary64) (/.f64 %182 %49))
+%447
+(neg.f64 (*.f64 %419 x))
+(neg.f64 (*.f64 %423 %49))
+(neg.f64 (*.f64 %386 %84))
+(neg.f64 (/.f64 %49 %180))
+%501
+%503
+%504
+%505
+%506
+%507
+%509
+%511
+%513
+%517
+%518
+%520
+%208
+%522
+%525
+%527
+%529
+%530
+%531
+%532
+%533
+%164
+%166
+%162
+%501
+%503
+%504
+%505
+%506
+%507
+%509
+%511
+%513
+%517
+%518
+%520
+%208
+%522
+%525
+%527
+%529
+%530
+%531
+%532
+%533
+%164
+%166
+%162
+%501
+%503
+%504
+%505
+%506
+%507
+%501
+%503
+%504
+%505
+%506
+%507</pre></td></tr></table></details></dd></dl></div><div class="timeline-block timeline-reconstruct" id="timeline25"><h3><a href="#timeline25">reconstruct</a><span class="time">13.0ms (4.2%)</span></h3><dl><dt>Counts</dt><dd>436 → 145</dd><dt>Compiler</dt><dd><p>Compiled 5 511 to 593 computations (89.2% saved)</p></dd></dl></div><div class="timeline-block timeline-eval" id="timeline26"><h3><a href="#timeline26">eval</a><span class="time">3.0ms (0.8%)</span></h3><dl><dt>Compiler</dt><dd><p>Compiled 1 823 to 354 computations (80.6% saved)</p></dd></dl></div><div class="timeline-block timeline-prune" id="timeline27"><h3><a href="#timeline27">prune</a><span class="time">1.0ms (0.4%)</span></h3><dl><dt>Pruning</dt><dd><p>6 alts after pruning (1 fresh and 5 done)</p><table class="states"><thead><tr><th></th><th>Pruned</th><th>Kept</th><th>Total</th></tr></thead><tbody><tr><th>New</th><td>108</td><td>1</td><td>109</td></tr><tr><th>Fresh</th><td>0</td><td>0</td><td>0</td></tr><tr><th>Picked</th><td>0</td><td>4</td><td>4</td></tr><tr><th>Done</th><td>2</td><td>1</td><td>3</td></tr></tbody><tfoot><tr><th>Total</th><td>110</td><td>6</td><td>116</td></tr></tfoot></table></dd><dt>Taylor</dt><dd><table class="times"><thead><tr><th>Generated</th><th>Kept</th><th>% Kept</th><th># Vars</th><th>Transform</th><th>Order</th></tr></thead><tbody><tr><td>4×</td><td>1×</td><td>25.0%</td><td>1</td><td><code>zero</code></td><td>-1</td></tr><tr><td>3×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>inf</code></td><td>0</td></tr><tr><td>5×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>-inf</code></td><td>1</td></tr><tr><td>6×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>inf</code></td><td>1</td></tr><tr><td>1×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>-inf</code></td><td>0</td></tr><tr><td>5×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>0</code></td><td>1</td></tr><tr><td>1×</td><td>0×</td><td>0.0%</td><td>2</td><td><code>0</code></td><td>1</td></tr><tr><td>2×</td><td>0×</td><td>0.0%</td><td>2</td><td><code>0</code></td><td>0</td></tr><tr><td>5×</td><td>0×</td><td>0.0%</td><td>1</td><td><code>0</code></td><td>0</td></tr></tbody></table></dd><dt>Accuracy</dt><dd>100.0%</dd><dt>Counts</dt><dd>116 → 6</dd><dt>Alt Table</dt><dd><details><summary>Click to see full alt table</summary><table class="times"><thead><tr><th>Status</th><th>Accuracy</th><th>Program</th></tr></thead><tr><td><span title="Selected in a prior iteration">✓</span></td><td>5.3%</td><td><pre>(+.f64 (approx y #s(literal 0 binary64)) (approx (sqrt (+ (* y y) (* x x))) (sqrt.f64 (*.f64 y y))))</pre></td></tr><tr><td></td><td>97.7%</td><td><pre>%1 = (* y y)
+%3 = (* x x)
+%12 = (sqrt %3)
+(+.f64 (approx y #s(literal 0 binary64)) (approx (sqrt (+ %1 %3)) (approx (+ %12 (* 1/2 (/ %1 %12))) (approx (/ (+ (* 1/2 %1) %3) x) x))))</pre></td></tr><tr><td><span title="Selected in a prior iteration">✓</span></td><td>100.0%</td><td><pre>(+.f64 y (sqrt.f64 (+.f64 (*.f64 y y) (*.f64 x x))))</pre></td></tr><tr><td><span title="Selected in a prior iteration">✓</span></td><td>99.2%</td><td><pre>%1 = (* y y)
+%3 = (* x x)
+%12 = (sqrt %3)
+(+.f64 y (approx (sqrt (+ %1 %3)) (approx (+ %12 (* 1/2 (/ %1 %12))) (-.f64 x (*.f64 (*.f64 #s(literal -1/2 binary64) y) (/.f64 y x))))))</pre></td></tr><tr><td><span title="Selected in a prior iteration">✓</span></td><td>98.9%</td><td><pre>%1 = (* y y)
+%3 = (* x x)
+%12 = (sqrt %3)
+(+.f64 y (approx (sqrt (+ %1 %3)) (approx (+ %12 (* 1/2 (/ %1 %12))) (approx (/ (+ (* 1/2 %1) %3) x) x))))</pre></td></tr><tr><td><span title="Selected in a prior iteration">✓</span></td><td>3.4%</td><td><pre>(approx (+ y (sqrt (+ (* y y) (* x x)))) (/.f64 (*.f64 x x) (-.f64 (neg.f64 y) y)))</pre></td></tr></table></details></dd><dt>Compiler</dt><dd><p>Compiled 53 to 21 computations (60.4% saved)</p></dd></dl></div><div class="timeline-block timeline-regimes" id="timeline28"><h3><a href="#timeline28">regimes</a><span class="time">12.0ms (3.9%)</span></h3><dl><dt>Accuracy</dt><dd><p>Total -0.0b remaining (-0.0%)<p>Threshold costs -0.0b (-0.0%)</p><table class="times"><tr><td>0.0b</td><td>0%</td></tr><tr><td>0.0b</td><td>0%</td></tr><tr><td>-0.0b</td><td>+∞%</td></tr></table></p></dd><dt>Counts</dt><dd>1 → 1</dd><dd>2 → 1</dd><dd>13 → 1</dd><dt>Calls</dt><dd><details><summary>Call 1</summary><table><thead><tr><th>Inputs</th></tr></thead><tr><td><pre>%1 = (* y y)
+%3 = (* x x)
+%4 = (+ %1 %3)
+%5 = (sqrt %4)
+%6 = (+ y %5)
+%7 = (+.f64 y y)
+%9 = (sqrt %3)
+%13 = (+ %9 (* 1/2 (/ %1 %9)))
+%19 = (approx %5 (approx %13 (approx (/ (+ (* 1/2 %1) %3) x) x)))
+%22 = (approx y #s(literal 0 binary64))
+%24 = (neg.f64 y)
+%34 = (*.f64 x x)
+%36 = (sqrt.f64 (approx %4 %34))
+%38 = (*.f64 y y)
+%70 = (sqrt.f64 %34)
+(approx %6 %7)
+(+.f64 y %19)
+(+.f64 %22 %19)
+(+.f64 y (approx %5 %24))
+(approx %6 (*.f64 #s(literal 2 binary64) y))
+(+.f64 y (approx %5 (*.f64 #s(literal -1 binary64) y)))
+(+.f64 y %36)
+(+.f64 %22 (approx %5 (sqrt.f64 %38)))
+(+.f64 %22 %36)
+(approx %6 (/.f64 %34 (-.f64 %24 y)))
+(approx %6 (neg.f64 (/.f64 %34 %7)))
+(approx %6 (*.f64 #s(literal -1/2 binary64) (/.f64 %34 y)))
+(+.f64 y (sqrt.f64 (+.f64 %38 %34)))
+(+.f64 y (approx %5 (approx %13 (-.f64 x (*.f64 (*.f64 #s(literal -1/2 binary64) y) (/.f64 y x))))))
+(+.f64 y (approx %5 (approx %13 (/.f64 (+.f64 (*.f64 #s(literal 1/2 binary64) %38) %34) x))))
+(+.f64 y (approx %5 (+.f64 %70 (*.f64 #s(literal 1/2 binary64) (/.f64 %38 %70)))))</pre></td></tr></table><table><thead><tr><th>Outputs</th></tr></thead><tr><td><pre>%7 = (* y y)
+%8 = (* x x)
+%10 = (sqrt (+ %7 %8))
+%11 = (sqrt %8)
+(+.f64 y (sqrt.f64 (+.f64 (*.f64 y y) (*.f64 x x))))
+(+.f64 y (approx %10 (approx (+ %11 (* 1/2 (/ %7 %11))) (approx (/ (+ (* 1/2 %7) %8) x) x))))
+(approx (+ y %10) (+.f64 y y))</pre></td></tr></table></details></dd><dt>Calls</dt><dd><p>4 calls:</p><canvas id="calls-5" title="Weighted histogram; height corresponds to percentage of runtime in that bucket."></canvas><script>histogram('calls-5', [2.744873046875,2.725830078125,2.755126953125,2.958984375])</script><table class="times"><tr><td>3.0ms</td><td><pre>(+.f64 y (sqrt.f64 (+.f64 (*.f64 y y) (*.f64 x x))))</pre></td></tr><tr><td>3.0ms</td><td><pre>y</pre></td></tr><tr><td>3.0ms</td><td><pre>(*.f64 x x)</pre></td></tr><tr><td>3.0ms</td><td><pre>x</pre></td></tr></table></dd><dt>Results</dt><dd><table class="times"><thead><tr><th>Accuracy</th><th>Segments</th><th>Branch</th></tr></thead><tr><td>3.9%</td><td>1</td><td><pre>(*.f64 x x)</pre></td></tr><tr><td>3.9%</td><td>1</td><td><pre>x</pre></td></tr><tr><td>3.9%</td><td>1</td><td><pre>y</pre></td></tr><tr><td>3.9%</td><td>1</td><td><pre>(+.f64 y (sqrt.f64 (+.f64 (*.f64 y y) (*.f64 x x))))</pre></td></tr></table></dd><dt>Compiler</dt><dd><p>Compiled 152 to 52 computations (65.8% saved)</p></dd></dl></div><div class="timeline-block timeline-bsearch" id="timeline29"><h3><a href="#timeline29">bsearch</a><span class="time">0.0ms (0.0%)</span></h3><dl></dl></div><div class="timeline-block timeline-bsearch" id="timeline30"><h3><a href="#timeline30">bsearch</a><span class="time">0.0ms (0.0%)</span></h3><dl></dl></div><div class="timeline-block timeline-bsearch" id="timeline31"><h3><a href="#timeline31">bsearch</a><span class="time">0.0ms (0.0%)</span></h3><dl></dl></div><div class="timeline-block timeline-derivations" id="timeline32"><h3><a href="#timeline32">derivations</a><span class="time">5.0ms (1.8%)</span></h3><dl><dt>Stop Event</dt><dd><table class="times"><tr><td>1×</td><td>fuel</td></tr></table></dd><dt>Compiler</dt><dd><p>Compiled 20 to 9 computations (55.0% saved)</p></dd></dl></div><div class="timeline-block timeline-preprocess" id="timeline33"><h3><a href="#timeline33">preprocess</a><span class="time">26.0ms (8.4%)</span></h3><dl><dt>Compiler</dt><dd><p>Compiled 577 to 260 computations (54.9% saved)</p></dd></dl></div><div class="timeline-block timeline-end" id="timeline34"><h3><a href="#timeline34">end</a><span class="time">0.0ms (0.0%)</span></h3><dl></dl></div><div class="timeline-block timeline-gc" id="timeline35"><h3><a href="#timeline35">gc</a><span class="time">10ms (3.3%)</span></h3><dl><dt>Allocations</dt><dd><table class="times"><thead><tr><th>Allocated</th><th>Percent</th><th>Phase</th></tr></thead><tr><td>112.2 MiB</td><td>28.5%</td><td><code>sample</code></td></tr><tr><td>70.8 MiB</td><td>18.0%</td><td><code>rewrite</code></td></tr><tr><td>55.7 MiB</td><td>14.1%</td><td><code>reconstruct</code></td></tr><tr><td>55.7 MiB</td><td>14.1%</td><td><code>preprocess</code></td></tr><tr><td>40.0 MiB</td><td>10.1%</td><td><code>regimes</code></td></tr><tr><td>22.5 MiB</td><td>5.7%</td><td><code>eval</code></td></tr><tr><td>20.9 MiB</td><td>5.3%</td><td><code>series</code></td></tr><tr><td>14.5 MiB</td><td>3.7%</td><td><code>prune</code></td></tr><tr><td>1.7 MiB</td><td>0.4%</td><td><code>derivations</code></td></tr><tr><td>0.1 MiB</td><td>0.0%</td><td><code>analyze</code></td></tr><tr><td>0.0 MiB</td><td>0.0%</td><td><code>bsearch</code></td></tr><tr><td>0.0 MiB</td><td>0.0%</td><td><code>start</code></td></tr><tr><td>0.0 MiB</td><td>0.0%</td><td><code>end</code></td></tr><tfoot><tr><td>393.9 MiB</td><td>100.0%</td><td><code>total</code></td></tr></tfoot></table></dd></dl></div></section><section id="profile"><h1>Profiling</h1><p class="load-text">Loading profile data...</p></section></body></html>
