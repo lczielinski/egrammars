@@ -1,7 +1,7 @@
 # egrammars
 
-Synthesize numerically-accurate FPCore rewrites — optionally branching on the input —
-with LLM sampling ([casa](https://github.com/large-loris-models/casa)) checked or
+Synthesize numerically-accurate FPCore rewrites with LLM sampling 
+([casa](https://github.com/large-loris-models/casa)) checked or
 constrained by an e-graph (egglog).
 
 ## Two decoding modes

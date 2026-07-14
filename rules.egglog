@@ -31,8 +31,49 @@
 (rewrite (Sub (Div p a) (Div q b)) (Div (Sub (Mul p b) (Mul q a)) (Mul a b)) :ruleset expand)
 
 ;; factoring / conjugate rewrites (structural, growing)
-(rewrite (Sub (Mul a a) (Mul b b)) (Mul (Sub a b) (Add a b)) :ruleset expand)
-(rewrite (Sub (Mul a a) (Num 1)) (Mul (Sub a (Num 1)) (Add a (Num 1))) :ruleset expand)
+(birewrite (Sub (Mul a a) (Mul b b)) (Mul (Sub a b) (Add a b)) :ruleset expand)
+(birewrite (Sub (Mul a a) (Num 1)) (Mul (Sub a (Num 1)) (Add a (Num 1))) :ruleset expand)
+
+;; ---- imported from Herbie's rule set (src/core/rules.rkt), filtered to the subset.
+;; Only domain-equal identities are unioned unguarded; anything whose sides differ
+;; where division/sqrt is undefined gets an interval guard (see the guarded section).
+
+;; mixed associativity (associate-*)
+(birewrite (Add a (Sub b c)) (Sub (Add a b) c) :ruleset expand)
+(birewrite (Sub a (Add b c)) (Sub (Sub a b) c) :ruleset expand)
+(birewrite (Sub a (Sub b c)) (Add (Sub a b) c) :ruleset expand)
+(birewrite (Mul a (Div b c)) (Div (Mul a b) c) :ruleset expand)
+(birewrite (Mul (Div a b) c) (Div (Mul a c) b) :ruleset expand)
+(birewrite (Div a (Mul b c)) (Div (Div a b) c) :ruleset expand)
+
+;; counting / factoring one out (count-2, distribute-*1-in)
+(birewrite (Add x x) (Mul (Num 2) x) :ruleset expand)
+(birewrite (Add (Mul b a) a) (Mul (Add b (Num 1)) a) :ruleset expand)
+
+;; negation distribution (distribute-*-neg-*, fp-cancel-*)
+(birewrite (Neg (Mul a b)) (Mul (Neg a) b) :ruleset expand)
+(birewrite (Neg (Mul a b)) (Mul a (Neg b)) :ruleset expand)
+(rewrite (Neg (Add a b)) (Add (Neg a) (Neg b)) :ruleset expand)
+(birewrite (Div (Neg a) b) (Neg (Div a b)) :ruleset expand)
+(birewrite (Div a (Neg b)) (Neg (Div a b)) :ruleset expand)
+(birewrite (Sub a (Mul (Neg b) c)) (Add a (Mul b c)) :ruleset expand)
+(birewrite (Add a (Mul (Neg b) c)) (Sub a (Mul b c)) :ruleset expand)
+(birewrite (Add a b) (Sub a (Neg b)) :ruleset expand)
+
+;; squares and cubes (swap-sqr, difference-of-sqr--1, sum/difference-cubes; pow^3
+;; spelled as a*(a*a))
+(birewrite (Mul (Mul a b) (Mul a b)) (Mul (Mul a a) (Mul b b)) :ruleset expand)
+(birewrite (Add (Mul a a) (Num -1)) (Mul (Add a (Num 1)) (Sub a (Num 1))) :ruleset expand)
+(birewrite (Sub (Mul a (Mul a a)) (Mul b (Mul b b)))
+           (Mul (Add (Mul a a) (Add (Mul b b) (Mul a b))) (Sub a b)) :ruleset expand)
+(birewrite (Add (Mul a (Mul a a)) (Mul b (Mul b b)))
+           (Mul (Add (Mul a a) (Sub (Mul b b) (Mul a b))) (Add a b)) :ruleset expand)
+
+;; fractions (add/sub-to-fraction, frac-times, frac-2neg; domains match on both sides)
+(birewrite (Add c (Div b a)) (Div (Add (Mul c a) b) a) :ruleset expand)
+(birewrite (Sub c (Div b a)) (Div (Sub (Mul c a) b) a) :ruleset expand)
+(birewrite (Mul (Div a b) (Div c d)) (Div (Mul a c) (Mul b d)) :ruleset expand)
+(birewrite (Div a b) (Div (Neg a) (Neg b)) :ruleset expand)
 
 ;; default ruleset: folding, identities, cancellation, normalization (non-growing)
 (rewrite (Add (Num a) (Num b)) (Num (+ a b)))
@@ -47,9 +88,16 @@
 (birewrite (Neg (Sub a b)) (Sub b a))
 
 (rewrite (Mul (Num 1) x) x)
+(rewrite (Mul x (Num 1)) x)
 (rewrite (Div x (Num 1)) x)
 (rewrite (Add (Num 0) x) x)
+(rewrite (Add x (Num 0)) x)
+(rewrite (Sub x (Num 0)) x)
+(rewrite (Mul (Num 0) x) (Num 0))
+(rewrite (Mul x (Num 0)) (Num 0))
 (rewrite (Neg (Neg a)) a)
+(rewrite (Neg (Num n)) (Num (* -1 n)))
+(rewrite (Add a (Neg b)) (Sub a b))
 
 (rewrite (Mul (Neg a) (Neg a)) (Mul a a))
 (rewrite (Mul (Sub a b) (Sub a b)) (Mul (Sub b a) (Sub b a)))
@@ -99,6 +147,22 @@
 (rule ((= e (Sqrt (Mul a b))) (>= (lo a) 0.0) (>= (lo b) 0.0)) ((union e (Mul (Sqrt a) (Sqrt b)))))
 (rule ((= e (Sqrt (Div a b))) (>= (lo a) 0.0) (> (lo b) 0.0)) ((union e (Div (Sqrt a) (Sqrt b)))))
 (rule ((= e (Mul (Sqrt a) (Sqrt a))) (>= (lo a) 0.0)) ((union e a)))
+;; the reverse directions (sqrt-unprod/undiv), same guards
+(rule ((= e (Mul (Sqrt a) (Sqrt b))) (>= (lo a) 0.0) (>= (lo b) 0.0)) ((union e (Sqrt (Mul a b)))))
+(rule ((= e (Div (Sqrt a) (Sqrt b))) (>= (lo a) 0.0) (> (lo b) 0.0)) ((union e (Sqrt (Div a b)))))
+
+;; Herbie flip--: sqrt(a) - sqrt(b) = (a - b) / (sqrt(a) + sqrt(b)); the denominator
+;; is nonzero when one operand is strictly positive and both are nonnegative
+(rule ((= e (Sub (Sqrt a) (Sqrt b))) (> (lo a) 0.0) (>= (lo b) 0.0))
+    ((union e (Div (Sub a b) (Add (Sqrt a) (Sqrt b))))) :ruleset expand)
+(rule ((= e (Sub (Sqrt a) (Sqrt b))) (>= (lo a) 0.0) (> (lo b) 0.0))
+    ((union e (Div (Sub a b) (Add (Sqrt a) (Sqrt b))))) :ruleset expand)
+;; Herbie flip-+: sqrt(a) + sqrt(b) = (a - b) / (sqrt(a) - sqrt(b)); the denominator
+;; is nonzero only where the operands provably differ
+(rule ((= e (Add (Sqrt a) (Sqrt b))) (>= (lo b) 0.0) (> (lo a) (hi b)))
+    ((union e (Div (Sub a b) (Sub (Sqrt a) (Sqrt b))))) :ruleset expand)
+(rule ((= e (Add (Sqrt a) (Sqrt b))) (>= (lo a) 0.0) (> (lo b) (hi a)))
+    ((union e (Div (Sub a b) (Sub (Sqrt a) (Sqrt b))))) :ruleset expand)
 
 ;; conjugate: p + sqrt(d) = (p^2 - d) / (p - sqrt(d))
 (rule ((= e (Add p (Sqrt d))) (<= (hi p) 0.0) (> (lo d) 0.0))
@@ -111,6 +175,28 @@
 (rule ((= e (Div (Mul a x) a)) (< (hi a) 0.0)) ((union e x)))
 (rule ((= e (Div a (Mul a y))) (> (lo a) 0.0)) ((union e (Div (Num 1) y))))
 (rule ((= e (Div a (Mul a y))) (< (hi a) 0.0)) ((union e (Div (Num 1) y))))
+
+;; Herbie division identities, guarded on the divisor proven != 0 (their sides are
+;; not domain-equal: e.g. a/a and 1 differ at a = 0, which is how an e-graph collapses)
+(rule ((= e (Div a a)) (> (lo a) 0.0)) ((union e (Num 1))))
+(rule ((= e (Div a a)) (< (hi a) 0.0)) ((union e (Num 1))))
+(rule ((= e (Mul a (Div (Num 1) a))) (> (lo a) 0.0)) ((union e (Num 1))))
+(rule ((= e (Mul a (Div (Num 1) a))) (< (hi a) 0.0)) ((union e (Num 1))))
+(rule ((= e (Div (Num 0) a)) (> (lo a) 0.0)) ((union e (Num 0))))
+(rule ((= e (Div (Num 0) a)) (< (hi a) 0.0)) ((union e (Num 0))))
+(rule ((= e (Div (Num 1) (Div (Num 1) a))) (> (lo a) 0.0)) ((union e a)))
+(rule ((= e (Div (Num 1) (Div (Num 1) a))) (< (hi a) 0.0)) ((union e a)))
+;; div-flip: a/b = 1/(b/a), needs a != 0 (growing)
+(rule ((= e (Div a b)) (> (lo a) 0.0)) ((union e (Div (Num 1) (Div b a)))) :ruleset expand)
+(rule ((= e (Div a b)) (< (hi a) 0.0)) ((union e (Div (Num 1) (Div b a)))) :ruleset expand)
+;; associate-/r/: a/(b/c) = (a/b)*c, needs c != 0 (growing)
+(rule ((= e (Div a (Div b c))) (> (lo c) 0.0)) ((union e (Mul (Div a b) c))) :ruleset expand)
+(rule ((= e (Div a (Div b c))) (< (hi c) 0.0)) ((union e (Mul (Div a b) c))) :ruleset expand)
+;; sum/sub-to-mult: (1 +- b/a) * a = a +- b, needs a != 0
+(rule ((= e (Mul (Add (Num 1) (Div b a)) a)) (> (lo a) 0.0)) ((union e (Add a b))))
+(rule ((= e (Mul (Add (Num 1) (Div b a)) a)) (< (hi a) 0.0)) ((union e (Add a b))))
+(rule ((= e (Mul (Sub (Num 1) (Div b a)) a)) (> (lo a) 0.0)) ((union e (Sub a b))))
+(rule ((= e (Mul (Sub (Num 1) (Div b a)) a)) (< (hi a) 0.0)) ((union e (Sub a b))))
 
 ;; sqrt(a+b) = sqrt(a)*sqrt(1 + b/a), pivot proven positive. Recurses (RHS re-exposes a
 ;; sqrt-of-sum): throttled in the prover; EXCLUDED from grammar compilation (egrammar.py
