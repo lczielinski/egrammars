@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import re
+import time
 from collections import defaultdict
 from dataclasses import dataclass
 
@@ -18,6 +19,7 @@ import benchmarks
 import prove
 
 SATURATION_RUNS = 6
+SATURATION_BUDGET = 20.0  # seconds; skip remaining rounds past this
 NODE_CAP = 100_000
 MAX_SPELLINGS = 8
 START = "__start__"
@@ -38,22 +40,30 @@ EClassMapping = dict[str, set[ENode]]
 
 
 def saturate(benchmark_source: str, runs: int = SATURATION_RUNS, seeds: str = "",
-             node_cap: int = NODE_CAP):
+             node_cap: int = NODE_CAP, budget: float = SATURATION_BUDGET):
     """Saturate with all rules fired together, one step at a time, to a fixpoint,
-    `runs`, or `node_cap`. Extraction wants breadth (every equivalent spelling),
-    unlike prove's throttled proving schedule."""
+    `runs`, `node_cap`, or the time `budget` (late rounds on division-heavy
+    benchmarks can cost minutes for negligible grammar gain -- and arm grammars are
+    compiled mid-decode). Extraction wants breadth, unlike prove's throttled
+    schedule; stopping early only shrinks the language, never breaks soundness."""
     from egglog.bindings import EGraph
 
     source = GRAMMAR_RULES + benchmark_source + seeds
     source += f"\n(relation {START} (Math))\n({START} start)"  # mark the root e-class
     egraph = EGraph()
+    t0 = time.monotonic()
     with prove.quiet_stderr():
         egraph.run_program(*egraph.parse_program(source))
         for _ in range(runs):
-            if prove.node_count(egraph) > node_cap:
+            if time.monotonic() - t0 > budget or prove.node_count(egraph) > node_cap:
                 break
+            r0 = time.monotonic()
             if not egraph.run_program(*egraph.parse_program("(run 1)"))[0].report.updated:
                 break  # saturated
+            # round cost grows ~5-10x per round: if this one used a big slice of the
+            # budget, the next would overshoot it many times over -- stop now
+            if time.monotonic() - r0 > budget / 4:
+                break
     return egraph
 
 
@@ -207,78 +217,122 @@ def strip_identity_enodes(root: str, eclasses: EClassMapping) -> tuple[str, ECla
     for eclass, enodes in cleaned.items():
         stripped[eclass] = {e for e in enodes if not is_padding(e)} or enodes
 
-    # Keep an e-node only if it is a shortest spelling or doesn't recurse into its own cycle.
-    min_depth = {eclass: float("inf") for eclass in stripped}
-
-    def depth(enode: ENode) -> float:
-        return 1 + max((min_depth[c] for c in enode.children), default=0)
-
-    changed = True
-    while changed:
-        changed = False
-        for eclass, enodes in stripped.items():
-            if (best := min(depth(e) for e in enodes)) < min_depth[eclass]:
-                min_depth[eclass], changed = best, True
-
-    scc = _strongly_connected_components(stripped)
+    # Acyclic spelling selection: order classes by (min completion size, BFS depth
+    # from root DESC, id) -- the root sorts last among ties, so it can reference
+    # everything -- and keep a spelling only if every child strictly precedes its
+    # class. The kept grammar is a DAG (no unbounded recursion, hence no monster
+    # programs) while deep-but-terminating spellings like conjugates survive. Every
+    # class keeps its minimal spelling: that spelling's children are strictly
+    # smaller, so they always precede it.
+    size = _min_sizes(stripped)
+    depth = {root: 0}
+    frontier = [root]
+    while frontier:
+        nxt = []
+        for c in frontier:
+            for e in stripped[c]:
+                for ch in e.children:
+                    if ch in stripped and ch not in depth:
+                        depth[ch] = depth[c] + 1
+                        nxt.append(ch)
+        frontier = nxt
+    order = {c: i for i, c in enumerate(
+        sorted(stripped, key=lambda c: (size[c], -depth.get(c, 1 << 30), c)))}
     return root, {
-        eclass: {
-            e
-            for e in enodes
-            if depth(e) <= min_depth[eclass]
-            or all(scc[c] != scc[eclass] for c in e.children)
-        }
-        for eclass, enodes in stripped.items()
+        c: {e for e in enodes if all(order[ch] < order[c] for ch in e.children
+                                     if ch in order)} or
+           {min(enodes, key=lambda e: (1 + sum(size[ch] for ch in e.children), e))}
+        for c, enodes in stripped.items()
     }
 
 
-def _strongly_connected_components(eclasses: EClassMapping) -> dict[str, str]:
-    """Tarjan's SCC: eclass -> a shared id per cycle."""
-    order: dict[str, int] = {}
-    low: dict[str, int] = {}
-    scc: dict[str, str] = {}
-    stack: list[str] = []
-    on_stack: set[str] = set()
+def _min_sizes(eclasses: EClassMapping) -> dict[str, float]:
+    """Size of the smallest program per e-class (fixpoint; inf on pure cycles)."""
+    size = {c: float("inf") for c in eclasses}
+    changed = True
+    while changed:
+        changed = False
+        for c, enodes in eclasses.items():
+            best = min(1 + sum(size[ch] for ch in e.children) for e in enodes)
+            if best < size[c]:
+                size[c], changed = best, True
+    return size
 
-    def connect(node: str) -> None:
-        order[node] = low[node] = len(order)
-        stack.append(node)
-        on_stack.add(node)
-        for child in {c for e in eclasses[node] for c in e.children}:
-            if child not in order:
-                connect(child)
-                low[node] = min(low[node], low[child])
-            elif child in on_stack:
-                low[node] = min(low[node], order[child])
-        if low[node] == order[node]:  # root of an SCC
-            while True:
-                member = stack.pop()
-                on_stack.discard(member)
-                scc[member] = node
-                if member == node:
-                    break
 
-    for eclass in eclasses:
-        if eclass not in order:
-            connect(eclass)
-    return scc
+def _sign_bases(eclasses: EClassMapping) -> tuple[dict[str, str], dict[str, int]]:
+    """Pair each e-class with its negation (via Neg e-nodes): class -> (base, sign),
+    where a class and its negation share a base and differ in sign."""
+    adj: defaultdict[str, set[str]] = defaultdict(set)
+    for c, enodes in eclasses.items():
+        for e in enodes:
+            if e.op == "Neg":
+                adj[c].add(e.children[0])
+                adj[e.children[0]].add(c)
+    base: dict[str, str] = {}
+    sign: dict[str, int] = {}
+    for c in eclasses:
+        if c in base:
+            continue
+        seen = {c: 1}
+        stack = [c]
+        while stack:
+            n = stack.pop()
+            for m in adj[n]:
+                if m not in seen:  # a class that is its own negation keeps sign 1
+                    seen[m] = -seen[n]
+                    stack.append(m)
+        b = min(seen)
+        for n, s in seen.items():
+            base[n], sign[n] = b, s * seen[b]
+    return base, sign
+
+
+def dedup_spellings(eclasses: EClassMapping) -> EClassMapping:
+    """Drop rounding-identical spellings. Negation is exact in float64 and IEEE +/*
+    are exactly commutative, so spellings differing only in sign placement or operand
+    order -- (-a)/(-b) vs a/b, a+(-b) vs a-b, b+a vs a+b -- compute bit-identically
+    and offer no accuracy diversity. Each spelling is canonicalized to a sign-and-
+    order-normal signature; one smallest representative per signature survives.
+    Structurally exact: genuinely different roundings are never merged."""
+    base, sign = _sign_bases(eclasses)
+    size = _min_sizes(eclasses)
+
+    def nsize(e: ENode) -> float:
+        return 1 + sum(size[c] for c in e.children)
+
+    def signature(e: ENode):
+        if e.op in ("Var", "Num") or not e.children:
+            return ("leaf", e)
+        ch = [(base[c], sign[c]) for c in e.children]
+        if e.op == "Neg":
+            return ("ref", ch[0][0], -ch[0][1])
+        if e.op == "Add":
+            return ("sum", tuple(sorted(ch)))
+        if e.op == "Sub":
+            return ("sum", tuple(sorted([ch[0], (ch[1][0], -ch[1][1])])))
+        if e.op == "Mul":
+            return ("mul", tuple(sorted([ch[0][0], ch[1][0]])), ch[0][1] * ch[1][1])
+        if e.op == "Div":
+            return ("div", ch[0][0], ch[1][0], ch[0][1] * ch[1][1])
+        return ("sqrt", ch[0])
+
+    out: EClassMapping = {}
+    for c, enodes in eclasses.items():
+        groups: dict[tuple, ENode] = {}
+        for e in sorted(enodes, key=lambda e: (nsize(e), e)):
+            groups.setdefault(signature(e), e)
+        out[c] = set(groups.values())
+    return out
 
 
 def limit_spellings(eclasses: EClassMapping, k: int = MAX_SPELLINGS) -> EClassMapping:
     """Keep the k smallest-completion spellings per e-class. Program size multiplies
     across classes, so uncapped spelling counts make the language monster-heavy and
     the sampler wanders; the cap keeps rewrite diversity but bounds the depth."""
-    size = {c: float("inf") for c in eclasses}
+    size = _min_sizes(eclasses)
 
     def nsize(e: ENode) -> float:
         return 1 + sum(size[c] for c in e.children)
-
-    changed = True
-    while changed:
-        changed = False
-        for c, enodes in eclasses.items():
-            if (best := min(nsize(e) for e in enodes)) < size[c]:
-                size[c], changed = best, True
 
     return {c: set(sorted(enodes, key=lambda e: (nsize(e), e))[:k])
             for c, enodes in eclasses.items()}
@@ -331,14 +385,46 @@ def intersect(root: str, eclasses: EClassMapping) -> str:
     return "\n".join(lines) + "\n"
 
 
-def build(benchmark: str, box: dict[str, tuple[float, float]] | None = None,
-          runs: int = SATURATION_RUNS) -> str:
-    """Grammar of programs equivalent to the reference over `box`; `box=None` seeds
-    no intervals (whole-domain equivalences only)."""
+def _build(benchmark: str, box, runs: int) -> str:
     seeds = prove.seeds(box) if box else ""
     root, eclasses = extract(saturate(benchmarks.read_source(benchmark), runs, seeds))
     root, eclasses = strip_identity_enodes(root, eclasses)
-    return intersect(root, limit_spellings(eclasses))
+    return intersect(root, limit_spellings(dedup_spellings(eclasses)))
+
+
+def _build_worker(benchmark, box, runs, q) -> None:
+    try:
+        q.put(_build(benchmark, box, runs))
+    except Exception:
+        q.put(None)
+
+
+def build(benchmark: str, box: dict[str, tuple[float, float]] | None = None,
+          runs: int = SATURATION_RUNS) -> str:
+    """Grammar of programs equivalent to the reference over `box`; `box=None` seeds
+    no intervals (whole-domain equivalences only). Compiled in a budget-killed
+    subprocess -- a single saturation round can cost minutes (or panic egglog) on
+    division-heavy benchmarks -- retrying with fewer rounds until one fits."""
+    import multiprocessing as mp
+    ctx = mp.get_context("spawn")
+    for r in (runs, runs - 2, 2, 1):
+        if r < 1:
+            continue
+        q = ctx.Queue()
+        p = ctx.Process(target=_build_worker, args=(benchmark, box, r, q))
+        p.start()
+        try:
+            # get() before join(): a grammar bigger than the pipe buffer would
+            # block the child's queue feeder until the parent reads it
+            g = q.get(timeout=2 * SATURATION_BUDGET)
+        except Exception:
+            g = None
+        if p.is_alive():
+            p.terminate()
+        p.join()
+        if g is not None:
+            return g
+    raise RuntimeError(f"grammar compilation failed for {benchmark!r}")
 
 
 def rules(benchmark: str, box: dict[str, tuple[float, float]] | None = None,
