@@ -90,7 +90,9 @@ def run_report(run, cores: list[str], timeout_each: int, platform: str) -> list[
 
 
 def _worst(run, row) -> None:
-    """Attach worst-case FPTaylor bounds for reference / ours / herbie's program."""
+    """Attach worst-case FPTaylor bounds for reference / ours / herbie's program.
+    `ours` here is the run's worst-case CHAMPION (best bound among proven programs),
+    which may be a different program than the average-bits column's."""
     b = row["benchmark"]
     box = benchmarks.INTERVALS[b]
     fsrc = paths.fptaylor_path(run, b)
@@ -99,8 +101,13 @@ def _worst(run, row) -> None:
         pick = lambda r: {"abs_err": r.get("abs_err"), "rel_err_ulps": r.get("rel_err_ulps")}
         if fd.get("reference_result"):
             row["reference_worst"] = pick(fd["reference_result"])
-        row["ours_worst"] = next((pick(r) for r in fd.get("results", [])
-                                  if r.get("program") == row["ours_program"]), None)
+        for key in ("rel_err_ulps", "abs_err"):  # champion: best rel, else best abs
+            scored = [r for r in fd.get("results", []) if r.get(key) is not None]
+            if scored:
+                champ = min(scored, key=lambda r: r[key])
+                row["ours_worst"] = pick(champ)
+                row["ours_worst_program"] = champ.get("program")
+                break
     if row["herbie_program"]:
         try:
             ast = herbie_to_ast(row["herbie_program"])
@@ -126,7 +133,8 @@ def rows_from_tests(tests: list[dict], alts_by_name: dict[str, list[str]]) -> li
             "ours_bits": scored[0][0] if scored else None,
             "ours_program": scored[0][1] if scored else None,
             "ours_all": [{"program": p, "bits": b} for b, p in scored],
-            "reference_worst": None, "ours_worst": None, "herbie_worst": None,
+            "reference_worst": None, "ours_worst": None, "ours_worst_program": None,
+            "herbie_worst": None,
         })
     return rows
 
@@ -222,8 +230,10 @@ def main() -> None:
           + avg_table(rows) + "\n")
     if fptaylor:
         md += ("\n## Worst-case error over the box (FPTaylor)\n\n"
-               "Winner compares relative ulps when both sides have them, else "
-               "absolute error.\n\n" + worst_table(rows) + "\n")
+               "`ours` = the run's worst-case champion (best bound among proven "
+               "programs; may differ from the average-bits column's program). Winner "
+               "compares relative ulps when both sides have them, else absolute "
+               "error.\n\n" + worst_table(rows) + "\n")
     (run / "herbie.json").write_text(json.dumps(rows, indent=2))
     (run / "herbie.md").write_text(md)
     print("\n" + md)

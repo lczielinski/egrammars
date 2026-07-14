@@ -1,0 +1,2730 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/><title>Result for cancel_sqrt_2var</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous"/><script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js" integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6" crossorigin="anonymous"></script><script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/d3@7" defer=""></script><script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6" defer=""></script><link rel="stylesheet" type="text/css" href="../report.css"/><script src="../report.js"></script></head><body><header><h1>cancel_sqrt_2var</h1><img src="../logo-car.png"/><nav><ul><li><a href="../index.html">Report</a></li><li><a href="timeline.html">Metrics</a></li></ul></nav></header><div id="large"><div>Percentage Accurate: <span class="number" title="Minimum Accuracy: 92.1% → 92.1%">100.0%<span class="unit"> → </span>100.0%</span></div><div>Time: <span class="number">370.0ms</span></div><div>Alternatives: <span class="number">3</span></div><div>Speedup: <span class="number" title="Relative speed of fastest alternative that improves accuracy.">1.0×</span></div></div><section><details id="specification" class="programs"><summary><h2>Specification</h2><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#spec" target="_blank">?</a></summary><div><div id="precondition"><div class="program math">\[\left(-10 \leq y \land y \leq 10\right) \land \left(1 \leq x \land x \leq 10\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[y + \sqrt{y \cdot y + x \cdot x}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre (and (and (&lt;= -10 y) (&lt;= y 10)) (and (&lt;= 1 x) (&lt;= x 10)))
+  (+ y (sqrt (+ (* y y) (* x x)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	return y + sqrt(((y * y) + (x * x)));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    code = y + sqrt(((y * y) + (x * x)))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	return y + Math.sqrt(((y * y) + (x * x)));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	return y + math.sqrt(((y * y) + (x * x)))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	return Float64(y + sqrt(Float64(Float64(y * y) + Float64(x * x))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(y, x)
+	tmp = y + sqrt(((y * y) + (x * x)));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := N[(y + N[Sqrt[N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]], $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-10, 10],
+	x in [1, 10]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	y + (sqrt(((y * y) + (x * x))))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">y + \sqrt{y \cdot y + x \cdot x}
+</pre></div></div></details></section><figure id="graphs"><h2>Local Percentage Accuracy vs <span id="variables"></span><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#graph" target="_blank">?</a></h2><svg></svg><div id="functions"></div><figcaption>The average percentage accuracy by input value. Horizontal axis shows value of an input variable; the variable is choosen in the title. Vertical axis is accuracy; higher is better. Red represent the original program, while blue represents Herbie's suggestion. These can be toggled with buttons below the plot. The line is an average while dots represent individual samples.</figcaption></figure><section id="cost-accuracy" class="section" data-benchmark-name="cancel_sqrt_2var"><h2>Accuracy vs Speed<a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#cost-accuracy" target="_blank">?</a></h2><div class="figure-row"><svg></svg><div><p>Herbie found 3 alternatives:</p><table><thead><tr><th>Alternative</th><th class="numeric">Accuracy</th><th class="numeric">Speedup</th></tr></thead><tbody></tbody></table></div></div><figcaption>The accuracy (vertical axis) and speed (horizontal axis) of each alternatives. Up and to the right is better. The red square shows the initial program, and each blue circle shows an alternative.The line shows the best available speed-accuracy tradeoffs.</figcaption></section><section id="initial" class="programs"><h2>Initial Program: <span class="subhead"><data>100.0%</data> accurate, <data>1.0×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(-10 \leq y \land y \leq 10\right) \land \left(1 \leq x \land x \leq 10\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[y + \sqrt{y \cdot y + x \cdot x}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre (and (and (&lt;= -10 y) (&lt;= y 10)) (and (&lt;= 1 x) (&lt;= x 10)))
+  (+ y (sqrt (+ (* y y) (* x x)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	return y + sqrt(((y * y) + (x * x)));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    code = y + sqrt(((y * y) + (x * x)))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	return y + Math.sqrt(((y * y) + (x * x)));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	return y + math.sqrt(((y * y) + (x * x)))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	return Float64(y + sqrt(Float64(Float64(y * y) + Float64(x * x))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(y, x)
+	tmp = y + sqrt(((y * y) + (x * x)));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := N[(y + N[Sqrt[N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]], $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-10, 10],
+	x in [1, 10]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	y + (sqrt(((y * y) + (x * x))))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">y + \sqrt{y \cdot y + x \cdot x}
+</pre></div></div></section><section id="alternative2" class="programs"><h2>Alternative 1: <span class="subhead"><data>98.7%</data> accurate, <data>5.7×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(-10 \leq y \land y \leq 10\right) \land \left(1 \leq x \land x \leq 10\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[y + x
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre (and (and (&lt;= -10 y) (&lt;= y 10)) (and (&lt;= 1 x) (&lt;= x 10)))
+  (+ y x))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	return y + x;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    code = y + x
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	return y + x;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	return y + x
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	return Float64(y + x)
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(y, x)
+	tmp = y + x;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := N[(y + x), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-10, 10],
+	x in [1, 10]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	y + x
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">y + x
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">100.0%</span></p><div class="math">\[y + \sqrt{y \cdot y + x \cdot x}
+\]</div></li><li><p>Taylor expanded in y around 0 to order 1</p><div class="math">\[\leadsto y + \left(\sqrt{x \cdot x} + 0.5 \cdot \frac{y \cdot y}{\sqrt{x \cdot x}}\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.3%</span></p><div class="math">\[\leadsto y + \left(\sqrt{x \cdot x} + 0.5 \cdot \frac{y \cdot y}{\sqrt{x \cdot x}}\right)
+\]</div></li><li><p>Taylor expanded in x around 0 to order 1</p><div class="math">\[\leadsto y + \frac{0.5 \cdot \left(y \cdot y\right) + x \cdot x}{x}
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.2%</span></p><div class="math">\[\leadsto y + \frac{0.5 \cdot \left(y \cdot y\right) + x \cdot x}{x}
+\]</div></li><li><p>Taylor expanded in y around 0 to order 0</p><div class="math">\[\leadsto y + x
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">98.7%</span></p><div class="math">\[\leadsto y + x
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative3" class="programs"><h2>Alternative 2: <span class="subhead"><data>3.8%</data> accurate, <data>5.7×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(-10 \leq y \land y \leq 10\right) \land \left(1 \leq x \land x \leq 10\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[y + y
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre (and (and (&lt;= -10 y) (&lt;= y 10)) (and (&lt;= 1 x) (&lt;= x 10)))
+  (+ y y))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	return y + y;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    code = y + y
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	return y + y;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	return y + y
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	return Float64(y + y)
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(y, x)
+	tmp = y + y;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := N[(y + y), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-10, 10],
+	x in [1, 10]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	y + y
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">y + y
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">100.0%</span></p><div class="math">\[y + \sqrt{y \cdot y + x \cdot x}
+\]</div></li><li><p>Taylor expanded in y around inf to order 0</p><div class="math">\[\leadsto 2 \cdot y
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">3.8%</span></p><div class="math">\[\leadsto 2 \cdot y
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">3.8%</span></p><div class="math">\[\leadsto y + y
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="target1" class="programs"><h2>Developer Target 1: <span class="subhead"><data>99.9%</data> accurate, <data>0.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+t_1 := -t\_0\\
+t_2 := t\_1 + y\\
+t_3 := y + t\_1\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-\left(x \cdot x + y \cdot y\right)\right)\right) \cdot t\_2\right) \cdot t\_2}{\left(t\_3 \cdot t\_3\right) \cdot t\_2}\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (sqrt (+ (* y y) (* x x))))
+       (t_1 (- t_0))
+       (t_2 (+ t_1 y))
+       (t_3 (+ y t_1)))
+  (if (&gt;= y 0.0)
+    (+ y t_0)
+    (/
+     (* (* (+ (* y y) (- (+ (* x x) (* y y)))) t_2) t_2)
+     (* (* t_3 t_3) t_2)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = sqrt(((y * y) + (x * x)));
+	double t_1 = -t_0;
+	double t_2 = t_1 + y;
+	double t_3 = y + t_1;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_0;
+	} else {
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * t_2) / ((t_3 * t_3) * t_2);
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: t_2
+    real(8) :: t_3
+    real(8) :: tmp
+    t_0 = sqrt(((y * y) + (x * x)))
+    t_1 = -t_0
+    t_2 = t_1 + y
+    t_3 = y + t_1
+    if (y &gt;= 0.0d0) then
+        tmp = y + t_0
+    else
+        tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * t_2) / ((t_3 * t_3) * t_2)
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = Math.sqrt(((y * y) + (x * x)));
+	double t_1 = -t_0;
+	double t_2 = t_1 + y;
+	double t_3 = y + t_1;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_0;
+	} else {
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * t_2) / ((t_3 * t_3) * t_2);
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = math.sqrt(((y * y) + (x * x)))
+	t_1 = -t_0
+	t_2 = t_1 + y
+	t_3 = y + t_1
+	tmp = 0
+	if y &gt;= 0.0:
+		tmp = y + t_0
+	else:
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * t_2) / ((t_3 * t_3) * t_2)
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = sqrt(Float64(Float64(y * y) + Float64(x * x)))
+	t_1 = Float64(-t_0)
+	t_2 = Float64(t_1 + y)
+	t_3 = Float64(y + t_1)
+	tmp = 0.0
+	if (y &gt;= 0.0)
+		tmp = Float64(y + t_0);
+	else
+		tmp = Float64(Float64(Float64(Float64(Float64(y * y) + Float64(-Float64(Float64(x * x) + Float64(y * y)))) * t_2) * t_2) / Float64(Float64(t_3 * t_3) * t_2));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = sqrt(((y * y) + (x * x)));
+	t_1 = -t_0;
+	t_2 = t_1 + y;
+	t_3 = y + t_1;
+	tmp = 0.0;
+	if (y &gt;= 0.0)
+		tmp = y + t_0;
+	else
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * t_2) / ((t_3 * t_3) * t_2);
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[Sqrt[N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]], $MachinePrecision]}, Block[{t$95$1 = (-t$95$0)}, Block[{t$95$2 = N[(t$95$1 + y), $MachinePrecision]}, Block[{t$95$3 = N[(y + t$95$1), $MachinePrecision]}, If[GreaterEqual[y, 0.0], N[(y + t$95$0), $MachinePrecision], N[(N[(N[(N[(N[(y * y), $MachinePrecision] + (-N[(N[(x * x), $MachinePrecision] + N[(y * y), $MachinePrecision]), $MachinePrecision])), $MachinePrecision] * t$95$2), $MachinePrecision] * t$95$2), $MachinePrecision] / N[(N[(t$95$3 * t$95$3), $MachinePrecision] * t$95$2), $MachinePrecision]), $MachinePrecision]]]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = (sqrt(((y * y) + (x * x)))) IN
+		LET t_1 = (- t_0) IN
+			LET t_2 = (t_1 + y) IN
+				LET t_3 = (y + t_1) IN
+					LET tmp = IF (y &gt;= (0)) THEN (y + t_0) ELSE (((((y * y) + (- ((x * x) + (y * y)))) * t_2) * t_2) / ((t_3 * t_3) * t_2)) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+t_1 := -t\_0\\
+t_2 := t\_1 + y\\
+t_3 := y + t\_1\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-\left(x \cdot x + y \cdot y\right)\right)\right) \cdot t\_2\right) \cdot t\_2}{\left(t\_3 \cdot t\_3\right) \cdot t\_2}\\
+
+
+\end{array}
+</pre></div></div></section><section id="target2" class="programs"><h2>Developer Target 2: <span class="subhead"><data>99.9%</data> accurate, <data>0.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+t_1 := y - t\_0\\
+t_2 := -t\_0\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-\left(x \cdot x + y \cdot y\right)\right)\right) \cdot t\_1\right) \cdot t\_1}{t\_1 \cdot \left(y \cdot y - y \cdot t\_0\right) + \left(t\_2 + y\right) \cdot \left(y \cdot t\_2 + t\_2 \cdot t\_2\right)}\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (sqrt (+ (* y y) (* x x)))) (t_1 (- y t_0)) (t_2 (- t_0)))
+  (if (&gt;= y 0.0)
+    (+ y t_0)
+    (/
+     (* (* (+ (* y y) (- (+ (* x x) (* y y)))) t_1) t_1)
+     (+
+      (* t_1 (- (* y y) (* y t_0)))
+      (* (+ t_2 y) (+ (* y t_2) (* t_2 t_2))))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = sqrt(((y * y) + (x * x)));
+	double t_1 = y - t_0;
+	double t_2 = -t_0;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_0;
+	} else {
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_1) * t_1) / ((t_1 * ((y * y) - (y * t_0))) + ((t_2 + y) * ((y * t_2) + (t_2 * t_2))));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: t_2
+    real(8) :: tmp
+    t_0 = sqrt(((y * y) + (x * x)))
+    t_1 = y - t_0
+    t_2 = -t_0
+    if (y &gt;= 0.0d0) then
+        tmp = y + t_0
+    else
+        tmp = ((((y * y) + -((x * x) + (y * y))) * t_1) * t_1) / ((t_1 * ((y * y) - (y * t_0))) + ((t_2 + y) * ((y * t_2) + (t_2 * t_2))))
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = Math.sqrt(((y * y) + (x * x)));
+	double t_1 = y - t_0;
+	double t_2 = -t_0;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_0;
+	} else {
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_1) * t_1) / ((t_1 * ((y * y) - (y * t_0))) + ((t_2 + y) * ((y * t_2) + (t_2 * t_2))));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = math.sqrt(((y * y) + (x * x)))
+	t_1 = y - t_0
+	t_2 = -t_0
+	tmp = 0
+	if y &gt;= 0.0:
+		tmp = y + t_0
+	else:
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_1) * t_1) / ((t_1 * ((y * y) - (y * t_0))) + ((t_2 + y) * ((y * t_2) + (t_2 * t_2))))
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = sqrt(Float64(Float64(y * y) + Float64(x * x)))
+	t_1 = Float64(y - t_0)
+	t_2 = Float64(-t_0)
+	tmp = 0.0
+	if (y &gt;= 0.0)
+		tmp = Float64(y + t_0);
+	else
+		tmp = Float64(Float64(Float64(Float64(Float64(y * y) + Float64(-Float64(Float64(x * x) + Float64(y * y)))) * t_1) * t_1) / Float64(Float64(t_1 * Float64(Float64(y * y) - Float64(y * t_0))) + Float64(Float64(t_2 + y) * Float64(Float64(y * t_2) + Float64(t_2 * t_2)))));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = sqrt(((y * y) + (x * x)));
+	t_1 = y - t_0;
+	t_2 = -t_0;
+	tmp = 0.0;
+	if (y &gt;= 0.0)
+		tmp = y + t_0;
+	else
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_1) * t_1) / ((t_1 * ((y * y) - (y * t_0))) + ((t_2 + y) * ((y * t_2) + (t_2 * t_2))));
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[Sqrt[N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]], $MachinePrecision]}, Block[{t$95$1 = N[(y - t$95$0), $MachinePrecision]}, Block[{t$95$2 = (-t$95$0)}, If[GreaterEqual[y, 0.0], N[(y + t$95$0), $MachinePrecision], N[(N[(N[(N[(N[(y * y), $MachinePrecision] + (-N[(N[(x * x), $MachinePrecision] + N[(y * y), $MachinePrecision]), $MachinePrecision])), $MachinePrecision] * t$95$1), $MachinePrecision] * t$95$1), $MachinePrecision] / N[(N[(t$95$1 * N[(N[(y * y), $MachinePrecision] - N[(y * t$95$0), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + N[(N[(t$95$2 + y), $MachinePrecision] * N[(N[(y * t$95$2), $MachinePrecision] + N[(t$95$2 * t$95$2), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = (sqrt(((y * y) + (x * x)))) IN
+		LET t_1 = (y - t_0) IN
+			LET t_2 = (- t_0) IN
+				LET tmp = IF (y &gt;= (0)) THEN (y + t_0) ELSE (((((y * y) + (- ((x * x) + (y * y)))) * t_1) * t_1) / ((t_1 * ((y * y) - (y * t_0))) + ((t_2 + y) * ((y * t_2) + (t_2 * t_2))))) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+t_1 := y - t\_0\\
+t_2 := -t\_0\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-\left(x \cdot x + y \cdot y\right)\right)\right) \cdot t\_1\right) \cdot t\_1}{t\_1 \cdot \left(y \cdot y - y \cdot t\_0\right) + \left(t\_2 + y\right) \cdot \left(y \cdot t\_2 + t\_2 \cdot t\_2\right)}\\
+
+
+\end{array}
+</pre></div></div></section><section id="target3" class="programs"><h2>Developer Target 3: <span class="subhead"><data>99.9%</data> accurate, <data>0.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := -t\_1\\
+t_3 := y + t\_2\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{y \cdot y}{y - t\_1} + \frac{\left(t\_3 \cdot \left(-t\_0\right)\right) \cdot t\_3}{t\_3 \cdot \left(y \cdot y - t\_1 \cdot y\right) + t\_3 \cdot \left(t\_3 \cdot t\_2\right)}\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (* y y) (* x x)))
+       (t_1 (sqrt t_0))
+       (t_2 (- t_1))
+       (t_3 (+ y t_2)))
+  (if (&gt;= y 0.0)
+    (+ y t_1)
+    (+
+     (/ (* y y) (- y t_1))
+     (/
+      (* (* t_3 (- t_0)) t_3)
+      (+ (* t_3 (- (* y y) (* t_1 y))) (* t_3 (* t_3 t_2))))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = sqrt(t_0);
+	double t_2 = -t_1;
+	double t_3 = y + t_2;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((y * y) / (y - t_1)) + (((t_3 * -t_0) * t_3) / ((t_3 * ((y * y) - (t_1 * y))) + (t_3 * (t_3 * t_2))));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: t_2
+    real(8) :: t_3
+    real(8) :: tmp
+    t_0 = (y * y) + (x * x)
+    t_1 = sqrt(t_0)
+    t_2 = -t_1
+    t_3 = y + t_2
+    if (y &gt;= 0.0d0) then
+        tmp = y + t_1
+    else
+        tmp = ((y * y) / (y - t_1)) + (((t_3 * -t_0) * t_3) / ((t_3 * ((y * y) - (t_1 * y))) + (t_3 * (t_3 * t_2))))
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = Math.sqrt(t_0);
+	double t_2 = -t_1;
+	double t_3 = y + t_2;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((y * y) / (y - t_1)) + (((t_3 * -t_0) * t_3) / ((t_3 * ((y * y) - (t_1 * y))) + (t_3 * (t_3 * t_2))));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = (y * y) + (x * x)
+	t_1 = math.sqrt(t_0)
+	t_2 = -t_1
+	t_3 = y + t_2
+	tmp = 0
+	if y &gt;= 0.0:
+		tmp = y + t_1
+	else:
+		tmp = ((y * y) / (y - t_1)) + (((t_3 * -t_0) * t_3) / ((t_3 * ((y * y) - (t_1 * y))) + (t_3 * (t_3 * t_2))))
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = Float64(Float64(y * y) + Float64(x * x))
+	t_1 = sqrt(t_0)
+	t_2 = Float64(-t_1)
+	t_3 = Float64(y + t_2)
+	tmp = 0.0
+	if (y &gt;= 0.0)
+		tmp = Float64(y + t_1);
+	else
+		tmp = Float64(Float64(Float64(y * y) / Float64(y - t_1)) + Float64(Float64(Float64(t_3 * Float64(-t_0)) * t_3) / Float64(Float64(t_3 * Float64(Float64(y * y) - Float64(t_1 * y))) + Float64(t_3 * Float64(t_3 * t_2)))));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = (y * y) + (x * x);
+	t_1 = sqrt(t_0);
+	t_2 = -t_1;
+	t_3 = y + t_2;
+	tmp = 0.0;
+	if (y &gt;= 0.0)
+		tmp = y + t_1;
+	else
+		tmp = ((y * y) / (y - t_1)) + (((t_3 * -t_0) * t_3) / ((t_3 * ((y * y) - (t_1 * y))) + (t_3 * (t_3 * t_2))));
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]}, Block[{t$95$1 = N[Sqrt[t$95$0], $MachinePrecision]}, Block[{t$95$2 = (-t$95$1)}, Block[{t$95$3 = N[(y + t$95$2), $MachinePrecision]}, If[GreaterEqual[y, 0.0], N[(y + t$95$1), $MachinePrecision], N[(N[(N[(y * y), $MachinePrecision] / N[(y - t$95$1), $MachinePrecision]), $MachinePrecision] + N[(N[(N[(t$95$3 * (-t$95$0)), $MachinePrecision] * t$95$3), $MachinePrecision] / N[(N[(t$95$3 * N[(N[(y * y), $MachinePrecision] - N[(t$95$1 * y), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + N[(t$95$3 * N[(t$95$3 * t$95$2), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]]]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = ((y * y) + (x * x)) IN
+		LET t_1 = (sqrt(t_0)) IN
+			LET t_2 = (- t_1) IN
+				LET t_3 = (y + t_2) IN
+					LET tmp = IF (y &gt;= (0)) THEN (y + t_1) ELSE (((y * y) / (y - t_1)) + (((t_3 * (- t_0)) * t_3) / ((t_3 * ((y * y) - (t_1 * y))) + (t_3 * (t_3 * t_2))))) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := -t\_1\\
+t_3 := y + t\_2\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{y \cdot y}{y - t\_1} + \frac{\left(t\_3 \cdot \left(-t\_0\right)\right) \cdot t\_3}{t\_3 \cdot \left(y \cdot y - t\_1 \cdot y\right) + t\_3 \cdot \left(t\_3 \cdot t\_2\right)}\\
+
+
+\end{array}
+</pre></div></div></section><section id="target4" class="programs"><h2>Developer Target 4: <span class="subhead"><data>99.9%</data> accurate, <data>0.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := -t\_1\\
+t_3 := t\_2 + y\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot \left(y - t\_1\right)\right) \cdot t\_3}{t\_3 \cdot \left(y \cdot y + t\_2 \cdot y\right) + \left(y + t\_2\right) \cdot \left(y \cdot t\_2 + t\_2 \cdot t\_2\right)}\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (* y y) (* x x)))
+       (t_1 (sqrt t_0))
+       (t_2 (- t_1))
+       (t_3 (+ t_2 y)))
+  (if (&gt;= y 0.0)
+    (+ y t_1)
+    (/
+     (* (* (+ (* y y) (- t_0)) (- y t_1)) t_3)
+     (+
+      (* t_3 (+ (* y y) (* t_2 y)))
+      (* (+ y t_2) (+ (* y t_2) (* t_2 t_2))))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = sqrt(t_0);
+	double t_2 = -t_1;
+	double t_3 = t_2 + y;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((((y * y) + -t_0) * (y - t_1)) * t_3) / ((t_3 * ((y * y) + (t_2 * y))) + ((y + t_2) * ((y * t_2) + (t_2 * t_2))));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: t_2
+    real(8) :: t_3
+    real(8) :: tmp
+    t_0 = (y * y) + (x * x)
+    t_1 = sqrt(t_0)
+    t_2 = -t_1
+    t_3 = t_2 + y
+    if (y &gt;= 0.0d0) then
+        tmp = y + t_1
+    else
+        tmp = ((((y * y) + -t_0) * (y - t_1)) * t_3) / ((t_3 * ((y * y) + (t_2 * y))) + ((y + t_2) * ((y * t_2) + (t_2 * t_2))))
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = Math.sqrt(t_0);
+	double t_2 = -t_1;
+	double t_3 = t_2 + y;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((((y * y) + -t_0) * (y - t_1)) * t_3) / ((t_3 * ((y * y) + (t_2 * y))) + ((y + t_2) * ((y * t_2) + (t_2 * t_2))));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = (y * y) + (x * x)
+	t_1 = math.sqrt(t_0)
+	t_2 = -t_1
+	t_3 = t_2 + y
+	tmp = 0
+	if y &gt;= 0.0:
+		tmp = y + t_1
+	else:
+		tmp = ((((y * y) + -t_0) * (y - t_1)) * t_3) / ((t_3 * ((y * y) + (t_2 * y))) + ((y + t_2) * ((y * t_2) + (t_2 * t_2))))
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = Float64(Float64(y * y) + Float64(x * x))
+	t_1 = sqrt(t_0)
+	t_2 = Float64(-t_1)
+	t_3 = Float64(t_2 + y)
+	tmp = 0.0
+	if (y &gt;= 0.0)
+		tmp = Float64(y + t_1);
+	else
+		tmp = Float64(Float64(Float64(Float64(Float64(y * y) + Float64(-t_0)) * Float64(y - t_1)) * t_3) / Float64(Float64(t_3 * Float64(Float64(y * y) + Float64(t_2 * y))) + Float64(Float64(y + t_2) * Float64(Float64(y * t_2) + Float64(t_2 * t_2)))));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = (y * y) + (x * x);
+	t_1 = sqrt(t_0);
+	t_2 = -t_1;
+	t_3 = t_2 + y;
+	tmp = 0.0;
+	if (y &gt;= 0.0)
+		tmp = y + t_1;
+	else
+		tmp = ((((y * y) + -t_0) * (y - t_1)) * t_3) / ((t_3 * ((y * y) + (t_2 * y))) + ((y + t_2) * ((y * t_2) + (t_2 * t_2))));
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]}, Block[{t$95$1 = N[Sqrt[t$95$0], $MachinePrecision]}, Block[{t$95$2 = (-t$95$1)}, Block[{t$95$3 = N[(t$95$2 + y), $MachinePrecision]}, If[GreaterEqual[y, 0.0], N[(y + t$95$1), $MachinePrecision], N[(N[(N[(N[(N[(y * y), $MachinePrecision] + (-t$95$0)), $MachinePrecision] * N[(y - t$95$1), $MachinePrecision]), $MachinePrecision] * t$95$3), $MachinePrecision] / N[(N[(t$95$3 * N[(N[(y * y), $MachinePrecision] + N[(t$95$2 * y), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + N[(N[(y + t$95$2), $MachinePrecision] * N[(N[(y * t$95$2), $MachinePrecision] + N[(t$95$2 * t$95$2), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]]]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = ((y * y) + (x * x)) IN
+		LET t_1 = (sqrt(t_0)) IN
+			LET t_2 = (- t_1) IN
+				LET t_3 = (t_2 + y) IN
+					LET tmp = IF (y &gt;= (0)) THEN (y + t_1) ELSE (((((y * y) + (- t_0)) * (y - t_1)) * t_3) / ((t_3 * ((y * y) + (t_2 * y))) + ((y + t_2) * ((y * t_2) + (t_2 * t_2))))) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := -t\_1\\
+t_3 := t\_2 + y\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot \left(y - t\_1\right)\right) \cdot t\_3}{t\_3 \cdot \left(y \cdot y + t\_2 \cdot y\right) + \left(y + t\_2\right) \cdot \left(y \cdot t\_2 + t\_2 \cdot t\_2\right)}\\
+
+
+\end{array}
+</pre></div></div></section><section id="target5" class="programs"><h2>Developer Target 5: <span class="subhead"><data>99.9%</data> accurate, <data>0.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := -t\_1\\
+t_3 := t\_2 + y\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot \left(y - t\_1\right)\right) \cdot t\_3}{t\_3 \cdot \left(t\_3 \cdot t\_2\right) + t\_3 \cdot \left(t\_3 \cdot y\right)}\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (* y y) (* x x)))
+       (t_1 (sqrt t_0))
+       (t_2 (- t_1))
+       (t_3 (+ t_2 y)))
+  (if (&gt;= y 0.0)
+    (+ y t_1)
+    (/
+     (* (* (+ (* y y) (- t_0)) (- y t_1)) t_3)
+     (+ (* t_3 (* t_3 t_2)) (* t_3 (* t_3 y)))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = sqrt(t_0);
+	double t_2 = -t_1;
+	double t_3 = t_2 + y;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((((y * y) + -t_0) * (y - t_1)) * t_3) / ((t_3 * (t_3 * t_2)) + (t_3 * (t_3 * y)));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: t_2
+    real(8) :: t_3
+    real(8) :: tmp
+    t_0 = (y * y) + (x * x)
+    t_1 = sqrt(t_0)
+    t_2 = -t_1
+    t_3 = t_2 + y
+    if (y &gt;= 0.0d0) then
+        tmp = y + t_1
+    else
+        tmp = ((((y * y) + -t_0) * (y - t_1)) * t_3) / ((t_3 * (t_3 * t_2)) + (t_3 * (t_3 * y)))
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = Math.sqrt(t_0);
+	double t_2 = -t_1;
+	double t_3 = t_2 + y;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((((y * y) + -t_0) * (y - t_1)) * t_3) / ((t_3 * (t_3 * t_2)) + (t_3 * (t_3 * y)));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = (y * y) + (x * x)
+	t_1 = math.sqrt(t_0)
+	t_2 = -t_1
+	t_3 = t_2 + y
+	tmp = 0
+	if y &gt;= 0.0:
+		tmp = y + t_1
+	else:
+		tmp = ((((y * y) + -t_0) * (y - t_1)) * t_3) / ((t_3 * (t_3 * t_2)) + (t_3 * (t_3 * y)))
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = Float64(Float64(y * y) + Float64(x * x))
+	t_1 = sqrt(t_0)
+	t_2 = Float64(-t_1)
+	t_3 = Float64(t_2 + y)
+	tmp = 0.0
+	if (y &gt;= 0.0)
+		tmp = Float64(y + t_1);
+	else
+		tmp = Float64(Float64(Float64(Float64(Float64(y * y) + Float64(-t_0)) * Float64(y - t_1)) * t_3) / Float64(Float64(t_3 * Float64(t_3 * t_2)) + Float64(t_3 * Float64(t_3 * y))));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = (y * y) + (x * x);
+	t_1 = sqrt(t_0);
+	t_2 = -t_1;
+	t_3 = t_2 + y;
+	tmp = 0.0;
+	if (y &gt;= 0.0)
+		tmp = y + t_1;
+	else
+		tmp = ((((y * y) + -t_0) * (y - t_1)) * t_3) / ((t_3 * (t_3 * t_2)) + (t_3 * (t_3 * y)));
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]}, Block[{t$95$1 = N[Sqrt[t$95$0], $MachinePrecision]}, Block[{t$95$2 = (-t$95$1)}, Block[{t$95$3 = N[(t$95$2 + y), $MachinePrecision]}, If[GreaterEqual[y, 0.0], N[(y + t$95$1), $MachinePrecision], N[(N[(N[(N[(N[(y * y), $MachinePrecision] + (-t$95$0)), $MachinePrecision] * N[(y - t$95$1), $MachinePrecision]), $MachinePrecision] * t$95$3), $MachinePrecision] / N[(N[(t$95$3 * N[(t$95$3 * t$95$2), $MachinePrecision]), $MachinePrecision] + N[(t$95$3 * N[(t$95$3 * y), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]]]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = ((y * y) + (x * x)) IN
+		LET t_1 = (sqrt(t_0)) IN
+			LET t_2 = (- t_1) IN
+				LET t_3 = (t_2 + y) IN
+					LET tmp = IF (y &gt;= (0)) THEN (y + t_1) ELSE (((((y * y) + (- t_0)) * (y - t_1)) * t_3) / ((t_3 * (t_3 * t_2)) + (t_3 * (t_3 * y)))) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := -t\_1\\
+t_3 := t\_2 + y\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot \left(y - t\_1\right)\right) \cdot t\_3}{t\_3 \cdot \left(t\_3 \cdot t\_2\right) + t\_3 \cdot \left(t\_3 \cdot y\right)}\\
+
+
+\end{array}
+</pre></div></div></section><section id="target6" class="programs"><h2>Developer Target 6: <span class="subhead"><data>99.9%</data> accurate, <data>0.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+t_1 := -t\_0\\
+t_2 := t\_1 \cdot y\\
+t_3 := y - t\_0\\
+\mathbf{if}\;y \leq 0:\\
+\;\;\;\;\frac{\left(t\_3 \cdot \left(-x \cdot x\right)\right) \cdot \left(y + t\_1\right)}{t\_3 \cdot \left(y \cdot y + t\_2\right) + t\_3 \cdot \left(t\_2 + t\_1 \cdot t\_1\right)}\\
+
+\mathbf{else}:\\
+\;\;\;\;y + t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (sqrt (+ (* y y) (* x x))))
+       (t_1 (- t_0))
+       (t_2 (* t_1 y))
+       (t_3 (- y t_0)))
+  (if (&lt;= y 0.0)
+    (/
+     (* (* t_3 (- (* x x))) (+ y t_1))
+     (+ (* t_3 (+ (* y y) t_2)) (* t_3 (+ t_2 (* t_1 t_1)))))
+    (+ y t_0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = sqrt(((y * y) + (x * x)));
+	double t_1 = -t_0;
+	double t_2 = t_1 * y;
+	double t_3 = y - t_0;
+	double tmp;
+	if (y &lt;= 0.0) {
+		tmp = ((t_3 * -(x * x)) * (y + t_1)) / ((t_3 * ((y * y) + t_2)) + (t_3 * (t_2 + (t_1 * t_1))));
+	} else {
+		tmp = y + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: t_2
+    real(8) :: t_3
+    real(8) :: tmp
+    t_0 = sqrt(((y * y) + (x * x)))
+    t_1 = -t_0
+    t_2 = t_1 * y
+    t_3 = y - t_0
+    if (y &lt;= 0.0d0) then
+        tmp = ((t_3 * -(x * x)) * (y + t_1)) / ((t_3 * ((y * y) + t_2)) + (t_3 * (t_2 + (t_1 * t_1))))
+    else
+        tmp = y + t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = Math.sqrt(((y * y) + (x * x)));
+	double t_1 = -t_0;
+	double t_2 = t_1 * y;
+	double t_3 = y - t_0;
+	double tmp;
+	if (y &lt;= 0.0) {
+		tmp = ((t_3 * -(x * x)) * (y + t_1)) / ((t_3 * ((y * y) + t_2)) + (t_3 * (t_2 + (t_1 * t_1))));
+	} else {
+		tmp = y + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = math.sqrt(((y * y) + (x * x)))
+	t_1 = -t_0
+	t_2 = t_1 * y
+	t_3 = y - t_0
+	tmp = 0
+	if y &lt;= 0.0:
+		tmp = ((t_3 * -(x * x)) * (y + t_1)) / ((t_3 * ((y * y) + t_2)) + (t_3 * (t_2 + (t_1 * t_1))))
+	else:
+		tmp = y + t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = sqrt(Float64(Float64(y * y) + Float64(x * x)))
+	t_1 = Float64(-t_0)
+	t_2 = Float64(t_1 * y)
+	t_3 = Float64(y - t_0)
+	tmp = 0.0
+	if (y &lt;= 0.0)
+		tmp = Float64(Float64(Float64(t_3 * Float64(-Float64(x * x))) * Float64(y + t_1)) / Float64(Float64(t_3 * Float64(Float64(y * y) + t_2)) + Float64(t_3 * Float64(t_2 + Float64(t_1 * t_1)))));
+	else
+		tmp = Float64(y + t_0);
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = sqrt(((y * y) + (x * x)));
+	t_1 = -t_0;
+	t_2 = t_1 * y;
+	t_3 = y - t_0;
+	tmp = 0.0;
+	if (y &lt;= 0.0)
+		tmp = ((t_3 * -(x * x)) * (y + t_1)) / ((t_3 * ((y * y) + t_2)) + (t_3 * (t_2 + (t_1 * t_1))));
+	else
+		tmp = y + t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[Sqrt[N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]], $MachinePrecision]}, Block[{t$95$1 = (-t$95$0)}, Block[{t$95$2 = N[(t$95$1 * y), $MachinePrecision]}, Block[{t$95$3 = N[(y - t$95$0), $MachinePrecision]}, If[LessEqual[y, 0.0], N[(N[(N[(t$95$3 * (-N[(x * x), $MachinePrecision])), $MachinePrecision] * N[(y + t$95$1), $MachinePrecision]), $MachinePrecision] / N[(N[(t$95$3 * N[(N[(y * y), $MachinePrecision] + t$95$2), $MachinePrecision]), $MachinePrecision] + N[(t$95$3 * N[(t$95$2 + N[(t$95$1 * t$95$1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision], N[(y + t$95$0), $MachinePrecision]]]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = (sqrt(((y * y) + (x * x)))) IN
+		LET t_1 = (- t_0) IN
+			LET t_2 = (t_1 * y) IN
+				LET t_3 = (y - t_0) IN
+					LET tmp = IF (y &lt;= (0)) THEN (((t_3 * (- (x * x))) * (y + t_1)) / ((t_3 * ((y * y) + t_2)) + (t_3 * (t_2 + (t_1 * t_1))))) ELSE (y + t_0) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+t_1 := -t\_0\\
+t_2 := t\_1 \cdot y\\
+t_3 := y - t\_0\\
+\mathbf{if}\;y \leq 0:\\
+\;\;\;\;\frac{\left(t\_3 \cdot \left(-x \cdot x\right)\right) \cdot \left(y + t\_1\right)}{t\_3 \cdot \left(y \cdot y + t\_2\right) + t\_3 \cdot \left(t\_2 + t\_1 \cdot t\_1\right)}\\
+
+\mathbf{else}:\\
+\;\;\;\;y + t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target7" class="programs"><h2>Developer Target 7: <span class="subhead"><data>99.9%</data> accurate, <data>0.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := y - t\_1\\
+\mathbf{if}\;y &gt; 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot t\_2\right) \cdot t\_2}{\left(\left(t\_1 + \left(-y\right)\right) \cdot \left(\left(-y\right) + t\_1\right)\right) \cdot \left(\left(-t\_1\right) + y\right)}\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (* y y) (* x x))) (t_1 (sqrt t_0)) (t_2 (- y t_1)))
+  (if (&gt; y 0.0)
+    (+ y t_1)
+    (/
+     (* (* (+ (* y y) (- t_0)) t_2) t_2)
+     (* (* (+ t_1 (- y)) (+ (- y) t_1)) (+ (- t_1) y))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = sqrt(t_0);
+	double t_2 = y - t_1;
+	double tmp;
+	if (y &gt; 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((((y * y) + -t_0) * t_2) * t_2) / (((t_1 + -y) * (-y + t_1)) * (-t_1 + y));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: t_2
+    real(8) :: tmp
+    t_0 = (y * y) + (x * x)
+    t_1 = sqrt(t_0)
+    t_2 = y - t_1
+    if (y &gt; 0.0d0) then
+        tmp = y + t_1
+    else
+        tmp = ((((y * y) + -t_0) * t_2) * t_2) / (((t_1 + -y) * (-y + t_1)) * (-t_1 + y))
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = Math.sqrt(t_0);
+	double t_2 = y - t_1;
+	double tmp;
+	if (y &gt; 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((((y * y) + -t_0) * t_2) * t_2) / (((t_1 + -y) * (-y + t_1)) * (-t_1 + y));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = (y * y) + (x * x)
+	t_1 = math.sqrt(t_0)
+	t_2 = y - t_1
+	tmp = 0
+	if y &gt; 0.0:
+		tmp = y + t_1
+	else:
+		tmp = ((((y * y) + -t_0) * t_2) * t_2) / (((t_1 + -y) * (-y + t_1)) * (-t_1 + y))
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = Float64(Float64(y * y) + Float64(x * x))
+	t_1 = sqrt(t_0)
+	t_2 = Float64(y - t_1)
+	tmp = 0.0
+	if (y &gt; 0.0)
+		tmp = Float64(y + t_1);
+	else
+		tmp = Float64(Float64(Float64(Float64(Float64(y * y) + Float64(-t_0)) * t_2) * t_2) / Float64(Float64(Float64(t_1 + Float64(-y)) * Float64(Float64(-y) + t_1)) * Float64(Float64(-t_1) + y)));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = (y * y) + (x * x);
+	t_1 = sqrt(t_0);
+	t_2 = y - t_1;
+	tmp = 0.0;
+	if (y &gt; 0.0)
+		tmp = y + t_1;
+	else
+		tmp = ((((y * y) + -t_0) * t_2) * t_2) / (((t_1 + -y) * (-y + t_1)) * (-t_1 + y));
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]}, Block[{t$95$1 = N[Sqrt[t$95$0], $MachinePrecision]}, Block[{t$95$2 = N[(y - t$95$1), $MachinePrecision]}, If[Greater[y, 0.0], N[(y + t$95$1), $MachinePrecision], N[(N[(N[(N[(N[(y * y), $MachinePrecision] + (-t$95$0)), $MachinePrecision] * t$95$2), $MachinePrecision] * t$95$2), $MachinePrecision] / N[(N[(N[(t$95$1 + (-y)), $MachinePrecision] * N[((-y) + t$95$1), $MachinePrecision]), $MachinePrecision] * N[((-t$95$1) + y), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = ((y * y) + (x * x)) IN
+		LET t_1 = (sqrt(t_0)) IN
+			LET t_2 = (y - t_1) IN
+				LET tmp = IF (y &gt; (0)) THEN (y + t_1) ELSE (((((y * y) + (- t_0)) * t_2) * t_2) / (((t_1 + (- y)) * ((- y) + t_1)) * ((- t_1) + y))) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := y - t\_1\\
+\mathbf{if}\;y &gt; 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot t\_2\right) \cdot t\_2}{\left(\left(t\_1 + \left(-y\right)\right) \cdot \left(\left(-y\right) + t\_1\right)\right) \cdot \left(\left(-t\_1\right) + y\right)}\\
+
+
+\end{array}
+</pre></div></div></section><section id="target8" class="programs"><h2>Developer Target 8: <span class="subhead"><data>99.8%</data> accurate, <data>0.2×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{1}{\left(t\_1 - y\right) \cdot \left(\left(-y\right) + t\_1\right)} \cdot \left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot \left(\left(-t\_1\right) + y\right)\right)\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (* y y) (* x x))) (t_1 (sqrt t_0)))
+  (if (&gt;= y 0.0)
+    (+ y t_1)
+    (*
+     (/ 1.0 (* (- t_1 y) (+ (- y) t_1)))
+     (* (+ (* y y) (- t_0)) (+ (- t_1) y))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = sqrt(t_0);
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = (1.0 / ((t_1 - y) * (-y + t_1))) * (((y * y) + -t_0) * (-t_1 + y));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: tmp
+    t_0 = (y * y) + (x * x)
+    t_1 = sqrt(t_0)
+    if (y &gt;= 0.0d0) then
+        tmp = y + t_1
+    else
+        tmp = (1.0d0 / ((t_1 - y) * (-y + t_1))) * (((y * y) + -t_0) * (-t_1 + y))
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = Math.sqrt(t_0);
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = (1.0 / ((t_1 - y) * (-y + t_1))) * (((y * y) + -t_0) * (-t_1 + y));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = (y * y) + (x * x)
+	t_1 = math.sqrt(t_0)
+	tmp = 0
+	if y &gt;= 0.0:
+		tmp = y + t_1
+	else:
+		tmp = (1.0 / ((t_1 - y) * (-y + t_1))) * (((y * y) + -t_0) * (-t_1 + y))
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = Float64(Float64(y * y) + Float64(x * x))
+	t_1 = sqrt(t_0)
+	tmp = 0.0
+	if (y &gt;= 0.0)
+		tmp = Float64(y + t_1);
+	else
+		tmp = Float64(Float64(1.0 / Float64(Float64(t_1 - y) * Float64(Float64(-y) + t_1))) * Float64(Float64(Float64(y * y) + Float64(-t_0)) * Float64(Float64(-t_1) + y)));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = (y * y) + (x * x);
+	t_1 = sqrt(t_0);
+	tmp = 0.0;
+	if (y &gt;= 0.0)
+		tmp = y + t_1;
+	else
+		tmp = (1.0 / ((t_1 - y) * (-y + t_1))) * (((y * y) + -t_0) * (-t_1 + y));
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]}, Block[{t$95$1 = N[Sqrt[t$95$0], $MachinePrecision]}, If[GreaterEqual[y, 0.0], N[(y + t$95$1), $MachinePrecision], N[(N[(1.0 / N[(N[(t$95$1 - y), $MachinePrecision] * N[((-y) + t$95$1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] * N[(N[(N[(y * y), $MachinePrecision] + (-t$95$0)), $MachinePrecision] * N[((-t$95$1) + y), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = ((y * y) + (x * x)) IN
+		LET t_1 = (sqrt(t_0)) IN
+			LET tmp = IF (y &gt;= (0)) THEN (y + t_1) ELSE (((1) / ((t_1 - y) * ((- y) + t_1))) * (((y * y) + (- t_0)) * ((- t_1) + y))) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{1}{\left(t\_1 - y\right) \cdot \left(\left(-y\right) + t\_1\right)} \cdot \left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot \left(\left(-t\_1\right) + y\right)\right)\\
+
+
+\end{array}
+</pre></div></div></section><section id="target9" class="programs"><h2>Developer Target 9: <span class="subhead"><data>99.9%</data> accurate, <data>0.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := \left(-t\_1\right) + y\\
+t_3 := t\_1 + \left(-y\right)\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot t\_2\right) \cdot t\_2}{\left(t\_3 \cdot t\_3\right) \cdot t\_2}\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (* y y) (* x x)))
+       (t_1 (sqrt t_0))
+       (t_2 (+ (- t_1) y))
+       (t_3 (+ t_1 (- y))))
+  (if (&gt;= y 0.0)
+    (+ y t_1)
+    (/ (* (* (+ (* y y) (- t_0)) t_2) t_2) (* (* t_3 t_3) t_2)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = sqrt(t_0);
+	double t_2 = -t_1 + y;
+	double t_3 = t_1 + -y;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((((y * y) + -t_0) * t_2) * t_2) / ((t_3 * t_3) * t_2);
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: t_2
+    real(8) :: t_3
+    real(8) :: tmp
+    t_0 = (y * y) + (x * x)
+    t_1 = sqrt(t_0)
+    t_2 = -t_1 + y
+    t_3 = t_1 + -y
+    if (y &gt;= 0.0d0) then
+        tmp = y + t_1
+    else
+        tmp = ((((y * y) + -t_0) * t_2) * t_2) / ((t_3 * t_3) * t_2)
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = Math.sqrt(t_0);
+	double t_2 = -t_1 + y;
+	double t_3 = t_1 + -y;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((((y * y) + -t_0) * t_2) * t_2) / ((t_3 * t_3) * t_2);
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = (y * y) + (x * x)
+	t_1 = math.sqrt(t_0)
+	t_2 = -t_1 + y
+	t_3 = t_1 + -y
+	tmp = 0
+	if y &gt;= 0.0:
+		tmp = y + t_1
+	else:
+		tmp = ((((y * y) + -t_0) * t_2) * t_2) / ((t_3 * t_3) * t_2)
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = Float64(Float64(y * y) + Float64(x * x))
+	t_1 = sqrt(t_0)
+	t_2 = Float64(Float64(-t_1) + y)
+	t_3 = Float64(t_1 + Float64(-y))
+	tmp = 0.0
+	if (y &gt;= 0.0)
+		tmp = Float64(y + t_1);
+	else
+		tmp = Float64(Float64(Float64(Float64(Float64(y * y) + Float64(-t_0)) * t_2) * t_2) / Float64(Float64(t_3 * t_3) * t_2));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = (y * y) + (x * x);
+	t_1 = sqrt(t_0);
+	t_2 = -t_1 + y;
+	t_3 = t_1 + -y;
+	tmp = 0.0;
+	if (y &gt;= 0.0)
+		tmp = y + t_1;
+	else
+		tmp = ((((y * y) + -t_0) * t_2) * t_2) / ((t_3 * t_3) * t_2);
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]}, Block[{t$95$1 = N[Sqrt[t$95$0], $MachinePrecision]}, Block[{t$95$2 = N[((-t$95$1) + y), $MachinePrecision]}, Block[{t$95$3 = N[(t$95$1 + (-y)), $MachinePrecision]}, If[GreaterEqual[y, 0.0], N[(y + t$95$1), $MachinePrecision], N[(N[(N[(N[(N[(y * y), $MachinePrecision] + (-t$95$0)), $MachinePrecision] * t$95$2), $MachinePrecision] * t$95$2), $MachinePrecision] / N[(N[(t$95$3 * t$95$3), $MachinePrecision] * t$95$2), $MachinePrecision]), $MachinePrecision]]]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = ((y * y) + (x * x)) IN
+		LET t_1 = (sqrt(t_0)) IN
+			LET t_2 = ((- t_1) + y) IN
+				LET t_3 = (t_1 + (- y)) IN
+					LET tmp = IF (y &gt;= (0)) THEN (y + t_1) ELSE (((((y * y) + (- t_0)) * t_2) * t_2) / ((t_3 * t_3) * t_2)) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := \left(-t\_1\right) + y\\
+t_3 := t\_1 + \left(-y\right)\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot t\_2\right) \cdot t\_2}{\left(t\_3 \cdot t\_3\right) \cdot t\_2}\\
+
+
+\end{array}
+</pre></div></div></section><section id="target10" class="programs"><h2>Developer Target 10: <span class="subhead"><data>99.9%</data> accurate, <data>0.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+t_1 := -t\_0\\
+t_2 := t\_1 + y\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-\left(x \cdot x + y \cdot y\right)\right)\right) \cdot t\_2\right) \cdot t\_2}{t\_2 \cdot \left(y \cdot y + y \cdot t\_1\right) + t\_2 \cdot \left(t\_2 \cdot t\_1\right)}\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (sqrt (+ (* y y) (* x x)))) (t_1 (- t_0)) (t_2 (+ t_1 y)))
+  (if (&gt;= y 0.0)
+    (+ y t_0)
+    (/
+     (* (* (+ (* y y) (- (+ (* x x) (* y y)))) t_2) t_2)
+     (+ (* t_2 (+ (* y y) (* y t_1))) (* t_2 (* t_2 t_1)))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = sqrt(((y * y) + (x * x)));
+	double t_1 = -t_0;
+	double t_2 = t_1 + y;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_0;
+	} else {
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * t_2) / ((t_2 * ((y * y) + (y * t_1))) + (t_2 * (t_2 * t_1)));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: t_2
+    real(8) :: tmp
+    t_0 = sqrt(((y * y) + (x * x)))
+    t_1 = -t_0
+    t_2 = t_1 + y
+    if (y &gt;= 0.0d0) then
+        tmp = y + t_0
+    else
+        tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * t_2) / ((t_2 * ((y * y) + (y * t_1))) + (t_2 * (t_2 * t_1)))
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = Math.sqrt(((y * y) + (x * x)));
+	double t_1 = -t_0;
+	double t_2 = t_1 + y;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_0;
+	} else {
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * t_2) / ((t_2 * ((y * y) + (y * t_1))) + (t_2 * (t_2 * t_1)));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = math.sqrt(((y * y) + (x * x)))
+	t_1 = -t_0
+	t_2 = t_1 + y
+	tmp = 0
+	if y &gt;= 0.0:
+		tmp = y + t_0
+	else:
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * t_2) / ((t_2 * ((y * y) + (y * t_1))) + (t_2 * (t_2 * t_1)))
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = sqrt(Float64(Float64(y * y) + Float64(x * x)))
+	t_1 = Float64(-t_0)
+	t_2 = Float64(t_1 + y)
+	tmp = 0.0
+	if (y &gt;= 0.0)
+		tmp = Float64(y + t_0);
+	else
+		tmp = Float64(Float64(Float64(Float64(Float64(y * y) + Float64(-Float64(Float64(x * x) + Float64(y * y)))) * t_2) * t_2) / Float64(Float64(t_2 * Float64(Float64(y * y) + Float64(y * t_1))) + Float64(t_2 * Float64(t_2 * t_1))));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = sqrt(((y * y) + (x * x)));
+	t_1 = -t_0;
+	t_2 = t_1 + y;
+	tmp = 0.0;
+	if (y &gt;= 0.0)
+		tmp = y + t_0;
+	else
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * t_2) / ((t_2 * ((y * y) + (y * t_1))) + (t_2 * (t_2 * t_1)));
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[Sqrt[N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]], $MachinePrecision]}, Block[{t$95$1 = (-t$95$0)}, Block[{t$95$2 = N[(t$95$1 + y), $MachinePrecision]}, If[GreaterEqual[y, 0.0], N[(y + t$95$0), $MachinePrecision], N[(N[(N[(N[(N[(y * y), $MachinePrecision] + (-N[(N[(x * x), $MachinePrecision] + N[(y * y), $MachinePrecision]), $MachinePrecision])), $MachinePrecision] * t$95$2), $MachinePrecision] * t$95$2), $MachinePrecision] / N[(N[(t$95$2 * N[(N[(y * y), $MachinePrecision] + N[(y * t$95$1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + N[(t$95$2 * N[(t$95$2 * t$95$1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = (sqrt(((y * y) + (x * x)))) IN
+		LET t_1 = (- t_0) IN
+			LET t_2 = (t_1 + y) IN
+				LET tmp = IF (y &gt;= (0)) THEN (y + t_0) ELSE (((((y * y) + (- ((x * x) + (y * y)))) * t_2) * t_2) / ((t_2 * ((y * y) + (y * t_1))) + (t_2 * (t_2 * t_1)))) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+t_1 := -t\_0\\
+t_2 := t\_1 + y\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-\left(x \cdot x + y \cdot y\right)\right)\right) \cdot t\_2\right) \cdot t\_2}{t\_2 \cdot \left(y \cdot y + y \cdot t\_1\right) + t\_2 \cdot \left(t\_2 \cdot t\_1\right)}\\
+
+
+\end{array}
+</pre></div></div></section><section id="target11" class="programs"><h2>Developer Target 11: <span class="subhead"><data>99.9%</data> accurate, <data>0.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+t_1 := -t\_0\\
+t_2 := y + t\_1\\
+\mathbf{if}\;y &lt; 0:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-\left(x \cdot x + y \cdot y\right)\right)\right) \cdot t\_2\right) \cdot \left(t\_1 + y\right)}{t\_2 \cdot \left(t\_2 \cdot t\_1\right) + t\_2 \cdot \left(t\_2 \cdot y\right)}\\
+
+\mathbf{else}:\\
+\;\;\;\;y + t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (sqrt (+ (* y y) (* x x)))) (t_1 (- t_0)) (t_2 (+ y t_1)))
+  (if (&lt; y 0.0)
+    (/
+     (* (* (+ (* y y) (- (+ (* x x) (* y y)))) t_2) (+ t_1 y))
+     (+ (* t_2 (* t_2 t_1)) (* t_2 (* t_2 y))))
+    (+ y t_0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = sqrt(((y * y) + (x * x)));
+	double t_1 = -t_0;
+	double t_2 = y + t_1;
+	double tmp;
+	if (y &lt; 0.0) {
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * (t_1 + y)) / ((t_2 * (t_2 * t_1)) + (t_2 * (t_2 * y)));
+	} else {
+		tmp = y + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: t_2
+    real(8) :: tmp
+    t_0 = sqrt(((y * y) + (x * x)))
+    t_1 = -t_0
+    t_2 = y + t_1
+    if (y &lt; 0.0d0) then
+        tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * (t_1 + y)) / ((t_2 * (t_2 * t_1)) + (t_2 * (t_2 * y)))
+    else
+        tmp = y + t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = Math.sqrt(((y * y) + (x * x)));
+	double t_1 = -t_0;
+	double t_2 = y + t_1;
+	double tmp;
+	if (y &lt; 0.0) {
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * (t_1 + y)) / ((t_2 * (t_2 * t_1)) + (t_2 * (t_2 * y)));
+	} else {
+		tmp = y + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = math.sqrt(((y * y) + (x * x)))
+	t_1 = -t_0
+	t_2 = y + t_1
+	tmp = 0
+	if y &lt; 0.0:
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * (t_1 + y)) / ((t_2 * (t_2 * t_1)) + (t_2 * (t_2 * y)))
+	else:
+		tmp = y + t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = sqrt(Float64(Float64(y * y) + Float64(x * x)))
+	t_1 = Float64(-t_0)
+	t_2 = Float64(y + t_1)
+	tmp = 0.0
+	if (y &lt; 0.0)
+		tmp = Float64(Float64(Float64(Float64(Float64(y * y) + Float64(-Float64(Float64(x * x) + Float64(y * y)))) * t_2) * Float64(t_1 + y)) / Float64(Float64(t_2 * Float64(t_2 * t_1)) + Float64(t_2 * Float64(t_2 * y))));
+	else
+		tmp = Float64(y + t_0);
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = sqrt(((y * y) + (x * x)));
+	t_1 = -t_0;
+	t_2 = y + t_1;
+	tmp = 0.0;
+	if (y &lt; 0.0)
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * (t_1 + y)) / ((t_2 * (t_2 * t_1)) + (t_2 * (t_2 * y)));
+	else
+		tmp = y + t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[Sqrt[N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]], $MachinePrecision]}, Block[{t$95$1 = (-t$95$0)}, Block[{t$95$2 = N[(y + t$95$1), $MachinePrecision]}, If[Less[y, 0.0], N[(N[(N[(N[(N[(y * y), $MachinePrecision] + (-N[(N[(x * x), $MachinePrecision] + N[(y * y), $MachinePrecision]), $MachinePrecision])), $MachinePrecision] * t$95$2), $MachinePrecision] * N[(t$95$1 + y), $MachinePrecision]), $MachinePrecision] / N[(N[(t$95$2 * N[(t$95$2 * t$95$1), $MachinePrecision]), $MachinePrecision] + N[(t$95$2 * N[(t$95$2 * y), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision], N[(y + t$95$0), $MachinePrecision]]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = (sqrt(((y * y) + (x * x)))) IN
+		LET t_1 = (- t_0) IN
+			LET t_2 = (y + t_1) IN
+				LET tmp = IF (y &lt; (0)) THEN (((((y * y) + (- ((x * x) + (y * y)))) * t_2) * (t_1 + y)) / ((t_2 * (t_2 * t_1)) + (t_2 * (t_2 * y)))) ELSE (y + t_0) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+t_1 := -t\_0\\
+t_2 := y + t\_1\\
+\mathbf{if}\;y &lt; 0:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-\left(x \cdot x + y \cdot y\right)\right)\right) \cdot t\_2\right) \cdot \left(t\_1 + y\right)}{t\_2 \cdot \left(t\_2 \cdot t\_1\right) + t\_2 \cdot \left(t\_2 \cdot y\right)}\\
+
+\mathbf{else}:\\
+\;\;\;\;y + t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target12" class="programs"><h2>Developer Target 12: <span class="subhead"><data>99.9%</data> accurate, <data>0.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := -t\_1\\
+t_3 := t\_2 + y\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot t\_3\right) \cdot t\_3}{t\_3 \cdot \left(y \cdot y + y \cdot t\_2\right) + t\_3 \cdot \left(t\_3 \cdot t\_2\right)}\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (* y y) (* x x)))
+       (t_1 (sqrt t_0))
+       (t_2 (- t_1))
+       (t_3 (+ t_2 y)))
+  (if (&gt;= y 0.0)
+    (+ y t_1)
+    (/
+     (* (* (+ (* y y) (- t_0)) t_3) t_3)
+     (+ (* t_3 (+ (* y y) (* y t_2))) (* t_3 (* t_3 t_2)))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = sqrt(t_0);
+	double t_2 = -t_1;
+	double t_3 = t_2 + y;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((((y * y) + -t_0) * t_3) * t_3) / ((t_3 * ((y * y) + (y * t_2))) + (t_3 * (t_3 * t_2)));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: t_2
+    real(8) :: t_3
+    real(8) :: tmp
+    t_0 = (y * y) + (x * x)
+    t_1 = sqrt(t_0)
+    t_2 = -t_1
+    t_3 = t_2 + y
+    if (y &gt;= 0.0d0) then
+        tmp = y + t_1
+    else
+        tmp = ((((y * y) + -t_0) * t_3) * t_3) / ((t_3 * ((y * y) + (y * t_2))) + (t_3 * (t_3 * t_2)))
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = Math.sqrt(t_0);
+	double t_2 = -t_1;
+	double t_3 = t_2 + y;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((((y * y) + -t_0) * t_3) * t_3) / ((t_3 * ((y * y) + (y * t_2))) + (t_3 * (t_3 * t_2)));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = (y * y) + (x * x)
+	t_1 = math.sqrt(t_0)
+	t_2 = -t_1
+	t_3 = t_2 + y
+	tmp = 0
+	if y &gt;= 0.0:
+		tmp = y + t_1
+	else:
+		tmp = ((((y * y) + -t_0) * t_3) * t_3) / ((t_3 * ((y * y) + (y * t_2))) + (t_3 * (t_3 * t_2)))
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = Float64(Float64(y * y) + Float64(x * x))
+	t_1 = sqrt(t_0)
+	t_2 = Float64(-t_1)
+	t_3 = Float64(t_2 + y)
+	tmp = 0.0
+	if (y &gt;= 0.0)
+		tmp = Float64(y + t_1);
+	else
+		tmp = Float64(Float64(Float64(Float64(Float64(y * y) + Float64(-t_0)) * t_3) * t_3) / Float64(Float64(t_3 * Float64(Float64(y * y) + Float64(y * t_2))) + Float64(t_3 * Float64(t_3 * t_2))));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = (y * y) + (x * x);
+	t_1 = sqrt(t_0);
+	t_2 = -t_1;
+	t_3 = t_2 + y;
+	tmp = 0.0;
+	if (y &gt;= 0.0)
+		tmp = y + t_1;
+	else
+		tmp = ((((y * y) + -t_0) * t_3) * t_3) / ((t_3 * ((y * y) + (y * t_2))) + (t_3 * (t_3 * t_2)));
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]}, Block[{t$95$1 = N[Sqrt[t$95$0], $MachinePrecision]}, Block[{t$95$2 = (-t$95$1)}, Block[{t$95$3 = N[(t$95$2 + y), $MachinePrecision]}, If[GreaterEqual[y, 0.0], N[(y + t$95$1), $MachinePrecision], N[(N[(N[(N[(N[(y * y), $MachinePrecision] + (-t$95$0)), $MachinePrecision] * t$95$3), $MachinePrecision] * t$95$3), $MachinePrecision] / N[(N[(t$95$3 * N[(N[(y * y), $MachinePrecision] + N[(y * t$95$2), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + N[(t$95$3 * N[(t$95$3 * t$95$2), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]]]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = ((y * y) + (x * x)) IN
+		LET t_1 = (sqrt(t_0)) IN
+			LET t_2 = (- t_1) IN
+				LET t_3 = (t_2 + y) IN
+					LET tmp = IF (y &gt;= (0)) THEN (y + t_1) ELSE (((((y * y) + (- t_0)) * t_3) * t_3) / ((t_3 * ((y * y) + (y * t_2))) + (t_3 * (t_3 * t_2)))) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := -t\_1\\
+t_3 := t\_2 + y\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot t\_3\right) \cdot t\_3}{t\_3 \cdot \left(y \cdot y + y \cdot t\_2\right) + t\_3 \cdot \left(t\_3 \cdot t\_2\right)}\\
+
+
+\end{array}
+</pre></div></div></section><section id="target13" class="programs"><h2>Developer Target 13: <span class="subhead"><data>99.9%</data> accurate, <data>0.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := \left(-t\_1\right) + y\\
+t_3 := t\_1 + \left(-y\right)\\
+\mathbf{if}\;y &gt; 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot t\_2\right) \cdot t\_2}{\left(t\_3 \cdot t\_3\right) \cdot t\_2}\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (* y y) (* x x)))
+       (t_1 (sqrt t_0))
+       (t_2 (+ (- t_1) y))
+       (t_3 (+ t_1 (- y))))
+  (if (&gt; y 0.0)
+    (+ y t_1)
+    (/ (* (* (+ (* y y) (- t_0)) t_2) t_2) (* (* t_3 t_3) t_2)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = sqrt(t_0);
+	double t_2 = -t_1 + y;
+	double t_3 = t_1 + -y;
+	double tmp;
+	if (y &gt; 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((((y * y) + -t_0) * t_2) * t_2) / ((t_3 * t_3) * t_2);
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: t_2
+    real(8) :: t_3
+    real(8) :: tmp
+    t_0 = (y * y) + (x * x)
+    t_1 = sqrt(t_0)
+    t_2 = -t_1 + y
+    t_3 = t_1 + -y
+    if (y &gt; 0.0d0) then
+        tmp = y + t_1
+    else
+        tmp = ((((y * y) + -t_0) * t_2) * t_2) / ((t_3 * t_3) * t_2)
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = Math.sqrt(t_0);
+	double t_2 = -t_1 + y;
+	double t_3 = t_1 + -y;
+	double tmp;
+	if (y &gt; 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((((y * y) + -t_0) * t_2) * t_2) / ((t_3 * t_3) * t_2);
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = (y * y) + (x * x)
+	t_1 = math.sqrt(t_0)
+	t_2 = -t_1 + y
+	t_3 = t_1 + -y
+	tmp = 0
+	if y &gt; 0.0:
+		tmp = y + t_1
+	else:
+		tmp = ((((y * y) + -t_0) * t_2) * t_2) / ((t_3 * t_3) * t_2)
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = Float64(Float64(y * y) + Float64(x * x))
+	t_1 = sqrt(t_0)
+	t_2 = Float64(Float64(-t_1) + y)
+	t_3 = Float64(t_1 + Float64(-y))
+	tmp = 0.0
+	if (y &gt; 0.0)
+		tmp = Float64(y + t_1);
+	else
+		tmp = Float64(Float64(Float64(Float64(Float64(y * y) + Float64(-t_0)) * t_2) * t_2) / Float64(Float64(t_3 * t_3) * t_2));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = (y * y) + (x * x);
+	t_1 = sqrt(t_0);
+	t_2 = -t_1 + y;
+	t_3 = t_1 + -y;
+	tmp = 0.0;
+	if (y &gt; 0.0)
+		tmp = y + t_1;
+	else
+		tmp = ((((y * y) + -t_0) * t_2) * t_2) / ((t_3 * t_3) * t_2);
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]}, Block[{t$95$1 = N[Sqrt[t$95$0], $MachinePrecision]}, Block[{t$95$2 = N[((-t$95$1) + y), $MachinePrecision]}, Block[{t$95$3 = N[(t$95$1 + (-y)), $MachinePrecision]}, If[Greater[y, 0.0], N[(y + t$95$1), $MachinePrecision], N[(N[(N[(N[(N[(y * y), $MachinePrecision] + (-t$95$0)), $MachinePrecision] * t$95$2), $MachinePrecision] * t$95$2), $MachinePrecision] / N[(N[(t$95$3 * t$95$3), $MachinePrecision] * t$95$2), $MachinePrecision]), $MachinePrecision]]]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = ((y * y) + (x * x)) IN
+		LET t_1 = (sqrt(t_0)) IN
+			LET t_2 = ((- t_1) + y) IN
+				LET t_3 = (t_1 + (- y)) IN
+					LET tmp = IF (y &gt; (0)) THEN (y + t_1) ELSE (((((y * y) + (- t_0)) * t_2) * t_2) / ((t_3 * t_3) * t_2)) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := \left(-t\_1\right) + y\\
+t_3 := t\_1 + \left(-y\right)\\
+\mathbf{if}\;y &gt; 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot t\_2\right) \cdot t\_2}{\left(t\_3 \cdot t\_3\right) \cdot t\_2}\\
+
+
+\end{array}
+</pre></div></div></section><section id="target14" class="programs"><h2>Developer Target 14: <span class="subhead"><data>99.9%</data> accurate, <data>0.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+t_1 := -t\_0\\
+t_2 := y + t\_1\\
+t_3 := y - t\_0\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;\left(\left(y \cdot \frac{1}{t\_3}\right) \cdot \frac{y \cdot y}{t\_2} + \frac{y \cdot \left(t\_1 \cdot y\right)}{y \cdot y + \left(y \cdot t\_1 + t\_2 \cdot t\_1\right)}\right) - \left(\frac{x \cdot x}{t\_3} + \frac{y \cdot y}{t\_1 + y}\right)\\
+
+\mathbf{else}:\\
+\;\;\;\;y + t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (sqrt (+ (* y y) (* x x))))
+       (t_1 (- t_0))
+       (t_2 (+ y t_1))
+       (t_3 (- y t_0)))
+  (if (&gt;= y 0.0)
+    (-
+     (+
+      (* (* y (/ 1.0 t_3)) (/ (* y y) t_2))
+      (/ (* y (* t_1 y)) (+ (* y y) (+ (* y t_1) (* t_2 t_1)))))
+     (+ (/ (* x x) t_3) (/ (* y y) (+ t_1 y))))
+    (+ y t_0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = sqrt(((y * y) + (x * x)));
+	double t_1 = -t_0;
+	double t_2 = y + t_1;
+	double t_3 = y - t_0;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = (((y * (1.0 / t_3)) * ((y * y) / t_2)) + ((y * (t_1 * y)) / ((y * y) + ((y * t_1) + (t_2 * t_1))))) - (((x * x) / t_3) + ((y * y) / (t_1 + y)));
+	} else {
+		tmp = y + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: t_2
+    real(8) :: t_3
+    real(8) :: tmp
+    t_0 = sqrt(((y * y) + (x * x)))
+    t_1 = -t_0
+    t_2 = y + t_1
+    t_3 = y - t_0
+    if (y &gt;= 0.0d0) then
+        tmp = (((y * (1.0d0 / t_3)) * ((y * y) / t_2)) + ((y * (t_1 * y)) / ((y * y) + ((y * t_1) + (t_2 * t_1))))) - (((x * x) / t_3) + ((y * y) / (t_1 + y)))
+    else
+        tmp = y + t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = Math.sqrt(((y * y) + (x * x)));
+	double t_1 = -t_0;
+	double t_2 = y + t_1;
+	double t_3 = y - t_0;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = (((y * (1.0 / t_3)) * ((y * y) / t_2)) + ((y * (t_1 * y)) / ((y * y) + ((y * t_1) + (t_2 * t_1))))) - (((x * x) / t_3) + ((y * y) / (t_1 + y)));
+	} else {
+		tmp = y + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = math.sqrt(((y * y) + (x * x)))
+	t_1 = -t_0
+	t_2 = y + t_1
+	t_3 = y - t_0
+	tmp = 0
+	if y &gt;= 0.0:
+		tmp = (((y * (1.0 / t_3)) * ((y * y) / t_2)) + ((y * (t_1 * y)) / ((y * y) + ((y * t_1) + (t_2 * t_1))))) - (((x * x) / t_3) + ((y * y) / (t_1 + y)))
+	else:
+		tmp = y + t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = sqrt(Float64(Float64(y * y) + Float64(x * x)))
+	t_1 = Float64(-t_0)
+	t_2 = Float64(y + t_1)
+	t_3 = Float64(y - t_0)
+	tmp = 0.0
+	if (y &gt;= 0.0)
+		tmp = Float64(Float64(Float64(Float64(y * Float64(1.0 / t_3)) * Float64(Float64(y * y) / t_2)) + Float64(Float64(y * Float64(t_1 * y)) / Float64(Float64(y * y) + Float64(Float64(y * t_1) + Float64(t_2 * t_1))))) - Float64(Float64(Float64(x * x) / t_3) + Float64(Float64(y * y) / Float64(t_1 + y))));
+	else
+		tmp = Float64(y + t_0);
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = sqrt(((y * y) + (x * x)));
+	t_1 = -t_0;
+	t_2 = y + t_1;
+	t_3 = y - t_0;
+	tmp = 0.0;
+	if (y &gt;= 0.0)
+		tmp = (((y * (1.0 / t_3)) * ((y * y) / t_2)) + ((y * (t_1 * y)) / ((y * y) + ((y * t_1) + (t_2 * t_1))))) - (((x * x) / t_3) + ((y * y) / (t_1 + y)));
+	else
+		tmp = y + t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[Sqrt[N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]], $MachinePrecision]}, Block[{t$95$1 = (-t$95$0)}, Block[{t$95$2 = N[(y + t$95$1), $MachinePrecision]}, Block[{t$95$3 = N[(y - t$95$0), $MachinePrecision]}, If[GreaterEqual[y, 0.0], N[(N[(N[(N[(y * N[(1.0 / t$95$3), $MachinePrecision]), $MachinePrecision] * N[(N[(y * y), $MachinePrecision] / t$95$2), $MachinePrecision]), $MachinePrecision] + N[(N[(y * N[(t$95$1 * y), $MachinePrecision]), $MachinePrecision] / N[(N[(y * y), $MachinePrecision] + N[(N[(y * t$95$1), $MachinePrecision] + N[(t$95$2 * t$95$1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(N[(N[(x * x), $MachinePrecision] / t$95$3), $MachinePrecision] + N[(N[(y * y), $MachinePrecision] / N[(t$95$1 + y), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision], N[(y + t$95$0), $MachinePrecision]]]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = (sqrt(((y * y) + (x * x)))) IN
+		LET t_1 = (- t_0) IN
+			LET t_2 = (y + t_1) IN
+				LET t_3 = (y - t_0) IN
+					LET tmp = IF (y &gt;= (0)) THEN ((((y * ((1) / t_3)) * ((y * y) / t_2)) + ((y * (t_1 * y)) / ((y * y) + ((y * t_1) + (t_2 * t_1))))) - (((x * x) / t_3) + ((y * y) / (t_1 + y)))) ELSE (y + t_0) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+t_1 := -t\_0\\
+t_2 := y + t\_1\\
+t_3 := y - t\_0\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;\left(\left(y \cdot \frac{1}{t\_3}\right) \cdot \frac{y \cdot y}{t\_2} + \frac{y \cdot \left(t\_1 \cdot y\right)}{y \cdot y + \left(y \cdot t\_1 + t\_2 \cdot t\_1\right)}\right) - \left(\frac{x \cdot x}{t\_3} + \frac{y \cdot y}{t\_1 + y}\right)\\
+
+\mathbf{else}:\\
+\;\;\;\;y + t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target15" class="programs"><h2>Developer Target 15: <span class="subhead"><data>99.9%</data> accurate, <data>0.5×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;-\frac{x \cdot x}{y - t\_0}\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (sqrt (+ (* y y) (* x x)))))
+  (if (&gt;= y 0.0) (+ y t_0) (- (/ (* x x) (- y t_0))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = sqrt(((y * y) + (x * x)));
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_0;
+	} else {
+		tmp = -((x * x) / (y - t_0));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = sqrt(((y * y) + (x * x)))
+    if (y &gt;= 0.0d0) then
+        tmp = y + t_0
+    else
+        tmp = -((x * x) / (y - t_0))
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = Math.sqrt(((y * y) + (x * x)));
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_0;
+	} else {
+		tmp = -((x * x) / (y - t_0));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = math.sqrt(((y * y) + (x * x)))
+	tmp = 0
+	if y &gt;= 0.0:
+		tmp = y + t_0
+	else:
+		tmp = -((x * x) / (y - t_0))
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = sqrt(Float64(Float64(y * y) + Float64(x * x)))
+	tmp = 0.0
+	if (y &gt;= 0.0)
+		tmp = Float64(y + t_0);
+	else
+		tmp = Float64(-Float64(Float64(x * x) / Float64(y - t_0)));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = sqrt(((y * y) + (x * x)));
+	tmp = 0.0;
+	if (y &gt;= 0.0)
+		tmp = y + t_0;
+	else
+		tmp = -((x * x) / (y - t_0));
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[Sqrt[N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]], $MachinePrecision]}, If[GreaterEqual[y, 0.0], N[(y + t$95$0), $MachinePrecision], (-N[(N[(x * x), $MachinePrecision] / N[(y - t$95$0), $MachinePrecision]), $MachinePrecision])]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = (sqrt(((y * y) + (x * x)))) IN
+		LET tmp = IF (y &gt;= (0)) THEN (y + t_0) ELSE (- ((x * x) / (y - t_0))) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;-\frac{x \cdot x}{y - t\_0}\\
+
+
+\end{array}
+</pre></div></div></section><section id="target16" class="programs"><h2>Developer Target 16: <span class="subhead"><data>99.9%</data> accurate, <data>0.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+t_1 := y - t\_0\\
+t_2 := -t\_0\\
+t_3 := y + t\_2\\
+\mathbf{if}\;y &gt; 0:\\
+\;\;\;\;y + t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-\left(x \cdot x + y \cdot y\right)\right)\right) \cdot t\_1\right) \cdot t\_3}{t\_1 \cdot \left(t\_1 \cdot t\_2\right) + t\_3 \cdot \left(t\_3 \cdot y\right)}\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (sqrt (+ (* y y) (* x x))))
+       (t_1 (- y t_0))
+       (t_2 (- t_0))
+       (t_3 (+ y t_2)))
+  (if (&gt; y 0.0)
+    (+ y t_0)
+    (/
+     (* (* (+ (* y y) (- (+ (* x x) (* y y)))) t_1) t_3)
+     (+ (* t_1 (* t_1 t_2)) (* t_3 (* t_3 y)))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = sqrt(((y * y) + (x * x)));
+	double t_1 = y - t_0;
+	double t_2 = -t_0;
+	double t_3 = y + t_2;
+	double tmp;
+	if (y &gt; 0.0) {
+		tmp = y + t_0;
+	} else {
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_1) * t_3) / ((t_1 * (t_1 * t_2)) + (t_3 * (t_3 * y)));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: t_2
+    real(8) :: t_3
+    real(8) :: tmp
+    t_0 = sqrt(((y * y) + (x * x)))
+    t_1 = y - t_0
+    t_2 = -t_0
+    t_3 = y + t_2
+    if (y &gt; 0.0d0) then
+        tmp = y + t_0
+    else
+        tmp = ((((y * y) + -((x * x) + (y * y))) * t_1) * t_3) / ((t_1 * (t_1 * t_2)) + (t_3 * (t_3 * y)))
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = Math.sqrt(((y * y) + (x * x)));
+	double t_1 = y - t_0;
+	double t_2 = -t_0;
+	double t_3 = y + t_2;
+	double tmp;
+	if (y &gt; 0.0) {
+		tmp = y + t_0;
+	} else {
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_1) * t_3) / ((t_1 * (t_1 * t_2)) + (t_3 * (t_3 * y)));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = math.sqrt(((y * y) + (x * x)))
+	t_1 = y - t_0
+	t_2 = -t_0
+	t_3 = y + t_2
+	tmp = 0
+	if y &gt; 0.0:
+		tmp = y + t_0
+	else:
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_1) * t_3) / ((t_1 * (t_1 * t_2)) + (t_3 * (t_3 * y)))
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = sqrt(Float64(Float64(y * y) + Float64(x * x)))
+	t_1 = Float64(y - t_0)
+	t_2 = Float64(-t_0)
+	t_3 = Float64(y + t_2)
+	tmp = 0.0
+	if (y &gt; 0.0)
+		tmp = Float64(y + t_0);
+	else
+		tmp = Float64(Float64(Float64(Float64(Float64(y * y) + Float64(-Float64(Float64(x * x) + Float64(y * y)))) * t_1) * t_3) / Float64(Float64(t_1 * Float64(t_1 * t_2)) + Float64(t_3 * Float64(t_3 * y))));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = sqrt(((y * y) + (x * x)));
+	t_1 = y - t_0;
+	t_2 = -t_0;
+	t_3 = y + t_2;
+	tmp = 0.0;
+	if (y &gt; 0.0)
+		tmp = y + t_0;
+	else
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_1) * t_3) / ((t_1 * (t_1 * t_2)) + (t_3 * (t_3 * y)));
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[Sqrt[N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]], $MachinePrecision]}, Block[{t$95$1 = N[(y - t$95$0), $MachinePrecision]}, Block[{t$95$2 = (-t$95$0)}, Block[{t$95$3 = N[(y + t$95$2), $MachinePrecision]}, If[Greater[y, 0.0], N[(y + t$95$0), $MachinePrecision], N[(N[(N[(N[(N[(y * y), $MachinePrecision] + (-N[(N[(x * x), $MachinePrecision] + N[(y * y), $MachinePrecision]), $MachinePrecision])), $MachinePrecision] * t$95$1), $MachinePrecision] * t$95$3), $MachinePrecision] / N[(N[(t$95$1 * N[(t$95$1 * t$95$2), $MachinePrecision]), $MachinePrecision] + N[(t$95$3 * N[(t$95$3 * y), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]]]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = (sqrt(((y * y) + (x * x)))) IN
+		LET t_1 = (y - t_0) IN
+			LET t_2 = (- t_0) IN
+				LET t_3 = (y + t_2) IN
+					LET tmp = IF (y &gt; (0)) THEN (y + t_0) ELSE (((((y * y) + (- ((x * x) + (y * y)))) * t_1) * t_3) / ((t_1 * (t_1 * t_2)) + (t_3 * (t_3 * y)))) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+t_1 := y - t\_0\\
+t_2 := -t\_0\\
+t_3 := y + t\_2\\
+\mathbf{if}\;y &gt; 0:\\
+\;\;\;\;y + t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-\left(x \cdot x + y \cdot y\right)\right)\right) \cdot t\_1\right) \cdot t\_3}{t\_1 \cdot \left(t\_1 \cdot t\_2\right) + t\_3 \cdot \left(t\_3 \cdot y\right)}\\
+
+
+\end{array}
+</pre></div></div></section><section id="target17" class="programs"><h2>Developer Target 17: <span class="subhead"><data>99.9%</data> accurate, <data>0.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+t_1 := -t\_0\\
+t_2 := t\_1 + y\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-\left(x \cdot x + y \cdot y\right)\right)\right) \cdot t\_2\right) \cdot t\_2}{t\_2 \cdot \left(y \cdot y + t\_1 \cdot y\right) + t\_2 \cdot \left(y \cdot t\_1 + t\_1 \cdot t\_1\right)}\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (sqrt (+ (* y y) (* x x)))) (t_1 (- t_0)) (t_2 (+ t_1 y)))
+  (if (&gt;= y 0.0)
+    (+ y t_0)
+    (/
+     (* (* (+ (* y y) (- (+ (* x x) (* y y)))) t_2) t_2)
+     (+
+      (* t_2 (+ (* y y) (* t_1 y)))
+      (* t_2 (+ (* y t_1) (* t_1 t_1))))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = sqrt(((y * y) + (x * x)));
+	double t_1 = -t_0;
+	double t_2 = t_1 + y;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_0;
+	} else {
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * t_2) / ((t_2 * ((y * y) + (t_1 * y))) + (t_2 * ((y * t_1) + (t_1 * t_1))));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: t_2
+    real(8) :: tmp
+    t_0 = sqrt(((y * y) + (x * x)))
+    t_1 = -t_0
+    t_2 = t_1 + y
+    if (y &gt;= 0.0d0) then
+        tmp = y + t_0
+    else
+        tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * t_2) / ((t_2 * ((y * y) + (t_1 * y))) + (t_2 * ((y * t_1) + (t_1 * t_1))))
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = Math.sqrt(((y * y) + (x * x)));
+	double t_1 = -t_0;
+	double t_2 = t_1 + y;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_0;
+	} else {
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * t_2) / ((t_2 * ((y * y) + (t_1 * y))) + (t_2 * ((y * t_1) + (t_1 * t_1))));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = math.sqrt(((y * y) + (x * x)))
+	t_1 = -t_0
+	t_2 = t_1 + y
+	tmp = 0
+	if y &gt;= 0.0:
+		tmp = y + t_0
+	else:
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * t_2) / ((t_2 * ((y * y) + (t_1 * y))) + (t_2 * ((y * t_1) + (t_1 * t_1))))
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = sqrt(Float64(Float64(y * y) + Float64(x * x)))
+	t_1 = Float64(-t_0)
+	t_2 = Float64(t_1 + y)
+	tmp = 0.0
+	if (y &gt;= 0.0)
+		tmp = Float64(y + t_0);
+	else
+		tmp = Float64(Float64(Float64(Float64(Float64(y * y) + Float64(-Float64(Float64(x * x) + Float64(y * y)))) * t_2) * t_2) / Float64(Float64(t_2 * Float64(Float64(y * y) + Float64(t_1 * y))) + Float64(t_2 * Float64(Float64(y * t_1) + Float64(t_1 * t_1)))));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = sqrt(((y * y) + (x * x)));
+	t_1 = -t_0;
+	t_2 = t_1 + y;
+	tmp = 0.0;
+	if (y &gt;= 0.0)
+		tmp = y + t_0;
+	else
+		tmp = ((((y * y) + -((x * x) + (y * y))) * t_2) * t_2) / ((t_2 * ((y * y) + (t_1 * y))) + (t_2 * ((y * t_1) + (t_1 * t_1))));
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[Sqrt[N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]], $MachinePrecision]}, Block[{t$95$1 = (-t$95$0)}, Block[{t$95$2 = N[(t$95$1 + y), $MachinePrecision]}, If[GreaterEqual[y, 0.0], N[(y + t$95$0), $MachinePrecision], N[(N[(N[(N[(N[(y * y), $MachinePrecision] + (-N[(N[(x * x), $MachinePrecision] + N[(y * y), $MachinePrecision]), $MachinePrecision])), $MachinePrecision] * t$95$2), $MachinePrecision] * t$95$2), $MachinePrecision] / N[(N[(t$95$2 * N[(N[(y * y), $MachinePrecision] + N[(t$95$1 * y), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + N[(t$95$2 * N[(N[(y * t$95$1), $MachinePrecision] + N[(t$95$1 * t$95$1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = (sqrt(((y * y) + (x * x)))) IN
+		LET t_1 = (- t_0) IN
+			LET t_2 = (t_1 + y) IN
+				LET tmp = IF (y &gt;= (0)) THEN (y + t_0) ELSE (((((y * y) + (- ((x * x) + (y * y)))) * t_2) * t_2) / ((t_2 * ((y * y) + (t_1 * y))) + (t_2 * ((y * t_1) + (t_1 * t_1))))) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \sqrt{y \cdot y + x \cdot x}\\
+t_1 := -t\_0\\
+t_2 := t\_1 + y\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-\left(x \cdot x + y \cdot y\right)\right)\right) \cdot t\_2\right) \cdot t\_2}{t\_2 \cdot \left(y \cdot y + t\_1 \cdot y\right) + t\_2 \cdot \left(y \cdot t\_1 + t\_1 \cdot t\_1\right)}\\
+
+
+\end{array}
+</pre></div></div></section><section id="target18" class="programs"><h2>Developer Target 18: <span class="subhead"><data>99.9%</data> accurate, <data>0.4×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{y \cdot y + \left(-t\_0\right)}{y - t\_1}\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (* y y) (* x x))) (t_1 (sqrt t_0)))
+  (if (&gt;= y 0.0) (+ y t_1) (/ (+ (* y y) (- t_0)) (- y t_1)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = sqrt(t_0);
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((y * y) + -t_0) / (y - t_1);
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: tmp
+    t_0 = (y * y) + (x * x)
+    t_1 = sqrt(t_0)
+    if (y &gt;= 0.0d0) then
+        tmp = y + t_1
+    else
+        tmp = ((y * y) + -t_0) / (y - t_1)
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = Math.sqrt(t_0);
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((y * y) + -t_0) / (y - t_1);
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = (y * y) + (x * x)
+	t_1 = math.sqrt(t_0)
+	tmp = 0
+	if y &gt;= 0.0:
+		tmp = y + t_1
+	else:
+		tmp = ((y * y) + -t_0) / (y - t_1)
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = Float64(Float64(y * y) + Float64(x * x))
+	t_1 = sqrt(t_0)
+	tmp = 0.0
+	if (y &gt;= 0.0)
+		tmp = Float64(y + t_1);
+	else
+		tmp = Float64(Float64(Float64(y * y) + Float64(-t_0)) / Float64(y - t_1));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = (y * y) + (x * x);
+	t_1 = sqrt(t_0);
+	tmp = 0.0;
+	if (y &gt;= 0.0)
+		tmp = y + t_1;
+	else
+		tmp = ((y * y) + -t_0) / (y - t_1);
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]}, Block[{t$95$1 = N[Sqrt[t$95$0], $MachinePrecision]}, If[GreaterEqual[y, 0.0], N[(y + t$95$1), $MachinePrecision], N[(N[(N[(y * y), $MachinePrecision] + (-t$95$0)), $MachinePrecision] / N[(y - t$95$1), $MachinePrecision]), $MachinePrecision]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = ((y * y) + (x * x)) IN
+		LET t_1 = (sqrt(t_0)) IN
+			LET tmp = IF (y &gt;= (0)) THEN (y + t_1) ELSE (((y * y) + (- t_0)) / (y - t_1)) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{y \cdot y + \left(-t\_0\right)}{y - t\_1}\\
+
+
+\end{array}
+</pre></div></div></section><section id="target19" class="programs"><h2>Developer Target 19: <span class="subhead"><data>99.9%</data> accurate, <data>0.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := -t\_1\\
+t_3 := t\_2 + y\\
+\mathbf{if}\;y &gt; 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot \left(y - t\_1\right)\right) \cdot t\_3}{t\_3 \cdot \left(t\_2 \cdot y + t\_2 \cdot t\_2\right) + t\_3 \cdot \left(y \cdot y - y \cdot t\_1\right)}\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (* y y) (* x x)))
+       (t_1 (sqrt t_0))
+       (t_2 (- t_1))
+       (t_3 (+ t_2 y)))
+  (if (&gt; y 0.0)
+    (+ y t_1)
+    (/
+     (* (* (+ (* y y) (- t_0)) (- y t_1)) t_3)
+     (+
+      (* t_3 (+ (* t_2 y) (* t_2 t_2)))
+      (* t_3 (- (* y y) (* y t_1))))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = sqrt(t_0);
+	double t_2 = -t_1;
+	double t_3 = t_2 + y;
+	double tmp;
+	if (y &gt; 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((((y * y) + -t_0) * (y - t_1)) * t_3) / ((t_3 * ((t_2 * y) + (t_2 * t_2))) + (t_3 * ((y * y) - (y * t_1))));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: t_2
+    real(8) :: t_3
+    real(8) :: tmp
+    t_0 = (y * y) + (x * x)
+    t_1 = sqrt(t_0)
+    t_2 = -t_1
+    t_3 = t_2 + y
+    if (y &gt; 0.0d0) then
+        tmp = y + t_1
+    else
+        tmp = ((((y * y) + -t_0) * (y - t_1)) * t_3) / ((t_3 * ((t_2 * y) + (t_2 * t_2))) + (t_3 * ((y * y) - (y * t_1))))
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = Math.sqrt(t_0);
+	double t_2 = -t_1;
+	double t_3 = t_2 + y;
+	double tmp;
+	if (y &gt; 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((((y * y) + -t_0) * (y - t_1)) * t_3) / ((t_3 * ((t_2 * y) + (t_2 * t_2))) + (t_3 * ((y * y) - (y * t_1))));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = (y * y) + (x * x)
+	t_1 = math.sqrt(t_0)
+	t_2 = -t_1
+	t_3 = t_2 + y
+	tmp = 0
+	if y &gt; 0.0:
+		tmp = y + t_1
+	else:
+		tmp = ((((y * y) + -t_0) * (y - t_1)) * t_3) / ((t_3 * ((t_2 * y) + (t_2 * t_2))) + (t_3 * ((y * y) - (y * t_1))))
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = Float64(Float64(y * y) + Float64(x * x))
+	t_1 = sqrt(t_0)
+	t_2 = Float64(-t_1)
+	t_3 = Float64(t_2 + y)
+	tmp = 0.0
+	if (y &gt; 0.0)
+		tmp = Float64(y + t_1);
+	else
+		tmp = Float64(Float64(Float64(Float64(Float64(y * y) + Float64(-t_0)) * Float64(y - t_1)) * t_3) / Float64(Float64(t_3 * Float64(Float64(t_2 * y) + Float64(t_2 * t_2))) + Float64(t_3 * Float64(Float64(y * y) - Float64(y * t_1)))));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = (y * y) + (x * x);
+	t_1 = sqrt(t_0);
+	t_2 = -t_1;
+	t_3 = t_2 + y;
+	tmp = 0.0;
+	if (y &gt; 0.0)
+		tmp = y + t_1;
+	else
+		tmp = ((((y * y) + -t_0) * (y - t_1)) * t_3) / ((t_3 * ((t_2 * y) + (t_2 * t_2))) + (t_3 * ((y * y) - (y * t_1))));
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]}, Block[{t$95$1 = N[Sqrt[t$95$0], $MachinePrecision]}, Block[{t$95$2 = (-t$95$1)}, Block[{t$95$3 = N[(t$95$2 + y), $MachinePrecision]}, If[Greater[y, 0.0], N[(y + t$95$1), $MachinePrecision], N[(N[(N[(N[(N[(y * y), $MachinePrecision] + (-t$95$0)), $MachinePrecision] * N[(y - t$95$1), $MachinePrecision]), $MachinePrecision] * t$95$3), $MachinePrecision] / N[(N[(t$95$3 * N[(N[(t$95$2 * y), $MachinePrecision] + N[(t$95$2 * t$95$2), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + N[(t$95$3 * N[(N[(y * y), $MachinePrecision] - N[(y * t$95$1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]]]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = ((y * y) + (x * x)) IN
+		LET t_1 = (sqrt(t_0)) IN
+			LET t_2 = (- t_1) IN
+				LET t_3 = (t_2 + y) IN
+					LET tmp = IF (y &gt; (0)) THEN (y + t_1) ELSE (((((y * y) + (- t_0)) * (y - t_1)) * t_3) / ((t_3 * ((t_2 * y) + (t_2 * t_2))) + (t_3 * ((y * y) - (y * t_1))))) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := -t\_1\\
+t_3 := t\_2 + y\\
+\mathbf{if}\;y &gt; 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot \left(y - t\_1\right)\right) \cdot t\_3}{t\_3 \cdot \left(t\_2 \cdot y + t\_2 \cdot t\_2\right) + t\_3 \cdot \left(y \cdot y - y \cdot t\_1\right)}\\
+
+
+\end{array}
+</pre></div></div></section><section id="target20" class="programs"><h2>Developer Target 20: <span class="subhead"><data>99.9%</data> accurate, <data>0.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := -t\_1\\
+t_3 := t\_2 + y\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot t\_3\right) \cdot t\_3}{t\_3 \cdot \left(y \cdot y + t\_2 \cdot y\right) + \left(y - t\_1\right) \cdot \left(y \cdot t\_2 + t\_2 \cdot t\_2\right)}\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (y x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (* y y) (* x x)))
+       (t_1 (sqrt t_0))
+       (t_2 (- t_1))
+       (t_3 (+ t_2 y)))
+  (if (&gt;= y 0.0)
+    (+ y t_1)
+    (/
+     (* (* (+ (* y y) (- t_0)) t_3) t_3)
+     (+
+      (* t_3 (+ (* y y) (* t_2 y)))
+      (* (- y t_1) (+ (* y t_2) (* t_2 t_2))))))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = sqrt(t_0);
+	double t_2 = -t_1;
+	double t_3 = t_2 + y;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((((y * y) + -t_0) * t_3) * t_3) / ((t_3 * ((y * y) + (t_2 * y))) + ((y - t_1) * ((y * t_2) + (t_2 * t_2))));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(y, x)
+use fmin_fmax_functions
+    real(8), intent (in) :: y
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: t_1
+    real(8) :: t_2
+    real(8) :: t_3
+    real(8) :: tmp
+    t_0 = (y * y) + (x * x)
+    t_1 = sqrt(t_0)
+    t_2 = -t_1
+    t_3 = t_2 + y
+    if (y &gt;= 0.0d0) then
+        tmp = y + t_1
+    else
+        tmp = ((((y * y) + -t_0) * t_3) * t_3) / ((t_3 * ((y * y) + (t_2 * y))) + ((y - t_1) * ((y * t_2) + (t_2 * t_2))))
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double y, double x) {
+	double t_0 = (y * y) + (x * x);
+	double t_1 = Math.sqrt(t_0);
+	double t_2 = -t_1;
+	double t_3 = t_2 + y;
+	double tmp;
+	if (y &gt;= 0.0) {
+		tmp = y + t_1;
+	} else {
+		tmp = ((((y * y) + -t_0) * t_3) * t_3) / ((t_3 * ((y * y) + (t_2 * y))) + ((y - t_1) * ((y * t_2) + (t_2 * t_2))));
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(y, x):
+	t_0 = (y * y) + (x * x)
+	t_1 = math.sqrt(t_0)
+	t_2 = -t_1
+	t_3 = t_2 + y
+	tmp = 0
+	if y &gt;= 0.0:
+		tmp = y + t_1
+	else:
+		tmp = ((((y * y) + -t_0) * t_3) * t_3) / ((t_3 * ((y * y) + (t_2 * y))) + ((y - t_1) * ((y * t_2) + (t_2 * t_2))))
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(y, x)
+	t_0 = Float64(Float64(y * y) + Float64(x * x))
+	t_1 = sqrt(t_0)
+	t_2 = Float64(-t_1)
+	t_3 = Float64(t_2 + y)
+	tmp = 0.0
+	if (y &gt;= 0.0)
+		tmp = Float64(y + t_1);
+	else
+		tmp = Float64(Float64(Float64(Float64(Float64(y * y) + Float64(-t_0)) * t_3) * t_3) / Float64(Float64(t_3 * Float64(Float64(y * y) + Float64(t_2 * y))) + Float64(Float64(y - t_1) * Float64(Float64(y * t_2) + Float64(t_2 * t_2)))));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(y, x)
+	t_0 = (y * y) + (x * x);
+	t_1 = sqrt(t_0);
+	t_2 = -t_1;
+	t_3 = t_2 + y;
+	tmp = 0.0;
+	if (y &gt;= 0.0)
+		tmp = y + t_1;
+	else
+		tmp = ((((y * y) + -t_0) * t_3) * t_3) / ((t_3 * ((y * y) + (t_2 * y))) + ((y - t_1) * ((y * t_2) + (t_2 * t_2))));
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[y_, x_] := Block[{t$95$0 = N[(N[(y * y), $MachinePrecision] + N[(x * x), $MachinePrecision]), $MachinePrecision]}, Block[{t$95$1 = N[Sqrt[t$95$0], $MachinePrecision]}, Block[{t$95$2 = (-t$95$1)}, Block[{t$95$3 = N[(t$95$2 + y), $MachinePrecision]}, If[GreaterEqual[y, 0.0], N[(y + t$95$1), $MachinePrecision], N[(N[(N[(N[(N[(y * y), $MachinePrecision] + (-t$95$0)), $MachinePrecision] * t$95$3), $MachinePrecision] * t$95$3), $MachinePrecision] / N[(N[(t$95$3 * N[(N[(y * y), $MachinePrecision] + N[(t$95$2 * y), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + N[(N[(y - t$95$1), $MachinePrecision] * N[(N[(y * t$95$2), $MachinePrecision] + N[(t$95$2 * t$95$2), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]]]]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(y, x):
+	y in [-inf, +inf],
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(y, x: real): real =
+	LET t_0 = ((y * y) + (x * x)) IN
+		LET t_1 = (sqrt(t_0)) IN
+			LET t_2 = (- t_1) IN
+				LET t_3 = (t_2 + y) IN
+					LET tmp = IF (y &gt;= (0)) THEN (y + t_1) ELSE (((((y * y) + (- t_0)) * t_3) * t_3) / ((t_3 * ((y * y) + (t_2 * y))) + ((y - t_1) * ((y * t_2) + (t_2 * t_2))))) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := y \cdot y + x \cdot x\\
+t_1 := \sqrt{t\_0}\\
+t_2 := -t\_1\\
+t_3 := t\_2 + y\\
+\mathbf{if}\;y \geq 0:\\
+\;\;\;\;y + t\_1\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{\left(\left(y \cdot y + \left(-t\_0\right)\right) \cdot t\_3\right) \cdot t\_3}{t\_3 \cdot \left(y \cdot y + t\_2 \cdot y\right) + \left(y - t\_1\right) \cdot \left(y \cdot t\_2 + t\_2 \cdot t\_2\right)}\\
+
+
+\end{array}
+</pre></div></div></section><section id="reproduce"><details><summary><h2>Reproduce</h2><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#reproduction" target="_blank">?</a></summary><pre class="shell"><code>herbie shell --seed 1 
+(FPCore (y x)
+  :name "cancel_sqrt_2var"
+  :precision binary64
+  :pre (and (and (&lt;= -10 y) (&lt;= y 10)) (and (&lt;= 1 x) (&lt;= x 10)))
+
+  :alt
+  (if (&gt;= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (* (* (+ y (- (sqrt (+ (* y y) (* x x))))) (+ y (- (sqrt (+ (* y y) (* x x)))))) (+ (- (sqrt (+ (* y y) (* x x)))) y))))
+
+  :alt
+  (if (&gt;= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (- y (sqrt (+ (* y y) (* x x))))) (- y (sqrt (+ (* y y) (* x x))))) (+ (* (- y (sqrt (+ (* y y) (* x x)))) (- (* y y) (* y (sqrt (+ (* y y) (* x x)))))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y (- (sqrt (+ (* y y) (* x x))))) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x))))))))))
+
+  :alt
+  (if (&gt;= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (+ (/ (* y y) (- y (sqrt (+ (* y y) (* x x))))) (/ (* (* (+ y (- (sqrt (+ (* y y) (* x x))))) (- (+ (* y y) (* x x)))) (+ y (- (sqrt (+ (* y y) (* x x)))))) (+ (* (+ y (- (sqrt (+ (* y y) (* x x))))) (- (* y y) (* (sqrt (+ (* y y) (* x x))) y))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (- (sqrt (+ (* y y) (* x x))))))))))
+
+  :alt
+  (if (&gt;= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (- y (sqrt (+ (* y y) (* x x))))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y y) (* (- (sqrt (+ (* y y) (* x x)))) y))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (+ (* y (- (sqrt (+ (* y y) (* x x))))) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x))))))))))
+
+  :alt
+  (if (&gt;= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (- y (sqrt (+ (* y y) (* x x))))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (- (sqrt (+ (* y y) (* x x)))))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) y)))))
+
+  :alt
+  (if (&lt;= y 0) (/ (* (* (- y (sqrt (+ (* y y) (* x x)))) (- (* x x))) (+ y (- (sqrt (+ (* y y) (* x x)))))) (+ (* (- y (sqrt (+ (* y y) (* x x)))) (+ (* y y) (* (- (sqrt (+ (* y y) (* x x)))) y))) (* (- y (sqrt (+ (* y y) (* x x)))) (+ (* (- (sqrt (+ (* y y) (* x x)))) y) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x))))))))) (+ y (sqrt (+ (* y y) (* x x)))))
+
+  :alt
+  (if (&gt; y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (- y (sqrt (+ (* y y) (* x x))))) (- y (sqrt (+ (* y y) (* x x))))) (* (* (+ (sqrt (+ (* y y) (* x x))) (- y)) (+ (- y) (sqrt (+ (* y y) (* x x))))) (+ (- (sqrt (+ (* y y) (* x x)))) y))))
+
+  :alt
+  (if (&gt;= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (* (/ 1 (* (- (sqrt (+ (* y y) (* x x))) y) (+ (- y) (sqrt (+ (* y y) (* x x)))))) (* (+ (* y y) (- (+ (* y y) (* x x)))) (+ (- (sqrt (+ (* y y) (* x x)))) y))))
+
+  :alt
+  (if (&gt;= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (* (* (+ (sqrt (+ (* y y) (* x x))) (- y)) (+ (sqrt (+ (* y y) (* x x))) (- y))) (+ (- (sqrt (+ (* y y) (* x x)))) y))))
+
+  :alt
+  (if (&gt;= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y y) (* y (- (sqrt (+ (* y y) (* x x))))))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (- (sqrt (+ (* y y) (* x x)))))))))
+
+  :alt
+  (if (&lt; y 0) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (+ y (- (sqrt (+ (* y y) (* x x)))))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ y (- (sqrt (+ (* y y) (* x x))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (- (sqrt (+ (* y y) (* x x)))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) y)))) (+ y (sqrt (+ (* y y) (* x x)))))
+
+  :alt
+  (if (&gt;= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y y) (* y (- (sqrt (+ (* y y) (* x x))))))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (- (sqrt (+ (* y y) (* x x)))))))))
+
+  :alt
+  (if (&gt; y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (* (* (+ (sqrt (+ (* y y) (* x x))) (- y)) (+ (sqrt (+ (* y y) (* x x))) (- y))) (+ (- (sqrt (+ (* y y) (* x x)))) y))))
+
+  :alt
+  (if (&gt;= y 0) (- (+ (* (* y (/ 1 (- y (sqrt (+ (* y y) (* x x)))))) (/ (* y y) (+ y (- (sqrt (+ (* y y) (* x x))))))) (/ (* y (* (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* y y) (+ (* y (- (sqrt (+ (* y y) (* x x))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (- (sqrt (+ (* y y) (* x x))))))))) (+ (/ (* x x) (- y (sqrt (+ (* y y) (* x x))))) (/ (* y y) (+ (- (sqrt (+ (* y y) (* x x)))) y)))) (+ y (sqrt (+ (* y y) (* x x)))))
+
+  :alt
+  (if (&gt;= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (- (/ (* x x) (- y (sqrt (+ (* y y) (* x x)))))))
+
+  :alt
+  (if (&gt; y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (- y (sqrt (+ (* y y) (* x x))))) (+ y (- (sqrt (+ (* y y) (* x x)))))) (+ (* (- y (sqrt (+ (* y y) (* x x)))) (* (- y (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x)))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) (* (+ y (- (sqrt (+ (* y y) (* x x))))) y)))))
+
+  :alt
+  (if (&gt;= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* x x) (* y y)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y y) (* (- (sqrt (+ (* y y) (* x x)))) y))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y (- (sqrt (+ (* y y) (* x x))))) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x))))))))))
+
+  :alt
+  (if (&gt;= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (+ (* y y) (- (+ (* y y) (* x x)))) (- y (sqrt (+ (* y y) (* x x))))))
+
+  :alt
+  (if (&gt; y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (- y (sqrt (+ (* y y) (* x x))))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* (- (sqrt (+ (* y y) (* x x)))) y) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x))))))) (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (- (* y y) (* y (sqrt (+ (* y y) (* x x)))))))))
+
+  :alt
+  (if (&gt;= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* (* (+ (* y y) (- (+ (* y y) (* x x)))) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (- (sqrt (+ (* y y) (* x x)))) y)) (+ (* (+ (- (sqrt (+ (* y y) (* x x)))) y) (+ (* y y) (* (- (sqrt (+ (* y y) (* x x)))) y))) (* (- y (sqrt (+ (* y y) (* x x)))) (+ (* y (- (sqrt (+ (* y y) (* x x))))) (* (- (sqrt (+ (* y y) (* x x)))) (- (sqrt (+ (* y y) (* x x))))))))))
+
+  (+ y (sqrt (+ (* y y) (* x x)))))
+</code></pre></details></section></body></html>

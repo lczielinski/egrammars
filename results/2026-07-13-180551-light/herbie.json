@@ -1,0 +1,1730 @@
+[
+  {
+    "benchmark": "asymptote_c",
+    "status": "imp-start",
+    "reference_bits": 1.586357647628926,
+    "herbie_bits": 0.283,
+    "herbie_program": "(-.f64 (/.f64 #s(literal -2 binary64) (-.f64 x (/.f64 #s(literal 1 binary64) x))) (/.f64 #s(literal 1 binary64) (-.f64 x #s(literal 1 binary64))))",
+    "ours_bits": null,
+    "ours_program": null,
+    "ours_all": [],
+    "reference_worst": null,
+    "ours_worst": null,
+    "herbie_worst": {
+      "abs_err": 6.784697e-16,
+      "rel_err_ulps": 1.3166084359433297
+    },
+    "ours_worst_program": null
+  },
+  {
+    "benchmark": "beta_a",
+    "status": "gt-target",
+    "reference_bits": 2.829419164711426,
+    "herbie_bits": 2.1878922073725104,
+    "herbie_program": "(*.f64 (-.f64 (-.f64 m (*.f64 m m)) v) (/.f64 m v))",
+    "ours_bits": 2.829419164711426,
+    "ours_program": "(FPCore (m v) (* (+ (/ (* m (- 1 m)) v) -1) m))",
+    "ours_all": [
+      {
+        "program": "(FPCore (m v) (* (+ (/ (* m (- 1 m)) v) -1) m))",
+        "bits": 2.829419164711426
+      },
+      {
+        "program": "(FPCore (m v) (* (- (/ (* m (- 1 m)) v) 01) m))",
+        "bits": 2.829419164711426
+      },
+      {
+        "program": "(FPCore (m v) (* (- (/ (* m (- 1 m)) v) 1) m))",
+        "bits": 2.829419164711426
+      },
+      {
+        "program": "(FPCore (m v) (+ (* (/ (* m (- 1 m)) v) m) (- m)))",
+        "bits": 2.95685830560701
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 2.220447e-16,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 2.220447e-16,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": {
+      "abs_err": 1.965312e-16,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (m v) (* (- (/ (* m (- 1 m)) v) 1) m))"
+  },
+  {
+    "benchmark": "beta_b",
+    "status": "gt-target",
+    "reference_bits": 2.87244728249978,
+    "herbie_bits": 2.229701476953704,
+    "herbie_program": "(*.f64 (*.f64 (*.f64 (-.f64 (-.f64 m (*.f64 m m)) v) v) #s(approx (- 1 m) (*.f64 m (-.f64 (/.f64 #s(literal 1 binary64) m) #s(literal 1 binary64))))) (/.f64 #s(literal 1 binary64) (*.f64 v v)))",
+    "ours_bits": 3.015100012399601,
+    "ours_program": "(FPCore (m v) (- (/ (* m (* (- 1 m) (- 1 m))) v) (- 1 m)))",
+    "ours_all": [
+      {
+        "program": "(FPCore (m v) (- (/ (* m (* (- 1 m) (- 1 m))) v) (- 1 m)))",
+        "bits": 3.015100012399601
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 2.517084e-16,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 3.209239e-16,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": null,
+    "herbie_worst_error": "operator 'approx' outside the subset",
+    "ours_worst_program": "(FPCore (m v) (- (/ (* m (* (- 1 m) (- 1 m))) v) (- 1 m)))"
+  },
+  {
+    "benchmark": "cancel_sqrt_2var",
+    "status": "eq-target",
+    "reference_bits": 0.010935775816648566,
+    "herbie_bits": 0.010935775816648566,
+    "herbie_program": "(+.f64 y (sqrt.f64 (+.f64 (*.f64 y y) (*.f64 x x))))",
+    "ours_bits": 0.05032312031259014,
+    "ours_program": "(FPCore (y x) (if (< y 0) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y)) (+ y (sqrt (+ (* y y) (* x x))))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (y x) (if (< y 0) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y)) (+ y (sqrt (+ (* y y) (* x x))))))",
+        "bits": 0.05032312031259014
+      },
+      {
+        "program": "(FPCore (y x) (if (> y -0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y))))",
+        "bits": 0.05032312031259014
+      },
+      {
+        "program": "(FPCore (y x) (if (> y -0.0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y))))",
+        "bits": 0.05032312031259014
+      },
+      {
+        "program": "(FPCore (y x) (if (> y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y))))",
+        "bits": 0.05032312031259014
+      },
+      {
+        "program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y))))",
+        "bits": 0.05032312031259014
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 3.94296e-15,
+      "rel_err_ulps": 179.979963996391
+    },
+    "ours_worst": {
+      "abs_err": 3.94296e-15,
+      "rel_err_ulps": 2.192707632614557
+    },
+    "herbie_worst": {
+      "abs_err": 3.94296e-15,
+      "rel_err_ulps": 179.979963996391
+    },
+    "ours_worst_program": "(FPCore (y x) (if (>= y 0) (+ y (sqrt (+ (* y y) (* x x)))) (/ (* x x) (- (sqrt (+ (* y y) (* x x))) y))))"
+  },
+  {
+    "benchmark": "cancel_sqrt_shift3",
+    "status": "imp-start",
+    "reference_bits": 2.9541609631352577,
+    "herbie_bits": 0.016412401002298408,
+    "herbie_program": "(/.f64 #s(literal 1 binary64) (-.f64 (sqrt.f64 (-.f64 (*.f64 (-.f64 x #s(literal 6 binary64)) x) #s(literal -10 binary64))) (-.f64 x #s(literal 3 binary64))))",
+    "ours_bits": null,
+    "ours_program": null,
+    "ours_all": [],
+    "reference_worst": {
+      "abs_err": 2.850937e-15,
+      "rel_err_ulps": 311.93863063408196
+    },
+    "ours_worst": null,
+    "herbie_worst": {
+      "abs_err": null,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": null
+  },
+  {
+    "benchmark": "cancel_sqrt_sum",
+    "status": "eq-target",
+    "reference_bits": 0.014159719063241356,
+    "herbie_bits": 0.014159719063241356,
+    "herbie_program": "(+.f64 x (sqrt.f64 (-.f64 (*.f64 x x) #s(literal -1 binary64))))",
+    "ours_bits": 0.020783082813311298,
+    "ours_program": "(FPCore (x) (if (< x 0) (/ 1 (- (sqrt (+ (* x x) 1)) x)) (+ x (sqrt (+ (* x x) 1)))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x) (if (< x 0) (/ 1 (- (sqrt (+ (* x x) 1)) x)) (+ x (sqrt (+ (* x x) 1)))))",
+        "bits": 0.020783082813311298
+      },
+      {
+        "program": "(FPCore (x) (if (<= x 0) (/ 1 (- (sqrt (+ (* x x) 1)) x)) (+ x (sqrt (+ (* x x) 1)))))",
+        "bits": 0.020783082813311298
+      },
+      {
+        "program": "(FPCore (x) (if (> x -0.0) (+ x (sqrt (+ (* x x) 1))) (/ 1 (- (sqrt (+ (* x x) 1)) x))))",
+        "bits": 0.020783082813311298
+      },
+      {
+        "program": "(FPCore (x) (if (>= x 0) (+ x (sqrt (+ (* x x) 1))) (* 1 (/ 1 (- (sqrt (+ (* x x) 1)) x)))))",
+        "bits": 0.020783082813311298
+      },
+      {
+        "program": "(FPCore (x) (if (>= x 0) (+ x (sqrt (+ (* x x) 1))) (/ 1 (+ (sqrt (+ (* x x) 1)) (- x)))))",
+        "bits": 0.020783082813311298
+      },
+      {
+        "program": "(FPCore (x) (if (>= x 0) (+ x (sqrt (+ (* x x) 1))) (/ 1 (- (sqrt (+ (* x x) 1)) x))))",
+        "bits": 0.020783082813311298
+      },
+      {
+        "program": "(FPCore (x) (if (>= x 0) (+ x (sqrt (+ (* x x) 1))) (/ 1 (- (sqrt (- (* x x) -1)) x))))",
+        "bits": 0.020783082813311298
+      },
+      {
+        "program": "(FPCore (x) (if (>= x 0) (+ x (sqrt (+ (/ (* x x) 1) 1))) (/ 1 (- (sqrt (+ (/ (* x x) 1) 1)) x))))",
+        "bits": 0.020783082813311298
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 3.56667e-15,
+      "rel_err_ulps": 179.35990839969463
+    },
+    "ours_worst": {
+      "abs_err": 3.56667e-15,
+      "rel_err_ulps": 1.7671890750621202
+    },
+    "herbie_worst": {
+      "abs_err": 3.56667e-15,
+      "rel_err_ulps": 179.35990839969463
+    },
+    "ours_worst_program": "(FPCore (x) (if (>= x 0) (+ x (sqrt (+ (* x x) 1))) (/ 1 (- (sqrt (+ (* x x) 1)) x))))"
+  },
+  {
+    "benchmark": "complex_square_real",
+    "status": "eq-target",
+    "reference_bits": 1.107448247991743,
+    "herbie_bits": 0.246,
+    "herbie_program": "(-.f64 (*.f64 (-.f64 re im) im) (*.f64 (-.f64 im re) re))",
+    "ours_bits": 0.243,
+    "ours_program": "(FPCore (re im) (* (* (- re im) (+ re im)) 1))",
+    "ours_all": [
+      {
+        "program": "(FPCore (re im) (* (* (- re im) (+ re im)) 1))",
+        "bits": 0.243
+      },
+      {
+        "program": "(FPCore (re im) (* (+ re im) (- re im)))",
+        "bits": 0.243
+      },
+      {
+        "program": "(FPCore (re im) (* (- re (sqrt (* im im))) (+ re (sqrt (* im im)))))",
+        "bits": 0.243
+      },
+      {
+        "program": "(FPCore (re im) (* (- re im) (* (+ re im) 1)))",
+        "bits": 0.243
+      },
+      {
+        "program": "(FPCore (re im) (* (- re im) (+ re (sqrt (* im im)))))",
+        "bits": 0.243
+      },
+      {
+        "program": "(FPCore (re im) (* (- re im) (+ re im)))",
+        "bits": 0.243
+      },
+      {
+        "program": "(FPCore (re im) (* (- re im) (- (+ re im) 0)))",
+        "bits": 0.243
+      },
+      {
+        "program": "(FPCore (re im) (+ (* (- re im) (+ re im)) 0))",
+        "bits": 0.243
+      },
+      {
+        "program": "(FPCore (re im) (- (* re re) (* im im)))",
+        "bits": 1.107448247991743
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 6.661339e-16,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 6.123574e-16,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": {
+      "abs_err": 7.220787e-16,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (re im) (* (- re im) (+ re im)))"
+  },
+  {
+    "benchmark": "conte_near_pole",
+    "status": "imp-start",
+    "reference_bits": 8.135330156965368,
+    "herbie_bits": 0.3222830828133113,
+    "herbie_program": "(/.f64 #s(literal 10 binary64) (-.f64 (*.f64 x (-.f64 #s(literal 1 binary64) x)) (-.f64 x #s(literal 1 binary64))))",
+    "ours_bits": null,
+    "ours_program": null,
+    "ours_all": [],
+    "reference_worst": null,
+    "ours_worst": null,
+    "herbie_worst": {
+      "abs_err": 1.391769e-10,
+      "rel_err_ulps": 125.4220070305366
+    },
+    "ours_worst_program": null
+  },
+  {
+    "benchmark": "conte_x_minus_sqrt",
+    "status": "lt-target",
+    "reference_bits": 59.09460833187875,
+    "herbie_bits": 0.23685468525070397,
+    "herbie_program": "#s(approx (- x (sqrt (- (* x x) eps))) (/.f64 (*.f64 eps (/.f64 (-.f64 (*.f64 #s(literal 1/8 binary64) (/.f64 eps x)) (*.f64 #s(literal -1/2 binary64) x)) x)) x))",
+    "ours_bits": 0.0155,
+    "ours_program": "(FPCore (x eps) (+ (/ eps (+ x (sqrt (- (* x x) eps)))) 0))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x eps) (+ (/ eps (+ x (sqrt (- (* x x) eps)))) 0))",
+        "bits": 0.0155
+      },
+      {
+        "program": "(FPCore (x eps) (/ eps (+ (sqrt (- (* x x) eps)) x)))",
+        "bits": 0.0155
+      },
+      {
+        "program": "(FPCore (x eps) (/ eps (+ x (sqrt (+ (* x x) (- eps))))))",
+        "bits": 0.0155
+      },
+      {
+        "program": "(FPCore (x eps) (/ eps (+ x (sqrt (+ (- (* x x) eps) 0)))))",
+        "bits": 0.0155
+      },
+      {
+        "program": "(FPCore (x eps) (/ eps (+ x (sqrt (- (* x (* x 1)) eps)))))",
+        "bits": 0.0155
+      },
+      {
+        "program": "(FPCore (x eps) (/ eps (+ x (sqrt (- (* x x) eps)))))",
+        "bits": 0.0155
+      },
+      {
+        "program": "(FPCore (x eps) (/ eps (+ x (sqrt (- (+ (* x x) 0) eps)))))",
+        "bits": 0.0155
+      },
+      {
+        "program": "(FPCore (x eps) (/ eps (+ x (sqrt (- (/ (* x x) 1) eps)))))",
+        "bits": 0.0155
+      },
+      {
+        "program": "(FPCore (x eps) (/ eps (- (+ x (sqrt (- (* x x) eps))) 0)))",
+        "bits": 0.0155
+      },
+      {
+        "program": "(FPCore (x eps) (* eps (/ 1 (+ x (sqrt (- (* x x) eps))))))",
+        "bits": 0.26989624062518025
+      },
+      {
+        "program": "(FPCore (x eps) (/ eps (- (+ x (sqrt (- (* x x) eps))) (+ x (sqrt (- (* x x) eps))))))",
+        "bits": 62.55931447802027
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 1.382089e-13,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 7.37292e-17,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": {
+      "abs_err": null,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (x eps) (/ eps (+ x (sqrt (- (* x x) eps)))))"
+  },
+  {
+    "benchmark": "delta4",
+    "status": "gt-target",
+    "reference_bits": 1.0367460149276018,
+    "herbie_bits": 0.3398002949571364,
+    "herbie_program": "(-.f64 #s(approx (- (- (* x6 x1) (* x6 (- x5 x3))) (- (* x4 x1) (* x2 (- x5 x3)))) (-.f64 (+.f64 (*.f64 x1 (-.f64 x6 x4)) (*.f64 x2 (-.f64 x5 x3))) (*.f64 x6 (-.f64 x5 x3)))) (*.f64 (-.f64 (-.f64 (-.f64 x4 x5) x2) (-.f64 x3 x1)) x1))",
+    "ours_bits": 1.9295442247403656,
+    "ours_program": "(FPCore (x1 x2 x3 x4 x5 x6) (- (+ (* x1 x2) (+ (* x1 x3) (+ (* x1 x5) (+ (* x1 x6) (+ (* x2 x5) (* x3 x6)))))) (* (+ (* x1 x1) (+ (* 2 (* x1 x4)) (+ (* x2 x3) (* x5 x6)))) 1)))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x1 x2 x3 x4 x5 x6) (- (+ (* x1 x2) (+ (* x1 x3) (+ (* x1 x5) (+ (* x1 x6) (+ (* x2 x5) (* x3 x6)))))) (* (+ (* x1 x1) (+ (* 2 (* x1 x4)) (+ (* x2 x3) (* x5 x6)))) 1)))",
+        "bits": 1.9295442247403656
+      },
+      {
+        "program": "(FPCore (x1 x2 x3 x4 x5 x6) (- (+ (* x1 x2) (+ (* x1 x3) (+ (* x1 x5) (+ (* x1 x6) (+ (* x2 x5) (* x3 x6)))))) (+ (* x1 x1) (+ (* 1 (* 2 (* x1 x4))) (+ (* x2 x3) (* x5 x6))))))",
+        "bits": 1.9295442247403656
+      },
+      {
+        "program": "(FPCore (x1 x2 x3 x4 x5 x6) (- (+ (* x1 x2) (+ (* x1 x3) (+ (* x1 x5) (+ (* x1 x6) (+ (* x2 x5) (* x3 x6)))))) (+ (* x1 x1) (+ (* 2 (* x1 x4)) (+ (* x2 (* x3 1)) (* x5 x6))))))",
+        "bits": 1.9295442247403656
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 5.770726e-14,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 1.350032e-13,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": null,
+    "herbie_worst_error": "operator 'approx' outside the subset",
+    "ours_worst_program": "(FPCore (x1 x2 x3 x4 x5 x6) (- (+ (* x1 x2) (+ (* x1 x3) (+ (* x1 x5) (+ (* x1 x6) (+ (* x2 x5) (* x3 x6)))))) (+ (* x1 x1) (+ (* 1 (* 2 (* x1 x4))) (+ (* x2 x3) (* x5 x6))))))"
+  },
+  {
+    "benchmark": "excel_x0",
+    "status": "eq-target",
+    "reference_bits": 7.212687511273452,
+    "herbie_bits": 0.30964624062518026,
+    "herbie_program": "(*.f64 x1 (/.f64 x0 (-.f64 #s(literal 1 binary64) x1)))",
+    "ours_bits": 0.299375,
+    "ours_program": "(FPCore (x0 x1) (/ (* x0 (sqrt (* x1 x1))) (- 1 (sqrt (* x1 x1)))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x0 x1) (/ (* x0 (sqrt (* x1 x1))) (- 1 (sqrt (* x1 x1)))))",
+        "bits": 0.299375
+      },
+      {
+        "program": "(FPCore (x0 x1) (/ (* x0 x1) (- 01 x1)))",
+        "bits": 0.299375
+      },
+      {
+        "program": "(FPCore (x0 x1) (/ (* x0 x1) (- 1 x1)))",
+        "bits": 0.299375
+      },
+      {
+        "program": "(FPCore (x0 x1) (/ (+ (* x0 x1) 0) (- 1 x1)))",
+        "bits": 0.299375
+      },
+      {
+        "program": "(FPCore (x0 x1) (* (/ x0 (- 1 x1)) x1))",
+        "bits": 0.30964624062518026
+      },
+      {
+        "program": "(FPCore (x0 x1) (/ (* x0 x1) (- 0 0)))",
+        "bits": 62.01217337530768
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 4.023836e-16,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 1.137835e-17,
+      "rel_err_ulps": 116.0990153699244
+    },
+    "herbie_worst": {
+      "abs_err": 1.137835e-17,
+      "rel_err_ulps": 116.0990153699244
+    },
+    "ours_worst_program": "(FPCore (x0 x1) (* (/ x0 (- 1 x1)) x1))"
+  },
+  {
+    "benchmark": "expand_square",
+    "status": "eq-target",
+    "reference_bits": 58.42259048031801,
+    "herbie_bits": 0.014625,
+    "herbie_program": "(*.f64 x (-.f64 x #s(literal -2 binary64)))",
+    "ours_bits": 0.014625,
+    "ours_program": "(FPCore (x) (* x (+ 2 x)))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x) (* x (+ 2 x)))",
+        "bits": 0.014625
+      },
+      {
+        "program": "(FPCore (x) (* x (+ x (+ 2 0))))",
+        "bits": 0.014625
+      },
+      {
+        "program": "(FPCore (x) (* x (+ x 02)))",
+        "bits": 0.014625
+      },
+      {
+        "program": "(FPCore (x) (* x (+ x 2)))",
+        "bits": 0.014625
+      },
+      {
+        "program": "(FPCore (x) (* x (- (+ x 2) 0)))",
+        "bits": 0.014625
+      },
+      {
+        "program": "(FPCore (x) (* x (/ (+ x 2) 1)))",
+        "bits": 0.014625
+      },
+      {
+        "program": "(FPCore (x) (/ (* x (+ x 2)) 1))",
+        "bits": 0.014625
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 1.110224e-15,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 4.440893e-16,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": {
+      "abs_err": 4.440893e-16,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (x) (* x (+ x 2)))"
+  },
+  {
+    "benchmark": "fastmath_dist4",
+    "status": "eq-target",
+    "reference_bits": 0.7460400560239703,
+    "herbie_bits": 0.5266981819071551,
+    "herbie_program": "(*.f64 d1 (-.f64 (-.f64 d2 (-.f64 d3 d4)) d1))",
+    "ours_bits": 0.4439763874864112,
+    "ours_program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (+ (- d2 d3) (- d4 d1)) 0)))",
+    "ours_all": [
+      {
+        "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (+ (- d2 d3) (- d4 d1)) 0)))",
+        "bits": 0.4439763874864112
+      },
+      {
+        "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (+ d2 (- d3)) (+ d4 (- d1)))))",
+        "bits": 0.4439763874864112
+      },
+      {
+        "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (- d2 d3) (+ (- d4 d1) 0))))",
+        "bits": 0.4439763874864112
+      },
+      {
+        "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (- d2 d3) (+ d4 (- d1)))))",
+        "bits": 0.4439763874864112
+      },
+      {
+        "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (- d2 d3) (- d4 d1))))",
+        "bits": 0.4439763874864112
+      },
+      {
+        "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (- d4 d1) (- d2 d3))))",
+        "bits": 0.4439763874864112
+      },
+      {
+        "program": "(FPCore (d1 d2 d3 d4) (* d1 (- (- d2 d3) (- d1 d4))))",
+        "bits": 0.4439763874864112
+      },
+      {
+        "program": "(FPCore (d1 d2 d3 d4) (* d1 (- (+ (- d2 d3) d4) d1)))",
+        "bits": 0.5296057818491481
+      },
+      {
+        "program": "(FPCore (d1 d2 d3 d4) (* d1 (- (+ d2 d4) (+ d3 d1))))",
+        "bits": 0.7776866791668098
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 6.48015e-12,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 4.661161e-12,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": {
+      "abs_err": 4.661161e-12,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (- d2 d3) (- d4 d1))))"
+  },
+  {
+    "benchmark": "floudas1",
+    "status": "eq-target",
+    "reference_bits": 0.241125,
+    "herbie_bits": 0.07896936093777043,
+    "herbie_program": "(+.f64 (*.f64 (-.f64 #s(literal 1 binary64) x3) (-.f64 x3 #s(literal 1 binary64))) (-.f64 (-.f64 (*.f64 (*.f64 (-.f64 x1 #s(literal 2 binary64)) (-.f64 x1 #s(literal 2 binary64))) #s(literal -25 binary64)) (*.f64 (-.f64 x2 #s(literal 2 binary64)) (-.f64 x2 #s(literal 2 binary64)))) (-.f64 (-.f64 (*.f64 (-.f64 x5 #s(literal 1 binary64)) (-.f64 x5 #s(literal 1 binary64))) (*.f64 (-.f64 #s(literal 4 binary64) x4) (-.f64 x4 #s(literal 4 binary64)))) (*.f64 (-.f64 #s(literal 4 binary64) x6) (-.f64 x6 #s(literal 4 binary64))))))",
+    "ours_bits": 0.146875,
+    "ours_program": "(FPCore (x1 x2 x3 x4 x5 x6) (- (+ (* 25 (* (- x1 2) (- x1 2))) (+ (* (- x2 2) (- x2 2)) (+ (* (- x3 1) (- x3 1)) (+ (* (- x4 4) (- x4 4)) (+ (* (- x5 1) (- x5 1)) (* (- x6 4) (- x6 4)))))))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x1 x2 x3 x4 x5 x6) (- (+ (* 25 (* (- x1 2) (- x1 2))) (+ (* (- x2 2) (- x2 2)) (+ (* (- x3 1) (- x3 1)) (+ (* (- x4 4) (- x4 4)) (+ (* (- x5 1) (- x5 1)) (* (- x6 4) (- x6 4)))))))))",
+        "bits": 0.146875
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 2.851053e-13,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 1.962875e-13,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": {
+      "abs_err": 2.3892e-13,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (x1 x2 x3 x4 x5 x6) (- (+ (* 25 (* (- x1 2) (- x1 2))) (+ (* (- x2 2) (- x2 2)) (+ (* (- x3 1) (- x3 1)) (+ (* (- x4 4) (- x4 4)) (+ (* (- x5 1) (- x5 1)) (* (- x6 4) (- x6 4)))))))))"
+  },
+  {
+    "benchmark": "floudas3",
+    "status": "eq-target",
+    "reference_bits": 0.1425,
+    "herbie_bits": 0.1425,
+    "herbie_program": "(+.f64 (-.f64 (*.f64 #s(literal -12 binary64) x1) (*.f64 #s(literal 7 binary64) x2)) (*.f64 x2 x2))",
+    "ours_bits": 0.1425,
+    "ours_program": "(FPCore (x1 x2) (+ (* -12 x1) (+ (* -7 x2) (* x2 x2))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x1 x2) (+ (* -12 x1) (+ (* -7 x2) (* x2 x2))))",
+        "bits": 0.1425
+      },
+      {
+        "program": "(FPCore (x1 x2) (+ (+ (* -12 x1) (* -7 x2)) (* x2 x2)))",
+        "bits": 0.1425
+      },
+      {
+        "program": "(FPCore (x1 x2) (+ (- (* -12 x1) (* (sqrt 1) (* 7 x2))) (* x2 x2)))",
+        "bits": 0.1425
+      },
+      {
+        "program": "(FPCore (x1 x2) (+ (- (* -12 x1) (* 7 x2)) (* x2 x2)))",
+        "bits": 0.1425
+      },
+      {
+        "program": "(FPCore (x1 x2) (+ (- (* -12 x1) (* 7 x2)) (+ (* x2 x2) 0)))",
+        "bits": 0.1425
+      },
+      {
+        "program": "(FPCore (x1 x2) (+ (- (* -12 x1) (* 7 x2)) (/ (* x2 x2) 1)))",
+        "bits": 0.1425
+      },
+      {
+        "program": "(FPCore (x1 x2) (+ (- (* -12 x1) (+ (* 7 x2) 0)) (* x2 x2)))",
+        "bits": 0.1425
+      },
+      {
+        "program": "(FPCore (x1 x2) (+ (- (* -12 x1) (* 7 (sqrt (* x2 x2)))) (* x2 x2)))",
+        "bits": 7.6667927979378945
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 1.154632e-14,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 8.881785e-15,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": {
+      "abs_err": 1.154632e-14,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (x1 x2) (+ (* -12 x1) (+ (* -7 x2) (* x2 x2))))"
+  },
+  {
+    "benchmark": "himmilbeau",
+    "status": "eq-target",
+    "reference_bits": 0.03719812031259014,
+    "herbie_bits": 0.03314624062518029,
+    "herbie_program": "(-.f64 (-.f64 (*.f64 (-.f64 x2 (-.f64 #s(literal 11 binary64) (*.f64 x1 x1))) (-.f64 x2 (-.f64 #s(literal 11 binary64) (*.f64 x1 x1)))) (*.f64 (-.f64 (-.f64 #s(literal 7 binary64) x1) (*.f64 x2 x2)) x1)) (*.f64 (-.f64 #s(literal 7 binary64) (*.f64 x2 x2)) (-.f64 (*.f64 x2 x2) (-.f64 #s(literal 7 binary64) x1))))",
+    "ours_bits": 0.03719812031259014,
+    "ours_program": "(FPCore (x1 x2) (+ (* (- (+ (* x1 x1) x2) 11) (- (+ (* x1 x1) x2) 11)) (* (* (- (+ x1 (* x2 x2)) 7) (- (+ x1 (* x2 x2)) 7)) 1)))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x1 x2) (+ (* (- (+ (* x1 x1) x2) 11) (- (+ (* x1 x1) x2) 11)) (* (* (- (+ x1 (* x2 x2)) 7) (- (+ x1 (* x2 x2)) 7)) 1)))",
+        "bits": 0.03719812031259014
+      },
+      {
+        "program": "(FPCore (x1 x2) (+ (* (- (+ (* x1 x1) x2) 11) (- (+ (* x1 x1) x2) 11)) (* (- (+ x1 (* x2 x2)) 7) (* (- (+ x1 (* x2 x2)) 7) 1))))",
+        "bits": 0.03719812031259014
+      },
+      {
+        "program": "(FPCore (x1 x2) (+ (* (- (+ (* x1 x1) x2) 11) (- (+ (* x1 x1) x2) 11)) (* (- (+ x1 (* x2 x2)) 7) (- (+ x1 (* x2 x2)) 7))))",
+        "bits": 0.03719812031259014
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 5.897505e-13,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 5.897505e-13,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": {
+      "abs_err": 4.864998e-13,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (x1 x2) (+ (* (- (+ (* x1 x1) x2) 11) (- (+ (* x1 x1) x2) 11)) (* (- (+ x1 (* x2 x2)) 7) (- (+ x1 (* x2 x2)) 7))))"
+  },
+  {
+    "benchmark": "kahan_p9",
+    "status": "eq-target",
+    "reference_bits": 0.021889285939212747,
+    "herbie_bits": 0.021889285939212747,
+    "herbie_program": "(/.f64 (*.f64 (-.f64 x y) (+.f64 x y)) (+.f64 (*.f64 x x) (*.f64 y y)))",
+    "ours_bits": 0.027396262438355218,
+    "ours_program": "(FPCore (x y) (/ (- (* x x) (* y y)) (+ (* x x) (* y y))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x y) (/ (- (* x x) (* y y)) (+ (* x x) (* y y))))",
+        "bits": 0.027396262438355218
+      },
+      {
+        "program": "(FPCore (x y) (/ (- (* x x) (* y y)) (+ (* x x) (+ (* y y) 0))))",
+        "bits": 0.027396262438355218
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 3.971188e-12,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 1.966799e-12,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": {
+      "abs_err": 3.971188e-12,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (x y) (/ (- (* x x) (* y y)) (+ (* x x) (* y y))))"
+  },
+  {
+    "benchmark": "kepler0",
+    "status": "gt-target",
+    "reference_bits": 0.5619609078551383,
+    "herbie_bits": 0.28071936093777045,
+    "herbie_program": "(-.f64 (-.f64 (*.f64 x1 x6) (*.f64 (-.f64 x6 x2) (-.f64 x5 x3))) (*.f64 (-.f64 (-.f64 (-.f64 x4 x5) x2) (-.f64 x3 x1)) x1))",
+    "ours_bits": 0.4134248125036058,
+    "ours_program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* (- x2 x6) (- x5 (sqrt (* x3 x3)))) (* x1 (+ (+ (- (+ (+ (- x1) x2) x3) x4) x5) x6))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* (- x2 x6) (- x5 (sqrt (* x3 x3)))) (* x1 (+ (+ (- (+ (+ (- x1) x2) x3) x4) x5) x6))))",
+        "bits": 0.4134248125036058
+      },
+      {
+        "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* (- x2 x6) (- x5 x3)) (* x1 (+ (+ (- (+ (+ (- x1) x2) x3) x4) x5) x6))))",
+        "bits": 0.4134248125036058
+      },
+      {
+        "program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* (- x2 x6) (- x5 x3)) (* x1 (+ (- x1) (+ x2 (+ x3 (+ (- x4) (+ x5 x6))))))))",
+        "bits": 0.7003515766318189
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 5.853056e-14,
+      "rel_err_ulps": 5.43483144032003
+    },
+    "ours_worst": {
+      "abs_err": 3.366816e-14,
+      "rel_err_ulps": 2.4709174995953695
+    },
+    "herbie_worst": {
+      "abs_err": 3.109714e-14,
+      "rel_err_ulps": 2.2414951273778616
+    },
+    "ours_worst_program": "(FPCore (x1 x2 x3 x4 x5 x6) (+ (* (- x2 x6) (- x5 x3)) (* x1 (+ (+ (- (+ (+ (- x1) x2) x3) x4) x5) x6))))"
+  },
+  {
+    "benchmark": "kepler1",
+    "status": "gt-target",
+    "reference_bits": 0.7715542298329058,
+    "herbie_bits": 0.6039114078028437,
+    "herbie_program": "(-.f64 (*.f64 (-.f64 (-.f64 x3 (-.f64 x1 x2)) x4) (*.f64 x4 x1)) #s(approx (- x4 (- (- (* (- x3 (- (- x2 x1) x4)) x2) (* x3 (+ (- (* x2 x4) (- x2 (- (- x3 x1) x4))) x1))) (* x2 x1))) #s(approx (- (+ x4 (* x3 (- (+ x3 (* x2 x4)) (+ x2 x4)))) (* x2 (- (+ x3 x4) x2))) (-.f64 (+.f64 (*.f64 x3 (-.f64 x3 x2)) (*.f64 x4 (-.f64 (+.f64 #s(literal 1 binary64) (*.f64 x3 (-.f64 x2 #s(literal 1 binary64)))) x2))) (*.f64 x2 (-.f64 x3 x2))))))",
+    "ours_bits": 0.848418168037023,
+    "ours_program": "(FPCore (x1 x2 x3 x4) (- (* x4 (+ (+ (+ (+ (+ (+ (- (* x1 x1)) (* x1 x2)) (* x1 x3)) (- (* x1 x4))) x2) x3) (+ (- (* x2 x3)) -1))) (* (- x2 x3) (- x2 x3))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x1 x2 x3 x4) (- (* x4 (+ (+ (+ (+ (+ (+ (- (* x1 x1)) (* x1 x2)) (* x1 x3)) (- (* x1 x4))) x2) x3) (+ (- (* x2 x3)) -1))) (* (- x2 x3) (- x2 x3))))",
+        "bits": 0.848418168037023
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 1.959013e-13,
+      "rel_err_ulps": 17.23623053706789
+    },
+    "ours_worst": {
+      "abs_err": 2.204818e-13,
+      "rel_err_ulps": 13.981789834741521
+    },
+    "herbie_worst": null,
+    "herbie_worst_error": "operator 'approx' outside the subset",
+    "ours_worst_program": "(FPCore (x1 x2 x3 x4) (- (* x4 (+ (+ (+ (+ (+ (+ (- (* x1 x1)) (* x1 x2)) (* x1 x3)) (- (* x1 x4))) x2) x3) (+ (- (* x2 x3)) -1))) (* (- x2 x3) (- x2 x3))))"
+  },
+  {
+    "benchmark": "kepler2",
+    "status": "apx-start",
+    "reference_bits": 1.2882997326040502,
+    "herbie_bits": 0.9420136327828711,
+    "herbie_program": "(-.f64 (-.f64 (*.f64 (-.f64 (-.f64 x6 (-.f64 (-.f64 x2 x3) x1)) (-.f64 x5 x4)) (*.f64 x5 x2)) (-.f64 (*.f64 (-.f64 (-.f64 (-.f64 x4 x5) x6) (-.f64 x3 (-.f64 x1 x2))) (*.f64 x4 x1)) (-.f64 (*.f64 (-.f64 (*.f64 (-.f64 (-.f64 x5 x6) (-.f64 (-.f64 (-.f64 x3 x1) x2) x4)) x6) (*.f64 x2 x4)) x3) (*.f64 (+.f64 (*.f64 x5 x3) (*.f64 x6 x2)) x1)))) (*.f64 (*.f64 x5 x4) x6))",
+    "ours_bits": null,
+    "ours_program": null,
+    "ours_all": [],
+    "reference_worst": null,
+    "ours_worst": null,
+    "herbie_worst": {
+      "abs_err": 9.513239e-13,
+      "rel_err_ulps": 46.69606813235
+    },
+    "ours_worst_program": null
+  },
+  {
+    "benchmark": "martel_p6",
+    "status": "gt-target",
+    "reference_bits": 3.6517247530395522,
+    "herbie_bits": 0.01855269863007109,
+    "herbie_program": "(*.f64 (+.f64 c (+.f64 (+.f64 d a) b)) #s(literal 2 binary64))",
+    "ours_bits": 3.6517247530395522,
+    "ours_program": "(FPCore (a b c d) (* (* (+ a (+ b (+ c d))) 2) 1))",
+    "ours_all": [
+      {
+        "program": "(FPCore (a b c d) (* (* (+ a (+ b (+ c d))) 2) 1))",
+        "bits": 3.6517247530395522
+      },
+      {
+        "program": "(FPCore (a b c d) (* (+ a (+ (sqrt 0) (+ b (+ (sqrt 0) (+ c d))))) 2))",
+        "bits": 3.6517247530395522
+      },
+      {
+        "program": "(FPCore (a b c d) (* (+ a (+ b (+ (sqrt 0) (+ c d)))) 2))",
+        "bits": 3.6517247530395522
+      },
+      {
+        "program": "(FPCore (a b c d) (* (+ a (+ b (+ c d))) 2))",
+        "bits": 3.6517247530395522
+      },
+      {
+        "program": "(FPCore (a b c d) (* (+ a (+ b (- (+ c d) (- 0)))) 2))",
+        "bits": 3.6517247530395522
+      },
+      {
+        "program": "(FPCore (a b c d) (* (+ a (+ b (- (+ c d) 0))) 2))",
+        "bits": 3.6517247530395522
+      },
+      {
+        "program": "(FPCore (a b c d) (* (+ a (- (+ b (+ c d)) 0)) 2))",
+        "bits": 3.6517247530395522
+      },
+      {
+        "program": "(FPCore (a b c d) (* (- (+ a (+ b (+ c d))) 0) 2))",
+        "bits": 3.6517247530395522
+      },
+      {
+        "program": "(FPCore (a b c d) (* 2 (+ a (+ b (+ c d)))))",
+        "bits": 3.6517247530395522
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 5.77316e-15,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 5.77316e-15,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": {
+      "abs_err": 1.332268e-15,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (a b c d) (* (+ a (+ b (+ c d))) 2))"
+  },
+  {
+    "benchmark": "matrixdeterminant",
+    "status": "eq-target",
+    "reference_bits": 0.16725960194963135,
+    "herbie_bits": 0.17466297031547479,
+    "herbie_program": "(-.f64 (+.f64 (+.f64 (*.f64 (*.f64 a e) i) (*.f64 (*.f64 b f) g)) (*.f64 (*.f64 c d) h)) #s(approx (+ (+ (* (* c e) g) (* (* b d) i)) (* (* a f) h)) (*.f64 e (+.f64 (*.f64 c g) (+.f64 (/.f64 (*.f64 a (*.f64 f h)) e) (/.f64 (*.f64 b (*.f64 d i)) e))))))",
+    "ours_bits": 0.16386336132445106,
+    "ours_program": "(FPCore (a b c d e f g h i) (+ (* a (- (* e i) (* f h))) (+ (* b (- (* f g) (* d i))) (* c (- (* d h) (* e g))))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (a b c d e f g h i) (+ (* a (- (* e i) (* f h))) (+ (* b (- (* f g) (* d i))) (* c (- (* d h) (* e g))))))",
+        "bits": 0.16386336132445106
+      },
+      {
+        "program": "(FPCore (a b c d e f g h i) (- (+ (+ (* (* a e) i) (* (* b f) g)) (* (* c d) h)) (+ (+ (* (* c e) g) (* (* b d) i)) (* (* a f) h))))",
+        "bits": 0.16725960194963135
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 1.563195e-12,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 1.456613e-12,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": null,
+    "herbie_worst_error": "operator 'approx' outside the subset",
+    "ours_worst_program": "(FPCore (a b c d e f g h i) (+ (* a (- (* e i) (* f h))) (+ (* b (- (* f g) (* d i))) (* c (- (* d h) (* e g))))))"
+  },
+  {
+    "benchmark": "matrixdeterminant2",
+    "status": "ex-start",
+    "reference_bits": 0.1607712406251803,
+    "herbie_bits": 0.1739648500028846,
+    "herbie_program": "(-.f64 (+.f64 (*.f64 a (*.f64 e i)) (+.f64 (*.f64 g (*.f64 b f)) (*.f64 c (*.f64 d h)))) #s(approx (+ (* e (* c g)) (+ (* i (* b d)) (* a (* f h)))) (*.f64 e (+.f64 (*.f64 c g) (+.f64 (/.f64 (*.f64 a (*.f64 f h)) e) (/.f64 (*.f64 b (*.f64 d i)) e))))))",
+    "ours_bits": null,
+    "ours_program": null,
+    "ours_all": [],
+    "reference_worst": null,
+    "ours_worst": null,
+    "herbie_worst": null,
+    "herbie_worst_error": "operator 'approx' outside the subset",
+    "ours_worst_program": null
+  },
+  {
+    "benchmark": "nmse_example_3_1",
+    "status": "gt-target",
+    "reference_bits": 1.36126965867207,
+    "herbie_bits": 0.25607312031259016,
+    "herbie_program": "(sqrt.f64 (/.f64 #s(literal 1 binary64) (-.f64 (-.f64 x #s(literal -1 binary64)) (-.f64 (*.f64 #s(literal -2 binary64) (sqrt.f64 (+.f64 (*.f64 x x) x))) x))))",
+    "ours_bits": 0.45380376252379817,
+    "ours_program": "(FPCore (x) (/ 1 (* (+ (sqrt (+ x 1)) (sqrt x)) 1)))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x) (/ 1 (* (+ (sqrt (+ x 1)) (sqrt x)) 1)))",
+        "bits": 0.45380376252379817
+      },
+      {
+        "program": "(FPCore (x) (/ 1 (+ (sqrt (+ 1 x)) (sqrt x))))",
+        "bits": 0.45380376252379817
+      },
+      {
+        "program": "(FPCore (x) (/ 1 (+ (sqrt (+ x 01)) (sqrt x))))",
+        "bits": 0.45380376252379817
+      },
+      {
+        "program": "(FPCore (x) (/ 1 (+ (sqrt (+ x 1)) (sqrt x))))",
+        "bits": 0.45380376252379817
+      },
+      {
+        "program": "(FPCore (x) (/ 1 (+ (sqrt (- x -1)) (sqrt x))))",
+        "bits": 0.45380376252379817
+      },
+      {
+        "program": "(FPCore (x) (/ 1 (+ (sqrt (/ (+ x 1) 1)) (sqrt x))))",
+        "bits": 0.45380376252379817
+      },
+      {
+        "program": "(FPCore (x) (/ 1 (- (+ (sqrt (+ x 1)) (sqrt x)) 0)))",
+        "bits": 0.45380376252379817
+      },
+      {
+        "program": "(FPCore (x) (/ 1 (/ (+ (sqrt (+ x 1)) (sqrt x)) 1)))",
+        "bits": 0.45380376252379817
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 2.236069e-15,
+      "rel_err_ulps": 193.81389615176633
+    },
+    "ours_worst": {
+      "abs_err": 3.343699e-16,
+      "rel_err_ulps": 1.6291370831645933
+    },
+    "herbie_worst": {
+      "abs_err": 2.843712e-16,
+      "rel_err_ulps": 5.060528268090014
+    },
+    "ours_worst_program": "(FPCore (x) (/ 1 (+ (sqrt (+ x 1)) (sqrt x))))"
+  },
+  {
+    "benchmark": "nmse_example_3_6",
+    "status": "eq-target",
+    "reference_bits": 1.4408663901086105,
+    "herbie_bits": 0.4861387250245193,
+    "herbie_program": "(/.f64 (sqrt.f64 (/.f64 #s(literal 1 binary64) (+.f64 (*.f64 x x) x))) (+.f64 (sqrt.f64 (-.f64 x #s(literal -1 binary64))) (sqrt.f64 x)))",
+    "ours_bits": 0.45532255939789673,
+    "ours_program": "(FPCore (x) (/ 1 (+ (* (sqrt x) (+ x 1)) (* (sqrt (+ x 1)) x))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x) (/ 1 (+ (* (sqrt x) (+ x 1)) (* (sqrt (+ x 1)) x))))",
+        "bits": 0.45532255939789673
+      },
+      {
+        "program": "(FPCore (x) (/ 1 (+ (* (sqrt x) (+ x 1)) (* x (sqrt (+ 1 x))))))",
+        "bits": 0.45532255939789673
+      },
+      {
+        "program": "(FPCore (x) (/ 1 (+ (* (sqrt x) (+ x 1)) (* x (sqrt (+ x 1))))))",
+        "bits": 0.45532255939789673
+      },
+      {
+        "program": "(FPCore (x) (/ 1 (+ (* (sqrt x) (- (+ x 1) 0)) (* x (sqrt (+ x 1))))))",
+        "bits": 0.45532255939789673
+      },
+      {
+        "program": "(FPCore (x) (/ 1 (+ (+ (* (sqrt x) (+ x 1)) (* x (sqrt (+ x 1)))) 0)))",
+        "bits": 0.45532255939789673
+      },
+      {
+        "program": "(FPCore (x) (/ 1 (/ (+ (* (sqrt x) (+ x 1)) (* x (sqrt (+ x 1)))) 1)))",
+        "bits": 0.45532255939789673
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 8.382182e-14,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 3.11632e-13,
+      "rel_err_ulps": 126.05732982996976
+    },
+    "herbie_worst": {
+      "abs_err": null,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (x) (/ 1 (+ (* (sqrt x) (+ x 1)) (* x (sqrt (+ x 1))))))"
+  },
+  {
+    "benchmark": "nmse_p42_negative",
+    "status": "eq-target",
+    "reference_bits": 0.2949695644503525,
+    "herbie_bits": 0.2937020422430965,
+    "herbie_program": "(-.f64 (/.f64 b (-.f64 (neg.f64 a) a)) (/.f64 (sqrt.f64 (-.f64 (*.f64 b b) (*.f64 (*.f64 c a) #s(literal 4 binary64)))) (+.f64 a a)))",
+    "ours_bits": 0.2856187722309878,
+    "ours_program": "(FPCore (a b c) (/ (* 2 c) (+ (sqrt (- (* b b) (* 4 (* a c)))) (* -1 b))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (a b c) (/ (* 2 c) (+ (sqrt (- (* b b) (* 4 (* a c)))) (* -1 b))))",
+        "bits": 0.2856187722309878
+      },
+      {
+        "program": "(FPCore (a b c) (/ (+ (* 2 c) 0) (+ (sqrt (- (* b b) (* 4 (* a c)))) (- b))))",
+        "bits": 0.2856187722309878
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 2.292151e-14,
+      "rel_err_ulps": null
+    },
+    "ours_worst": null,
+    "herbie_worst": {
+      "abs_err": 3.351201e-14,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": null
+  },
+  {
+    "benchmark": "nmse_p42_positive",
+    "status": "eq-target",
+    "reference_bits": 0.29362872448464933,
+    "herbie_bits": 0.29338060362251306,
+    "herbie_program": "(-.f64 (/.f64 (sqrt.f64 (-.f64 (*.f64 b b) (*.f64 (*.f64 c a) #s(literal 4 binary64)))) (+.f64 a a)) (/.f64 b (+.f64 a a)))",
+    "ours_bits": 0.2916156015629507,
+    "ours_program": "(FPCore (a b c) (if (<= b 0) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)) (/ (* 2 c) (+ (- b) (- (sqrt (- (* b b) (* 4 (* a c)))))))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (a b c) (if (<= b 0) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)) (/ (* 2 c) (+ (- b) (- (sqrt (- (* b b) (* 4 (* a c)))))))))",
+        "bits": 0.2916156015629507
+      },
+      {
+        "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (+ (- b) (- (sqrt (- (* b b) (* (* 4 a) c)))))) (/ (+ (- b) (sqrt (- (* b b) (* (* 4 a) c)))) (* 2 a))))",
+        "bits": 0.2916156015629507
+      },
+      {
+        "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (+ (- b) (- (sqrt (- (* b b) (* 4 (* a c))))))) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a))))",
+        "bits": 0.2916156015629507
+      },
+      {
+        "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (+ (- b) (- (sqrt (- (* b b) (* 4 (* a c))))))) (/ (+ (- b) (sqrt (- (+ (* b b) (* -4 (* a c))) (* 0 0)))) (* 2 a))))",
+        "bits": 0.2916156015629507
+      },
+      {
+        "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (+ (- b) (- (sqrt (- (* b b) (* 4 (* a c))))))) (/ (+ (- b) (sqrt (- (+ (* b b) (* -4 (* a c))) 0))) (* 2 a))))",
+        "bits": 0.2916156015629507
+      },
+      {
+        "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (+ (- b) (- (sqrt (- (* b b) (* 4 (* a c))))))) (/ (+ (- b) (sqrt (- (- (* b b) (* 4 (* a c))) (* 0 0)))) (* 2 a))))",
+        "bits": 0.2916156015629507
+      },
+      {
+        "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (+ (- b) (- (sqrt (- (* b b) (* 4 (* a c))))))) (/ (+ (- b) (sqrt (- (- (* b b) (* 4 (* a c))) 0))) (* 2 a))))",
+        "bits": 0.2916156015629507
+      },
+      {
+        "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (+ (- b) (- (sqrt (- (* b b) (* 4 (* a c))))))) (/ (+ (- b) (sqrt (- (/ (* b b) 1) (* 4 (* a c))))) (* 2 a))))",
+        "bits": 0.2916156015629507
+      },
+      {
+        "program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (+ (- b) (- (sqrt (- (* b b) (* 4 (* a c))))))) (/ (+ (- b) (sqrt (- (+ (* b b) (* 4 (* a c))) (* 8 (* a c))))) (* 2 a))))",
+        "bits": 0.2917406015629507
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 2.299992e-14,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 2.299992e-14,
+      "rel_err_ulps": 2.0274638068868924
+    },
+    "herbie_worst": {
+      "abs_err": 3.351201e-14,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (a b c) (if (>= b 0) (/ (* 2 c) (+ (- b) (- (sqrt (- (* b b) (* 4 (* a c))))))) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a))))"
+  },
+  {
+    "benchmark": "nmse_problem_3_2_1_negative",
+    "status": "eq-target",
+    "reference_bits": 0.29560219312952724,
+    "herbie_bits": 0.29560219312952724,
+    "herbie_program": "(/.f64 (-.f64 (neg.f64 b2) (sqrt.f64 (-.f64 (*.f64 b2 b2) (*.f64 a c)))) a)",
+    "ours_bits": 0.2824906015629507,
+    "ours_program": "(FPCore (a b2 c) (if (< b2 0) (/ c (+ (sqrt (- (* b2 b2) (* a c))) (- b2))) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))",
+    "ours_all": [
+      {
+        "program": "(FPCore (a b2 c) (if (< b2 0) (/ c (+ (sqrt (- (* b2 b2) (* a c))) (- b2))) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))",
+        "bits": 0.2824906015629507
+      },
+      {
+        "program": "(FPCore (a b2 c) (if (< b2 0) (/ c (- (sqrt (- (* b2 b2) (* a c))) b2)) (/ (+ (- b2) (* -1 (sqrt (- (* b2 b2) (* a c))))) a)))",
+        "bits": 0.2824906015629507
+      },
+      {
+        "program": "(FPCore (a b2 c) (if (< b2 0) (/ c (- (sqrt (- (* b2 b2) (* a c))) b2)) (/ (+ (- b2) (- (sqrt (- (* b2 b2) (* a c))))) a)))",
+        "bits": 0.2824906015629507
+      },
+      {
+        "program": "(FPCore (a b2 c) (if (< b2 0) (/ c (- (sqrt (- (* b2 b2) (* a c))) b2)) (/ (- (* -1 b2) (sqrt (- (* b2 b2) (* a c)))) a)))",
+        "bits": 0.2824906015629507
+      },
+      {
+        "program": "(FPCore (a b2 c) (if (< b2 0) (/ c (- (sqrt (- (* b2 b2) (* a c))) b2)) (/ (- (- b2) (sqrt (+ (* b2 b2) (* (- a) c)))) a)))",
+        "bits": 0.2824906015629507
+      },
+      {
+        "program": "(FPCore (a b2 c) (if (< b2 0) (/ c (- (sqrt (- (* b2 b2) (* a c))) b2)) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))",
+        "bits": 0.2824906015629507
+      },
+      {
+        "program": "(FPCore (a b2 c) (if (< b2 0) (/ c (- (sqrt (- (* b2 b2) (* a c))) b2)) (/ (- (- b2) (sqrt (- (/ (* b2 b2) 1) (* a c)))) a)))",
+        "bits": 0.2824906015629507
+      },
+      {
+        "program": "(FPCore (a b2 c) (if (< b2 0) (/ c (- (sqrt (- (* b2 b2) (/ (* a c) 1))) b2)) (/ (- (- b2) (sqrt (- (* b2 b2) (/ (* a c) 1)))) a)))",
+        "bits": 0.2824906015629507
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 4.583332e-14,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 4.583332e-14,
+      "rel_err_ulps": 2.034062030700953
+    },
+    "herbie_worst": {
+      "abs_err": 4.583332e-14,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (a b2 c) (if (< b2 0) (/ c (- (sqrt (- (* b2 b2) (* a c))) b2)) (/ (- (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+  },
+  {
+    "benchmark": "nmse_problem_3_2_1_positive",
+    "status": "eq-target",
+    "reference_bits": 0.2957099384484184,
+    "herbie_bits": 0.2968873739239389,
+    "herbie_program": "(-.f64 (/.f64 (sqrt.f64 (-.f64 (*.f64 b2 b2) (*.f64 c a))) a) (/.f64 b2 a))",
+    "ours_bits": 0.2919387218755409,
+    "ours_program": "(FPCore (a b2 c) (if (<= b2 0) (/ (+ (- b2) (sqrt (- (* b2 b2) (* a c)))) a) (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (a b2 c) (if (<= b2 0) (/ (+ (- b2) (sqrt (- (* b2 b2) (* a c)))) a) (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2))))",
+        "bits": 0.2919387218755409
+      },
+      {
+        "program": "(FPCore (a b2 c) (if (> b2 -0.0) (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2)) (/ (+ (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))",
+        "bits": 0.2919387218755409
+      },
+      {
+        "program": "(FPCore (a b2 c) (if (> b2 0) (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2)) (/ (+ (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))",
+        "bits": 0.2919387218755409
+      },
+      {
+        "program": "(FPCore (a b2 c) (if (>= b2 0) (/ (- c) (+ (sqrt (+ (* b2 b2) (* (- a) c))) b2)) (/ (+ (- b2) (sqrt (+ (* b2 b2) (* (- a) c)))) a)))",
+        "bits": 0.2919387218755409
+      },
+      {
+        "program": "(FPCore (a b2 c) (if (>= b2 0) (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2)) (/ (+ (- b2) (sqrt (+ (* b2 b2) (- (* a c))))) a)))",
+        "bits": 0.2919387218755409
+      },
+      {
+        "program": "(FPCore (a b2 c) (if (>= b2 0) (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2)) (/ (+ (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))",
+        "bits": 0.2919387218755409
+      },
+      {
+        "program": "(FPCore (a b2 c) (if (>= b2 0) (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2)) (/ (+ (- b2) (sqrt (- (* b2 b2) (/ (* a c) 1)))) a)))",
+        "bits": 0.2919387218755409
+      },
+      {
+        "program": "(FPCore (a b2 c) (if (>= b2 0) (/ (- c) (+ (sqrt (- (/ (* b2 b2) 1) (* a c))) b2)) (/ (+ (- b2) (sqrt (- (/ (* b2 b2) 1) (* a c)))) a)))",
+        "bits": 0.2919387218755409
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 4.599343e-14,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 4.599343e-14,
+      "rel_err_ulps": 2.034062030700953
+    },
+    "herbie_worst": {
+      "abs_err": 4.599343e-14,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (a b2 c) (if (>= b2 0) (/ (- c) (+ (sqrt (- (* b2 b2) (* a c))) b2)) (/ (+ (- b2) (sqrt (- (* b2 b2) (* a c)))) a)))"
+  },
+  {
+    "benchmark": "nmse_problem_3_3_1",
+    "status": "eq-target",
+    "reference_bits": 1.6149283257452578,
+    "herbie_bits": 0.3246936093777043,
+    "herbie_program": "(/.f64 #s(literal -1 binary64) (+.f64 (*.f64 x x) x))",
+    "ours_bits": 0.34288966250649044,
+    "ours_program": "(FPCore (x) (* -1 (/ 1 (* x (+ x 1)))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x) (* -1 (/ 1 (* x (+ x 1)))))",
+        "bits": 0.34288966250649044
+      },
+      {
+        "program": "(FPCore (x) (- (/ 1 (* x (+ x 1)))))",
+        "bits": 0.34288966250649044
+      },
+      {
+        "program": "(FPCore (x) (/ -1 (* (sqrt (* x x)) (+ x 1))))",
+        "bits": 0.34288966250649044
+      },
+      {
+        "program": "(FPCore (x) (/ -1 (* x (+ 1 x))))",
+        "bits": 0.34288966250649044
+      },
+      {
+        "program": "(FPCore (x) (/ -1 (* x (+ x (sqrt 1)))))",
+        "bits": 0.34288966250649044
+      },
+      {
+        "program": "(FPCore (x) (/ -1 (* x (+ x 1))))",
+        "bits": 0.34288966250649044
+      },
+      {
+        "program": "(FPCore (x) (/ -1 (* x (/ (+ x 1) 1))))",
+        "bits": 0.34288966250649044
+      },
+      {
+        "program": "(FPCore (x) (/ -1 (/ (* x (+ x 1)) 1)))",
+        "bits": 0.34288966250649044
+      },
+      {
+        "program": "(FPCore (x) (/ -1 (* 0 x)))",
+        "bits": 62.00593052563072
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 1.923622e-15,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 2.622908e-15,
+      "rel_err_ulps": 119306.52885647892
+    },
+    "herbie_worst": {
+      "abs_err": 1.835164e-15,
+      "rel_err_ulps": 83474.92429104312
+    },
+    "ours_worst_program": "(FPCore (x) (/ -1 (* x (+ x 1))))"
+  },
+  {
+    "benchmark": "nmse_problem_3_3_3",
+    "status": "imp-start",
+    "reference_bits": 5.662757923351955,
+    "herbie_bits": 0.35673853437914665,
+    "herbie_program": "(/.f64 #s(literal 1 binary64) #s(approx (/ x (- (/ x (- x 1)) (- (/ x (- -1 x)) -2))) (*.f64 x (-.f64 (*.f64 #s(literal 1/2 binary64) (*.f64 x x)) #s(literal 1/2 binary64)))))",
+    "ours_bits": null,
+    "ours_program": null,
+    "ours_all": [],
+    "reference_worst": {
+      "abs_err": 4.132497e-16,
+      "rel_err_ulps": null
+    },
+    "ours_worst": null,
+    "herbie_worst": null,
+    "herbie_worst_error": "operator 'approx' outside the subset",
+    "ours_worst_program": null
+  },
+  {
+    "benchmark": "nonlin2",
+    "status": "eq-target",
+    "reference_bits": 0.39883192578918875,
+    "herbie_bits": 0.33188928593921274,
+    "herbie_program": "(/.f64 (/.f64 #s(literal -1 binary64) y) (-.f64 (/.f64 #s(literal -1 binary64) y) x))",
+    "ours_bits": 0.2944272562546875,
+    "ours_program": "(FPCore (x y) (* (/ 1 (+ (* x y) 1)) 1))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x y) (* (/ 1 (+ (* x y) 1)) 1))",
+        "bits": 0.2944272562546875
+      },
+      {
+        "program": "(FPCore (x y) (/ 1 (* (+ (* x y) 1) 1)))",
+        "bits": 0.2944272562546875
+      },
+      {
+        "program": "(FPCore (x y) (/ 1 (+ (* x y) 1)))",
+        "bits": 0.2944272562546875
+      },
+      {
+        "program": "(FPCore (x y) (/ 1 (- (+ (* x y) 1) 0)))",
+        "bits": 0.2944272562546875
+      },
+      {
+        "program": "(FPCore (x y) (/ 1 (/ (+ (* x y) 1) 1)))",
+        "bits": 0.2944272562546875
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 3.729979e-13,
+      "rel_err_ulps": 29958.809412396993
+    },
+    "ours_worst": {
+      "abs_err": 1.10856e-16,
+      "rel_err_ulps": 1.2602873197233595
+    },
+    "herbie_worst": {
+      "abs_err": 1.256113e-16,
+      "rel_err_ulps": 1.4471078912657562
+    },
+    "ours_worst_program": "(FPCore (x y) (/ 1 (+ (* x y) 1)))"
+  },
+  {
+    "benchmark": "pbrt_cone_z",
+    "status": "eq-target",
+    "reference_bits": 0.0265,
+    "herbie_bits": 0.01675,
+    "herbie_program": "(-.f64 #s(literal 1 binary64) (-.f64 ux (*.f64 maxCos ux)))",
+    "ours_bits": 0.02702124062518029,
+    "ours_program": "(FPCore (ux maxCos) (+ (* (* (- 1 ux) (- 1 maxCos)) 1) maxCos))",
+    "ours_all": [
+      {
+        "program": "(FPCore (ux maxCos) (+ (* (* (- 1 ux) (- 1 maxCos)) 1) maxCos))",
+        "bits": 0.02702124062518029
+      },
+      {
+        "program": "(FPCore (ux maxCos) (+ (* (+ -1 ux) (+ -1 maxCos)) maxCos))",
+        "bits": 0.02702124062518029
+      },
+      {
+        "program": "(FPCore (ux maxCos) (+ (* (- (sqrt 1) ux) (- (sqrt 1) maxCos)) maxCos))",
+        "bits": 0.02702124062518029
+      },
+      {
+        "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (* (- 1 maxCos) 1)) maxCos))",
+        "bits": 0.02702124062518029
+      },
+      {
+        "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (* 1 (- 1 maxCos))) maxCos))",
+        "bits": 0.02702124062518029
+      },
+      {
+        "program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (- 1 maxCos)) maxCos))",
+        "bits": 0.02702124062518029
+      },
+      {
+        "program": "(FPCore (ux maxCos) (- (+ (* (- 1 ux) (- 1 maxCos)) maxCos) 0))",
+        "bits": 0.02702124062518029
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 2.220447e-16,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 2.775558e-16,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": {
+      "abs_err": 1.682682e-16,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (ux maxCos) (+ (* (- 1 ux) (- 1 maxCos)) maxCos))"
+  },
+  {
+    "benchmark": "rigidbody1",
+    "status": "eq-target",
+    "reference_bits": 0.004835483983577826,
+    "herbie_bits": 0.00578360429616797,
+    "herbie_program": "(-.f64 (-.f64 (*.f64 (-.f64 (-.f64 (neg.f64 x3) x1) x3) x2) x3) x1)",
+    "ours_bits": 0.017375,
+    "ours_program": "(FPCore (x1 x2 x3) (- (+ (* (+ 1 x2) x1) (* (+ (* 2 x2) 1) x3))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x1 x2 x3) (- (+ (* (+ 1 x2) x1) (* (+ (* 2 x2) 1) x3))))",
+        "bits": 0.017375
+      },
+      {
+        "program": "(FPCore (x1 x2 x3) (- (+ (* (+ 1 x2) x1) (* (+ 1 (* 2 x2)) x3))))",
+        "bits": 0.017375
+      },
+      {
+        "program": "(FPCore (x1 x2 x3) (- (+ (* (+ x2 1) x1) (* (+ (* 2 x2) 1) x3))))",
+        "bits": 0.017375
+      },
+      {
+        "program": "(FPCore (x1 x2 x3) (- (+ (* (+ x2 1) x1) (* (+ (* 2.0 x2) 1) x3))))",
+        "bits": 0.017375
+      },
+      {
+        "program": "(FPCore (x1 x2 x3) (- (+ (* (+ x2 1) x1) (* (+ (+ (* 2 x2) 0) 1) x3))))",
+        "bits": 0.017375
+      },
+      {
+        "program": "(FPCore (x1 x2 x3) (- (+ (* (+ x2 1) x1) (* (- (* 2 x2) -1) x3))))",
+        "bits": 0.017375
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 2.131629e-13,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 1.394441e-13,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": {
+      "abs_err": 2.504664e-13,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (x1 x2 x3) (- (+ (* (+ x2 1) x1) (* (+ (* 2 x2) 1) x3))))"
+  },
+  {
+    "benchmark": "rigidbody2",
+    "status": "eq-target",
+    "reference_bits": 0.0714155928888118,
+    "herbie_bits": 0.07359888263933963,
+    "herbie_program": "(-.f64 #s(approx (+ (- (+ (* (* (* 2 x1) x2) x3) (* (* 3 x3) x3)) (* (* (* x2 x1) x2) x3)) (* (* 3 x3) x3)) (*.f64 #s(literal 6 binary64) (*.f64 x3 x3))) x2)",
+    "ours_bits": 0.07323552131488856,
+    "ours_program": "(FPCore (x1 x2 x3) (+ (- (+ (* x1 (* x2 (* x3 (- 2 x2)))) (* 6 (* x3 x3))) x2) 0))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x1 x2 x3) (+ (- (+ (* x1 (* x2 (* x3 (- 2 x2)))) (* 6 (* x3 x3))) x2) 0))",
+        "bits": 0.07323552131488856
+      },
+      {
+        "program": "(FPCore (x1 x2 x3) (- (+ (* x1 (* x2 (* (sqrt 1) (* x3 (- 2 x2))))) (* 6 (* x3 x3))) x2))",
+        "bits": 0.07323552131488856
+      },
+      {
+        "program": "(FPCore (x1 x2 x3) (- (+ (* x1 (* x2 (* x3 (+ 2 (* -1 x2))))) (* 6 (* x3 x3))) x2))",
+        "bits": 0.07323552131488856
+      },
+      {
+        "program": "(FPCore (x1 x2 x3) (- (+ (* x1 (* x2 (* x3 (- 2 x2)))) (* 6 (* x3 x3))) x2))",
+        "bits": 0.07323552131488856
+      },
+      {
+        "program": "(FPCore (x1 x2 x3) (- (+ (* x1 (* x2 (+ (* x3 (- 2 x2)) 0))) (* 6 (* x3 x3))) x2))",
+        "bits": 0.07323552131488856
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 2.271606e-11,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 2.371615e-11,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": null,
+    "herbie_worst_error": "operator 'approx' outside the subset",
+    "ours_worst_program": "(FPCore (x1 x2 x3) (- (+ (* x1 (* x2 (* x3 (- 2 x2)))) (* 6 (* x3 x3))) x2))"
+  },
+  {
+    "benchmark": "sine",
+    "status": "eq-target",
+    "reference_bits": 0.003875,
+    "herbie_bits": 0.0005,
+    "herbie_program": "(-.f64 x (*.f64 x (-.f64 (*.f64 (-.f64 (*.f64 #s(literal -1/120 binary64) (*.f64 x x)) #s(literal -1/6 binary64)) (*.f64 x x)) (*.f64 (*.f64 #s(literal -1/5040 binary64) (*.f64 (*.f64 (*.f64 (*.f64 x x) x) x) x)) x))))",
+    "ours_bits": 0.004573120312590145,
+    "ours_program": "(FPCore (x) (* x (+ 1 (* (* x x) (+ (/ (* -1 1) 6) (* (* x x) (+ (/ 1 120) (* (* x x) (/ (* -1 1) 5040)))))))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x) (* x (+ 1 (* (* x x) (+ (/ (* -1 1) 6) (* (* x x) (+ (/ 1 120) (* (* x x) (/ (* -1 1) 5040)))))))))",
+        "bits": 0.004573120312590145
+      },
+      {
+        "program": "(FPCore (x) (* x (+ 1 (* (* x x) (+ (/ (- 1) 6) (* (* x x) (+ (/ 1 120) (* (* x x) (/ (- 1) 5040)))))))))",
+        "bits": 0.004573120312590145
+      },
+      {
+        "program": "(FPCore (x) (* x (+ 1 (* (* x x) (+ (/ (- 1) 6) (* (* x x) (+ (/ 1 120) (* (* x x) (/ -1 5040)))))))))",
+        "bits": 0.004573120312590145
+      },
+      {
+        "program": "(FPCore (x) (* x (+ 1 (* (* x x) (+ (/ (- 1) 6) (* (* x x) (+ (/ 1 120) (- (* (* x x) (/ 1 5040))))))))))",
+        "bits": 0.004573120312590145
+      },
+      {
+        "program": "(FPCore (x) (* x (+ 1 (* (* x x) (+ (/ -1 6) (* (* x x) (+ (/ 1 120) (* (* x x) (/ -1 5040)))))))))",
+        "bits": 0.004573120312590145
+      },
+      {
+        "program": "(FPCore (x) (* x (+ 1 (+ (* (* x x) (/ (- 1) 6)) (* (* x x) (* (* x x) (+ (/ 1 120) (* (* x x) (/ (- 1) 5040)))))))))",
+        "bits": 0.004573120312590145
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 4.377246e-16,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 4.139577e-16,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": {
+      "abs_err": 4.226164e-16,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (x) (* x (+ 1 (+ (* (* x x) (/ (- 1) 6)) (* (* x x) (* (* x x) (+ (/ 1 120) (* (* x x) (/ (- 1) 5040)))))))))"
+  },
+  {
+    "benchmark": "som_setup_w",
+    "status": "eq-target",
+    "reference_bits": 3.1506676145320225,
+    "herbie_bits": 0.2627139730159675,
+    "herbie_program": "(+.f64 (*.f64 #s(approx (- rone_es (* (* (* ca es) ca) rone_es)) rone_es) #s(approx (- (- rone_es (* (* (* ca es) ca) rone_es)) 1) (-.f64 rone_es #s(literal 1 binary64)))) #s(approx (- (- rone_es (* (* (* ca es) ca) rone_es)) 1) (-.f64 rone_es #s(literal 1 binary64))))",
+    "ours_bits": 0.35870179469758046,
+    "ours_program": "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (* (- 1 (* es (* ca ca))) rone_es) (sqrt 1))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (* (- 1 (* es (* ca ca))) rone_es) (sqrt 1))))",
+        "bits": 0.35870179469758046
+      },
+      {
+        "program": "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (* (- 1 (* es (* ca ca))) rone_es) 1)))",
+        "bits": 0.35870179469758046
+      },
+      {
+        "program": "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (* (- 1 (* es (/ (* ca ca) 1))) rone_es) 1)))",
+        "bits": 0.35870179469758046
+      },
+      {
+        "program": "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (- (* (- 1 (* es (* ca ca))) rone_es) 1) 2)))",
+        "bits": 0.35870179469758046
+      },
+      {
+        "program": "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (/ (* (- 1 (* es (* ca ca))) rone_es) 1) 1)))",
+        "bits": 0.35870179469758046
+      },
+      {
+        "program": "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ 1 (* (- 1 (* es (* ca ca))) rone_es))))",
+        "bits": 0.35870179469758046
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 5.976335e-16,
+      "rel_err_ulps": null
+    },
+    "ours_worst": {
+      "abs_err": 5.048258e-16,
+      "rel_err_ulps": null
+    },
+    "herbie_worst": null,
+    "herbie_worst_error": "operator 'approx' outside the subset",
+    "ours_worst_program": "(FPCore (es ca rone_es) (* (- (* (- 1 (* es (* ca ca))) rone_es) 1) (+ (* (- 1 (* es (* ca ca))) rone_es) 1)))"
+  },
+  {
+    "benchmark": "sum",
+    "status": "eq-target",
+    "reference_bits": 0.35003627969894835,
+    "herbie_bits": 0.142125,
+    "herbie_program": "#s(approx (+ (+ (- (+ x0 x1) x2) (- (+ x1 x2) x0)) (- (+ x2 x0) x1)) (+.f64 x2 (+.f64 x1 x0)))",
+    "ours_bits": 0.142125,
+    "ours_program": "(FPCore (x0 x1 x2) (+ (+ x0 x1) x2))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x0 x1 x2) (+ (+ x0 x1) x2))",
+        "bits": 0.142125
+      },
+      {
+        "program": "(FPCore (x0 x1 x2) (+ 0 (+ (+ x0 x1) x2)))",
+        "bits": 0.142125
+      },
+      {
+        "program": "(FPCore (x0 x1 x2) (- (+ (+ x0 x1) x2) 0))",
+        "bits": 0.142125
+      },
+      {
+        "program": "(FPCore (x0 x1 x2) (* 1 (+ x0 (+ x1 x2))))",
+        "bits": 0.1455
+      },
+      {
+        "program": "(FPCore (x0 x1 x2) (+ x0 (* 1 (+ x1 x2))))",
+        "bits": 0.1455
+      },
+      {
+        "program": "(FPCore (x0 x1 x2) (+ x0 (+ x1 (+ x2 0))))",
+        "bits": 0.1455
+      },
+      {
+        "program": "(FPCore (x0 x1 x2) (+ x0 (+ x1 x2)))",
+        "bits": 0.1455
+      },
+      {
+        "program": "(FPCore (x0 x1 x2) (+ x0 (+ x2 x1)))",
+        "bits": 0.1455
+      },
+      {
+        "program": "(FPCore (x0 x1 x2) (+ x0 (- (+ (+ x1 x2) -0) 0)))",
+        "bits": 0.1455
+      },
+      {
+        "program": "(FPCore (x0 x1 x2) (+ x0 (- (+ x1 x2) 0)))",
+        "bits": 0.1455
+      },
+      {
+        "program": "(FPCore (x0 x1 x2) (- (+ x0 (+ x1 x2)) 0))",
+        "bits": 0.1455
+      },
+      {
+        "program": "(FPCore (x0 x1 x2) (/ (+ x0 (+ x1 x2)) 1))",
+        "bits": 0.1455
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 2.220447e-15,
+      "rel_err_ulps": 2.2761345639117816
+    },
+    "ours_worst": {
+      "abs_err": 6.661339e-16,
+      "rel_err_ulps": 0.758893466728873
+    },
+    "herbie_worst": {
+      "abs_err": null,
+      "rel_err_ulps": null
+    },
+    "ours_worst_program": "(FPCore (x0 x1 x2) (+ x0 (+ x1 x2)))"
+  },
+  {
+    "benchmark": "test03_nonlin2",
+    "status": "ex-start",
+    "reference_bits": 0.03589868437626203,
+    "herbie_bits": 0.03471240625180289,
+    "herbie_program": "(/.f64 (+.f64 x y) #s(approx (- x y) (*.f64 y (-.f64 (/.f64 x y) #s(literal 1 binary64)))))",
+    "ours_bits": null,
+    "ours_program": null,
+    "ours_all": [],
+    "reference_worst": null,
+    "ours_worst": null,
+    "herbie_worst": null,
+    "herbie_worst_error": "operator 'approx' outside the subset",
+    "ours_worst_program": null
+  },
+  {
+    "benchmark": "test04_dqmom9",
+    "status": "ex-start",
+    "reference_bits": 0.6364315204615908,
+    "herbie_bits": 0.47674289142450316,
+    "herbie_program": "(+.f64 #s(literal 0 binary64) #s(approx (+ (* (* (* w0 (- 0 m0)) (* -3 (* (* 1 (/ a0 w0)) (/ a0 w0)))) 1) (+ (* (* (* w1 (- 0 m1)) (* -3 (* (* 1 (/ a1 w1)) (/ a1 w1)))) 1) (+ (* (* (* w2 (- 0 m2)) (* -3 (* (* 1 (/ a2 w2)) (/ a2 w2)))) 1) 0))) (/.f64 (+.f64 (*.f64 #s(literal 3 binary64) (*.f64 (*.f64 a1 a1) m1)) (*.f64 w1 (+.f64 (*.f64 #s(literal 3 binary64) (/.f64 (*.f64 (*.f64 a0 a0) m0) w0)) (*.f64 #s(literal 3 binary64) (/.f64 (*.f64 (*.f64 a2 a2) m2) w2))))) w1)))",
+    "ours_bits": null,
+    "ours_program": null,
+    "ours_all": [],
+    "reference_worst": null,
+    "ours_worst": null,
+    "herbie_worst": null,
+    "herbie_worst_error": "operator 'approx' outside the subset",
+    "ours_worst_program": null
+  },
+  {
+    "benchmark": "test05_nonlin1_r4",
+    "status": "eq-target",
+    "reference_bits": 0.7612939186052404,
+    "herbie_bits": 0.3607761281273438,
+    "herbie_program": "(/.f64 (-.f64 x #s(literal 1 binary64)) (-.f64 (*.f64 (-.f64 x #s(literal 1 binary64)) x) (-.f64 #s(literal 1 binary64) x)))",
+    "ours_bits": 0.334125,
+    "ours_program": "(FPCore (x) (* (/ 1 (+ x 1)) 1))",
+    "ours_all": [
+      {
+        "program": "(FPCore (x) (* (/ 1 (+ x 1)) 1))",
+        "bits": 0.334125
+      },
+      {
+        "program": "(FPCore (x) (/ 01 (+ x 1)))",
+        "bits": 0.334125
+      },
+      {
+        "program": "(FPCore (x) (/ 1 (+ 1 x)))",
+        "bits": 0.334125
+      },
+      {
+        "program": "(FPCore (x) (/ 1 (+ x 1)))",
+        "bits": 0.334125
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 2.205133e-09,
+      "rel_err_ulps": 15597717409.839075
+    },
+    "ours_worst": {
+      "abs_err": 8.326618e-17,
+      "rel_err_ulps": 0.7617176740551971
+    },
+    "herbie_worst": {
+      "abs_err": 8.497118e-11,
+      "rel_err_ulps": 601032842.2303196
+    },
+    "ours_worst_program": "(FPCore (x) (/ 1 (+ x 1)))"
+  },
+  {
+    "benchmark": "triangle",
+    "status": "gt-target",
+    "reference_bits": 2.5487665117746903,
+    "herbie_bits": 0.6216564000692311,
+    "herbie_program": "(sqrt.f64 (neg.f64 (/.f64 (*.f64 (*.f64 (*.f64 #s(approx (- a (* 1/2 (+ c (+ b a)))) (*.f64 #s(literal 1/2 binary64) (-.f64 (-.f64 a c) b))) (+.f64 c (+.f64 b a))) (-.f64 (*.f64 #s(literal 1/2 binary64) (+.f64 c (+.f64 b a))) b)) (-.f64 #s(approx (- (+ c c) (+ c b)) (-.f64 c b)) a)) #s(literal -4 binary64))))",
+    "ours_bits": 2.5487665117746903,
+    "ours_program": "(FPCore (a b c) (sqrt (* (* (* (/ (+ (+ a b) c) 2) (- (/ (+ (+ a b) c) 2) a)) (+ (- (/ (+ (+ a b) c) 2) b) 0)) (- (/ (+ (+ a b) c) 2) c))))",
+    "ours_all": [
+      {
+        "program": "(FPCore (a b c) (sqrt (* (* (* (/ (+ (+ a b) c) 2) (- (/ (+ (+ a b) c) 2) a)) (+ (- (/ (+ (+ a b) c) 2) b) 0)) (- (/ (+ (+ a b) c) 2) c))))",
+        "bits": 2.5487665117746903
+      },
+      {
+        "program": "(FPCore (a b c) (sqrt (* (* (* (/ (+ (+ a b) c) 2) (- (/ (+ (+ a b) c) 2) a)) (- (/ (+ (+ a b) c) 2) b)) (- (/ (+ (+ a b) c) 2) c))))",
+        "bits": 2.5487665117746903
+      }
+    ],
+    "reference_worst": {
+      "abs_err": 2.444848e-14,
+      "rel_err_ulps": 17.570564262604993
+    },
+    "ours_worst": {
+      "abs_err": 2.444848e-14,
+      "rel_err_ulps": 17.570564262604993
+    },
+    "herbie_worst": null,
+    "herbie_worst_error": "operator 'approx' outside the subset",
+    "ours_worst_program": "(FPCore (a b c) (sqrt (* (* (* (/ (+ (+ a b) c) 2) (- (/ (+ (+ a b) c) 2) a)) (- (/ (+ (+ a b) c) 2) b)) (- (/ (+ (+ a b) c) 2) c))))"
+  },
+  {
+    "benchmark": "triangle1",
+    "status": "apx-start",
+    "reference_bits": 1.1345648913499364,
+    "herbie_bits": 0.4489986859507512,
+    "herbie_program": "(sqrt.f64 (neg.f64 (/.f64 (*.f64 (*.f64 (*.f64 #s(approx (- a (* 1/2 (+ c (+ b a)))) (*.f64 #s(literal 1/2 binary64) (-.f64 (-.f64 a c) b))) (+.f64 c (+.f64 b a))) (-.f64 (*.f64 (+.f64 b a) #s(literal 1/2 binary64)) (-.f64 b (*.f64 #s(literal 1/2 binary64) c)))) (-.f64 (-.f64 (+.f64 c c) (+.f64 c b)) a)) #s(literal -4 binary64))))",
+    "ours_bits": null,
+    "ours_program": null,
+    "ours_all": [],
+    "reference_worst": null,
+    "ours_worst": null,
+    "herbie_worst": null,
+    "herbie_worst_error": "operator 'approx' outside the subset",
+    "ours_worst_program": null
+  }
+]
