@@ -24,7 +24,6 @@ from base import benchmarks, paths
 SATURATION_RUNS = 6
 SATURATION_BUDGET = 20.0  # seconds; skip remaining rounds past this
 NODE_CAP = 100_000
-MAX_SPELLINGS = 8
 START = "__start__"
 
 # All of rules.egglog, minus the block it marks grammar-excluded (recursive rules
@@ -351,19 +350,6 @@ def dedup_spellings(eclasses: EClassMapping) -> EClassMapping:
     return out
 
 
-def limit_spellings(eclasses: EClassMapping, k: int = MAX_SPELLINGS) -> EClassMapping:
-    """Keep the k smallest-completion spellings per e-class. Program size multiplies
-    across classes, so uncapped spelling counts make the language monster-heavy and
-    the sampler wanders; the cap keeps rewrite diversity but bounds the depth."""
-    size = _min_sizes(eclasses)
-
-    def nsize(e: ENode) -> float:
-        return 1 + sum(size[c] for c in e.children)
-
-    return {c: set(sorted(enodes, key=lambda e: (nsize(e), e))[:k])
-            for c, enodes in eclasses.items()}
-
-
 SPELLING = {"Add": "+", "Sub": "-", "Mul": "*", "Div": "/", "Neg": "-", "Sqrt": "sqrt"}
 
 
@@ -415,7 +401,7 @@ def _build(benchmark: str, box, runs: int) -> str:
     seeds = interval_seeds(box) if box else ""
     root, eclasses = extract(saturate(benchmarks.read_source(benchmark), runs, seeds))
     root, eclasses = strip_identity_enodes(root, eclasses)
-    return intersect(root, limit_spellings(dedup_spellings(eclasses)))
+    return intersect(root, dedup_spellings(eclasses))
 
 
 def _build_worker(benchmark, box, runs, q) -> None:

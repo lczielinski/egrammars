@@ -26,7 +26,12 @@ def program_prompt(reference: str, box: dict | None) -> str:
         "each fragile region a rewrite that is well-conditioned and in-range there, so "
         "every input takes the form accurate for it. The arms must be genuinely "
         "different forms; never repeat the same form in both. Every branch must equal "
-        "the original in exact arithmetic; only the rounding may differ.\n\n"
+        "the original in exact arithmetic; only the rounding may differ.\n"
+        "4. Keep the program as SMALL as accuracy allows: rewrite only the fragile "
+        "subterms and copy every already-accurate part of the original unchanged. "
+        "Every operation is a rounding step, so re-associations and expansions that "
+        "don't fix a fragile spot make the result worse, not better. Between two "
+        "equally accurate forms, always output the smaller one.\n\n"
         "Output only the single-line program, then immediately stop."
     )
 
