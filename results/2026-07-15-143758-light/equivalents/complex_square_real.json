@@ -1,0 +1,106 @@
+{
+  "benchmark": "complex_square_real",
+  "reference": "(FPCore (re im) (- (* re re) (* im im)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 10,
+    "decoding": "light",
+    "run": "2026-07-15-143758-light",
+    "time_budget": 10.0,
+    "box": {
+      "re": [
+        1.0,
+        2.0
+      ],
+      "im": [
+        1.0,
+        2.0
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (re im) (* (- re im) (+ re im)))",
+    "(FPCore (re im) (* (+ re im) (- re im)))",
+    "(FPCore (re im) (* (- re im) (- (+ re im) 0)))",
+    "(FPCore (re im) (+ (* (- re im) re) (* (- re im) im)))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (re im) (* (- re im) (+ re im)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (* (- re im) (+ re re)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.3231455378877846,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (re im) (* (- re re) (+ re im)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.0,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (re im) (* (- re) im))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.9932172718646022,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (re im) (* (- re (if (< re 0) re re)) (+ re im)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 1.0,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (re im) (* (+ re im) (- re im)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (* (- re im) (+ re 1)))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "different",
+        "max_rel_diff": 0.3264844388698018,
+        "samples": 400,
+        "hint": "model produced a non-equivalent program"
+      }
+    },
+    {
+      "program": "(FPCore (re im) (* (- re im) (+ re (if (< im 1.5) im im))))",
+      "proven_equivalent": false,
+      "numeric": {
+        "verdict": "equal",
+        "max_rel_diff": 2.1578454391556768e-13,
+        "samples": 400,
+        "hint": "likely a missing e-graph rule"
+      }
+    },
+    {
+      "program": "(FPCore (re im) (* (- re im) (- (+ re im) 0)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (+ (* (- re im) re) (* (- re im) im)))",
+      "proven_equivalent": true
+    }
+  ]
+}

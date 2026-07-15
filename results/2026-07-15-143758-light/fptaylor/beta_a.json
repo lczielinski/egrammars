@@ -1,0 +1,126 @@
+{
+  "benchmark": "beta_a",
+  "reference": "(FPCore (m v) (* (- (/ (* m (- 1 m)) v) 1) m))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 10,
+    "decoding": "light",
+    "run": "2026-07-15-143758-light",
+    "time_budget": 10.0,
+    "box": {
+      "m": [
+        0.4,
+        0.6
+      ],
+      "v": [
+        0.2,
+        0.25
+      ]
+    }
+  },
+  "intervals": {
+    "m": [
+      0.4,
+      0.6
+    ],
+    "v": [
+      0.2,
+      0.25
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "((((m * (1 - m)) / v) - 1) * m)",
+    "enclosure": [
+      -0.03000001,
+      0.1400782
+    ],
+    "abs_err": 2.220447e-16,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (m v) (* (- (/ (* m (- 1 m)) v) 1) m))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "((((m * m) * (1 - m)) / v) - m)",
+      "enclosure": [
+        -0.03593751,
+        0.1463282
+      ],
+      "abs_err": 2.456586e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (- (/ (* (* m m) (- 1 m)) v) m))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 2.456586e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((((m * m) * (1 - m)) / v) - m)",
+          "enclosure": [
+            -0.02625001,
+            0.1390626
+          ],
+          "abs_err": 2.43295e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "m < 0.5",
+          "region": {
+            "m": [
+              0.4,
+              0.5
+            ],
+            "v": [
+              0.2,
+              0.25
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((((m * m) * (1 - m)) / v) - m)",
+          "enclosure": [
+            -0.03593751,
+            0.1463282
+          ],
+          "abs_err": 2.456586e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "m >= 0.5",
+          "region": {
+            "m": [
+              0.5,
+              0.6
+            ],
+            "v": [
+              0.2,
+              0.25
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (m v) (if (< m 0.5) (- (/ (* (* m m) (- 1 m)) v) m) (- (/ (* (* m m) (- 1 m)) v) m)))"
+    },
+    {
+      "fptaylor_expr": "((((m * m) * (1 - m)) / v) - (1 * m))",
+      "enclosure": [
+        -0.03593751,
+        0.1463282
+      ],
+      "abs_err": 2.456586e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (m v) (- (/ (* (* m m) (- 1 m)) v) (* 1 m)))"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "benchmark": "nmse_example_3_1",
+  "reference": "(FPCore (x) (- (sqrt (+ x 1)) (sqrt x)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 10,
+    "decoding": "light",
+    "run": "2026-07-15-143758-light",
+    "time_budget": 10.0,
+    "box": {
+      "x": [
+        0.0001,
+        100.0
+      ]
+    }
+  },
+  "intervals": {
+    "x": [
+      0.0001,
+      100.0
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "(sqrt((x + 1)) - sqrt(x))",
+    "enclosure": [
+      0.04015376,
+      1.002183
+    ],
+    "abs_err": 2.236069e-15,
+    "rel_err": 4.303533e-14,
+    "rel_err_derived": false,
+    "rel_err_ulps": 193.81389615176633,
+    "program": "(FPCore (x) (- (sqrt (+ x 1)) (sqrt x)))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "(1 / (sqrt((x + 1)) + sqrt(x)))",
+      "enclosure": [
+        0.04987562,
+        0.99005
+      ],
+      "abs_err": 3.343699e-16,
+      "rel_err": 3.617411e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.6291370831645933,
+      "program": "(FPCore (x) (/ 1 (+ (sqrt (+ x 1)) (sqrt x))))"
+    },
+    {
+      "fptaylor_expr": "(1 * (1 / (sqrt((x + 1)) + sqrt(x))))",
+      "enclosure": [
+        0.04987562,
+        0.99005
+      ],
+      "abs_err": 3.343699e-16,
+      "rel_err": 3.617411e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.6291370831645933,
+      "program": "(FPCore (x) (* 1 (/ 1 (+ (sqrt (+ x 1)) (sqrt x)))))"
+    },
+    {
+      "fptaylor_expr": "(1 / (sqrt((1 + x)) + sqrt(x)))",
+      "enclosure": [
+        0.04987562,
+        0.99005
+      ],
+      "abs_err": 3.343699e-16,
+      "rel_err": 3.617411e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 1.6291370831645933,
+      "program": "(FPCore (x) (/ 1 (+ (sqrt (+ 1 x)) (sqrt x))))"
+    },
+    {
+      "fptaylor_expr": "(1 / ((sqrt((x + 1)) + sqrt(x)) - 0))",
+      "enclosure": [
+        0.04987562,
+        0.99005
+      ],
+      "abs_err": 4.431938e-16,
+      "rel_err": 4.794733e-16,
+      "rel_err_derived": false,
+      "rel_err_ulps": 2.159355775214102,
+      "program": "(FPCore (x) (/ 1 (- (+ (sqrt (+ x 1)) (sqrt x)) 0)))"
+    }
+  ]
+}
