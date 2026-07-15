@@ -1,0 +1,263 @@
+{
+  "benchmark": "fastmath_dist4",
+  "reference": "(FPCore (d1 d2 d3 d4) (- (+ (- (* d1 d2) (* d1 d3)) (* d4 d1)) (* d1 d1)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "saturation": 6,
+    "run": "2026-07-15-221435",
+    "box": {
+      "d1": [
+        1.0,
+        100.0
+      ],
+      "d2": [
+        1.0,
+        100.0
+      ],
+      "d3": [
+        1.0,
+        100.0
+      ],
+      "d4": [
+        1.0,
+        100.0
+      ]
+    }
+  },
+  "intervals": {
+    "d1": [
+      1.0,
+      100.0
+    ],
+    "d2": [
+      1.0,
+      100.0
+    ],
+    "d3": [
+      1.0,
+      100.0
+    ],
+    "d4": [
+      1.0,
+      100.0
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "((((d1 * d2) - (d1 * d3)) + (d4 * d1)) - (d1 * d1))",
+    "enclosure": [
+      -19801.55,
+      9938.916
+    ],
+    "abs_err": 6.48015e-12,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (d1 d2 d3 d4) (- (+ (- (* d1 d2) (* d1 d3)) (* d4 d1)) (* d1 d1)))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "(d1 * ((d2 + d4) + ((-(d1)) + (-(d3)))))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (+ d2 d4) (+ (- d1) (- d3)))))"
+    },
+    {
+      "fptaylor_expr": "(d1 * (((-(1)) * d1) + (d2 + (d4 + (-(d3))))))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (* (- 1) d1) (+ d2 (+ d4 (- d3))))))"
+    },
+    {
+      "fptaylor_expr": "(d1 * (((d2 + d4) - d1) + (-(d3))))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (- (+ d2 d4) d1) (- d3))))"
+    },
+    {
+      "fptaylor_expr": "(d1 * ((d2 + d4) - (d1 + d3)))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (- (+ d2 d4) (+ d1 d3))))"
+    },
+    {
+      "fptaylor_expr": "(d1 * ((-(d1)) + (d2 - (d3 - d4))))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (- d1) (- d2 (- d3 d4)))))"
+    },
+    {
+      "fptaylor_expr": "(d1 * ((d2 + d4) + (-((d1 + d3)))))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (+ d2 d4) (- (+ d1 d3)))))"
+    },
+    {
+      "fptaylor_expr": "(d1 * (((d2 + d4) + (-(d1))) - d3))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (- (+ (+ d2 d4) (- d1)) d3)))"
+    },
+    {
+      "fptaylor_expr": "(d1 * ((d2 + d4) + (((-(1)) * d1) + (-(d3)))))",
+      "enclosure": [
+        -19800.0,
+        9938.76
+      ],
+      "abs_err": 5.726975e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (+ d2 d4) (+ (* (- 1) d1) (- d3)))))"
+    },
+    {
+      "fptaylor_expr": "(d1 * ((-(d1)) + (d2 + ((-(d3)) + d4))))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (- d1) (+ d2 (+ (- d3) d4)))))"
+    },
+    {
+      "fptaylor_expr": "(d1 * ((d2 + d4) + ((-(d1)) - d3)))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (+ d2 d4) (- (- d1) d3))))"
+    },
+    {
+      "fptaylor_expr": "(d1 * ((-(d1)) + (d2 + (d4 + (-(d3))))))",
+      "enclosure": [
+        -19800.0,
+        9938.76
+      ],
+      "abs_err": 4.661161e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (- d1) (+ d2 (+ d4 (- d3))))))"
+    },
+    {
+      "fptaylor_expr": "((d1 * ((d2 + d4) + (-(d1)))) - (d1 * d3))",
+      "enclosure": [
+        -19800.0,
+        9939.147
+      ],
+      "abs_err": 4.526158e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (- (* d1 (+ (+ d2 d4) (- d1))) (* d1 d3)))"
+    },
+    {
+      "fptaylor_expr": "(d1 * (((d2 + d4) + (-(d3))) - d1))",
+      "enclosure": [
+        -19800.0,
+        9938.76
+      ],
+      "abs_err": 4.462209e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (- (+ (+ d2 d4) (- d3)) d1)))"
+    },
+    {
+      "fptaylor_expr": "(d1 * ((d4 + d2) + ((-(d1)) + (-(d3)))))",
+      "enclosure": [
+        -19800.0,
+        9938.76
+      ],
+      "abs_err": 5.016432e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (+ d4 d2) (+ (- d1) (- d3)))))"
+    },
+    {
+      "fptaylor_expr": "(d1 * ((-(d1)) + ((-(d3)) + (d2 + d4))))",
+      "enclosure": [
+        -19800.0,
+        9938.76
+      ],
+      "abs_err": 4.462209e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (- d1) (+ (- d3) (+ d2 d4)))))"
+    },
+    {
+      "fptaylor_expr": "((d1 * (d2 + d4)) + (d1 * ((-(d1)) + (-(d3)))))",
+      "enclosure": [
+        -19801.55,
+        9977.581
+      ],
+      "abs_err": 6.707524e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (+ (* d1 (+ d2 d4)) (* d1 (+ (- d1) (- d3)))))"
+    },
+    {
+      "fptaylor_expr": "(d1 * ((-(d1)) + ((d2 + d4) + (-(d3)))))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (- d1) (+ (+ d2 d4) (- d3)))))"
+    },
+    {
+      "fptaylor_expr": "(d1 * ((d2 - d3) + (d4 + (-(d1)))))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (- d2 d3) (+ d4 (- d1)))))"
+    },
+    {
+      "fptaylor_expr": "(d1 * ((d2 + (d4 + (-(d1)))) + (-(d3))))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (+ (+ d2 (+ d4 (- d1))) (- d3))))"
+    },
+    {
+      "fptaylor_expr": "(d1 * (((d2 + d4) + ((-(1)) * d1)) - d3))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (d1 d2 d3 d4) (* d1 (- (+ (+ d2 d4) (* (- 1) d1)) d3)))"
+    }
+  ]
+}

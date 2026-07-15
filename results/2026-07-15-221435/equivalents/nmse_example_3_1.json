@@ -1,0 +1,39 @@
+{
+  "benchmark": "nmse_example_3_1",
+  "reference": "(FPCore (x) (- (sqrt (+ x 1)) (sqrt x)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "saturation": 6,
+    "run": "2026-07-15-221435",
+    "box": {
+      "x": [
+        0.0001,
+        100.0
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (x) (/ 1 (+ (sqrt (+ x 1)) (sqrt x))))",
+    "(FPCore (x) (/ 1 (+ (sqrt (- (+ -1 (- x)))) (sqrt x))))",
+    "(FPCore (x) (/ 1 (+ (sqrt (- x -1)) (sqrt x))))",
+    "(FPCore (x) (/ 1 (+ (sqrt (+ 1 x)) (sqrt x))))",
+    "(FPCore (x) (/ 1 (- (sqrt (+ x 1)) (* -1 (sqrt x)))))",
+    "(FPCore (x) (* (/ -1 (- (sqrt (+ x 1)) (- (sqrt x)))) (- 1)))",
+    "(FPCore (x) (+ (/ (- x) (sqrt x)) (sqrt (+ x 1))))",
+    "(FPCore (x) (- (sqrt (+ x 1)) (sqrt x)))",
+    "(FPCore (x) (+ (sqrt (+ x 1)) (- (sqrt x))))",
+    "(FPCore (x) (/ 1 (+ (sqrt (- x (- 1))) (sqrt x))))",
+    "(FPCore (x) (/ 1 (- (sqrt (+ x 1)) (- (sqrt x)))))",
+    "(FPCore (x) (/ 1 (+ (sqrt x) (sqrt (+ x 1)))))",
+    "(FPCore (x) (- (/ -1 (+ (sqrt (+ x 1)) (sqrt x)))))",
+    "(FPCore (x) (- (/ (- 1) (+ (sqrt (+ x 1)) (sqrt x)))))",
+    "(FPCore (x) (/ 1 (+ (sqrt (- 1 (- x))) (sqrt x))))",
+    "(FPCore (x) (+ (* -1 (sqrt x)) (sqrt (+ x 1))))",
+    "(FPCore (x) (/ 1 (+ (/ (* (sqrt (+ x 1)) (- 1)) (- 1)) (/ (* (sqrt x) (- 1)) (- 1)))))",
+    "(FPCore (x) (/ 1 (- (sqrt x) (- (sqrt (+ x 1))))))",
+    "(FPCore (x) (if (< x 0) (/ 1 (+ (sqrt (+ x 1)) (sqrt x))) (/ 1 (+ (sqrt (+ x 1)) (sqrt x)))))",
+    "(FPCore (x) (+ (- (sqrt x)) (sqrt (+ x 1))))"
+  ]
+}

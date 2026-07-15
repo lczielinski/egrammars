@@ -1,0 +1,278 @@
+{
+  "benchmark": "nmse_problem_3_3_3",
+  "reference": "(FPCore (x) (+ (- (/ 1 (+ x 1)) (/ 2 x)) (/ 1 (- x 1))))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "saturation": 6,
+    "run": "2026-07-15-221435",
+    "box": {
+      "x": [
+        2.0,
+        100.0
+      ]
+    }
+  },
+  "intervals": {
+    "x": [
+      2.0,
+      100.0
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "(((1 / (x + 1)) - (2 / x)) + (1 / (x - 1)))",
+    "enclosure": [
+      -0.009754011,
+      0.3451549
+    ],
+    "abs_err": 4.132497e-16,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (x) (+ (- (/ 1 (+ x 1)) (/ 2 x)) (/ 1 (- x 1))))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "(2 / (x * (-1 - (x * (-(x))))))",
+      "enclosure": [
+        2.0002e-06,
+        0.3333334
+      ],
+      "abs_err": 1.26664e-16,
+      "rel_err": 6.332566743325667e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 285193.4522554027,
+      "program": "(FPCore (x) (/ 2 (* x (- -1 (* x (- x))))))"
+    },
+    {
+      "fptaylor_expr": "(2 / (x * (-1 - (-((x * x))))))",
+      "enclosure": [
+        2.0002e-06,
+        0.3333334
+      ],
+      "abs_err": 1.26664e-16,
+      "rel_err": 6.332566743325667e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 285193.4522554027,
+      "program": "(FPCore (x) (/ 2 (* x (- -1 (- (* x x))))))"
+    },
+    {
+      "fptaylor_expr": "(2 / (x * ((x - 1) * (x + 1))))",
+      "enclosure": [
+        2.0002e-06,
+        0.3333334
+      ],
+      "abs_err": 1.39259e-16,
+      "rel_err": 6.962253774622538e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 313552.0350504889,
+      "program": "(FPCore (x) (/ 2 (* x (* (- x 1) (+ x 1)))))"
+    },
+    {
+      "fptaylor_expr": "(2 / (x * (-(((x - 1) * (((-(1)) * x) + (-(1))))))))",
+      "enclosure": [
+        2.0002e-06,
+        0.3333334
+      ],
+      "abs_err": 1.641528e-16,
+      "rel_err": 8.206819318068193e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 369602.284227489,
+      "program": "(FPCore (x) (/ 2 (* x (- (* (- x 1) (+ (* (- 1) x) (- 1)))))))"
+    },
+    {
+      "fptaylor_expr": "(2 / (x * (-1 - (-1 * (x * x)))))",
+      "enclosure": [
+        2.0002e-06,
+        0.3333334
+      ],
+      "abs_err": 1.761553e-16,
+      "rel_err": 8.806884311568843e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 396626.8090387651,
+      "program": "(FPCore (x) (/ 2 (* x (- -1 (* -1 (* x x))))))"
+    },
+    {
+      "fptaylor_expr": "((2 / (x * (x - 1))) * (1 / (x + 1)))",
+      "enclosure": [
+        2.0002e-06,
+        0.3333334
+      ],
+      "abs_err": 1.913158e-16,
+      "rel_err": 9.564833516648335e-11,
+      "rel_err_derived": true,
+      "rel_err_ulps": 430761.8066143827,
+      "program": "(FPCore (x) (* (/ 2 (* x (- x 1))) (/ 1 (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": "(1 / (x * ((-(((2 / ((-(((-(1)) - 1))) * 2)) + ((((-(1)) * x) / ((-(1)) + (-(1)))) * (-(1)))))) * (x + 1))))",
+      "enclosure": [
+        2.0002e-06,
+        0.3333334
+      ],
+      "abs_err": 4.555054e-16,
+      "rel_err": 2.277299270072993e-10,
+      "rel_err_derived": true,
+      "rel_err_ulps": 1025604.4144111833,
+      "program": "(FPCore (x) (/ 1 (* x (* (- (+ (/ 2 (* (- (- (- 1) 1)) 2)) (* (/ (* (- 1) x) (+ (- 1) (- 1))) (- 1)))) (+ x 1)))))"
+    },
+    {
+      "fptaylor_expr": "(2 / (x * ((x + (x * x)) - (x - (-(1))))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 2 (* x (- (+ x (* x x)) (- x (- 1))))))"
+    },
+    {
+      "fptaylor_expr": "(2 / (x * ((x + (x * x)) - (x + 1))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 2 (* x (- (+ x (* x x)) (+ x 1)))))"
+    },
+    {
+      "fptaylor_expr": "(2 / (x * ((x - (-(((-(x)) * (-(x)))))) + (((-(1)) * x) + (-(1))))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 2 (* x (+ (- x (- (* (- x) (- x)))) (+ (* (- 1) x) (- 1))))))"
+    },
+    {
+      "fptaylor_expr": "(2 / (x * ((x - (-((x * x)))) - (x - (-(1))))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 2 (* x (- (- x (- (* x x))) (- x (- 1))))))"
+    },
+    {
+      "fptaylor_expr": "(2 / ((x * (x - 1)) / (1 + (x / ((x - (-(1))) * (-(1)))))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 2 (/ (* x (- x 1)) (+ 1 (/ x (* (- x (- 1)) (- 1)))))))"
+    },
+    {
+      "fptaylor_expr": "(2 / (x * ((x - (-((x * x)))) - (1 - (-(x))))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 2 (* x (- (- x (- (* x x))) (- 1 (- x))))))"
+    },
+    {
+      "fptaylor_expr": "(2 / ((x * (-(1))) + (x * ((-(x)) * (x * (-(1)))))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 2 (+ (* x (- 1)) (* x (* (- x) (* x (- 1)))))))"
+    },
+    {
+      "fptaylor_expr": "((2 / (x * (x - 1))) + (2 / (x * ((x / (x * x)) - x))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (+ (/ 2 (* x (- x 1))) (/ 2 (* x (- (/ x (* x x)) x)))))"
+    },
+    {
+      "fptaylor_expr": "(1 / ((x * (x - 1)) / ((((-(1)) * (2 / ((2 * (1 / x)) * ((x * (-(1))) + (-(1)))))) * (1 / x)) + ((2 * (1 / x)) / ((1 / x) + (((-(x)) - (x - (-(1)))) / (x / (-(1)))))))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (/ (* x (- x 1)) (+ (* (* (- 1) (/ 2 (* (* 2 (/ 1 x)) (+ (* x (- 1)) (- 1))))) (/ 1 x)) (/ (* 2 (/ 1 x)) (+ (/ 1 x) (/ (- (- x) (- x (- 1))) (/ x (- 1)))))))))"
+    },
+    {
+      "fptaylor_expr": "(2 / (x * ((x - 1) / (1 - (-((2 / ((1 - (-(x))) * (2 / ((-(1)) * x))))))))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 2 (* x (/ (- x 1) (- 1 (- (/ 2 (* (- 1 (- x)) (/ 2 (* (- 1) x))))))))))"
+    },
+    {
+      "fptaylor_expr": "(1 / ((x * (x - 1)) / ((2 / ((x * ((-(1)) - 1)) / (2 / (((x + 1) * (-(1))) / ((x * (-(1))) / ((-(1)) + (-(1)))))))) + ((2 / ((x - (-(1))) * (2 / ((-(1)) * x)))) + 1))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ 1 (/ (* x (- x 1)) (+ (/ 2 (/ (* x (- (- 1) 1)) (/ 2 (/ (* (+ x 1) (- 1)) (/ (* x (- 1)) (+ (- 1) (- 1))))))) (+ (/ 2 (* (- x (- 1)) (/ 2 (* (- 1) x)))) 1)))))"
+    },
+    {
+      "fptaylor_expr": "(2 * (1 / (x * ((x + ((-(x)) * (-(x)))) - (x - (-(1)))))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* 2 (/ 1 (* x (- (+ x (* (- x) (- x))) (- x (- 1)))))))"
+    },
+    {
+      "fptaylor_expr": "((2 - (2 * (1 / (1 - (-(x)))))) / (x * ((x - (-(((x / (-(1))) * (x / (-(1))))))) - (x + x))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ (- 2 (* 2 (/ 1 (- 1 (- x))))) (* x (- (- x (- (* (/ x (- 1)) (/ x (- 1))))) (+ x x)))))"
+    }
+  ]
+}

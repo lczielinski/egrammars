@@ -1,0 +1,43 @@
+{
+  "benchmark": "beta_a",
+  "reference": "(FPCore (m v) (* (- (/ (* m (- 1 m)) v) 1) m))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "saturation": 6,
+    "run": "2026-07-15-221435",
+    "box": {
+      "m": [
+        0.4,
+        0.6
+      ],
+      "v": [
+        0.2,
+        0.25
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (m v) (* (/ (+ m (- (- v) (* m m))) v) m))",
+    "(FPCore (m v) (* (/ (- m (+ (* m m) v)) v) m))",
+    "(FPCore (m v) (* (/ (* (- m (+ (* m m) v)) (- 1)) v) (- m)))",
+    "(FPCore (m v) (/ (* m (- (* m (- 1 m)) v)) v))",
+    "(FPCore (m v) (- (* (/ m v) (* m (- 1 m))) m))",
+    "(FPCore (m v) (* (* (/ 1 v) (- (* m (- 1)) (+ (* m (- m)) (/ v (- 1))))) (- m)))",
+    "(FPCore (m v) (* (/ (* (- (* m (- 1 m)) v) (- 1)) v) (- m)))",
+    "(FPCore (m v) (+ (* (/ m v) (- (* m (- (- 1) (- m))))) (* -1 m)))",
+    "(FPCore (m v) (/ (* (* m (- 1)) (- (* m (- 1 m)) v)) (* v (- 1))))",
+    "(FPCore (m v) (+ (* (/ m v) (+ (* m (- m)) m)) (- m)))",
+    "(FPCore (m v) (+ (* (/ m v) (* m (- 1 m))) (* -1 m)))",
+    "(FPCore (m v) (* (- (* m (- 1 m)) v) (/ m v)))",
+    "(FPCore (m v) (/ (* (- (* m (- 1 m)) v) m) v))",
+    "(FPCore (m v) (* (* (/ 1 v) (+ (- m) (- (* m m) (* v (- 1))))) (- m)))",
+    "(FPCore (m v) (* (+ (/ m v) (- (* m (- (* (- (/ (- 1) (/ v (- 1)))) (* m (- 1))))) 1)) m))",
+    "(FPCore (m v) (* (+ (/ m v) (- (- (* m (/ 1 (* (- (/ -1 m)) v))) (- 1)))) m))",
+    "(FPCore (m v) (* (/ (* (- m (+ (* (- m) (- m)) v)) (- 1)) v) (- m)))",
+    "(FPCore (m v) (+ (* (- (/ (* m (- 1 m)) (* v (- 1)))) m) (* (- 1) m)))",
+    "(FPCore (m v) (* (+ (/ m v) (- (/ 1 (- (* (/ 1 (* m m)) v))) 1)) m))",
+    "(FPCore (m v) (+ (* (* -1 m) (/ (- (* m (- 1)) (* (- 1) (* m m))) v)) (* m (- 1))))"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "benchmark": "pbrt_cone_z",
+  "reference": "(FPCore (ux maxCos) (+ (- 1 ux) (* ux maxCos)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "saturation": 6,
+    "run": "2026-07-15-221435",
+    "box": {
+      "ux": [
+        2.328306437e-10,
+        1.0
+      ],
+      "maxCos": [
+        0.0,
+        1.0
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (ux maxCos) (+ (- 1 ux) (* ux maxCos)))",
+    "(FPCore (ux maxCos) (- (+ 1 (* ux maxCos)) ux))",
+    "(FPCore (ux maxCos) (+ (* ux maxCos) (- 1 ux)))",
+    "(FPCore (ux maxCos) (+ (+ (- ux) 1) (* ux maxCos)))",
+    "(FPCore (ux maxCos) (- (+ (* ux maxCos) 1) ux))",
+    "(FPCore (ux maxCos) (- (+ (- 1) (* ux (- 1 maxCos)))))",
+    "(FPCore (ux maxCos) (- (+ ux (- (* ux (- maxCos)) 1))))",
+    "(FPCore (ux maxCos) (+ (- 1 (* ux (- maxCos))) (- ux)))",
+    "(FPCore (ux maxCos) (+ (- (* ux maxCos) ux) 1))",
+    "(FPCore (ux maxCos) (- (* ux maxCos) (- ux 1)))",
+    "(FPCore (ux maxCos) (+ 1 (- (* ux maxCos) ux)))",
+    "(FPCore (ux maxCos) (- (- 1 ux) (* (- ux) maxCos)))",
+    "(FPCore (ux maxCos) (+ (+ (* ux maxCos) (- ux)) 1))",
+    "(FPCore (ux maxCos) (- (+ -1 (* ux (- 1 maxCos)))))",
+    "(FPCore (ux maxCos) (- (+ (* ux maxCos) (- ux)) (- 1)))",
+    "(FPCore (ux maxCos) (+ (+ (- ux) (* ux maxCos)) 1))",
+    "(FPCore (ux maxCos) (if (< ux 1.0) (+ (- 1 ux) (* ux maxCos)) (+ (- 1 ux) (* ux maxCos))))",
+    "(FPCore (ux maxCos) (- (+ 1 (* (- ux) (- maxCos))) ux))",
+    "(FPCore (ux maxCos) (+ (- 1 ux) (* (- ux) (- maxCos))))",
+    "(FPCore (ux maxCos) (if (< ux 0.5) (+ (- 1 ux) (* ux maxCos)) (+ (- 1 ux) (* ux maxCos))))"
+  ]
+}

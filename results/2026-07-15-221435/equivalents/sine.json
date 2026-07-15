@@ -1,0 +1,18 @@
+{
+  "benchmark": "sine",
+  "reference": "(FPCore (x) (- (+ (- x (/ (* (* x x) x) 6.0)) (/ (* (* (* (* x x) x) x) x) 120)) (/ (* (* (* (* (* (* x x) x) x) x) x) x) 5040)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "saturation": 6,
+    "run": "2026-07-15-221435",
+    "box": {
+      "x": [
+        -1.57079632679,
+        1.57079632679
+      ]
+    }
+  },
+  "programs": []
+}
