@@ -1,0 +1,130 @@
+{
+  "benchmark": "nmse_p42_positive",
+  "reference": "(FPCore (a b c) (/ (+ (- b) (sqrt (- (* b b) (* 4 (* a c))))) (* 2 a)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-14-202218-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "a": [
+        1.0,
+        100.0
+      ],
+      "b": [
+        -100.0,
+        100.0
+      ],
+      "c": [
+        -100.0,
+        -1.0
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (a b c) (if (>= b 0) (/ (* (* (- (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) b) (* (- 1) (/ 1 (/ a (- 1))))) (- 1)) (- 2)) (/ (+ (- (/ b 2)) (* (/ 1 2) (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))))) a)))",
+    "(FPCore (a b c) (if (>= b 0) (/ (* -1 (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (- (/ -1 a)))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+    "(FPCore (a b c) (if (>= b 0) (/ (* (* (- (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) b) (* (- 1) (/ 1 (/ a (- 1))))) (- 1)) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) 2)) a)))",
+    "(FPCore (a b c) (if (<= b 0) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) 2)) a) (/ (* -1 (- (* (- (/ 1 (/ a -1))) (sqrt (- (- (* (* 2 2) (* a c)) (* b b))))) (/ b a))) (- 2))))",
+    "(FPCore (a b c) (if (> b -0.0) (/ (* (- 1) (- (- (/ b a) (* (/ 1 a) (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))))))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) 2)) a)))",
+    "(FPCore (a b c) (if (> b 0) (/ (* -1 (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (- (/ 1 (/ a (- 1)))))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+    "(FPCore (a b c) (if (> b -0) (/ (* (- 1) (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (* (- 1) (/ (- 1) a)))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+    "(FPCore (a b c) (if (< b 0) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) 2)) a) (/ (* (- 1) (* (- (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) b) (/ 1 a))) (- 2))))",
+    "(FPCore (a b c) (if (>= b 0) (/ (* -1 (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (- (/ 1 (/ a (- 1)))))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+    "(FPCore (a b c) (if (> b 0) (/ (* (- 1) (- (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (/ 1 (/ a (- 1)))))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+    "(FPCore (a b c) (if (>= b 0) (/ (* -1 (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (* -1 (/ 1 (/ a -1))))) (- 2)) (/ (* -1 (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (* -1 (/ 1 (/ a -1))))) (- 2))))",
+    "(FPCore (a b c) (if (>= b 0) (/ (/ (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (- 1)) a) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+    "(FPCore (a b c) (if (>= b 0) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+    "(FPCore (a b c) (if (> b -1) (/ (* (- 1) (- (* (- (/ 1 (/ a (- 1)))) (sqrt (- (- (* 4 (* a c)) (* b b))))) (/ b a))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+    "(FPCore (a b c) (if (>= b 0) (/ (* (- 1) (- (* (- (/ 1 (/ a (- 1)))) (sqrt (- (- (* 4 (* a c)) (* b b))))) (* (- (/ 1 (/ a (- 1)))) b))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+    "(FPCore (a b c) (if (>= b 00) (/ (* (/ 1 (/ a (- 1))) (* (- (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) b) (- 1))) 2) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) 2)) a)))",
+    "(FPCore (a b c) (if (>= b 0) (- (/ (* (- (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) b) (/ 1 (- 2))) a)) (/ (* (- (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) b) (* (- 1) (/ 1 (- 2)))) a)))",
+    "(FPCore (a b c) (if (>= b 0) (/ (* -1 (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (/ 1 a))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+    "(FPCore (a b c) (if (>= b 0.0) (/ (* -1 (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (/ 1 a))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+    "(FPCore (a b c) (if (<= b 0) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) 2)) a) (/ (* -1 (* (- (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) b) (* -1 (/ 1 (/ a (- 1)))))) (- 2))))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* (* (- (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) b) (* (- 1) (/ 1 (/ a (- 1))))) (- 1)) (- 2)) (/ (+ (- (/ b 2)) (* (/ 1 2) (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))))) a)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* -1 (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (- (/ -1 a)))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* (* (- (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) b) (* (- 1) (/ 1 (/ a (- 1))))) (- 1)) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) 2)) a)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (<= b 0) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) 2)) a) (/ (* -1 (- (* (- (/ 1 (/ a -1))) (sqrt (- (- (* (* 2 2) (* a c)) (* b b))))) (/ b a))) (- 2))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (> b -0.0) (/ (* (- 1) (- (- (/ b a) (* (/ 1 a) (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))))))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) 2)) a)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (> b 0) (/ (* -1 (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (- (/ 1 (/ a (- 1)))))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (> b -0) (/ (* (- 1) (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (* (- 1) (/ (- 1) a)))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (< b 0) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) 2)) a) (/ (* (- 1) (* (- (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) b) (/ 1 a))) (- 2))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* -1 (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (- (/ 1 (/ a (- 1)))))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (> b 0) (/ (* (- 1) (- (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (/ 1 (/ a (- 1)))))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* -1 (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (* -1 (/ 1 (/ a -1))))) (- 2)) (/ (* -1 (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (* -1 (/ 1 (/ a -1))))) (- 2))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (/ (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (- 1)) a) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (> b -1) (/ (* (- 1) (- (* (- (/ 1 (/ a (- 1)))) (sqrt (- (- (* 4 (* a c)) (* b b))))) (/ b a))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* (- 1) (- (* (- (/ 1 (/ a (- 1)))) (sqrt (- (- (* 4 (* a c)) (* b b))))) (* (- (/ 1 (/ a (- 1)))) b))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 00) (/ (* (/ 1 (/ a (- 1))) (* (- (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) b) (- 1))) 2) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) 2)) a)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (- (/ (* (- (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) b) (/ 1 (- 2))) a)) (/ (* (- (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) b) (* (- 1) (/ 1 (- 2)))) a)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0) (/ (* -1 (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (/ 1 a))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (>= b 0.0) (/ (* -1 (* (- (sqrt (- (- (* 4 (* a c)) (* b b)))) b) (/ 1 a))) (- 2)) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* 4 (* a c)) (* b b)))) 2)) a)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (a b c) (if (<= b 0) (/ (+ (- (/ b 2)) (/ (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) 2)) a) (/ (* -1 (* (- (sqrt (- (- (* (* 2 2) (* a c)) (* b b)))) b) (* -1 (/ 1 (/ a (- 1)))))) (- 2))))",
+      "proven_equivalent": true
+    }
+  ]
+}

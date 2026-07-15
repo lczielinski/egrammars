@@ -1,0 +1,436 @@
+{
+  "benchmark": "expand_square",
+  "reference": "(FPCore (x) (- (* (+ x 1) (+ x 1)) 1))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-14-202218-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "x": [
+        -1.0,
+        1.0
+      ]
+    }
+  },
+  "intervals": {
+    "x": [
+      -1.0,
+      1.0
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "(((x + 1) * (x + 1)) - 1)",
+    "enclosure": [
+      -1.0,
+      3.0
+    ],
+    "abs_err": 1.110224e-15,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (x) (- (* (+ x 1) (+ x 1)) 1))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "(x * (x + 2))",
+      "enclosure": [
+        -1.015625,
+        3.0
+      ],
+      "abs_err": 4.440893e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (+ x 2)))"
+    },
+    {
+      "fptaylor_expr": "(x * (3 + (-((1 - x)))))",
+      "enclosure": [
+        -1.015625,
+        3.0
+      ],
+      "abs_err": 4.475587e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (+ 3 (- (- 1 x)))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.440893e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(x * (x + 2))",
+          "enclosure": [
+            -1.015625,
+            3.0
+          ],
+          "abs_err": 4.440893e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "x >= -2",
+          "region": {
+            "x": [
+              -1.0,
+              1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (< x -2) (* x (+ x 2)) (* x (+ x 2))))"
+    },
+    {
+      "fptaylor_expr": "((-(1)) * (x * (1 + (1 + ((((-(1)) * ((-(1)) + 3)) + (3 - x)) - (3 + 2))))))",
+      "enclosure": [
+        -1.015625,
+        3.0
+      ],
+      "abs_err": 2.554381e-15,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* (- 1) (* x (+ 1 (+ 1 (- (+ (* (- 1) (+ (- 1) 3)) (- 3 x)) (+ 3 2)))))))"
+    },
+    {
+      "fptaylor_expr": "(x * ((x + 4) + -2))",
+      "enclosure": [
+        -1.015625,
+        3.0
+      ],
+      "abs_err": 8.881785e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (+ (+ x 4) -2)))"
+    },
+    {
+      "fptaylor_expr": "(x * ((-(1)) * ((x + -2) - ((x * 3) - x))))",
+      "enclosure": [
+        -1.023438,
+        3.03125
+      ],
+      "abs_err": 1.221246e-15,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (* (- 1) (- (+ x -2) (- (* x 3) x)))))"
+    },
+    {
+      "fptaylor_expr": "(x * (-((2 + ((1 - x) + (-3 - 2))))))",
+      "enclosure": [
+        -1.015625,
+        3.0
+      ],
+      "abs_err": 1.346146e-15,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (- (+ 2 (+ (- 1 x) (- -3 2))))))"
+    },
+    {
+      "fptaylor_expr": "(x * (x + (1 + 1)))",
+      "enclosure": [
+        -1.015625,
+        3.0
+      ],
+      "abs_err": 5.551116e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (+ x (+ 1 1))))"
+    },
+    {
+      "fptaylor_expr": "((x * x) + (x * 2))",
+      "enclosure": [
+        -1.015564,
+        3.0
+      ],
+      "abs_err": 2.775558e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (+ (* x x) (* x 2)))"
+    },
+    {
+      "fptaylor_expr": "(x * (-1 + (x + 3)))",
+      "enclosure": [
+        -1.015625,
+        3.0
+      ],
+      "abs_err": 6.661339e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (+ -1 (+ x 3))))"
+    },
+    {
+      "fptaylor_expr": "((x * (x + 3)) - x)",
+      "enclosure": [
+        -1.015625,
+        3.03125
+      ],
+      "abs_err": 8.881785e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (- (* x (+ x 3)) x))"
+    },
+    {
+      "fptaylor_expr": "((-(1)) * ((x + (-(((x * (-(1))) - (x * (-1 - 3)))))) - (x * x)))",
+      "enclosure": [
+        -1.031189,
+        3.03125
+      ],
+      "abs_err": 1.665335e-15,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* (- 1) (- (+ x (- (- (* x (- 1)) (* x (- -1 3))))) (* x x))))"
+    },
+    {
+      "fptaylor_expr": "(x * (1 + (x + 1)))",
+      "enclosure": [
+        -1.015625,
+        3.0
+      ],
+      "abs_err": 5.551116e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (+ 1 (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.440893e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(x * (x + 2))",
+          "enclosure": [
+            0.0,
+            3.0
+          ],
+          "abs_err": 4.440893e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "x >= 0",
+          "region": {
+            "x": [
+              0.0,
+              1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(x * (x + 2))",
+          "enclosure": [
+            -1.015625,
+            0.0
+          ],
+          "abs_err": 2.220447e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "x < 0",
+          "region": {
+            "x": [
+              -1.0,
+              0.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (>= x 0) (* x (+ x 2)) (* x (+ x 2))))"
+    },
+    {
+      "fptaylor_expr": "(-1 * (x * (-1 + (-1 * (x + 1)))))",
+      "enclosure": [
+        -1.015625,
+        3.0
+      ],
+      "abs_err": 9.992008e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* -1 (* x (+ -1 (* -1 (+ x 1))))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.440893e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(x * (x + 2))",
+          "enclosure": [
+            -1.0,
+            -1.0
+          ],
+          "abs_err": 1.665335e-16,
+          "rel_err": 1.665335e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 0.7500002085447045,
+          "condition": "x < -1.0",
+          "region": {
+            "x": [
+              -1.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(x * (x + 2))",
+          "enclosure": [
+            -1.015625,
+            3.0
+          ],
+          "abs_err": 4.440893e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "x >= -1.0",
+          "region": {
+            "x": [
+              -1.0,
+              1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (< x -1.0) (* x (+ x 2)) (* x (+ x 2))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.440893e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(x * (x + 2))",
+          "enclosure": [
+            -1.0,
+            -1.0
+          ],
+          "abs_err": 1.665335e-16,
+          "rel_err": 1.665335e-16,
+          "rel_err_derived": false,
+          "rel_err_ulps": 0.7500002085447045,
+          "condition": "x <= -1",
+          "region": {
+            "x": [
+              -1.0,
+              -1.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(x * (x + 2))",
+          "enclosure": [
+            -1.015625,
+            3.0
+          ],
+          "abs_err": 4.440893e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "x > -1",
+          "region": {
+            "x": [
+              -1.0,
+              1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (<= x -1) (* x (+ x 2)) (* x (+ x 2))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 4.440893e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "(x * (x + 2))",
+          "enclosure": [
+            -1.015625,
+            0.0
+          ],
+          "abs_err": 2.220447e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "x < 0",
+          "region": {
+            "x": [
+              -1.0,
+              0.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(x * (x + 2))",
+          "enclosure": [
+            0.0,
+            3.0
+          ],
+          "abs_err": 4.440893e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "x >= 0",
+          "region": {
+            "x": [
+              0.0,
+              1.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (< x 0) (* x (+ x 2)) (* x (+ x 2))))"
+    },
+    {
+      "fptaylor_expr": "(x * ((-(1)) + (x + 3)))",
+      "enclosure": [
+        -1.015625,
+        3.0
+      ],
+      "abs_err": 6.661339e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* x (+ (- 1) (+ x 3))))"
+    },
+    {
+      "fptaylor_expr": "(-1 * ((x * (2 + ((-(1)) - 3))) - (x * x)))",
+      "enclosure": [
+        -1.015564,
+        3.0
+      ],
+      "abs_err": 1.165735e-15,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (* -1 (- (* x (+ 2 (- (- 1) 3))) (* x x))))"
+    }
+  ]
+}

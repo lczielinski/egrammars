@@ -1,0 +1,628 @@
+{
+  "benchmark": "matrixdeterminant2",
+  "reference": "(FPCore (a b c d e f g h i) (- (+ (* a (* e i)) (+ (* g (* b f)) (* c (* d h)))) (+ (* e (* c g)) (+ (* i (* b d)) (* a (* f h))))))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-14-202218-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "a": [
+        -10.0,
+        10.0
+      ],
+      "b": [
+        -10.0,
+        10.0
+      ],
+      "c": [
+        -10.0,
+        10.0
+      ],
+      "d": [
+        -10.0,
+        10.0
+      ],
+      "e": [
+        -10.0,
+        10.0
+      ],
+      "f": [
+        -10.0,
+        10.0
+      ],
+      "g": [
+        -10.0,
+        10.0
+      ],
+      "h": [
+        -10.0,
+        10.0
+      ],
+      "i": [
+        -10.0,
+        10.0
+      ]
+    }
+  },
+  "intervals": {
+    "a": [
+      -10.0,
+      10.0
+    ],
+    "b": [
+      -10.0,
+      10.0
+    ],
+    "c": [
+      -10.0,
+      10.0
+    ],
+    "d": [
+      -10.0,
+      10.0
+    ],
+    "e": [
+      -10.0,
+      10.0
+    ],
+    "f": [
+      -10.0,
+      10.0
+    ],
+    "g": [
+      -10.0,
+      10.0
+    ],
+    "h": [
+      -10.0,
+      10.0
+    ],
+    "i": [
+      -10.0,
+      10.0
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "(((a * (e * i)) + ((g * (b * f)) + (c * (d * h)))) - ((e * (c * g)) + ((i * (b * d)) + (a * (f * h)))))",
+    "enclosure": [
+      -4176.026,
+      4176.026
+    ],
+    "abs_err": 1.563195e-12,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (a b c d e f g h i) (- (+ (* a (* e i)) (+ (* g (* b f)) (* c (* d h)))) (+ (* e (* c g)) (+ (* i (* b d)) (* a (* f h))))))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "((((b * g) - (a * h)) * f) + ((a * (e * i)) + ((c * ((d * h) - (e * g))) - (b * (d * i)))))",
+      "enclosure": [
+        -4120.179,
+        4120.179
+      ],
+      "abs_err": 1.732059e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c d e f g h i) (+ (* (- (* b g) (* a h)) f) (+ (* a (* e i)) (- (* c (- (* d h) (* e g))) (* b (* d i))))))"
+    },
+    {
+      "fptaylor_expr": "((((c * d) - (a * f)) * h) + ((a * (e * i)) + ((b * (f * g)) - ((c * (e * g)) + (b * (d * i))))))",
+      "enclosure": [
+        -4148.56,
+        4148.56
+      ],
+      "abs_err": 1.703638e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c d e f g h i) (+ (* (- (* c d) (* a f)) h) (+ (* a (* e i)) (- (* b (* f g)) (+ (* c (* e g)) (* b (* d i)))))))"
+    },
+    {
+      "fptaylor_expr": "(((a * (e * i)) + ((b * (f * g)) - ((b * (d * i)) + (a * (f * h))))) + (c * ((d * h) - (e * g))))",
+      "enclosure": [
+        -4148.56,
+        4148.56
+      ],
+      "abs_err": 1.705303e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c d e f g h i) (+ (+ (* a (* e i)) (- (* b (* f g)) (+ (* b (* d i)) (* a (* f h))))) (* c (- (* d h) (* e g)))))"
+    },
+    {
+      "fptaylor_expr": "((((c * d) * h) - (a * (f * h))) + (((b * (f * g)) - (c * (e * g))) + ((a * (e * i)) - (b * (d * i)))))",
+      "enclosure": [
+        -4176.026,
+        4176.026
+      ],
+      "abs_err": 1.705303e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c d e f g h i) (+ (- (* (* c d) h) (* a (* f h))) (+ (- (* b (* f g)) (* c (* e g))) (- (* a (* e i)) (* b (* d i))))))"
+    },
+    {
+      "fptaylor_expr": "((b * ((f * g) - (d * i))) + ((c * ((d * h) - (e * g))) + ((a * (e * i)) - (a * (f * h)))))",
+      "enclosure": [
+        -4091.797,
+        4091.797
+      ],
+      "abs_err": 1.534773e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c d e f g h i) (+ (* b (- (* f g) (* d i))) (+ (* c (- (* d h) (* e g))) (- (* a (* e i)) (* a (* f h))))))"
+    },
+    {
+      "fptaylor_expr": "((-((((b * d) * i) - ((c * d) * h)))) + ((((b * f) * g) - ((a * f) * h)) + (((a * i) - (c * g)) * e)))",
+      "enclosure": [
+        -4148.56,
+        4148.56
+      ],
+      "abs_err": 1.733725e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c d e f g h i) (+ (- (- (* (* b d) i) (* (* c d) h))) (+ (- (* (* b f) g) (* (* a f) h)) (* (- (* a i) (* c g)) e))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 1.534773e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((b * ((f * g) - (d * i))) + ((c * ((d * h) - (e * g))) + ((a * (e * i)) - (a * (f * h)))))",
+          "enclosure": [
+            -4061.524,
+            4068.497
+          ],
+          "abs_err": 1.534773e-12,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "a < 0",
+          "region": {
+            "a": [
+              -10.0,
+              0.0
+            ],
+            "b": [
+              -10.0,
+              10.0
+            ],
+            "c": [
+              -10.0,
+              10.0
+            ],
+            "d": [
+              -10.0,
+              10.0
+            ],
+            "e": [
+              -10.0,
+              10.0
+            ],
+            "f": [
+              -10.0,
+              10.0
+            ],
+            "g": [
+              -10.0,
+              10.0
+            ],
+            "h": [
+              -10.0,
+              10.0
+            ],
+            "i": [
+              -10.0,
+              10.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((b * ((f * g) - (d * i))) + ((c * ((d * h) - (e * g))) + ((a * (e * i)) - (a * (f * h)))))",
+          "enclosure": [],
+          "abs_err": null,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "a >= 0",
+          "region": {
+            "a": [
+              0.0,
+              10.0
+            ],
+            "b": [
+              -10.0,
+              10.0
+            ],
+            "c": [
+              -10.0,
+              10.0
+            ],
+            "d": [
+              -10.0,
+              10.0
+            ],
+            "e": [
+              -10.0,
+              10.0
+            ],
+            "f": [
+              -10.0,
+              10.0
+            ],
+            "g": [
+              -10.0,
+              10.0
+            ],
+            "h": [
+              -10.0,
+              10.0
+            ],
+            "i": [
+              -10.0,
+              10.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b c d e f g h i) (if (< a 0) (+ (* b (- (* f g) (* d i))) (+ (* c (- (* d h) (* e g))) (- (* a (* e i)) (* a (* f h))))) (+ (* b (- (* f g) (* d i))) (+ (* c (- (* d h) (* e g))) (- (* a (* e i)) (* a (* f h)))))))"
+    },
+    {
+      "fptaylor_expr": "((d * ((c * h) - (b * i))) + ((a * (e * i)) + ((b * (f * g)) - ((c * (e * g)) + (a * (f * h))))))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c d e f g h i) (+ (* d (- (* c h) (* b i))) (+ (* a (* e i)) (- (* b (* f g)) (+ (* c (* e g)) (* a (* f h)))))))"
+    },
+    {
+      "fptaylor_expr": "(((-(((-(((a * (e * i)) - (b * (d * i))))) - (b * (f * g))))) - (a * (f * h))) + (c * ((d * h) - (e * g))))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c d e f g h i) (+ (- (- (- (- (- (* a (* e i)) (* b (* d i)))) (* b (* f g)))) (* a (* f h))) (* c (- (* d h) (* e g)))))"
+    },
+    {
+      "fptaylor_expr": "((((c * d) * h) - (a * (f * h))) + (((b * (f * g)) - (b * (d * i))) + (((a * i) - (c * g)) * e)))",
+      "enclosure": [],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c d e f g h i) (+ (- (* (* c d) h) (* a (* f h))) (+ (- (* b (* f g)) (* b (* d i))) (* (- (* a i) (* c g)) e))))"
+    },
+    {
+      "fptaylor_expr": "(((-(((a * (f * h)) - ((a * (e * i)) + (b * (f * g)))))) - (b * (d * i))) + (-((c * ((e * g) - (d * h))))))",
+      "enclosure": [
+        -4148.56,
+        4148.56
+      ],
+      "abs_err": 1.705303e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c d e f g h i) (+ (- (- (- (* a (* f h)) (+ (* a (* e i)) (* b (* f g))))) (* b (* d i))) (- (* c (- (* e g) (* d h))))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 1.534773e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((b * ((f * g) - (d * i))) + ((c * ((d * h) - (e * g))) + ((a * (e * i)) - (a * (f * h)))))",
+          "enclosure": [
+            -4061.524,
+            4068.497
+          ],
+          "abs_err": 1.534773e-12,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "a <= 0",
+          "region": {
+            "a": [
+              -10.0,
+              0.0
+            ],
+            "b": [
+              -10.0,
+              10.0
+            ],
+            "c": [
+              -10.0,
+              10.0
+            ],
+            "d": [
+              -10.0,
+              10.0
+            ],
+            "e": [
+              -10.0,
+              10.0
+            ],
+            "f": [
+              -10.0,
+              10.0
+            ],
+            "g": [
+              -10.0,
+              10.0
+            ],
+            "h": [
+              -10.0,
+              10.0
+            ],
+            "i": [
+              -10.0,
+              10.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((b * ((f * g) - (d * i))) + ((c * ((d * h) - (e * g))) + ((a * (e * i)) - (a * (f * h)))))",
+          "enclosure": [
+            -4068.497,
+            4061.524
+          ],
+          "abs_err": 1.534773e-12,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "a > 0",
+          "region": {
+            "a": [
+              0.0,
+              10.0
+            ],
+            "b": [
+              -10.0,
+              10.0
+            ],
+            "c": [
+              -10.0,
+              10.0
+            ],
+            "d": [
+              -10.0,
+              10.0
+            ],
+            "e": [
+              -10.0,
+              10.0
+            ],
+            "f": [
+              -10.0,
+              10.0
+            ],
+            "g": [
+              -10.0,
+              10.0
+            ],
+            "h": [
+              -10.0,
+              10.0
+            ],
+            "i": [
+              -10.0,
+              10.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b c d e f g h i) (if (<= a 0) (+ (* b (- (* f g) (* d i))) (+ (* c (- (* d h) (* e g))) (- (* a (* e i)) (* a (* f h))))) (+ (* b (- (* f g) (* d i))) (+ (* c (- (* d h) (* e g))) (- (* a (* e i)) (* a (* f h)))))))"
+    },
+    {
+      "fptaylor_expr": "((((a * (e * i)) + (b * (f * g))) - ((b * (d * i)) + (a * (f * h)))) + (-((c * ((e * g) - (d * h))))))",
+      "enclosure": [
+        -4148.56,
+        4148.56
+      ],
+      "abs_err": 1.733725e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c d e f g h i) (+ (- (+ (* a (* e i)) (* b (* f g))) (+ (* b (* d i)) (* a (* f h)))) (- (* c (- (* e g) (* d h))))))"
+    },
+    {
+      "fptaylor_expr": "(((b * (f * g)) - (a * (f * h))) + ((-((c * ((e * g) - (d * h))))) + (((a * e) - (b * d)) * i)))",
+      "enclosure": [
+        -4148.56,
+        4148.56
+      ],
+      "abs_err": 1.549872e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c d e f g h i) (+ (- (* b (* f g)) (* a (* f h))) (+ (- (* c (- (* e g) (* d h)))) (* (- (* a e) (* b d)) i))))"
+    },
+    {
+      "fptaylor_expr": "((((c * d) * h) - (a * (f * h))) + ((((b * f) * g) - (b * (d * i))) + (((a * i) - (c * g)) * e)))",
+      "enclosure": [
+        -4148.56,
+        4148.56
+      ],
+      "abs_err": 1.52145e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c d e f g h i) (+ (- (* (* c d) h) (* a (* f h))) (+ (- (* (* b f) g) (* b (* d i))) (* (- (* a i) (* c g)) e))))"
+    },
+    {
+      "fptaylor_expr": "(((((a * (e * i)) + (b * (f * g))) - (a * (f * h))) - (b * (d * i))) + (-((c * ((e * g) - (d * h))))))",
+      "enclosure": [
+        -4148.56,
+        4148.56
+      ],
+      "abs_err": 1.705303e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c d e f g h i) (+ (- (- (+ (* a (* e i)) (* b (* f g))) (* a (* f h))) (* b (* d i))) (- (* c (- (* e g) (* d h))))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 1.733725e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((((b * g) - (a * h)) * f) + ((a * (e * i)) + ((c * ((d * h) - (e * g))) - (b * (d * i)))))",
+          "enclosure": [
+            -4076.188,
+            4076.188
+          ],
+          "abs_err": 1.731504e-12,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "a < 0",
+          "region": {
+            "a": [
+              -10.0,
+              0.0
+            ],
+            "b": [
+              -10.0,
+              10.0
+            ],
+            "c": [
+              -10.0,
+              10.0
+            ],
+            "d": [
+              -10.0,
+              10.0
+            ],
+            "e": [
+              -10.0,
+              10.0
+            ],
+            "f": [
+              -10.0,
+              10.0
+            ],
+            "g": [
+              -10.0,
+              10.0
+            ],
+            "h": [
+              -10.0,
+              10.0
+            ],
+            "i": [
+              -10.0,
+              10.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((b * ((f * g) - (d * i))) + ((a * (e * i)) + ((c * ((d * h) - (e * g))) - (a * (f * h)))))",
+          "enclosure": [
+            -4076.188,
+            4076.188
+          ],
+          "abs_err": 1.733725e-12,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "a >= 0",
+          "region": {
+            "a": [
+              0.0,
+              10.0
+            ],
+            "b": [
+              -10.0,
+              10.0
+            ],
+            "c": [
+              -10.0,
+              10.0
+            ],
+            "d": [
+              -10.0,
+              10.0
+            ],
+            "e": [
+              -10.0,
+              10.0
+            ],
+            "f": [
+              -10.0,
+              10.0
+            ],
+            "g": [
+              -10.0,
+              10.0
+            ],
+            "h": [
+              -10.0,
+              10.0
+            ],
+            "i": [
+              -10.0,
+              10.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (a b c d e f g h i) (if (< a 0) (+ (* (- (* b g) (* a h)) f) (+ (* a (* e i)) (- (* c (- (* d h) (* e g))) (* b (* d i))))) (+ (* b (- (* f g) (* d i))) (+ (* a (* e i)) (- (* c (- (* d h) (* e g))) (* a (* f h)))))))"
+    },
+    {
+      "fptaylor_expr": "((((a * (e * i)) - (a * (f * h))) + ((b * (f * g)) - (b * (d * i)))) + (-((c * ((e * g) - (d * h))))))",
+      "enclosure": [
+        -4148.56,
+        4148.56
+      ],
+      "abs_err": 1.506351e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c d e f g h i) (+ (+ (- (* a (* e i)) (* a (* f h))) (- (* b (* f g)) (* b (* d i)))) (- (* c (- (* e g) (* d h))))))"
+    },
+    {
+      "fptaylor_expr": "((-((((((c * g) * e) + ((b * d) * i)) - ((b * f) * g)) - ((d * h) * c)))) + (a * ((e * i) - (f * h))))",
+      "enclosure": [
+        -4148.56,
+        4148.56
+      ],
+      "abs_err": 1.705303e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c d e f g h i) (+ (- (- (- (+ (* (* c g) e) (* (* b d) i)) (* (* b f) g)) (* (* d h) c))) (* a (- (* e i) (* f h)))))"
+    },
+    {
+      "fptaylor_expr": "(((d * (c * h)) - (f * (a * h))) + ((b * (f * g)) + ((a * (e * i)) - ((c * (e * g)) + (b * (d * i))))))",
+      "enclosure": [
+        -4176.026,
+        4176.026
+      ],
+      "abs_err": 1.790568e-12,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (a b c d e f g h i) (+ (- (* d (* c h)) (* f (* a h))) (+ (* b (* f g)) (- (* a (* e i)) (+ (* c (* e g)) (* b (* d i)))))))"
+    }
+  ]
+}

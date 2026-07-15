@@ -1,0 +1,295 @@
+{
+  "benchmark": "som_setup_w",
+  "reference": "(FPCore (es ca rone_es) (- (* (* (- 1 (* es (* ca ca))) rone_es) (* (- 1 (* es (* ca ca))) rone_es)) 1))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-14-202218-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "es": [
+        0.0,
+        0.1
+      ],
+      "ca": [
+        -1.0,
+        1.0
+      ],
+      "rone_es": [
+        1.0,
+        1.05
+      ]
+    }
+  },
+  "intervals": {
+    "es": [
+      0.0,
+      0.1
+    ],
+    "ca": [
+      -1.0,
+      1.0
+    ],
+    "rone_es": [
+      1.0,
+      1.05
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "((((1 - (es * (ca * ca))) * rone_es) * ((1 - (es * (ca * ca))) * rone_es)) - 1)",
+    "enclosure": [
+      -0.1900001,
+      0.1025001
+    ],
+    "abs_err": 5.976335e-16,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (es ca rone_es) (- (* (* (- 1 (* es (* ca ca))) rone_es) (* (- 1 (* es (* ca ca))) rone_es)) 1))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "((((1 - rone_es) * -1) - (es * (ca * (ca * rone_es)))) * ((-1 * -1) + (rone_es * (-1 * (-1 + (es * (ca * ca)))))))",
+      "enclosure": [
+        -0.1925341,
+        0.1025001
+      ],
+      "abs_err": 1.228027e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (* (- (* (- 1 rone_es) -1) (* es (* ca (* ca rone_es)))) (+ (* -1 -1) (* rone_es (* -1 (+ -1 (* es (* ca ca))))))))"
+    },
+    {
+      "fptaylor_expr": "(-1 * (((-((1 - rone_es))) - (es * (ca * (ca * rone_es)))) * ((((-(es)) * ((ca * (ca * rone_es)) * -1)) - (rone_es + (1 - rone_es))) - rone_es)))",
+      "enclosure": [
+        -0.1932211,
+        0.1050001
+      ],
+      "abs_err": 1.267699e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (* -1 (* (- (- (- 1 rone_es)) (* es (* ca (* ca rone_es)))) (- (- (* (- es) (* (* ca (* ca rone_es)) -1)) (+ rone_es (- 1 rone_es))) rone_es))))"
+    },
+    {
+      "fptaylor_expr": "((((1 - rone_es) * -1) - ((-(es)) * ((ca * (ca * rone_es)) * -1))) * ((-1 * -1) + (-1 * (rone_es * (-1 + (es * (ca * ca)))))))",
+      "enclosure": [
+        -0.1925341,
+        0.1025001
+      ],
+      "abs_err": 1.442096e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (* (- (* (- 1 rone_es) -1) (* (- es) (* (* ca (* ca rone_es)) -1))) (+ (* -1 -1) (* -1 (* rone_es (+ -1 (* es (* ca ca))))))))"
+    },
+    {
+      "fptaylor_expr": "((-1 + (-1 * (rone_es * (-1 + (es * (ca * ca)))))) * ((-1 * -1) + (rone_es * (1 - (es * (ca * ca))))))",
+      "enclosure": [
+        -0.1913383,
+        0.1025001
+      ],
+      "abs_err": 7.351971e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (* (+ -1 (* -1 (* rone_es (+ -1 (* es (* ca ca)))))) (+ (* -1 -1) (* rone_es (- 1 (* es (* ca ca)))))))"
+    },
+    {
+      "fptaylor_expr": "(((-((1 - rone_es))) - ((es * ca) * (ca * rone_es))) * ((-(-1)) + (rone_es * (1 - (es * (ca * ca))))))",
+      "enclosure": [
+        -0.1925341,
+        0.1025001
+      ],
+      "abs_err": 1.005146e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (* (- (- (- 1 rone_es)) (* (* es ca) (* ca rone_es))) (+ (- -1) (* rone_es (- 1 (* es (* ca ca)))))))"
+    },
+    {
+      "fptaylor_expr": "((((1 - rone_es) * -1) - (rone_es * (es * (ca * ca)))) * ((-1 * -1) + (rone_es * (-1 * (-1 + (es * (ca * ca)))))))",
+      "enclosure": [
+        -0.1925341,
+        0.1025001
+      ],
+      "abs_err": 1.031875e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (* (- (* (- 1 rone_es) -1) (* rone_es (* es (* ca ca)))) (+ (* -1 -1) (* rone_es (* -1 (+ -1 (* es (* ca ca))))))))"
+    },
+    {
+      "fptaylor_expr": "(((-1 + rone_es) - ((-(ca)) * ((es * (ca * rone_es)) * -1))) * ((-1 * -1) + (rone_es * ((-(-1)) - (es * (ca * ca))))))",
+      "enclosure": [
+        -0.1925341,
+        0.1025001
+      ],
+      "abs_err": 1.182861e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (* (- (+ -1 rone_es) (* (- ca) (* (* es (* ca rone_es)) -1))) (+ (* -1 -1) (* rone_es (- (- -1) (* es (* ca ca)))))))"
+    },
+    {
+      "fptaylor_expr": "(((-(rone_es)) * (((-1 * (-1 + (es * (ca * ca)))) * (-1 + ((((1 - rone_es) * -1) - (es * (ca * (ca * rone_es)))) * -1))) + -1)) + ((rone_es + 1) * -1))",
+      "enclosure": [
+        -0.1968126,
+        0.1087501
+      ],
+      "abs_err": 1.401516e-15,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (+ (* (- rone_es) (+ (* (* -1 (+ -1 (* es (* ca ca)))) (+ -1 (* (- (* (- 1 rone_es) -1) (* es (* ca (* ca rone_es)))) -1))) -1)) (* (+ rone_es 1) -1)))"
+    },
+    {
+      "fptaylor_expr": "(-(((((1 - rone_es) * -1) - (es * (ca * (ca * rone_es)))) * (((rone_es + 1) - (es * (ca * (ca * rone_es)))) * -1))))",
+      "enclosure": [
+        -0.1925922,
+        0.1025001
+      ],
+      "abs_err": 1.280392e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (- (* (- (* (- 1 rone_es) -1) (* es (* ca (* ca rone_es)))) (* (- (+ rone_es 1) (* es (* ca (* ca rone_es)))) -1))))"
+    },
+    {
+      "fptaylor_expr": "((((1 - rone_es) * -1) - (es * (ca * (ca * rone_es)))) * ((-1 * -1) + (-1 * (rone_es * (-1 + (es * (ca * ca)))))))",
+      "enclosure": [
+        -0.1925341,
+        0.1025001
+      ],
+      "abs_err": 1.226518e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (* (- (* (- 1 rone_es) -1) (* es (* ca (* ca rone_es)))) (+ (* -1 -1) (* -1 (* rone_es (+ -1 (* es (* ca ca))))))))"
+    },
+    {
+      "fptaylor_expr": "(((((-1 * -1) - rone_es) * -1) - ((-(ca)) * ((es * (ca * rone_es)) * -1))) * ((rone_es + (-1 * -1)) - (rone_es * (es * (ca * ca)))))",
+      "enclosure": [
+        -0.1925922,
+        0.1025001
+      ],
+      "abs_err": 2.419819e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (* (- (* (- (* -1 -1) rone_es) -1) (* (- ca) (* (* es (* ca rone_es)) -1))) (- (+ rone_es (* -1 -1)) (* rone_es (* es (* ca ca))))))"
+    },
+    {
+      "fptaylor_expr": "(-1 * ((((1 - rone_es) * -1) - (es * (ca * (ca * rone_es)))) * (((-1 * -1) + (rone_es * (-1 * (-1 + (es * (ca * ca)))))) * -1)))",
+      "enclosure": [
+        -0.1925341,
+        0.1025001
+      ],
+      "abs_err": 1.448957e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (* -1 (* (- (* (- 1 rone_es) -1) (* es (* ca (* ca rone_es)))) (* (+ (* -1 -1) (* rone_es (* -1 (+ -1 (* es (* ca ca)))))) -1))))"
+    },
+    {
+      "fptaylor_expr": "(-(((((1 - rone_es) * -1) - (es * (ca * (ca * rone_es)))) * ((((-(ca)) * ((es * (ca * rone_es)) * -1)) - (rone_es + (1 - rone_es))) - rone_es))))",
+      "enclosure": [
+        -0.1932211,
+        0.1050001
+      ],
+      "abs_err": 1.189957e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (- (* (- (* (- 1 rone_es) -1) (* es (* ca (* ca rone_es)))) (- (- (* (- ca) (* (* es (* ca rone_es)) -1)) (+ rone_es (- 1 rone_es))) rone_es))))"
+    },
+    {
+      "fptaylor_expr": "(-1 * (((-((1 - rone_es))) - (es * (ca * (ca * rone_es)))) * (((rone_es + (-1 * -1)) - (es * (ca * (ca * rone_es)))) * -1)))",
+      "enclosure": [
+        -0.1925922,
+        0.1025001
+      ],
+      "abs_err": 1.464288e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (* -1 (* (- (- (- 1 rone_es)) (* es (* ca (* ca rone_es)))) (* (- (+ rone_es (* -1 -1)) (* es (* ca (* ca rone_es)))) -1))))"
+    },
+    {
+      "fptaylor_expr": "(-1 * ((((-(((-(es)) * ((ca * (ca * rone_es)) * -1)))) * ((-1 * rone_es) - rone_es)) + (((-1 * -1) + ((ca * ca) * (es * rone_es))) * ((((ca * ca) * (es * rone_es)) + ((-1 * rone_es) - (1 - rone_es))) * -1))) - (rone_es * rone_es)))",
+      "enclosure": [
+        -0.2084341,
+        0.1153126
+      ],
+      "abs_err": 1.022304e-15,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (* -1 (- (+ (* (- (* (- es) (* (* ca (* ca rone_es)) -1))) (- (* -1 rone_es) rone_es)) (* (+ (* -1 -1) (* (* ca ca) (* es rone_es))) (* (+ (* (* ca ca) (* es rone_es)) (- (* -1 rone_es) (- 1 rone_es))) -1))) (* rone_es rone_es))))"
+    },
+    {
+      "fptaylor_expr": "(-1 * (((rone_es * rone_es) * (-((1 - (es * (ca * (ca + ca))))))) + (((-(-1)) + (es * (ca * (ca * rone_es)))) * ((((-(es)) * ((rone_es * (ca * ca)) * -1)) - (rone_es + ((-(-1)) - rone_es))) * -1))))",
+      "enclosure": [
+        -0.2059263,
+        0.1153126
+      ],
+      "abs_err": 9.270921e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (* -1 (+ (* (* rone_es rone_es) (- (- 1 (* es (* ca (+ ca ca)))))) (* (+ (- -1) (* es (* ca (* ca rone_es)))) (* (- (* (- es) (* (* rone_es (* ca ca)) -1)) (+ rone_es (- (- -1) rone_es))) -1)))))"
+    },
+    {
+      "fptaylor_expr": "(-1 * (((-((1 - rone_es))) - (es * (ca * (ca * rone_es)))) * (((-(-1)) + (rone_es * (-1 * (-1 + (es * (ca * ca)))))) * -1)))",
+      "enclosure": [
+        -0.1925341,
+        0.1025001
+      ],
+      "abs_err": 1.380597e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (* -1 (* (- (- (- 1 rone_es)) (* es (* ca (* ca rone_es)))) (* (+ (- -1) (* rone_es (* -1 (+ -1 (* es (* ca ca)))))) -1))))"
+    },
+    {
+      "fptaylor_expr": "((-1 + (-1 * (rone_es * (-1 + (es * (ca * ca)))))) * (1 + (-1 * (rone_es * (-1 + (es * (ca * ca)))))))",
+      "enclosure": [
+        -0.1913383,
+        0.1025001
+      ],
+      "abs_err": 7.379727e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (* (+ -1 (* -1 (* rone_es (+ -1 (* es (* ca ca)))))) (+ 1 (* -1 (* rone_es (+ -1 (* es (* ca ca))))))))"
+    },
+    {
+      "fptaylor_expr": "(((-1 * rone_es) * (((1 - (es * (ca * ca))) * (-1 + ((((1 - rone_es) * -1) - (es * (ca * (ca * rone_es)))) * -1))) + -1)) + ((rone_es + (-1 * -1)) * -1))",
+      "enclosure": [
+        -0.1968126,
+        0.1087501
+      ],
+      "abs_err": 1.562221e-15,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (+ (* (* -1 rone_es) (+ (* (- 1 (* es (* ca ca))) (+ -1 (* (- (* (- 1 rone_es) -1) (* es (* ca (* ca rone_es)))) -1))) -1)) (* (+ rone_es (* -1 -1)) -1)))"
+    },
+    {
+      "fptaylor_expr": "(-1 * ((((1 - rone_es) * -1) - (es * (ca * (ca * rone_es)))) * (((-1 * -1) + (-1 * (rone_es * (-1 + (es * (ca * ca)))))) * -1)))",
+      "enclosure": [
+        -0.1925341,
+        0.1025001
+      ],
+      "abs_err": 1.448026e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (es ca rone_es) (* -1 (* (- (* (- 1 rone_es) -1) (* es (* ca (* ca rone_es)))) (* (+ (* -1 -1) (* -1 (* rone_es (+ -1 (* es (* ca ca)))))) -1))))"
+    }
+  ]
+}

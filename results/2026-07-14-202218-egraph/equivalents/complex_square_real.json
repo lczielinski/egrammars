@@ -1,0 +1,126 @@
+{
+  "benchmark": "complex_square_real",
+  "reference": "(FPCore (re im) (- (* re re) (* im im)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-14-202218-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "re": [
+        1.0,
+        2.0
+      ],
+      "im": [
+        1.0,
+        2.0
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (re im) (* (- re im) (+ re im)))",
+    "(FPCore (re im) (if (< re 1.5) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+    "(FPCore (re im) (+ (* re (- re im)) (* im (- re im))))",
+    "(FPCore (re im) (- (* re re) (* im im)))",
+    "(FPCore (re im) (- (* (- im re) (+ re im))))",
+    "(FPCore (re im) (* (- (- im re)) (+ re im)))",
+    "(FPCore (re im) (+ (- (* re re) (* re im)) (- (* re im) (* im im))))",
+    "(FPCore (re im) (if (< re 1.0) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+    "(FPCore (re im) (if (< re 0) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+    "(FPCore (re im) (if (<= re 0) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+    "(FPCore (re im) (- (+ (* re re) (* re im)) (+ (* im im) (* re im))))",
+    "(FPCore (re im) (- (- (* im im) (* re re))))",
+    "(FPCore (re im) (if (>= re 1.0) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+    "(FPCore (re im) (- (* re (+ re im)) (* im (+ re im))))",
+    "(FPCore (re im) (if (< re -1000) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+    "(FPCore (re im) (if (< im 1.5) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+    "(FPCore (re im) (if (<= re 1.5) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+    "(FPCore (re im) (if (< im 0) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+    "(FPCore (re im) (if (< re 1.5000000000000000) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+    "(FPCore (re im) (if (< re 1.0000000000000002) (* (- re im) (+ re im)) (* (- re im) (+ re im))))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (re im) (* (- re im) (+ re im)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (if (< re 1.5) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (+ (* re (- re im)) (* im (- re im))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (- (* re re) (* im im)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (- (* (- im re) (+ re im))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (* (- (- im re)) (+ re im)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (+ (- (* re re) (* re im)) (- (* re im) (* im im))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (if (< re 1.0) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (if (< re 0) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (if (<= re 0) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (- (+ (* re re) (* re im)) (+ (* im im) (* re im))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (- (- (* im im) (* re re))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (if (>= re 1.0) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (- (* re (+ re im)) (* im (+ re im))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (if (< re -1000) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (if (< im 1.5) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (if (<= re 1.5) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (if (< im 0) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (if (< re 1.5000000000000000) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (re im) (if (< re 1.0000000000000002) (* (- re im) (+ re im)) (* (- re im) (+ re im))))",
+      "proven_equivalent": true
+    }
+  ]
+}

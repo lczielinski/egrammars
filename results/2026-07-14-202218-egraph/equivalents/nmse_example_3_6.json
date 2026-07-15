@@ -1,0 +1,122 @@
+{
+  "benchmark": "nmse_example_3_6",
+  "reference": "(FPCore (x) (- (/ 1 (sqrt x)) (/ 1 (sqrt (+ x 1)))))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-14-202218-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "x": [
+        0.0001,
+        100.0
+      ]
+    }
+  },
+  "programs": [
+    "(FPCore (x) (/ (/ (* (/ (* (- 1) (sqrt x)) (sqrt (+ x (* x x)))) (/ 1 (sqrt x))) (+ (sqrt x) (sqrt (+ x 1)))) (- 1)))",
+    "(FPCore (x) (/ (/ (/ 1 (sqrt x)) (+ (sqrt x) (sqrt (+ x 1)))) (sqrt (+ x 1))))",
+    "(FPCore (x) (- (/ (* (- 1) (/ (* (- 1) (/ (- 1) (sqrt x))) (+ (sqrt x) (sqrt (+ x 1))))) (sqrt (+ x 1)))))",
+    "(FPCore (x) (* (/ -1 (sqrt x)) (+ -1 (/ 1 (sqrt (+ (/ 1 x) (/ x x)))))))",
+    "(FPCore (x) (+ (/ (- (sqrt x)) (* (sqrt x) (sqrt (+ x 1)))) (/ (/ (- 1) (sqrt x)) (- 1))))",
+    "(FPCore (x) (* (/ (- 1) (sqrt x)) (/ (- 1 (sqrt (/ x (+ x 1)))) (- 1))))",
+    "(FPCore (x) (- (/ (* (/ (* (- 1) (sqrt x)) (sqrt (+ x (* x x)))) (* (- 1) (/ (- 1) (sqrt x)))) (+ (sqrt x) (sqrt (+ x 1))))))",
+    "(FPCore (x) (/ (- 1 (/ 1 (sqrt (+ (/ 1 x) (/ x x))))) (sqrt x)))",
+    "(FPCore (x) (/ (* (/ (* (- 1) (/ (- 1) (sqrt x))) (+ (sqrt x) (sqrt (+ x 1)))) (/ (* (- 1) (sqrt x)) (sqrt (+ x (* x x))))) (- 1)))",
+    "(FPCore (x) (- (/ (* (- (sqrt (+ x 1)) (sqrt x)) (/ (* (- 1) (sqrt x)) (sqrt (+ x (* x x))))) (sqrt x))))",
+    "(FPCore (x) (+ (/ (sqrt (+ x 1)) (* (- 1) (+ x 1))) (/ (/ (- 1) (sqrt x)) (- 1))))",
+    "(FPCore (x) (if (< x 0) (/ (- 1 (sqrt (/ x (+ x 1)))) (sqrt x)) (/ (- 1 (sqrt (/ x (+ x 1)))) (sqrt x))))",
+    "(FPCore (x) (if (>= x 0) (/ (- 1 (sqrt (/ x (+ x 1)))) (sqrt x)) (/ (- 1 (sqrt (/ x (+ x 1)))) (sqrt x))))",
+    "(FPCore (x) (+ (/ (* (- 1) (sqrt x)) (* (sqrt x) (sqrt (+ x 1)))) (/ 1 (sqrt x))))",
+    "(FPCore (x) (if (< x 0.0001) (/ (- 1 (sqrt (/ x (+ x 1)))) (sqrt x)) (/ (- 1 (sqrt (/ x (+ x 1)))) (sqrt x))))",
+    "(FPCore (x) (if (< x 0) (/ (* (+ (- 1) (* (- (/ (- 1) (sqrt x))) (sqrt (+ x 1)))) (/ (/ (sqrt x) (- 1)) (sqrt (+ x (* x x))))) (- 1)) (/ (/ (+ (- 1) (sqrt (/ x (+ x 1)))) (sqrt x)) (- 1))))",
+    "(FPCore (x) (* (/ -1 (sqrt x)) (/ (- 1 (sqrt (/ x (+ x 1)))) -1)))",
+    "(FPCore (x) (- (/ (* (/ -1 (sqrt (+ x 1))) (/ 1 (sqrt x))) (+ (sqrt x) (sqrt (+ x 1))))))",
+    "(FPCore (x) (+ (/ (- 1) (sqrt (+ x 1))) (/ 1 (sqrt x))))",
+    "(FPCore (x) (- (* (/ (- 1) (sqrt x)) (/ (- (sqrt (+ x 1)) (sqrt x)) (sqrt (+ x 1))))))"
+  ],
+  "attempts": [
+    {
+      "program": "(FPCore (x) (/ (/ (* (/ (* (- 1) (sqrt x)) (sqrt (+ x (* x x)))) (/ 1 (sqrt x))) (+ (sqrt x) (sqrt (+ x 1)))) (- 1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (/ (/ (/ 1 (sqrt x)) (+ (sqrt x) (sqrt (+ x 1)))) (sqrt (+ x 1))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (/ (* (- 1) (/ (* (- 1) (/ (- 1) (sqrt x))) (+ (sqrt x) (sqrt (+ x 1))))) (sqrt (+ x 1)))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (* (/ -1 (sqrt x)) (+ -1 (/ 1 (sqrt (+ (/ 1 x) (/ x x)))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ (/ (- (sqrt x)) (* (sqrt x) (sqrt (+ x 1)))) (/ (/ (- 1) (sqrt x)) (- 1))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (* (/ (- 1) (sqrt x)) (/ (- 1 (sqrt (/ x (+ x 1)))) (- 1))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (/ (* (/ (* (- 1) (sqrt x)) (sqrt (+ x (* x x)))) (* (- 1) (/ (- 1) (sqrt x)))) (+ (sqrt x) (sqrt (+ x 1))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (/ (- 1 (/ 1 (sqrt (+ (/ 1 x) (/ x x))))) (sqrt x)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (/ (* (/ (* (- 1) (/ (- 1) (sqrt x))) (+ (sqrt x) (sqrt (+ x 1)))) (/ (* (- 1) (sqrt x)) (sqrt (+ x (* x x))))) (- 1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (/ (* (- (sqrt (+ x 1)) (sqrt x)) (/ (* (- 1) (sqrt x)) (sqrt (+ x (* x x))))) (sqrt x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ (/ (sqrt (+ x 1)) (* (- 1) (+ x 1))) (/ (/ (- 1) (sqrt x)) (- 1))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (< x 0) (/ (- 1 (sqrt (/ x (+ x 1)))) (sqrt x)) (/ (- 1 (sqrt (/ x (+ x 1)))) (sqrt x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (>= x 0) (/ (- 1 (sqrt (/ x (+ x 1)))) (sqrt x)) (/ (- 1 (sqrt (/ x (+ x 1)))) (sqrt x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ (/ (* (- 1) (sqrt x)) (* (sqrt x) (sqrt (+ x 1)))) (/ 1 (sqrt x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (< x 0.0001) (/ (- 1 (sqrt (/ x (+ x 1)))) (sqrt x)) (/ (- 1 (sqrt (/ x (+ x 1)))) (sqrt x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (if (< x 0) (/ (* (+ (- 1) (* (- (/ (- 1) (sqrt x))) (sqrt (+ x 1)))) (/ (/ (sqrt x) (- 1)) (sqrt (+ x (* x x))))) (- 1)) (/ (/ (+ (- 1) (sqrt (/ x (+ x 1)))) (sqrt x)) (- 1))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (* (/ -1 (sqrt x)) (/ (- 1 (sqrt (/ x (+ x 1)))) -1)))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (/ (* (/ -1 (sqrt (+ x 1))) (/ 1 (sqrt x))) (+ (sqrt x) (sqrt (+ x 1))))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (+ (/ (- 1) (sqrt (+ x 1))) (/ 1 (sqrt x))))",
+      "proven_equivalent": true
+    },
+    {
+      "program": "(FPCore (x) (- (* (/ (- 1) (sqrt x)) (/ (- (sqrt (+ x 1)) (sqrt x)) (sqrt (+ x 1))))))",
+      "proven_equivalent": true
+    }
+  ]
+}

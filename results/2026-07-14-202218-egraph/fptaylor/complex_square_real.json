@@ -1,0 +1,672 @@
+{
+  "benchmark": "complex_square_real",
+  "reference": "(FPCore (re im) (- (* re re) (* im im)))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "decoding": "egraph",
+    "run": "2026-07-14-202218-egraph",
+    "time_budget": 10.0,
+    "box": {
+      "re": [
+        1.0,
+        2.0
+      ],
+      "im": [
+        1.0,
+        2.0
+      ]
+    }
+  },
+  "intervals": {
+    "re": [
+      1.0,
+      2.0
+    ],
+    "im": [
+      1.0,
+      2.0
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "((re * re) - (im * im))",
+    "enclosure": [
+      -3.0,
+      3.0
+    ],
+    "abs_err": 6.661339e-16,
+    "rel_err": null,
+    "rel_err_derived": false,
+    "rel_err_ulps": null,
+    "program": "(FPCore (re im) (- (* re re) (* im im)))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "((re - im) * (re + im))",
+      "enclosure": [
+        -3.007813,
+        3.007813
+      ],
+      "abs_err": 6.123574e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (re im) (* (- re im) (+ re im)))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 6.123574e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -3.007813,
+            1.253907
+          ],
+          "abs_err": 6.123574e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "re < 1.5",
+          "region": {
+            "re": [
+              1.0,
+              1.5
+            ],
+            "im": [
+              1.0,
+              2.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -1.753907,
+            3.007813
+          ],
+          "abs_err": 6.123574e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "re >= 1.5",
+          "region": {
+            "re": [
+              1.5,
+              2.0
+            ],
+            "im": [
+              1.0,
+              2.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (re im) (if (< re 1.5) (* (- re im) (+ re im)) (* (- re im) (+ re im))))"
+    },
+    {
+      "fptaylor_expr": "((re * (re - im)) + (im * (re - im)))",
+      "enclosure": [
+        -3.007813,
+        3.007813
+      ],
+      "abs_err": 7.220787e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (re im) (+ (* re (- re im)) (* im (- re im))))"
+    },
+    {
+      "fptaylor_expr": "((re * re) - (im * im))",
+      "enclosure": [
+        -3.0,
+        3.0
+      ],
+      "abs_err": 6.661339e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (re im) (- (* re re) (* im im)))"
+    },
+    {
+      "fptaylor_expr": "(-(((im - re) * (re + im))))",
+      "enclosure": [
+        -3.007813,
+        3.007813
+      ],
+      "abs_err": 6.123574e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (re im) (- (* (- im re) (+ re im))))"
+    },
+    {
+      "fptaylor_expr": "((-((im - re))) * (re + im))",
+      "enclosure": [
+        -3.007813,
+        3.007813
+      ],
+      "abs_err": 6.123574e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (re im) (* (- (- im re)) (+ re im)))"
+    },
+    {
+      "fptaylor_expr": "(((re * re) - (re * im)) + ((re * im) - (im * im)))",
+      "enclosure": [
+        -3.023438,
+        3.023438
+      ],
+      "abs_err": 9.992008e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (re im) (+ (- (* re re) (* re im)) (- (* re im) (* im im))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 6.123574e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -3.0,
+            0.0
+          ],
+          "abs_err": 6.106227e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "re < 1.0",
+          "region": {
+            "re": [
+              1.0,
+              1.0
+            ],
+            "im": [
+              1.0,
+              2.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -3.007813,
+            3.007813
+          ],
+          "abs_err": 6.123574e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "re >= 1.0",
+          "region": {
+            "re": [
+              1.0,
+              2.0
+            ],
+            "im": [
+              1.0,
+              2.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (re im) (if (< re 1.0) (* (- re im) (+ re im)) (* (- re im) (+ re im))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 6.123574e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -3.007813,
+            3.007813
+          ],
+          "abs_err": 6.123574e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "re >= 0",
+          "region": {
+            "re": [
+              1.0,
+              2.0
+            ],
+            "im": [
+              1.0,
+              2.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (re im) (if (< re 0) (* (- re im) (+ re im)) (* (- re im) (+ re im))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 6.123574e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -3.007813,
+            3.007813
+          ],
+          "abs_err": 6.123574e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "re > 0",
+          "region": {
+            "re": [
+              1.0,
+              2.0
+            ],
+            "im": [
+              1.0,
+              2.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (re im) (if (<= re 0) (* (- re im) (+ re im)) (* (- re im) (+ re im))))"
+    },
+    {
+      "fptaylor_expr": "(((re * re) + (re * im)) - ((im * im) + (re * im)))",
+      "enclosure": [
+        -3.023438,
+        3.023438
+      ],
+      "abs_err": 2.223916e-15,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (re im) (- (+ (* re re) (* re im)) (+ (* im im) (* re im))))"
+    },
+    {
+      "fptaylor_expr": "(-(((im * im) - (re * re))))",
+      "enclosure": [
+        -3.0,
+        3.0
+      ],
+      "abs_err": 6.661339e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (re im) (- (- (* im im) (* re re))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 6.123574e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -3.007813,
+            3.007813
+          ],
+          "abs_err": 6.123574e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "re >= 1.0",
+          "region": {
+            "re": [
+              1.0,
+              2.0
+            ],
+            "im": [
+              1.0,
+              2.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -3.0,
+            0.0
+          ],
+          "abs_err": 6.106227e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "re < 1.0",
+          "region": {
+            "re": [
+              1.0,
+              1.0
+            ],
+            "im": [
+              1.0,
+              2.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (re im) (if (>= re 1.0) (* (- re im) (+ re im)) (* (- re im) (+ re im))))"
+    },
+    {
+      "fptaylor_expr": "((re * (re + im)) - (im * (re + im)))",
+      "enclosure": [
+        -3.023438,
+        3.023438
+      ],
+      "abs_err": 1.781562e-15,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (re im) (- (* re (+ re im)) (* im (+ re im))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 6.123574e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -3.007813,
+            3.007813
+          ],
+          "abs_err": 6.123574e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "re >= -1000",
+          "region": {
+            "re": [
+              1.0,
+              2.0
+            ],
+            "im": [
+              1.0,
+              2.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (re im) (if (< re -1000) (* (- re im) (+ re im)) (* (- re im) (+ re im))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 6.123574e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -1.253907,
+            3.007813
+          ],
+          "abs_err": 6.123574e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "im < 1.5",
+          "region": {
+            "re": [
+              1.0,
+              2.0
+            ],
+            "im": [
+              1.0,
+              1.5
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -3.007813,
+            1.753907
+          ],
+          "abs_err": 6.123574e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "im >= 1.5",
+          "region": {
+            "re": [
+              1.0,
+              2.0
+            ],
+            "im": [
+              1.5,
+              2.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (re im) (if (< im 1.5) (* (- re im) (+ re im)) (* (- re im) (+ re im))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 6.123574e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -3.007813,
+            1.253907
+          ],
+          "abs_err": 6.123574e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "re <= 1.5",
+          "region": {
+            "re": [
+              1.0,
+              1.5
+            ],
+            "im": [
+              1.0,
+              2.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -1.753907,
+            3.007813
+          ],
+          "abs_err": 6.123574e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "re > 1.5",
+          "region": {
+            "re": [
+              1.5,
+              2.0
+            ],
+            "im": [
+              1.0,
+              2.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (re im) (if (<= re 1.5) (* (- re im) (+ re im)) (* (- re im) (+ re im))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 6.123574e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -3.007813,
+            3.007813
+          ],
+          "abs_err": 6.123574e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "im >= 0",
+          "region": {
+            "re": [
+              1.0,
+              2.0
+            ],
+            "im": [
+              1.0,
+              2.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (re im) (if (< im 0) (* (- re im) (+ re im)) (* (- re im) (+ re im))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 6.123574e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -3.007813,
+            1.253907
+          ],
+          "abs_err": 6.123574e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "re < 1.5000000000000000",
+          "region": {
+            "re": [
+              1.0,
+              1.5
+            ],
+            "im": [
+              1.0,
+              2.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -1.753907,
+            3.007813
+          ],
+          "abs_err": 6.123574e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "re >= 1.5000000000000000",
+          "region": {
+            "re": [
+              1.5,
+              2.0
+            ],
+            "im": [
+              1.0,
+              2.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (re im) (if (< re 1.5000000000000000) (* (- re im) (+ re im)) (* (- re im) (+ re im))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 6.123574e-16,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -3.000001,
+            6.661339e-16
+          ],
+          "abs_err": 6.106227e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "re < 1.0000000000000002",
+          "region": {
+            "re": [
+              1.0,
+              1.0000000000000002
+            ],
+            "im": [
+              1.0,
+              2.0
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "((re - im) * (re + im))",
+          "enclosure": [
+            -3.007813,
+            3.007813
+          ],
+          "abs_err": 6.123574e-16,
+          "rel_err": null,
+          "rel_err_derived": false,
+          "rel_err_ulps": null,
+          "condition": "re >= 1.0000000000000002",
+          "region": {
+            "re": [
+              1.0000000000000002,
+              2.0
+            ],
+            "im": [
+              1.0,
+              2.0
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (re im) (if (< re 1.0000000000000002) (* (- re im) (+ re im)) (* (- re im) (+ re im))))"
+    }
+  ]
+}
