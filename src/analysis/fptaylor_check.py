@@ -144,24 +144,16 @@ def check(benchmark: str, run) -> None:
         f.write(CONFIG)
         cfg_path = f.name
     try:
-        # bound the reference and the min-cost extraction too, so "did we improve on
-        # it?" and "did the LLM beat plain extraction?" are answerable offline
-        reference_result, extraction_result = None, None
+        # bound the reference too, so "did we improve on it?" is answerable offline
+        reference_result = None
         if data.get("reference"):
             reference_result = analyze_program(
                 regions.parse(regions.tokenize(data["reference"])), box, cfg_path)
             reference_result["program"] = data["reference"]
-            reference_result["cost"] = regions.cost(data["reference"])
-        if data.get("extraction"):
-            extraction_result = analyze_program(
-                regions.parse(regions.tokenize(data["extraction"])), box, cfg_path)
-            extraction_result["program"] = data["extraction"]
-            extraction_result["cost"] = regions.cost(data["extraction"])
         results = []
         for i, p in enumerate(data["programs"]):
             r = analyze_program(regions.parse(regions.tokenize(p)), box, cfg_path)
             r["program"] = p
-            r["cost"] = regions.cost(p)
             results.append(r)
             if r.get("timeout"):
                 status = f"timed out (> {TIMEOUT}s)"
@@ -185,8 +177,7 @@ def check(benchmark: str, run) -> None:
             label = f"{r['rel_err_ulps']:.1f} ulp{'*' if r.get('rel_err_derived') else ''}"
         else:
             label = "unbounded"
-        print(f"{rank:2d}. {label:>13}  abs={fmt(r['abs_err'])}  cost={r['cost']:3d}  "
-              f"{r['program']}")
+        print(f"{rank:2d}. {label:>13}  abs={fmt(r['abs_err'])}  {r['program']}")
 
     dst = paths.fptaylor_path(run, benchmark)
     dst.parent.mkdir(parents=True, exist_ok=True)
@@ -195,7 +186,6 @@ def check(benchmark: str, run) -> None:
         "config": data.get("config"), "intervals": box,
         "note": "worst-case double-rounding bounds over this box; a branching "
                 "program's error is the worst over its branches (see `branches`).",
-        "reference_result": reference_result, "extraction_result": extraction_result,
-        "results": ranked,
+        "reference_result": reference_result, "results": ranked,
     }, indent=2))
     print(f"wrote {dst}")

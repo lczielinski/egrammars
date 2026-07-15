@@ -8,28 +8,26 @@ e-graph (egglog).
 
 The model reasons once, then samples `--samples` distinct programs under a grammar
 that IS the set of programs provably equivalent to the reference:
-[egrammar.py](src/egrammar.py) saturates the e-graph over the input box (egglog
-saturation with the rules in [rules.egglog](rules.egglog); an interval analysis
-seeded from the box lets domain-conditional rewrites fire only where sound) and
-compiles it to a CFG (one nonterminal per e-class). Branching needs the grammar to
-depend on the model's own output: the head grammar offers either a whole-box
-equivalent form or the opening `(if (op var NUMBER)`; when the model emits a
-conditional, `DynamicRegionRecognizer` ([decoding.py](src/decoding.py)) reads the
-threshold, narrows the box by the guard, rebuilds the e-grammar over each arm's
-sub-box, and swaps it in mid-decode — to the model it is one uninterrupted
-generation. Every sample is equivalent by construction, so no post-hoc verification
-is needed.
+[egrammar.py](src/synth/egrammar.py) saturates the e-graph over the input box
+(egglog saturation with the rules in [rules.egglog](rules.egglog); an interval
+analysis seeded from the box lets domain-conditional rewrites fire only where
+sound) and compiles it to a CFG (one nonterminal per e-class). Branching needs the
+grammar to depend on the model's own output: the head grammar offers either a
+whole-box equivalent form or the opening `(if (op var NUMBER)`; when the model
+emits a conditional, `DynamicRegionRecognizer`
+([decoding.py](src/synth/decoding.py)) reads the threshold, narrows the box by the
+guard, rebuilds the e-grammar over each arm's sub-box, and swaps it in mid-decode —
+to the model it is one uninterrupted generation. Every sample is equivalent by
+construction, so no post-hoc verification is needed.
+
+The only pruning between the e-graph and the emitted grammar removes spellings that
+are floating-point-identical to a retained smaller sibling: identity padding
+(`x*1`, `x+0`, `x-0`, ...) and cyclic non-terminating expansions (`x+0+0+...`;
+every class keeps its minimal spelling). Everything else the saturation derives is
+in the language.
 
 Each program's worst-case double rounding error is then bounded with FPTaylor
-([fptaylor_check.py](src/fptaylor_check.py)), per branch over its sub-box, along
-with its cost (AST size).
-
-**Baseline: the LLM as extractor.** Sampling from the e-grammar makes the LLM an
-*extraction policy* over the e-graph, picking for accuracy. To measure what the
-model adds, every run also records the classic model-free baseline — the min-cost
-member of the same compiled grammar (`egrammar.min_program`) — and FPTaylor bounds
-it too; the summary compares the LLM's best program against it per benchmark
-(accuracy and cost).
+([fptaylor_check.py](src/analysis/fptaylor_check.py)), per branch over its sub-box.
 
 ## Layout
 
@@ -41,13 +39,13 @@ src/
   synth/              generation
     generate.py         prompt, reasoning handoff, ASAP sampling
     decoding.py         head/arm grammars, mid-decode grammar swapping
-    egrammar.py         e-graph -> lark grammar compiler + min-cost extraction
+    egrammar.py         e-graph -> lark grammar compiler
   analysis/           measurement
     fptaylor_check.py   FPTaylor error bounds (runs automatically after generation)
-    summary.py          per-run results table (incl. LLM-vs-extraction comparison)
+    summary.py          per-run results table
   base/               shared data and pure helpers
     benchmarks.py       reference terms and interval boxes
-    regions.py          box arithmetic, if-tree splitting, program cost
+    regions.py          box arithmetic and if-tree splitting
     paths.py            repo layout and per-run result directories
 ```
 
@@ -64,8 +62,8 @@ Every invocation writes one self-contained directory,
 
 ```
 results/2026-07-16-142530/
-  equivalents/<benchmark>.json   sampled programs + the min-cost extraction baseline
-  fptaylor/<benchmark>.json      error bounds and costs (written per benchmark)
+  equivalents/<benchmark>.json   the sampled programs
+  fptaylor/<benchmark>.json      error bounds (written right after each benchmark)
   summary.md                     aggregate table
   log/gpu<i>.log                 per-shard logs when sharded
 ```

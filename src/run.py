@@ -2,9 +2,7 @@
 where the grammar IS the set of programs provably equivalent to the reference. The
 model reasons once, then either emits a whole-box form or opens `(if (op var
 NUMBER)`; once the threshold is known, each arm's grammar is rebuilt on the fly over
-the guard-narrowed box, so every program is equivalent by construction. Alongside
-the samples, the classic min-cost extraction from the same e-grammar is recorded as
-a model-free baseline.
+the guard-narrowed box, so every program is equivalent by construction.
 
 Each invocation writes a fresh results/<run>/ directory holding equivalents/,
 fptaylor/, and summary.md. `all` self-shards across every visible GPU.
@@ -24,7 +22,7 @@ import warnings
 from datetime import datetime
 
 from analysis import fptaylor_check, summary
-from base import benchmarks, paths, regions
+from base import benchmarks, paths
 from synth import decoding, egrammar, generate
 
 os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
@@ -45,15 +43,7 @@ def run_benchmark(llm, benchmark: str, run, args, tag: str = "") -> None:
                                         args.temperature, base_ids)
     print(f"{len(programs)} programs (equivalent by construction)")
     for p in programs:
-        print(f"  [cost {regions.cost(p):3d}] {p}")
-
-    # model-free baseline: classic min-cost extraction from the same e-grammar
-    try:
-        extraction = egrammar.min_program(egrammar.build(benchmark, box, args.saturation))
-        print(f"e-graph extraction [cost {regions.cost(extraction):3d}] {extraction}")
-    except Exception as e:
-        extraction = None
-        print(f"no extraction baseline: {e!r}")
+        print(f"  {p}")
 
     out = paths.equivalents_path(run, benchmark)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -62,7 +52,7 @@ def run_benchmark(llm, benchmark: str, run, args, tag: str = "") -> None:
          "config": {"model": args.model, "temperature": args.temperature,
                     "samples": args.samples, "saturation": args.saturation,
                     "run": run.name, "box": box},
-         "programs": programs, "extraction": extraction}, indent=2))
+         "programs": programs}, indent=2))
     print(f"wrote {out}")
     if programs:
         try:

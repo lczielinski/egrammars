@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import contextlib
 import json
-import math
 import os
 import re
 import sys
@@ -284,72 +283,6 @@ def _min_sizes(eclasses: EClassMapping) -> dict[str, float]:
     return size
 
 
-def _sign_bases(eclasses: EClassMapping) -> tuple[dict[str, str], dict[str, int]]:
-    """Pair each e-class with its negation (via Neg e-nodes): class -> (base, sign),
-    where a class and its negation share a base and differ in sign."""
-    adj: defaultdict[str, set[str]] = defaultdict(set)
-    for c, enodes in eclasses.items():
-        for e in enodes:
-            if e.op == "Neg":
-                adj[c].add(e.children[0])
-                adj[e.children[0]].add(c)
-    base: dict[str, str] = {}
-    sign: dict[str, int] = {}
-    for c in eclasses:
-        if c in base:
-            continue
-        seen = {c: 1}
-        stack = [c]
-        while stack:
-            n = stack.pop()
-            for m in adj[n]:
-                if m not in seen:  # a class that is its own negation keeps sign 1
-                    seen[m] = -seen[n]
-                    stack.append(m)
-        b = min(seen)
-        for n, s in seen.items():
-            base[n], sign[n] = b, s * seen[b]
-    return base, sign
-
-
-def dedup_spellings(eclasses: EClassMapping) -> EClassMapping:
-    """Drop rounding-identical spellings. Negation is exact in float64 and IEEE +/*
-    are exactly commutative, so spellings differing only in sign placement or operand
-    order -- (-a)/(-b) vs a/b, a+(-b) vs a-b, b+a vs a+b -- compute bit-identically
-    and offer no accuracy diversity. Each spelling is canonicalized to a sign-and-
-    order-normal signature; one smallest representative per signature survives.
-    Structurally exact: genuinely different roundings are never merged."""
-    base, sign = _sign_bases(eclasses)
-    size = _min_sizes(eclasses)
-
-    def nsize(e: ENode) -> float:
-        return 1 + sum(size[c] for c in e.children)
-
-    def signature(e: ENode):
-        if e.op in ("Var", "Num") or not e.children:
-            return ("leaf", e)
-        ch = [(base[c], sign[c]) for c in e.children]
-        if e.op == "Neg":
-            return ("ref", ch[0][0], -ch[0][1])
-        if e.op == "Add":
-            return ("sum", tuple(sorted(ch)))
-        if e.op == "Sub":
-            return ("sum", tuple(sorted([ch[0], (ch[1][0], -ch[1][1])])))
-        if e.op == "Mul":
-            return ("mul", tuple(sorted([ch[0][0], ch[1][0]])), ch[0][1] * ch[1][1])
-        if e.op == "Div":
-            return ("div", ch[0][0], ch[1][0], ch[0][1] * ch[1][1])
-        return ("sqrt", ch[0])
-
-    out: EClassMapping = {}
-    for c, enodes in eclasses.items():
-        groups: dict[tuple, ENode] = {}
-        for e in sorted(enodes, key=lambda e: (nsize(e), e)):
-            groups.setdefault(signature(e), e)
-        out[c] = set(groups.values())
-    return out
-
-
 SPELLING = {"Add": "+", "Sub": "-", "Mul": "*", "Div": "/", "Neg": "-", "Sqrt": "sqrt"}
 
 
@@ -401,7 +334,7 @@ def _build(benchmark: str, box, runs: int) -> str:
     seeds = interval_seeds(box) if box else ""
     root, eclasses = extract(saturate(benchmarks.read_source(benchmark), runs, seeds))
     root, eclasses = strip_identity_enodes(root, eclasses)
-    return intersect(root, dedup_spellings(eclasses))
+    return intersect(root, eclasses)
 
 
 def _build_worker(benchmark, box, runs, q) -> None:
@@ -443,49 +376,3 @@ def rules(benchmark: str, box: dict[str, tuple[float, float]] | None = None,
           runs: int = SATURATION_RUNS) -> str:
     """The e-class productions (root `e0`) without the FPCore-wrapper `start` rule."""
     return "\n".join(build(benchmark, box, runs).strip().split("\n")[1:])
-
-
-def min_program(grammar: str) -> str:
-    """The cheapest member of a compiled e-grammar's language -- classic cost-based
-    e-graph extraction (every production costs 1 + its children, i.e. AST size), the
-    baseline the LLM's picks are compared against. Same language, no model."""
-    productions: dict[str, list[list[tuple[str, str]]]] = {}
-    for line in grammar.strip().splitlines():
-        name, rhs = line.split(": ", 1)
-        alternatives, alt, i = [], [], 0
-        while i < len(rhs):
-            if rhs[i] == '"':
-                j = rhs.index('"', i + 1)
-                alt.append(("lit", rhs[i + 1:j]))
-                i = j + 1
-            elif rhs[i] == "|":
-                alternatives.append(alt)
-                alt, i = [], i + 1
-            elif rhs[i].isspace():
-                i += 1
-            else:
-                j = i
-                while j < len(rhs) and not rhs[j].isspace() and rhs[j] != "|":
-                    j += 1
-                alt.append(("ref", rhs[i:j]))
-                i = j
-        alternatives.append(alt)
-        productions[name.strip()] = alternatives
-
-    def alt_cost(alt) -> float:
-        return 1 + sum(cost.get(t[1], math.inf) for t in alt if t[0] == "ref")
-
-    cost = {n: math.inf for n in productions}
-    changed = True
-    while changed:
-        changed = False
-        for n, alts in productions.items():
-            best = min(map(alt_cost, alts))
-            if best < cost[n]:
-                cost[n], changed = best, True
-
-    def emit(n: str) -> str:  # min alternative's children cost strictly less: terminates
-        alt = min(productions[n], key=alt_cost)
-        return "".join(t[1] if t[0] == "lit" else emit(t[1]) for t in alt)
-
-    return emit("start")
