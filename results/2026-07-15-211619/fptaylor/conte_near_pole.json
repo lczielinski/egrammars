@@ -1,0 +1,673 @@
+{
+  "benchmark": "conte_near_pole",
+  "reference": "(FPCore (x) (/ 10 (- 1 (* x x))))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 50,
+    "saturation": 6,
+    "run": "2026-07-15-211619",
+    "box": {
+      "x": [
+        1.0001,
+        1.001
+      ]
+    }
+  },
+  "intervals": {
+    "x": [
+      1.0001,
+      1.001
+    ]
+  },
+  "note": "worst-case double-rounding bounds over this box; a branching program's error is the worst over its branches (see `branches`).",
+  "reference_result": {
+    "fptaylor_expr": "(10 / (1 - (x * x)))",
+    "enclosure": [
+      -49997.51,
+      -4997.501
+    ],
+    "abs_err": 2.781065e-08,
+    "rel_err": 5.56491e-12,
+    "rel_err_derived": false,
+    "rel_err_ulps": 25062.12660235035,
+    "program": "(FPCore (x) (/ 10 (- 1 (* x x))))"
+  },
+  "results": [
+    {
+      "fptaylor_expr": "((10 / (x + 1)) / (-((x - 1))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 6.783683e-11,
+      "rel_err": 1.357415e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 61.13253688187122,
+      "program": "(FPCore (x) (/ (/ 10 (+ x 1)) (- (- x 1))))"
+    },
+    {
+      "fptaylor_expr": "((10 / (1 - (x * (10 / (-(10)))))) / (1 - x))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 7.339017e-11,
+      "rel_err": 1.468538e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 66.13707189579414,
+      "program": "(FPCore (x) (/ (/ 10 (- 1 (* x (/ 10 (- 10))))) (- 1 x)))"
+    },
+    {
+      "fptaylor_expr": "(((-1 * 1000) / ((x * -10) + (-(10)))) / ((x - 1) * (-(10))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.142668e-10,
+      "rel_err": 2.286477e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 102.9737696519121,
+      "program": "(FPCore (x) (/ (/ (* -1 1000) (+ (* x -10) (- 10))) (* (- x 1) (- 10))))"
+    },
+    {
+      "fptaylor_expr": "((0 - (-((-10 * (10 / (1 - (x * (10 / (-(10)))))))))) / ((x - 1) * 10))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.238616e-10,
+      "rel_err": 2.478469e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 111.62032064849326,
+      "program": "(FPCore (x) (/ (- 0 (- (* -10 (/ 10 (- 1 (* x (/ 10 (- 10)))))))) (* (- x 1) 10)))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / (((x - 1) * x) + (x - 1)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.391769e-10,
+      "rel_err": 2.784928e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 125.4220070305366,
+      "program": "(FPCore (x) (/ (- 10) (+ (* (- x 1) x) (- x 1))))"
+    },
+    {
+      "fptaylor_expr": "((-(1000)) / ((x - 1) * ((x * 100) + 100)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.458462e-10,
+      "rel_err": 2.918382e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 131.43224087724764,
+      "program": "(FPCore (x) (/ (- 1000) (* (- x 1) (+ (* x 100) 100))))"
+    },
+    {
+      "fptaylor_expr": "((-1 * 1000) / ((x - 1) * (100 + (100 * x))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.486882e-10,
+      "rel_err": 2.975251e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 133.99339294933696,
+      "program": "(FPCore (x) (/ (* -1 1000) (* (- x 1) (+ 100 (* 100 x)))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / (((x - 1) * x) - ((x - 1) * -1)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.662792e-10,
+      "rel_err": 3.327246e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 149.84583845769973,
+      "program": "(FPCore (x) (/ (- 10) (- (* (- x 1) x) (* (- x 1) -1))))"
+    },
+    {
+      "fptaylor_expr": "((-((10 * 100))) / ((x - 1) * ((-100 / -1) + (100 * x))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.6645e-10,
+      "rel_err": 3.330664e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 149.99977149296325,
+      "program": "(FPCore (x) (/ (- (* 10 100)) (* (- x 1) (+ (/ -100 -1) (* 100 x)))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((x - 1) * (x + 1)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.675801e-10,
+      "rel_err": 3.353277e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 151.01817047670056,
+      "program": "(FPCore (x) (/ (- 10) (* (- x 1) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((x + 1) * (x - 1)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.675801e-10,
+      "rel_err": 3.353277e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 151.01817047670056,
+      "program": "(FPCore (x) (/ (- 10) (* (+ x 1) (- x 1))))"
+    },
+    {
+      "fptaylor_expr": "(-10 / ((x - 1) * (x + 1)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.675801e-10,
+      "rel_err": 3.353277e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 151.01817047670056,
+      "program": "(FPCore (x) (/ -10 (* (- x 1) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((x - 1) * (x - -1)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.675801e-10,
+      "rel_err": 3.353277e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 151.01817047670056,
+      "program": "(FPCore (x) (/ (- 10) (* (- x 1) (- x -1))))"
+    },
+    {
+      "fptaylor_expr": "(-((10 / ((x - 1) * (x + 1)))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.675801e-10,
+      "rel_err": 3.353277e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 151.01817047670056,
+      "program": "(FPCore (x) (- (/ 10 (* (- x 1) (+ x 1)))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((x - 1) * (1 + x)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.675801e-10,
+      "rel_err": 3.353277e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 151.01817047670056,
+      "program": "(FPCore (x) (/ (- 10) (* (- x 1) (+ 1 x))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((-((x + -1))) * ((-(x)) + -1)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.675801e-10,
+      "rel_err": 3.353277e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 151.01817047670056,
+      "program": "(FPCore (x) (/ (- 10) (* (- (+ x -1)) (+ (- x) -1))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((x - -1) * (x + -1)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.675801e-10,
+      "rel_err": 3.353277e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 151.01817047670056,
+      "program": "(FPCore (x) (/ (- 10) (* (- x -1) (+ x -1))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((x - 1) * (1 - (-(x)))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.675801e-10,
+      "rel_err": 3.353277e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 151.01817047670056,
+      "program": "(FPCore (x) (/ (- 10) (* (- x 1) (- 1 (- x)))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((x - (-(-1))) * (x + 1)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.675801e-10,
+      "rel_err": 3.353277e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 151.01817047670056,
+      "program": "(FPCore (x) (/ (- 10) (* (- x (- -1)) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((x - 1) * ((-(-1)) - (-(x)))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.675801e-10,
+      "rel_err": 3.353277e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 151.01817047670056,
+      "program": "(FPCore (x) (/ (- 10) (* (- x 1) (- (- -1) (- x)))))"
+    },
+    {
+      "fptaylor_expr": "((-(-100)) / ((x - 1) * ((-(10)) + (10 * (-(x))))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.678403e-10,
+      "rel_err": 3.358484e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 151.25267290929773,
+      "program": "(FPCore (x) (/ (- -100) (* (- x 1) (+ (- 10) (* 10 (- x))))))"
+    },
+    {
+      "fptaylor_expr": "((10 / ((x - 1) * (x + 1))) / -1)",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.712181e-10,
+      "rel_err": 3.426073e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 154.29661086144117,
+      "program": "(FPCore (x) (/ (/ 10 (* (- x 1) (+ x 1))) -1))"
+    },
+    {
+      "fptaylor_expr": "((-10 * 10) / ((x - 1) * ((x * 10) + 10)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.713928e-10,
+      "rel_err": 3.42957e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 154.45410174041032,
+      "program": "(FPCore (x) (/ (* -10 10) (* (- x 1) (+ (* x 10) 10))))"
+    },
+    {
+      "fptaylor_expr": "(((-(10)) * 10) / ((x - 1) * (10 + (x * 10))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.713928e-10,
+      "rel_err": 3.42957e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 154.45410174041032,
+      "program": "(FPCore (x) (/ (* (- 10) 10) (* (- x 1) (+ 10 (* x 10)))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) * (1 / ((x - 1) * (x + 1))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.721276e-10,
+      "rel_err": 3.444272e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 155.11622095762633,
+      "program": "(FPCore (x) (* (- 10) (/ 1 (* (- x 1) (+ x 1)))))"
+    },
+    {
+      "fptaylor_expr": "(((-(10)) / ((x - 1) * (10 + (10 * x)))) * 10)",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.723878e-10,
+      "rel_err": 3.449479e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 155.35072339022352,
+      "program": "(FPCore (x) (* (/ (- 10) (* (- x 1) (+ 10 (* 10 x)))) 10))"
+    },
+    {
+      "fptaylor_expr": "((-10 / ((x - 1) * (10 + (10 * x)))) / (-10 / ((-(10)) * 10)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.794096e-10,
+      "rel_err": 3.589985e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 161.6785510826567,
+      "program": "(FPCore (x) (/ (/ -10 (* (- x 1) (+ 10 (* 10 x)))) (/ -10 (* (- 10) 10))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((x - 1) * (x + (-1 * -1))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.814565e-10,
+      "rel_err": 3.630944e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 163.52318045403138,
+      "program": "(FPCore (x) (/ (- 10) (* (- x 1) (+ x (* -1 -1)))))"
+    },
+    {
+      "fptaylor_expr": "((-(-100)) / ((x - 1) * (-10 + (-((10 / (1 / x)))))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.817445e-10,
+      "rel_err": 3.636706e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 163.78267786456047,
+      "program": "(FPCore (x) (/ (- -100) (* (- x 1) (+ -10 (- (/ 10 (/ 1 x)))))))"
+    },
+    {
+      "fptaylor_expr": "(((-(10)) / ((x - 1) * ((1 / (-(10))) + (1 / ((-(10)) / x))))) / (-(10)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.862868e-10,
+      "rel_err": 3.727598e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 167.87608963787005,
+      "program": "(FPCore (x) (/ (/ (- 10) (* (- x 1) (+ (/ 1 (- 10)) (/ 1 (/ (- 10) x))))) (- 10)))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((1 - x) * (-1 + (-1 * x))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.953329e-10,
+      "rel_err": 3.908611e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 176.02819043136222,
+      "program": "(FPCore (x) (/ (- 10) (* (- 1 x) (+ -1 (* -1 x)))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((x - 1) * ((-(-1)) - (-1 * x))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.953329e-10,
+      "rel_err": 3.908611e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 176.02819043136222,
+      "program": "(FPCore (x) (/ (- 10) (* (- x 1) (- (- -1) (* -1 x)))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((x - 1) * (1 - (-1 * x))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 1.953329e-10,
+      "rel_err": 3.908611e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 176.02819043136222,
+      "program": "(FPCore (x) (/ (- 10) (* (- x 1) (- 1 (* -1 x)))))"
+    },
+    {
+      "fptaylor_expr": "(((-(10)) / ((x - 1) * ((x * 10) + 10))) / ((-(10)) * (((-10 / 10) * ((-(10)) / 10)) / ((-(10)) * 10))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 2.003987e-10,
+      "rel_err": 4.009977e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 180.59330922964259,
+      "program": "(FPCore (x) (/ (/ (- 10) (* (- x 1) (+ (* x 10) 10))) (* (- 10) (/ (* (/ -10 10) (/ (- 10) 10)) (* (- 10) 10)))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((x - 1) * ((-1 * -1) - (-1 * x))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 2.092093e-10,
+      "rel_err": 4.186278e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 188.53320040869306,
+      "program": "(FPCore (x) (/ (- 10) (* (- x 1) (- (* -1 -1) (* -1 x)))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((-1 * (x + 1)) * (1 - x)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 2.230857e-10,
+      "rel_err": 4.463945e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 201.03821038602388,
+      "program": "(FPCore (x) (/ (- 10) (* (* -1 (+ x 1)) (- 1 x))))"
+    },
+    {
+      "fptaylor_expr": "(((-(10)) / 10) / ((x - 1) * ((1 / 10) + ((1 / (10 / (x / (10 / (-(10)))))) * (10 / (-(10)))))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 2.480283e-10,
+      "rel_err": 4.963046e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 223.5157211622263,
+      "program": "(FPCore (x) (/ (/ (- 10) 10) (* (- x 1) (+ (/ 1 10) (* (/ 1 (/ 10 (/ x (/ 10 (- 10))))) (/ 10 (- 10)))))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((-1 * (x - 1)) * ((-(x)) + (10 / (-(10))))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 2.495647e-10,
+      "rel_err": 4.993789e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 224.90026279566882,
+      "program": "(FPCore (x) (/ (- 10) (* (* -1 (- x 1)) (+ (- x) (/ 10 (- 10))))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((x - 1) * (((10 / (-(10))) * (10 / (-(10)))) + x)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 2.508385e-10,
+      "rel_err": 5.019278e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 226.0481853046893,
+      "program": "(FPCore (x) (/ (- 10) (* (- x 1) (+ (* (/ 10 (- 10)) (/ 10 (- 10))) x))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / (((x - 1) / (10 / -10)) * ((-(x)) + (10 / -10))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 2.759576e-10,
+      "rel_err": 5.521911e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 248.68476321973043,
+      "program": "(FPCore (x) (/ (- 10) (* (/ (- x 1) (/ 10 -10)) (+ (- x) (/ 10 -10)))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / (((x + 1) / (10 / (-(10)))) * (1 - x)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 2.786191e-10,
+      "rel_err": 5.575167e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 251.08320023728285,
+      "program": "(FPCore (x) (/ (- 10) (* (/ (+ x 1) (/ 10 (- 10))) (- 1 x))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / (((x - 1) * (10 / (-(10)))) * ((x * -1) + -1)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 3.050981e-10,
+      "rel_err": 6.105012e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 274.9452976829241,
+      "program": "(FPCore (x) (/ (- 10) (* (* (- x 1) (/ 10 (- 10))) (+ (* x -1) -1))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / (((x - 1) / (10 / (-(10)))) * ((((-(10)) / 10) * x) + ((-(10)) / 10))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 3.606314e-10,
+      "rel_err": 7.216234e-14,
+      "rel_err_derived": false,
+      "rel_err_ulps": 324.99028753418304,
+      "program": "(FPCore (x) (/ (- 10) (* (/ (- x 1) (/ 10 (- 10))) (+ (* (/ (- 10) 10) x) (/ (- 10) 10)))))"
+    },
+    {
+      "fptaylor_expr": null,
+      "abs_err": 9.197359e-10,
+      "rel_err": 1.840392e-13,
+      "rel_err_derived": false,
+      "rel_err_ulps": 828.8388725415642,
+      "timeout": false,
+      "branches": [
+        {
+          "fptaylor_expr": "((-(10)) / ((x - 1) * (x + 1)))",
+          "enclosure": [
+            -49997.51,
+            -9088.409
+          ],
+          "abs_err": 8.837821e-11,
+          "rel_err": 9.724276e-15,
+          "rel_err_derived": false,
+          "rel_err_ulps": 43.79424577004786,
+          "condition": "x < 1.00055",
+          "region": {
+            "x": [
+              1.0001,
+              1.00055
+            ]
+          }
+        },
+        {
+          "fptaylor_expr": "(10 / (1 - (x * x)))",
+          "enclosure": [
+            -9088.41,
+            -4997.501
+          ],
+          "abs_err": 9.197359e-10,
+          "rel_err": 1.840392e-13,
+          "rel_err_derived": false,
+          "rel_err_ulps": 828.8388725415642,
+          "condition": "x >= 1.00055",
+          "region": {
+            "x": [
+              1.00055,
+              1.001
+            ]
+          }
+        }
+      ],
+      "program": "(FPCore (x) (if (< x 1.00055) (/ (- 10) (* (- x 1) (+ x 1))) (/ 10 (- 1 (* x x)))))"
+    },
+    {
+      "fptaylor_expr": "(10 / (1 - (x * x)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 2.781065e-08,
+      "rel_err": 5.56491e-12,
+      "rel_err_derived": false,
+      "rel_err_ulps": 25062.12660235035,
+      "program": "(FPCore (x) (/ 10 (- 1 (* x x))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((x * x) - 1))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 2.781065e-08,
+      "rel_err": 5.56491e-12,
+      "rel_err_derived": false,
+      "rel_err_ulps": 25062.12660235035,
+      "program": "(FPCore (x) (/ (- 10) (- (* x x) 1)))"
+    },
+    {
+      "fptaylor_expr": "((10 / ((1 - (x * x)) * 10)) / ((-(10)) * ((-(-1)) / -100)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 2.786637e-08,
+      "rel_err": 5.576059e-12,
+      "rel_err_derived": false,
+      "rel_err_ulps": 25112.3372345959,
+      "program": "(FPCore (x) (/ (/ 10 (* (- 1 (* x x)) 10)) (* (- 10) (/ (- -1) -100))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((x - (-1 * -1)) * (x + 1)))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 2.793426e-08,
+      "rel_err": 5.589645e-12,
+      "rel_err_derived": false,
+      "rel_err_ulps": 25173.523139133355,
+      "program": "(FPCore (x) (/ (- 10) (* (- x (* -1 -1)) (+ x 1))))"
+    },
+    {
+      "fptaylor_expr": "((-(10)) / ((x - (10 / (-(10)))) * (x + (10 / (-(10))))))",
+      "enclosure": [
+        -49997.51,
+        -4997.501
+      ],
+      "abs_err": 5.569955e-08,
+      "rel_err": 1.114548e-11,
+      "rel_err_derived": false,
+      "rel_err_ulps": 50194.779574865315,
+      "program": "(FPCore (x) (/ (- 10) (* (- x (/ 10 (- 10))) (+ x (/ 10 (- 10))))))"
+    },
+    {
+      "fptaylor_expr": "((((-(10)) * 10) / 1000) / ((-(((-(((-((1 / ((-(10)) / x)))) - (((-(x)) / (-(10))) / (((-(10)) / 10) * ((-(((-(10)) / 10))) / x)))))) - (((((x / ((-10 * 10) / ((-(10)) / 10))) * (-(10))) * ((-(10)) / 10)) - (((-(10)) / 10) / 10)) / ((-(10)) / 10))))) * ((((10 / -10) / 10) / 10) / (((-(10)) / 10) / 10))))",
+      "enclosure": [
+        -Infinity,
+        Infinity
+      ],
+      "abs_err": null,
+      "rel_err": null,
+      "rel_err_derived": false,
+      "rel_err_ulps": null,
+      "program": "(FPCore (x) (/ (/ (* (- 10) 10) 1000) (* (- (- (- (- (- (/ 1 (/ (- 10) x))) (/ (/ (- x) (- 10)) (* (/ (- 10) 10) (/ (- (/ (- 10) 10)) x))))) (/ (- (* (* (/ x (/ (* -10 10) (/ (- 10) 10))) (- 10)) (/ (- 10) 10)) (/ (/ (- 10) 10) 10)) (/ (- 10) 10)))) (/ (/ (/ (/ 10 -10) 10) 10) (/ (/ (- 10) 10) 10)))))"
+    }
+  ]
+}
