@@ -30,6 +30,14 @@ def body_of(program):
     return ast[2] if isinstance(ast, list) and ast[:1] == ["FPCore"] else ast
 
 
+def cost(program) -> int:
+    """AST size of a program's body (every operator, guard, and leaf counts 1) --
+    the same cost min-cost e-graph extraction minimizes."""
+    def size(node):
+        return 1 if isinstance(node, str) else 1 + sum(size(c) for c in node[1:])
+    return size(body_of(program))
+
+
 def split_branches(node):
     """Yield (guards, leaf) per leaf: the guard down `then`, its negation down `else`.
     A condition that isn't a simple `(op atom atom)` contributes no guard (sound:

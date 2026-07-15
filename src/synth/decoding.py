@@ -1,11 +1,6 @@
-"""Decoding grammars for the two modes.
-
-light: `syntax_grammar` -- any well-formed FPCore program, branching freely; the
-candidates are verified against the e-graph afterwards (verify.py).
-
-egraph: `build_grammar` returns a grammar whose language is the programs provably
-equivalent to the reference (egrammar.py). Branching makes the grammar depend on the
-model's own output: the head grammar offers a whole-box form or the opening
+"""Decoding grammars: `build_grammar` returns a grammar whose language is the programs
+provably equivalent to the reference (egrammar.py). Branching makes the grammar depend
+on the model's own output: the head grammar offers a whole-box form or the opening
 `(if (op var NUMBER)`; DynamicRegionRecognizer then rebuilds each arm's grammar over
 the guard-narrowed box mid-decode, so to the model it is one generation.
 """
@@ -13,9 +8,8 @@ the guard-narrowed box mid-decode, so to the model it is one generation.
 import os
 import re
 
-import benchmarks
-import egrammar
-import regions
+from base import benchmarks, regions
+from synth import egrammar
 
 # The `(if (op var NUMBER)` opening the head grammar can emit.
 COND = re.compile(r"\(if \((<=|>=|<|>) (\w+) (-?\d+(?:\.\d+)?)\)")
@@ -25,23 +19,6 @@ NUMBER = r'NUMBER: /-?[0-9]+(\.[0-9]+)?/'
 
 def _cond_alts(operand: str) -> str:
     return " | ".join(f'"({op} " {operand} " " NUMBER ")"' for op in ("<", ">", "<=", ">="))
-
-
-def syntax_grammar(variables) -> str:
-    """Light static FPCore syntax grammar: well-formed programs over `variables`,
-    branching freely on a variable-vs-threshold condition. Syntax only."""
-    vs = " ".join(variables)
-    var_alts = " | ".join(f'"{v}"' for v in variables)
-    return "\n".join([
-        f'start: "(FPCore ({vs}) " e ")"',
-        f'e: NUMBER | {var_alts}',
-        '  | "(+ " e " " e ")" | "(- " e " " e ")" | "(- " e ")"',
-        '  | "(* " e " " e ")" | "(/ " e " " e ")" | "(sqrt " e ")"',
-        '  | "(if " cond " " e " " e ")"',
-        f"cond: {_cond_alts('var')}",
-        f"var: {var_alts}",
-        NUMBER,
-    ]) + "\n"
 
 
 def head_grammar(benchmark, box, variables, runs) -> str:
@@ -156,12 +133,9 @@ class DynamicRegionRecognizer:
         return self._bitmask
 
 
-def build_grammar(llm, benchmark, reference, box, mode, saturation):
-    """casa.Grammar for the chosen decoding mode."""
+def build_grammar(llm, benchmark, box, saturation):
+    """casa.Grammar whose language is the programs equivalent to the reference."""
     import casa
-    if mode != "egraph":
-        return casa.Grammar.from_string(
-            syntax_grammar(regions.variables_of(reference)), llm.tokenizer)
     if box is None:
         return casa.Grammar.from_string(
             egrammar.build(benchmark, None, saturation), llm.tokenizer)

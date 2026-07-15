@@ -9,8 +9,8 @@ comparison is search-vs-search, not vocabulary; pass --platform default to lift 
 When `fptaylor` is on PATH, a second table bounds the same three programs' WORST-case
 error over the box. Writes <run>/herbie.json and <run>/herbie.md.
 
-    uv run src/compare.py              # latest run
-    uv run src/compare.py --run NAME
+    uv run src/herbie.py              # latest run
+    uv run src/herbie.py --run NAME
 """
 
 import argparse
@@ -19,10 +19,8 @@ import re
 import shutil
 import subprocess
 
-import benchmarks
-import fptaylor_check
-import paths
-import regions
+from analysis import fptaylor_check
+from base import benchmarks, paths, regions
 
 HERBIE_SECONDS = 300  # per-benchmark budget
 PLATFORM = paths.ROOT / "herbie_platform.rkt"

@@ -9,14 +9,17 @@ the e-class productions for splicing into decoding.py's head/arm grammars.
 
 from __future__ import annotations
 
+import contextlib
 import json
+import math
+import os
 import re
+import sys
 import time
 from collections import defaultdict
 from dataclasses import dataclass
 
-import benchmarks
-import prove
+from base import benchmarks, paths
 
 SATURATION_RUNS = 6
 SATURATION_BUDGET = 20.0  # seconds; skip remaining rounds past this
@@ -24,10 +27,33 @@ NODE_CAP = 100_000
 MAX_SPELLINGS = 8
 START = "__start__"
 
-# All rules unified, minus the block rules.egglog marks grammar-excluded (recursive
-# rules that are safe under the prover's throttling but flood a full saturation).
+# All of rules.egglog, minus the block it marks grammar-excluded (recursive rules
+# that flood a full saturation with deep spellings).
 GRAMMAR_RULES = re.sub(r";; BEGIN grammar-excluded.*?;; END grammar-excluded\n", "",
-                       prove.RULES_UNIFIED, flags=re.S)
+                       (paths.ROOT / "rules.egglog").read_text(), flags=re.S)
+
+
+@contextlib.contextmanager
+def quiet_stderr():
+    """Drop egglog's Rust-side stderr noise; errors still raise."""
+    sys.stderr.flush()
+    saved, devnull = os.dup(2), os.open(os.devnull, os.O_WRONLY)
+    try:
+        os.dup2(devnull, 2)
+        yield
+    finally:
+        os.dup2(saved, 2)
+        os.close(devnull)
+        os.close(saved)
+
+
+def interval_seeds(box: dict[str, tuple[float, float]]) -> str:
+    """Interval-analysis seeds for the box."""
+    return "".join(f"(set (lo {v}) {lo}) (set (hi {v}) {hi})\n" for v, (lo, hi) in box.items())
+
+
+def node_count(eg) -> int:
+    return sum(n for _, n in eg.run_program(*eg.parse_program("(print-size)"))[0].sizes)
 
 
 @dataclass(frozen=True, order=True)
@@ -44,18 +70,18 @@ def saturate(benchmark_source: str, runs: int = SATURATION_RUNS, seeds: str = ""
     """Saturate with all rules fired together, one step at a time, to a fixpoint,
     `runs`, `node_cap`, or the time `budget` (late rounds on division-heavy
     benchmarks can cost minutes for negligible grammar gain -- and arm grammars are
-    compiled mid-decode). Extraction wants breadth, unlike prove's throttled
-    schedule; stopping early only shrinks the language, never breaks soundness."""
+    compiled mid-decode). Extraction wants breadth; stopping early only shrinks the
+    language, never breaks soundness."""
     from egglog.bindings import EGraph
 
     source = GRAMMAR_RULES + benchmark_source + seeds
     source += f"\n(relation {START} (Math))\n({START} start)"  # mark the root e-class
     egraph = EGraph()
     t0 = time.monotonic()
-    with prove.quiet_stderr():
+    with quiet_stderr():
         egraph.run_program(*egraph.parse_program(source))
         for _ in range(runs):
-            if time.monotonic() - t0 > budget or prove.node_count(egraph) > node_cap:
+            if time.monotonic() - t0 > budget or node_count(egraph) > node_cap:
                 break
             r0 = time.monotonic()
             if not egraph.run_program(*egraph.parse_program("(run 1)"))[0].report.updated:
@@ -386,7 +412,7 @@ def intersect(root: str, eclasses: EClassMapping) -> str:
 
 
 def _build(benchmark: str, box, runs: int) -> str:
-    seeds = prove.seeds(box) if box else ""
+    seeds = interval_seeds(box) if box else ""
     root, eclasses = extract(saturate(benchmarks.read_source(benchmark), runs, seeds))
     root, eclasses = strip_identity_enodes(root, eclasses)
     return intersect(root, limit_spellings(dedup_spellings(eclasses)))
@@ -431,3 +457,49 @@ def rules(benchmark: str, box: dict[str, tuple[float, float]] | None = None,
           runs: int = SATURATION_RUNS) -> str:
     """The e-class productions (root `e0`) without the FPCore-wrapper `start` rule."""
     return "\n".join(build(benchmark, box, runs).strip().split("\n")[1:])
+
+
+def min_program(grammar: str) -> str:
+    """The cheapest member of a compiled e-grammar's language -- classic cost-based
+    e-graph extraction (every production costs 1 + its children, i.e. AST size), the
+    baseline the LLM's picks are compared against. Same language, no model."""
+    productions: dict[str, list[list[tuple[str, str]]]] = {}
+    for line in grammar.strip().splitlines():
+        name, rhs = line.split(": ", 1)
+        alternatives, alt, i = [], [], 0
+        while i < len(rhs):
+            if rhs[i] == '"':
+                j = rhs.index('"', i + 1)
+                alt.append(("lit", rhs[i + 1:j]))
+                i = j + 1
+            elif rhs[i] == "|":
+                alternatives.append(alt)
+                alt, i = [], i + 1
+            elif rhs[i].isspace():
+                i += 1
+            else:
+                j = i
+                while j < len(rhs) and not rhs[j].isspace() and rhs[j] != "|":
+                    j += 1
+                alt.append(("ref", rhs[i:j]))
+                i = j
+        alternatives.append(alt)
+        productions[name.strip()] = alternatives
+
+    def alt_cost(alt) -> float:
+        return 1 + sum(cost.get(t[1], math.inf) for t in alt if t[0] == "ref")
+
+    cost = {n: math.inf for n in productions}
+    changed = True
+    while changed:
+        changed = False
+        for n, alts in productions.items():
+            best = min(map(alt_cost, alts))
+            if best < cost[n]:
+                cost[n], changed = best, True
+
+    def emit(n: str) -> str:  # min alternative's children cost strictly less: terminates
+        alt = min(productions[n], key=alt_cost)
+        return "".join(t[1] if t[0] == "lit" else emit(t[1]) for t in alt)
+
+    return emit("start")

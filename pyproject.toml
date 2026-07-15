@@ -10,3 +10,8 @@ dependencies = [
 
 [tool.uv.sources]
 casa = { path = "../casa", editable = true }
+
+[dependency-groups]
+dev = [
+    "matplotlib>=3.11.0",
+]

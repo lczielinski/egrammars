@@ -1,53 +1,54 @@
 # egrammars
 
-Synthesize numerically-accurate FPCore rewrites with LLM sampling 
-([casa](https://github.com/large-loris-models/casa)) checked or
-constrained by an e-graph (egglog).
+Synthesize numerically-accurate FPCore rewrites with LLM sampling
+([casa](https://github.com/large-loris-models/casa)) constrained by an
+e-graph (egglog).
 
-## Two decoding modes
+## Decoding — correct by construction
 
-**`--decoding light` (default) — generate freely, verify after.** The model reasons
-once, then samples `--samples` distinct programs under a light *syntax* grammar
-([decoding.py](src/decoding.py)): any well-formed program, branching on any
-variable/threshold. Each candidate is then verified ([verify.py](src/verify.py)):
-its `if`-tree is split, each branch's guards narrow the input box, and
-[prove.py](src/prove.py) proves the branch equal to the reference over that sub-box
-(egglog saturation with the interval analysis in [rules.egglog](rules.egglog) seeded
-from the box — domain-conditional rewrites fire only where sound). Any non-equivalent
-branch drops the program; `if` is total, so per-branch validity implies whole-program
-validity. Unproven candidates are classified by sampling: numerically equal (a
-missing e-graph rule) vs. genuinely non-equivalent.
+The model reasons once, then samples `--samples` distinct programs under a grammar
+that IS the set of programs provably equivalent to the reference:
+[egrammar.py](src/egrammar.py) saturates the e-graph over the input box (egglog
+saturation with the rules in [rules.egglog](rules.egglog); an interval analysis
+seeded from the box lets domain-conditional rewrites fire only where sound) and
+compiles it to a CFG (one nonterminal per e-class). Branching needs the grammar to
+depend on the model's own output: the head grammar offers either a whole-box
+equivalent form or the opening `(if (op var NUMBER)`; when the model emits a
+conditional, `DynamicRegionRecognizer` ([decoding.py](src/decoding.py)) reads the
+threshold, narrows the box by the guard, rebuilds the e-grammar over each arm's
+sub-box, and swaps it in mid-decode — to the model it is one uninterrupted
+generation. Every sample is equivalent by construction, so no post-hoc verification
+is needed.
 
-**`--decoding egraph` — correct by construction.** The grammar itself is the set of
-programs provably equivalent to the reference: [egrammar.py](src/egrammar.py)
-saturates the e-graph over the box and compiles it to a CFG (one nonterminal per
-e-class). Branching needs the grammar to depend on the model's own output: the head
-grammar offers either a whole-box equivalent form or the opening
-`(if (op var NUMBER)`; when the model emits a conditional, `DynamicRegionRecognizer`
-([decoding.py](src/decoding.py)) reads the threshold, narrows the box by the guard,
-rebuilds the e-grammar over each arm's sub-box, and swaps it in mid-decode — to the
-model it is one uninterrupted generation. Every sample is equivalent by
-construction, so this mode skips the prover.
+Each program's worst-case double rounding error is then bounded with FPTaylor
+([fptaylor_check.py](src/fptaylor_check.py)), per branch over its sub-box, along
+with its cost (AST size).
 
-Both modes then bound each surviving program's worst-case double rounding error with
-FPTaylor ([fptaylor_check.py](src/fptaylor_check.py)), per branch over its sub-box.
+**Baseline: the LLM as extractor.** Sampling from the e-grammar makes the LLM an
+*extraction policy* over the e-graph, picking for accuracy. To measure what the
+model adds, every run also records the classic model-free baseline — the min-cost
+member of the same compiled grammar (`egrammar.min_program`) — and FPTaylor bounds
+it too; the summary compares the LLM's best program against it per benchmark
+(accuracy and cost).
 
 ## Layout
 
 ```
 src/
-  run.py            CLI, per-benchmark pipeline, GPU sharding
-  generate.py       prompt, reasoning handoff, ASAP sampling
-  decoding.py       syntax/head/arm grammars, mid-decode grammar swapping
-  egrammar.py       e-graph -> lark grammar compiler
-  prove.py          egglog equivalence prover
-  verify.py         per-branch proving + numeric classification of failures
-  fptaylor_check.py FPTaylor error bounds (runs automatically after generation)
-  compare.py        score a run against Herbie, inside Herbie's own harness (CLI)
-  summary.py        per-run results table
-  benchmarks.py     reference terms and interval boxes
-  regions.py        box arithmetic and if-tree splitting
-  paths.py          repo layout and per-run result directories
+  run.py              CLI: per-benchmark pipeline, GPU sharding
+  herbie.py           CLI: score a run against Herbie, inside Herbie's own harness
+  plot.py             CLI: per-benchmark accuracy charts from herbie.py's output
+  synth/              generation
+    generate.py         prompt, reasoning handoff, ASAP sampling
+    decoding.py         head/arm grammars, mid-decode grammar swapping
+    egrammar.py         e-graph -> lark grammar compiler + min-cost extraction
+  analysis/           measurement
+    fptaylor_check.py   FPTaylor error bounds (runs automatically after generation)
+    summary.py          per-run results table (incl. LLM-vs-extraction comparison)
+  base/               shared data and pure helpers
+    benchmarks.py       reference terms and interval boxes
+    regions.py          box arithmetic, if-tree splitting, program cost
+    paths.py            repo layout and per-run result directories
 ```
 
 ## Usage
@@ -55,17 +56,16 @@ src/
 ```bash
 uv run src/run.py x_by_xy                     # one benchmark
 uv run src/run.py all                         # whole suite, one shard per GPU
-uv run src/run.py all --decoding egraph       # constrained decoding
 uv run src/run.py --summary-only              # re-print the latest run's table
 ```
 
 Every invocation writes one self-contained directory,
-`results/<timestamp>-<decoding>/` (name it with `--run NAME`):
+`results/<timestamp>/` (name it with `--run NAME`):
 
 ```
-results/2026-07-13-142530-light/
-  equivalents/<benchmark>.json   proven programs + every attempt and why rejected
-  fptaylor/<benchmark>.json      error bounds (written right after each benchmark)
+results/2026-07-16-142530/
+  equivalents/<benchmark>.json   sampled programs + the min-cost extraction baseline
+  fptaylor/<benchmark>.json      error bounds and costs (written per benchmark)
   summary.md                     aggregate table
   log/gpu<i>.log                 per-shard logs when sharded
 ```
@@ -73,12 +73,12 @@ results/2026-07-13-142530-light/
 `all` shards across every visible GPU, all shards writing into the same run
 directory; the parent summarizes when they finish.
 `--summary-only [--run NAME]` re-summarizes the latest (or named) run. Other flags:
-`--samples --temperature --model --saturation --time-budget`.
+`--samples --temperature --model --saturation`.
 
 ## Comparing against Herbie
 
 ```bash
-uv run src/compare.py [--run NAME] [--timeout SECONDS]
+uv run src/herbie.py [--run NAME] [--timeout SECONDS]
 ```
 
 Everything is measured by Herbie itself: each benchmark becomes one FPCore whose

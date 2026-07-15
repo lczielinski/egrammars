@@ -1,22 +1,16 @@
-"""Generate numerically-accurate FPCore rewrites and verify each is equivalent.
-
-Two decoding modes feed the same verification:
-
-  --decoding light  (default): sample programs under a light FPCore syntax grammar;
-    the model branches freely and each candidate is checked against the e-graph after.
-  --decoding egraph: grammar-constrained decoding where the grammar IS the set of
-    programs provably equivalent to the reference. The model either emits a whole-box
-    form or opens `(if (op var NUMBER)`; once the threshold is known, each arm's
-    grammar is rebuilt on the fly over the guard-narrowed box, so every program is
-    equivalent by construction (the prover is skipped). To the model it is one
-    generation.
+"""Generate numerically-accurate FPCore rewrites by grammar-constrained decoding,
+where the grammar IS the set of programs provably equivalent to the reference. The
+model reasons once, then either emits a whole-box form or opens `(if (op var
+NUMBER)`; once the threshold is known, each arm's grammar is rebuilt on the fly over
+the guard-narrowed box, so every program is equivalent by construction. Alongside
+the samples, the classic min-cost extraction from the same e-grammar is recorded as
+a model-free baseline.
 
 Each invocation writes a fresh results/<run>/ directory holding equivalents/,
 fptaylor/, and summary.md. `all` self-shards across every visible GPU.
 
     uv run src/run.py x_by_xy              # one benchmark
     uv run src/run.py all                  # whole suite, one shard per GPU
-    uv run src/run.py all --decoding egraph
     uv run src/run.py --summary-only       # re-print the latest run's table
 """
 
@@ -29,21 +23,16 @@ import time
 import warnings
 from datetime import datetime
 
-import benchmarks
-import decoding
-import egrammar
-import fptaylor_check
-import generate
-import paths
-import summary
-import verify
+from analysis import fptaylor_check, summary
+from base import benchmarks, paths, regions
+from synth import decoding, egrammar, generate
 
 os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 warnings.filterwarnings("ignore", category=FutureWarning, module="kernels")
 
 
 def run_benchmark(llm, benchmark: str, run, args, tag: str = "") -> None:
-    """Generate, verify, bound, and write <run>/equivalents/<benchmark>.json."""
+    """Generate, bound, and write <run>/equivalents/<benchmark>.json."""
     reference = benchmarks.read_reference(benchmark)
     box = benchmarks.INTERVALS.get(benchmark)
     print(f"\n{'=' * 70}\n{benchmark}{f'  [{tag}]' if tag else ''}   "
@@ -51,31 +40,29 @@ def run_benchmark(llm, benchmark: str, run, args, tag: str = "") -> None:
 
     base_ids = generate.initial_ids(llm, generate.program_prompt(reference, box),
                                     args.temperature)
-    grammar = decoding.build_grammar(llm, benchmark, reference, box,
-                                     args.decoding, args.saturation)
-    candidates = generate.sample_programs(llm, grammar, args.samples,
-                                          args.temperature, base_ids)
-    if args.decoding == "egraph":  # equivalent by construction; skip the prover
-        programs = candidates
-        attempts = [{"program": p, "proven_equivalent": True} for p in candidates]
-    else:
-        programs, attempts = verify.evaluate_candidates(
-            benchmark, reference, box, candidates, timeout=args.time_budget)
+    grammar = decoding.build_grammar(llm, benchmark, box, args.saturation)
+    programs = generate.sample_programs(llm, grammar, args.samples,
+                                        args.temperature, base_ids)
+    print(f"{len(programs)} programs (equivalent by construction)")
+    for p in programs:
+        print(f"  [cost {regions.cost(p):3d}] {p}")
 
-    missing = sum(a.get("numeric", {}).get("verdict") == "equal" for a in attempts)
-    print(f"{len(attempts)} candidates: {len(programs)} proven, {missing} missing-rule?, "
-          f"{len(attempts) - len(programs) - missing} non-equivalent")
-    for rec in attempts:
-        print(verify.attempt_line(rec))
+    # model-free baseline: classic min-cost extraction from the same e-grammar
+    try:
+        extraction = egrammar.min_program(egrammar.build(benchmark, box, args.saturation))
+        print(f"e-graph extraction [cost {regions.cost(extraction):3d}] {extraction}")
+    except Exception as e:
+        extraction = None
+        print(f"no extraction baseline: {e!r}")
 
     out = paths.equivalents_path(run, benchmark)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(
         {"benchmark": benchmark, "reference": reference,
          "config": {"model": args.model, "temperature": args.temperature,
-                    "samples": args.samples, "decoding": args.decoding,
-                    "run": run.name, "time_budget": args.time_budget, "box": box},
-         "programs": programs, "attempts": attempts}, indent=2))
+                    "samples": args.samples, "saturation": args.saturation,
+                    "run": run.name, "box": box},
+         "programs": programs, "extraction": extraction}, indent=2))
     print(f"wrote {out}")
     if programs:
         try:
@@ -99,8 +86,7 @@ def run_shards(n: int, run, args) -> bool:
     log_dir.mkdir(parents=True, exist_ok=True)
     base = [sys.executable, __file__, "all", "--run", run.name,
             "--samples", str(args.samples), "--temperature", str(args.temperature),
-            "--model", args.model, "--decoding", args.decoding,
-            "--saturation", str(args.saturation), "--time-budget", str(args.time_budget)]
+            "--model", args.model, "--saturation", str(args.saturation)]
     print(f"launching {n} shards over {n} GPUs; tail -f {log_dir}/gpu0.log to watch one")
     procs = []
     for i in range(n):
@@ -138,18 +124,10 @@ def main() -> None:
     p.add_argument("--samples", type=int, default=20)
     p.add_argument("--temperature", type=float, default=1.0)
     p.add_argument("--model", default=generate.MODEL_ID)
-    p.add_argument("--decoding", choices=["light", "egraph"], default="light",
-                   help="light: static syntax grammar, verify after; egraph: decode "
-                        "under the e-graph of equivalent programs, rebuilt per arm "
-                        "when an `if` is emitted")
     p.add_argument("--run", default=None, metavar="NAME",
-                   help="results/<NAME> (default: <timestamp>-<decoding>)")
+                   help="results/<NAME> (default: <timestamp>)")
     p.add_argument("--saturation", type=int, default=egrammar.SATURATION_RUNS,
-                   metavar="RUNS", help="egraph decoding: saturation rounds when "
-                        "compiling the e-grammar")
-    p.add_argument("--time-budget", type=float, default=10.0, metavar="SECONDS",
-                   help="per-check budget: saturate each branch until proven or "
-                        "this many seconds elapse")
+                   metavar="RUNS", help="saturation rounds when compiling the e-grammar")
     p.add_argument("--shard", metavar="I/N", help=argparse.SUPPRESS)  # internal
     args = p.parse_args()
 
@@ -161,7 +139,7 @@ def main() -> None:
     if not args.benchmark:
         p.error("give a benchmark name or `all`")
 
-    name = args.run or f"{datetime.now():%Y-%m-%d-%H%M%S}-{args.decoding}"
+    name = args.run or f"{datetime.now():%Y-%m-%d-%H%M%S}"
     run = paths.run_dir(name)
 
     names = benchmarks.suite() if args.benchmark == "all" else [args.benchmark]

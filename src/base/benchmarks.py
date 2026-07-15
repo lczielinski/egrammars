@@ -2,7 +2,7 @@
 
 import json
 
-import paths
+from base import paths
 
 
 def suite() -> list[str]:

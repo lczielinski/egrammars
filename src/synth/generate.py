@@ -1,6 +1,6 @@
 """Model-facing side: prompt, reasoning handoff, and constrained sampling."""
 
-import paths
+from base import paths
 
 MODEL_ID = "openai/gpt-oss-120b"
 
