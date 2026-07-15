@@ -204,10 +204,8 @@
 (rule ((= e (Mul (Sub (Num 1) (Div b a)) a)) (> (lo a) 0.0)) ((union e (Sub a b))))
 (rule ((= e (Mul (Sub (Num 1) (Div b a)) a)) (< (hi a) 0.0)) ((union e (Sub a b))))
 
-;; sqrt(a+b) = sqrt(a)*sqrt(1 + b/a), pivot proven positive. Recurses (RHS re-exposes
-;; a sqrt-of-sum), flooding the grammar with deep sqrt spellings, so it is EXCLUDED
-;; from grammar compilation.
-;; BEGIN grammar-excluded
-(rule ((= e (Sqrt (Add a b))) (> (lo a) 0.0))
-    ((union e (Mul (Sqrt a) (Sqrt (Add (Num 1) (Div b a)))))))
-;; END grammar-excluded
+;; DISABLED -- sqrt(a+b) = sqrt(a)*sqrt(1 + b/a), pivot proven positive: the RHS
+;; re-exposes a sqrt-of-sum, so the rule recurses and floods saturation with
+;; unboundedly deep sqrt spellings.
+;; (rule ((= e (Sqrt (Add a b))) (> (lo a) 0.0))
+;;     ((union e (Mul (Sqrt a) (Sqrt (Add (Num 1) (Div b a)))))))

@@ -12,7 +12,6 @@ from __future__ import annotations
 import contextlib
 import json
 import os
-import re
 import sys
 import time
 from collections import defaultdict
@@ -25,10 +24,7 @@ SATURATION_BUDGET = 20.0  # seconds; skip remaining rounds past this
 NODE_CAP = 100_000
 START = "__start__"
 
-# All of rules.egglog, minus the block it marks grammar-excluded (recursive rules
-# that flood a full saturation with deep spellings).
-GRAMMAR_RULES = re.sub(r";; BEGIN grammar-excluded.*?;; END grammar-excluded\n", "",
-                       (paths.ROOT / "rules.egglog").read_text(), flags=re.S)
+GRAMMAR_RULES = (paths.ROOT / "rules.egglog").read_text()
 
 
 @contextlib.contextmanager
