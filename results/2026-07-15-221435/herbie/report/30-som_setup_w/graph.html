@@ -1,0 +1,1314 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/><title>Result for som_setup_w</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous"/><script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js" integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6" crossorigin="anonymous"></script><script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/d3@7" defer=""></script><script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6" defer=""></script><link rel="stylesheet" type="text/css" href="../report.css"/><script src="../report.js"></script></head><body><header><h1>som_setup_w</h1><img src="../logo-car.png"/><nav><ul><li><a href="../index.html">Report</a></li><li><a href="timeline.html">Metrics</a></li></ul></nav></header><div id="large"><div>Percentage Accurate: <span class="number" title="Minimum Accuracy: 78.2% → 49.5%">95.1%<span class="unit"> → </span>99.6%</span></div><div>Time: <span class="number">704.0ms</span></div><div>Alternatives: <span class="number">4</span></div><div>Speedup: <span class="number" title="Relative speed of fastest alternative that improves accuracy.">3.1×</span></div></div><section><details id="specification" class="programs"><summary><h2>Specification</h2><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#spec" target="_blank">?</a></summary><div><div id="precondition"><div class="program math">\[\left(\left(0 \leq es \land es \leq \frac{1}{10}\right) \land \left(-1 \leq ca \land ca \leq 1\right)\right) \land \left(1 \leq rone\_es \land rone\_es \leq \frac{21}{20}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \left(1 - es \cdot \left(ca \cdot ca\right)\right) \cdot rone\_es\\
+t\_0 \cdot t\_0 - 1
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre (and (and (and (&lt;= 0 es) (&lt;= es 1/10))
+          (and (&lt;= -1 ca) (&lt;= ca 1)))
+     (and (&lt;= 1 rone_es) (&lt;= rone_es 21/20)))
+  (let* ((t_0 (* (- 1 (* es (* ca ca))) rone_es))) (- (* t_0 t_0) 1)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	double t_0 = (1.0 - (es * (ca * ca))) * rone_es;
+	return (t_0 * t_0) - 1.0;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    real(8) :: t_0
+    t_0 = (1.0d0 - (es * (ca * ca))) * rone_es
+    code = (t_0 * t_0) - 1.0d0
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	double t_0 = (1.0 - (es * (ca * ca))) * rone_es;
+	return (t_0 * t_0) - 1.0;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	t_0 = (1.0 - (es * (ca * ca))) * rone_es
+	return (t_0 * t_0) - 1.0
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	t_0 = Float64(Float64(1.0 - Float64(es * Float64(ca * ca))) * rone_es)
+	return Float64(Float64(t_0 * t_0) - 1.0)
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	t_0 = (1.0 - (es * (ca * ca))) * rone_es;
+	tmp = (t_0 * t_0) - 1.0;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := Block[{t$95$0 = N[(N[(1 - N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] * rone$95$es), $MachinePrecision]}, N[(N[(t$95$0 * t$95$0), $MachinePrecision] - 1), $MachinePrecision]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [0, 1e-1],
+	ca in [-1, 1],
+	rone_es in [1, 105e-2]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	LET t_0 = (((1) - (es * (ca * ca))) * rone_es) IN
+	(t_0 * t_0) - (1)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \left(1 - es \cdot \left(ca \cdot ca\right)\right) \cdot rone\_es\\
+t\_0 \cdot t\_0 - 1
+\end{array}
+</pre></div></div></details></section><figure id="graphs"><h2>Local Percentage Accuracy vs <span id="variables"></span><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#graph" target="_blank">?</a></h2><svg></svg><div id="functions"></div><figcaption>The average percentage accuracy by input value. Horizontal axis shows value of an input variable; the variable is choosen in the title. Vertical axis is accuracy; higher is better. Red represent the original program, while blue represents Herbie's suggestion. These can be toggled with buttons below the plot. The line is an average while dots represent individual samples.</figcaption></figure><section id="cost-accuracy" class="section" data-benchmark-name="som_setup_w"><h2>Accuracy vs Speed<a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#cost-accuracy" target="_blank">?</a></h2><div class="figure-row"><svg></svg><div><p>Herbie found 4 alternatives:</p><table><thead><tr><th>Alternative</th><th class="numeric">Accuracy</th><th class="numeric">Speedup</th></tr></thead><tbody></tbody></table></div></div><figcaption>The accuracy (vertical axis) and speed (horizontal axis) of each alternatives. Up and to the right is better. The red square shows the initial program, and each blue circle shows an alternative.The line shows the best available speed-accuracy tradeoffs.</figcaption></section><section id="initial" class="programs"><h2>Initial Program: <span class="subhead"><data>95.1%</data> accurate, <data>1.0×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(0 \leq es \land es \leq \frac{1}{10}\right) \land \left(-1 \leq ca \land ca \leq 1\right)\right) \land \left(1 \leq rone\_es \land rone\_es \leq \frac{21}{20}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \left(1 - es \cdot \left(ca \cdot ca\right)\right) \cdot rone\_es\\
+t\_0 \cdot t\_0 - 1
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre (and (and (and (&lt;= 0 es) (&lt;= es 1/10))
+          (and (&lt;= -1 ca) (&lt;= ca 1)))
+     (and (&lt;= 1 rone_es) (&lt;= rone_es 21/20)))
+  (let* ((t_0 (* (- 1.0 (* es (* ca ca))) rone_es)))
+  (- (* t_0 t_0) 1.0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	double t_0 = (1.0 - (es * (ca * ca))) * rone_es;
+	return (t_0 * t_0) - 1.0;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    real(8) :: t_0
+    t_0 = (1.0d0 - (es * (ca * ca))) * rone_es
+    code = (t_0 * t_0) - 1.0d0
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	double t_0 = (1.0 - (es * (ca * ca))) * rone_es;
+	return (t_0 * t_0) - 1.0;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	t_0 = (1.0 - (es * (ca * ca))) * rone_es
+	return (t_0 * t_0) - 1.0
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	t_0 = Float64(Float64(1.0 - Float64(es * Float64(ca * ca))) * rone_es)
+	return Float64(Float64(t_0 * t_0) - 1.0)
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	t_0 = (1.0 - (es * (ca * ca))) * rone_es;
+	tmp = (t_0 * t_0) - 1.0;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := Block[{t$95$0 = N[(N[(1.0 - N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] * rone$95$es), $MachinePrecision]}, N[(N[(t$95$0 * t$95$0), $MachinePrecision] - 1.0), $MachinePrecision]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [0, 1e-1],
+	ca in [-1, 1],
+	rone_es in [1, 105e-2]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	LET t_0 = (((1) - (es * (ca * ca))) * rone_es) IN
+	(t_0 * t_0) - (1)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \left(1 - es \cdot \left(ca \cdot ca\right)\right) \cdot rone\_es\\
+t\_0 \cdot t\_0 - 1
+\end{array}
+</pre></div></div></section><section id="alternative1" class="programs"><h2>Alternative 1: <span class="subhead"><data>99.6%</data> accurate, <data>2.5×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(0 \leq es \land es \leq \frac{1}{10}\right) \land \left(-1 \leq ca \land ca \leq 1\right)\right) \land \left(1 \leq rone\_es \land rone\_es \leq \frac{21}{20}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[rone\_es \cdot \left(rone\_es - 1\right) + \left(rone\_es - 1\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre (and (and (and (&lt;= 0 es) (&lt;= es 1/10))
+          (and (&lt;= -1 ca) (&lt;= ca 1)))
+     (and (&lt;= 1 rone_es) (&lt;= rone_es 21/20)))
+  (+ (* rone_es (- rone_es 1.0)) (- rone_es 1.0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	return (rone_es * (rone_es - 1.0)) + (rone_es - 1.0);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    code = (rone_es * (rone_es - 1.0d0)) + (rone_es - 1.0d0)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	return (rone_es * (rone_es - 1.0)) + (rone_es - 1.0);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	return (rone_es * (rone_es - 1.0)) + (rone_es - 1.0)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	return Float64(Float64(rone_es * Float64(rone_es - 1.0)) + Float64(rone_es - 1.0))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	tmp = (rone_es * (rone_es - 1.0)) + (rone_es - 1.0);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := N[(N[(rone$95$es * N[(rone$95$es - 1.0), $MachinePrecision]), $MachinePrecision] + N[(rone$95$es - 1.0), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [0, 1e-1],
+	ca in [-1, 1],
+	rone_es in [1, 105e-2]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	(rone_es * (rone_es - (1))) + (rone_es - (1))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">rone\_es \cdot \left(rone\_es - 1\right) + \left(rone\_es - 1\right)
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">95.1%</span></p><div class="math">\[\left(\left(1 - es \cdot \left(ca \cdot ca\right)\right) \cdot rone\_es\right) \cdot \left(\left(1 - es \cdot \left(ca \cdot ca\right)\right) \cdot rone\_es\right) - 1
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.6%</span></p><div class="math">\[\leadsto \left(rone\_es - \left(\left(ca \cdot es\right) \cdot ca\right) \cdot rone\_es\right) \cdot \left(\left(rone\_es - \left(\left(ca \cdot es\right) \cdot ca\right) \cdot rone\_es\right) - 1\right) + \left(\left(rone\_es - \left(\left(ca \cdot es\right) \cdot ca\right) \cdot rone\_es\right) - 1\right)
+\]</div></li><li><p>Taylor expanded in es around 0 to order 0</p><div class="math">\[\leadsto \left(rone\_es - \left(\left(ca \cdot es\right) \cdot ca\right) \cdot rone\_es\right) \cdot \left(rone\_es - 1\right) + \left(rone\_es - 1\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.6%</span></p><div class="math">\[\leadsto \left(rone\_es - \left(\left(ca \cdot es\right) \cdot ca\right) \cdot rone\_es\right) \cdot \left(rone\_es - 1\right) + \left(rone\_es - 1\right)
+\]</div></li><li><p>Taylor expanded in es around 0 to order 0</p><div class="math">\[\leadsto rone\_es \cdot \left(rone\_es - 1\right) + \left(rone\_es - 1\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.6%</span></p><div class="math">\[\leadsto rone\_es \cdot \left(rone\_es - 1\right) + \left(rone\_es - 1\right)
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative2" class="programs"><h2>Alternative 2: <span class="subhead"><data>99.4%</data> accurate, <data>3.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(0 \leq es \land es \leq \frac{1}{10}\right) \land \left(-1 \leq ca \land ca \leq 1\right)\right) \land \left(1 \leq rone\_es \land rone\_es \leq \frac{21}{20}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[\left(rone\_es - -1\right) \cdot \left(rone\_es - 1\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre (and (and (and (&lt;= 0 es) (&lt;= es 1/10))
+          (and (&lt;= -1 ca) (&lt;= ca 1)))
+     (and (&lt;= 1 rone_es) (&lt;= rone_es 21/20)))
+  (* (- rone_es -1.0) (- rone_es 1.0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	return (rone_es - -1.0) * (rone_es - 1.0);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    code = (rone_es - (-1.0d0)) * (rone_es - 1.0d0)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	return (rone_es - -1.0) * (rone_es - 1.0);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	return (rone_es - -1.0) * (rone_es - 1.0)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	return Float64(Float64(rone_es - -1.0) * Float64(rone_es - 1.0))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	tmp = (rone_es - -1.0) * (rone_es - 1.0);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := N[(N[(rone$95$es - -1.0), $MachinePrecision] * N[(rone$95$es - 1.0), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [0, 1e-1],
+	ca in [-1, 1],
+	rone_es in [1, 105e-2]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	(rone_es - (-1)) * (rone_es - (1))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(rone\_es - -1\right) \cdot \left(rone\_es - 1\right)
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">95.1%</span></p><div class="math">\[\left(\left(1 - es \cdot \left(ca \cdot ca\right)\right) \cdot rone\_es\right) \cdot \left(\left(1 - es \cdot \left(ca \cdot ca\right)\right) \cdot rone\_es\right) - 1
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.4%</span></p><div class="math">\[\leadsto \left(\left(rone\_es - \left(\left(ca \cdot es\right) \cdot ca\right) \cdot rone\_es\right) - -1\right) \cdot \left(\left(rone\_es - \left(\left(ca \cdot es\right) \cdot ca\right) \cdot rone\_es\right) - 1\right)
+\]</div></li><li><p>Taylor expanded in es around 0 to order 0</p><div class="math">\[\leadsto \left(1 + rone\_es\right) \cdot \left(rone\_es - 1\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.4%</span></p><div class="math">\[\leadsto \left(1 + rone\_es\right) \cdot \left(rone\_es - 1\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.4%</span></p><div class="math">\[\leadsto \left(rone\_es - -1\right) \cdot \left(rone\_es - 1\right)
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative3" class="programs"><h2>Alternative 3: <span class="subhead"><data>95.1%</data> accurate, <data>4.8×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(0 \leq es \land es \leq \frac{1}{10}\right) \land \left(-1 \leq ca \land ca \leq 1\right)\right) \land \left(1 \leq rone\_es \land rone\_es \leq \frac{21}{20}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[rone\_es \cdot rone\_es - 1
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre (and (and (and (&lt;= 0 es) (&lt;= es 1/10))
+          (and (&lt;= -1 ca) (&lt;= ca 1)))
+     (and (&lt;= 1 rone_es) (&lt;= rone_es 21/20)))
+  (- (* rone_es rone_es) 1.0))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	return (rone_es * rone_es) - 1.0;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    code = (rone_es * rone_es) - 1.0d0
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	return (rone_es * rone_es) - 1.0;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	return (rone_es * rone_es) - 1.0
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	return Float64(Float64(rone_es * rone_es) - 1.0)
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	tmp = (rone_es * rone_es) - 1.0;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := N[(N[(rone$95$es * rone$95$es), $MachinePrecision] - 1.0), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [0, 1e-1],
+	ca in [-1, 1],
+	rone_es in [1, 105e-2]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	(rone_es * rone_es) - (1)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">rone\_es \cdot rone\_es - 1
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">95.1%</span></p><div class="math">\[\left(\left(1 - es \cdot \left(ca \cdot ca\right)\right) \cdot rone\_es\right) \cdot \left(\left(1 - es \cdot \left(ca \cdot ca\right)\right) \cdot rone\_es\right) - 1
+\]</div></li><li><p>Taylor expanded in es around 0 to order 0</p><div class="math">\[\leadsto rone\_es \cdot rone\_es - 1
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">95.1%</span></p><div class="math">\[\leadsto rone\_es \cdot rone\_es - 1
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative4" class="programs"><h2>Alternative 4: <span class="subhead"><data>1.6%</data> accurate, <data>23.5×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(\left(0 \leq es \land es \leq \frac{1}{10}\right) \land \left(-1 \leq ca \land ca \leq 1\right)\right) \land \left(1 \leq rone\_es \land rone\_es \leq \frac{21}{20}\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[-1
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre (and (and (and (&lt;= 0 es) (&lt;= es 1/10))
+          (and (&lt;= -1 ca) (&lt;= ca 1)))
+     (and (&lt;= 1 rone_es) (&lt;= rone_es 21/20)))
+  -1.0)</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	return -1.0;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    code = -1.0d0
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	return -1.0;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	return -1.0
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	return -1.0
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	tmp = -1.0;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := -1.0
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [0, 1e-1],
+	ca in [-1, 1],
+	rone_es in [1, 105e-2]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	-1
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">-1
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">95.1%</span></p><div class="math">\[\left(\left(1 - es \cdot \left(ca \cdot ca\right)\right) \cdot rone\_es\right) \cdot \left(\left(1 - es \cdot \left(ca \cdot ca\right)\right) \cdot rone\_es\right) - 1
+\]</div></li><li><p>Taylor expanded in rone_es around 0 to order 0</p><div class="math">\[\leadsto -1
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">1.6%</span></p><div class="math">\[\leadsto -1
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="target1" class="programs"><h2>Developer Target 1: <span class="subhead"><data>99.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right)\\
+\left(t\_0 - 1\right) \cdot \left(t\_0 + 1\right)
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (* rone_es (- 1.0 (* es (* ca ca))))))
+  (* (- t_0 1.0) (+ t_0 1.0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	double t_0 = rone_es * (1.0 - (es * (ca * ca)));
+	return (t_0 - 1.0) * (t_0 + 1.0);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    real(8) :: t_0
+    t_0 = rone_es * (1.0d0 - (es * (ca * ca)))
+    code = (t_0 - 1.0d0) * (t_0 + 1.0d0)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	double t_0 = rone_es * (1.0 - (es * (ca * ca)));
+	return (t_0 - 1.0) * (t_0 + 1.0);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	t_0 = rone_es * (1.0 - (es * (ca * ca)))
+	return (t_0 - 1.0) * (t_0 + 1.0)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	t_0 = Float64(rone_es * Float64(1.0 - Float64(es * Float64(ca * ca))))
+	return Float64(Float64(t_0 - 1.0) * Float64(t_0 + 1.0))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	t_0 = rone_es * (1.0 - (es * (ca * ca)));
+	tmp = (t_0 - 1.0) * (t_0 + 1.0);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := Block[{t$95$0 = N[(rone$95$es * N[(1.0 - N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]}, N[(N[(t$95$0 - 1.0), $MachinePrecision] * N[(t$95$0 + 1.0), $MachinePrecision]), $MachinePrecision]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	LET t_0 = (rone_es * ((1) - (es * (ca * ca)))) IN
+	(t_0 - (1)) * (t_0 + (1))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right)\\
+\left(t\_0 - 1\right) \cdot \left(t\_0 + 1\right)
+\end{array}
+</pre></div></div></section><section id="target2" class="programs"><h2>Developer Target 2: <span class="subhead"><data>99.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right) - 1\right) \cdot \left(rone\_es \cdot \left(1 - ca \cdot \left(ca \cdot es\right)\right) + 1\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (*
+ (- (* rone_es (- 1.0 (* es (* ca ca)))) 1.0)
+ (+ (* rone_es (- 1.0 (* ca (* ca es)))) 1.0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	return ((rone_es * (1.0 - (es * (ca * ca)))) - 1.0) * ((rone_es * (1.0 - (ca * (ca * es)))) + 1.0);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    code = ((rone_es * (1.0d0 - (es * (ca * ca)))) - 1.0d0) * ((rone_es * (1.0d0 - (ca * (ca * es)))) + 1.0d0)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	return ((rone_es * (1.0 - (es * (ca * ca)))) - 1.0) * ((rone_es * (1.0 - (ca * (ca * es)))) + 1.0);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	return ((rone_es * (1.0 - (es * (ca * ca)))) - 1.0) * ((rone_es * (1.0 - (ca * (ca * es)))) + 1.0)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	return Float64(Float64(Float64(rone_es * Float64(1.0 - Float64(es * Float64(ca * ca)))) - 1.0) * Float64(Float64(rone_es * Float64(1.0 - Float64(ca * Float64(ca * es)))) + 1.0))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	tmp = ((rone_es * (1.0 - (es * (ca * ca)))) - 1.0) * ((rone_es * (1.0 - (ca * (ca * es)))) + 1.0);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := N[(N[(N[(rone$95$es * N[(1.0 - N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - 1.0), $MachinePrecision] * N[(N[(rone$95$es * N[(1.0 - N[(ca * N[(ca * es), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	((rone_es * ((1) - (es * (ca * ca)))) - (1)) * ((rone_es * ((1) - (ca * (ca * es)))) + (1))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right) - 1\right) \cdot \left(rone\_es \cdot \left(1 - ca \cdot \left(ca \cdot es\right)\right) + 1\right)
+</pre></div></div></section><section id="target3" class="programs"><h2>Developer Target 3: <span class="subhead"><data>99.4%</data> accurate, <data>0.7×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[-1 \cdot \left(\left(rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right) + 1\right) \cdot \left(rone\_es \cdot \left(-1 - es \cdot \left(ca \cdot \left(ca \cdot -1\right)\right)\right) - -1\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (*
+ -1.0
+ (*
+  (+ (* rone_es (- 1.0 (* es (* ca ca)))) 1.0)
+  (- (* rone_es (- -1.0 (* es (* ca (* ca -1.0))))) -1.0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	return -1.0 * (((rone_es * (1.0 - (es * (ca * ca)))) + 1.0) * ((rone_es * (-1.0 - (es * (ca * (ca * -1.0))))) - -1.0));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    code = (-1.0d0) * (((rone_es * (1.0d0 - (es * (ca * ca)))) + 1.0d0) * ((rone_es * ((-1.0d0) - (es * (ca * (ca * (-1.0d0)))))) - (-1.0d0)))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	return -1.0 * (((rone_es * (1.0 - (es * (ca * ca)))) + 1.0) * ((rone_es * (-1.0 - (es * (ca * (ca * -1.0))))) - -1.0));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	return -1.0 * (((rone_es * (1.0 - (es * (ca * ca)))) + 1.0) * ((rone_es * (-1.0 - (es * (ca * (ca * -1.0))))) - -1.0))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	return Float64(-1.0 * Float64(Float64(Float64(rone_es * Float64(1.0 - Float64(es * Float64(ca * ca)))) + 1.0) * Float64(Float64(rone_es * Float64(-1.0 - Float64(es * Float64(ca * Float64(ca * -1.0))))) - -1.0)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	tmp = -1.0 * (((rone_es * (1.0 - (es * (ca * ca)))) + 1.0) * ((rone_es * (-1.0 - (es * (ca * (ca * -1.0))))) - -1.0));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := N[(-1.0 * N[(N[(N[(rone$95$es * N[(1.0 - N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision] * N[(N[(rone$95$es * N[(-1.0 - N[(es * N[(ca * N[(ca * -1.0), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - -1.0), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	(-1) * (((rone_es * ((1) - (es * (ca * ca)))) + (1)) * ((rone_es * ((-1) - (es * (ca * (ca * (-1)))))) - (-1)))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">-1 \cdot \left(\left(rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right) + 1\right) \cdot \left(rone\_es \cdot \left(-1 - es \cdot \left(ca \cdot \left(ca \cdot -1\right)\right)\right) - -1\right)\right)
+</pre></div></div></section><section id="target4" class="programs"><h2>Developer Target 4: <span class="subhead"><data>95.1%</data> accurate, <data>0.6×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := ca \cdot \left(ca \cdot \left(es \cdot rone\_es\right)\right)\\
+\left(rone\_es \cdot \left(\left(1 - es \cdot \left(ca \cdot ca\right)\right) \cdot t\_0\right) - \left(rone\_es \cdot \left(-t\_0\right) - \left(1 - rone\_es \cdot rone\_es\right)\right)\right) \cdot -1
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (* ca (* ca (* es rone_es)))))
+  (*
+   (-
+    (* rone_es (* (- 1.0 (* es (* ca ca))) t_0))
+    (- (* rone_es (- t_0)) (- 1.0 (* rone_es rone_es))))
+   -1.0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	double t_0 = ca * (ca * (es * rone_es));
+	return ((rone_es * ((1.0 - (es * (ca * ca))) * t_0)) - ((rone_es * -t_0) - (1.0 - (rone_es * rone_es)))) * -1.0;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    real(8) :: t_0
+    t_0 = ca * (ca * (es * rone_es))
+    code = ((rone_es * ((1.0d0 - (es * (ca * ca))) * t_0)) - ((rone_es * -t_0) - (1.0d0 - (rone_es * rone_es)))) * (-1.0d0)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	double t_0 = ca * (ca * (es * rone_es));
+	return ((rone_es * ((1.0 - (es * (ca * ca))) * t_0)) - ((rone_es * -t_0) - (1.0 - (rone_es * rone_es)))) * -1.0;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	t_0 = ca * (ca * (es * rone_es))
+	return ((rone_es * ((1.0 - (es * (ca * ca))) * t_0)) - ((rone_es * -t_0) - (1.0 - (rone_es * rone_es)))) * -1.0
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	t_0 = Float64(ca * Float64(ca * Float64(es * rone_es)))
+	return Float64(Float64(Float64(rone_es * Float64(Float64(1.0 - Float64(es * Float64(ca * ca))) * t_0)) - Float64(Float64(rone_es * Float64(-t_0)) - Float64(1.0 - Float64(rone_es * rone_es)))) * -1.0)
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	t_0 = ca * (ca * (es * rone_es));
+	tmp = ((rone_es * ((1.0 - (es * (ca * ca))) * t_0)) - ((rone_es * -t_0) - (1.0 - (rone_es * rone_es)))) * -1.0;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := Block[{t$95$0 = N[(ca * N[(ca * N[(es * rone$95$es), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]}, N[(N[(N[(rone$95$es * N[(N[(1.0 - N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] * t$95$0), $MachinePrecision]), $MachinePrecision] - N[(N[(rone$95$es * (-t$95$0)), $MachinePrecision] - N[(1.0 - N[(rone$95$es * rone$95$es), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] * -1.0), $MachinePrecision]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	LET t_0 = (ca * (ca * (es * rone_es))) IN
+	((rone_es * (((1) - (es * (ca * ca))) * t_0)) - ((rone_es * (- t_0)) - ((1) - (rone_es * rone_es)))) * (-1)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := ca \cdot \left(ca \cdot \left(es \cdot rone\_es\right)\right)\\
+\left(rone\_es \cdot \left(\left(1 - es \cdot \left(ca \cdot ca\right)\right) \cdot t\_0\right) - \left(rone\_es \cdot \left(-t\_0\right) - \left(1 - rone\_es \cdot rone\_es\right)\right)\right) \cdot -1
+\end{array}
+</pre></div></div></section><section id="target5" class="programs"><h2>Developer Target 5: <span class="subhead"><data>99.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right)\\
+\left(t\_0 + 1\right) \cdot \left(t\_0 - 1\right)
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (* rone_es (- 1.0 (* es (* ca ca))))))
+  (* (+ t_0 1.0) (- t_0 1.0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	double t_0 = rone_es * (1.0 - (es * (ca * ca)));
+	return (t_0 + 1.0) * (t_0 - 1.0);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    real(8) :: t_0
+    t_0 = rone_es * (1.0d0 - (es * (ca * ca)))
+    code = (t_0 + 1.0d0) * (t_0 - 1.0d0)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	double t_0 = rone_es * (1.0 - (es * (ca * ca)));
+	return (t_0 + 1.0) * (t_0 - 1.0);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	t_0 = rone_es * (1.0 - (es * (ca * ca)))
+	return (t_0 + 1.0) * (t_0 - 1.0)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	t_0 = Float64(rone_es * Float64(1.0 - Float64(es * Float64(ca * ca))))
+	return Float64(Float64(t_0 + 1.0) * Float64(t_0 - 1.0))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	t_0 = rone_es * (1.0 - (es * (ca * ca)));
+	tmp = (t_0 + 1.0) * (t_0 - 1.0);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := Block[{t$95$0 = N[(rone$95$es * N[(1.0 - N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]}, N[(N[(t$95$0 + 1.0), $MachinePrecision] * N[(t$95$0 - 1.0), $MachinePrecision]), $MachinePrecision]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	LET t_0 = (rone_es * ((1) - (es * (ca * ca)))) IN
+	(t_0 + (1)) * (t_0 - (1))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right)\\
+\left(t\_0 + 1\right) \cdot \left(t\_0 - 1\right)
+\end{array}
+</pre></div></div></section><section id="target6" class="programs"><h2>Developer Target 6: <span class="subhead"><data>99.4%</data> accurate, <data>0.8×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(-\left(rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right) + 1\right)\right) \cdot \left(rone\_es \cdot \left(-1 - es \cdot \left(ca \cdot \left(ca \cdot -1\right)\right)\right) + 1\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (*
+ (- (+ (* rone_es (- 1.0 (* es (* ca ca)))) 1.0))
+ (+ (* rone_es (- -1.0 (* es (* ca (* ca -1.0))))) 1.0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	return -((rone_es * (1.0 - (es * (ca * ca)))) + 1.0) * ((rone_es * (-1.0 - (es * (ca * (ca * -1.0))))) + 1.0);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    code = -((rone_es * (1.0d0 - (es * (ca * ca)))) + 1.0d0) * ((rone_es * ((-1.0d0) - (es * (ca * (ca * (-1.0d0)))))) + 1.0d0)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	return -((rone_es * (1.0 - (es * (ca * ca)))) + 1.0) * ((rone_es * (-1.0 - (es * (ca * (ca * -1.0))))) + 1.0);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	return -((rone_es * (1.0 - (es * (ca * ca)))) + 1.0) * ((rone_es * (-1.0 - (es * (ca * (ca * -1.0))))) + 1.0)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	return Float64(Float64(-Float64(Float64(rone_es * Float64(1.0 - Float64(es * Float64(ca * ca)))) + 1.0)) * Float64(Float64(rone_es * Float64(-1.0 - Float64(es * Float64(ca * Float64(ca * -1.0))))) + 1.0))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	tmp = -((rone_es * (1.0 - (es * (ca * ca)))) + 1.0) * ((rone_es * (-1.0 - (es * (ca * (ca * -1.0))))) + 1.0);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := N[((-N[(N[(rone$95$es * N[(1.0 - N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]) * N[(N[(rone$95$es * N[(-1.0 - N[(es * N[(ca * N[(ca * -1.0), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	(- ((rone_es * ((1) - (es * (ca * ca)))) + (1))) * ((rone_es * ((-1) - (es * (ca * (ca * (-1)))))) + (1))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(-\left(rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right) + 1\right)\right) \cdot \left(rone\_es \cdot \left(-1 - es \cdot \left(ca \cdot \left(ca \cdot -1\right)\right)\right) + 1\right)
+</pre></div></div></section><section id="target7" class="programs"><h2>Developer Target 7: <span class="subhead"><data>99.4%</data> accurate, <data>0.6×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(rone\_es \cdot -1 - \left(1 - es \cdot \left(ca \cdot \left(ca \cdot \left(rone\_es \cdot -1\right)\right)\right)\right) \cdot -1\right) \cdot \left(rone\_es \cdot \left(-1 - es \cdot \left(ca \cdot \left(ca \cdot -1\right)\right)\right) + -1\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (*
+ (-
+  (* rone_es -1.0)
+  (* (- 1.0 (* es (* ca (* ca (* rone_es -1.0))))) -1.0))
+ (+ (* rone_es (- -1.0 (* es (* ca (* ca -1.0))))) -1.0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	return ((rone_es * -1.0) - ((1.0 - (es * (ca * (ca * (rone_es * -1.0))))) * -1.0)) * ((rone_es * (-1.0 - (es * (ca * (ca * -1.0))))) + -1.0);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    code = ((rone_es * (-1.0d0)) - ((1.0d0 - (es * (ca * (ca * (rone_es * (-1.0d0)))))) * (-1.0d0))) * ((rone_es * ((-1.0d0) - (es * (ca * (ca * (-1.0d0)))))) + (-1.0d0))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	return ((rone_es * -1.0) - ((1.0 - (es * (ca * (ca * (rone_es * -1.0))))) * -1.0)) * ((rone_es * (-1.0 - (es * (ca * (ca * -1.0))))) + -1.0);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	return ((rone_es * -1.0) - ((1.0 - (es * (ca * (ca * (rone_es * -1.0))))) * -1.0)) * ((rone_es * (-1.0 - (es * (ca * (ca * -1.0))))) + -1.0)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	return Float64(Float64(Float64(rone_es * -1.0) - Float64(Float64(1.0 - Float64(es * Float64(ca * Float64(ca * Float64(rone_es * -1.0))))) * -1.0)) * Float64(Float64(rone_es * Float64(-1.0 - Float64(es * Float64(ca * Float64(ca * -1.0))))) + -1.0))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	tmp = ((rone_es * -1.0) - ((1.0 - (es * (ca * (ca * (rone_es * -1.0))))) * -1.0)) * ((rone_es * (-1.0 - (es * (ca * (ca * -1.0))))) + -1.0);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := N[(N[(N[(rone$95$es * -1.0), $MachinePrecision] - N[(N[(1.0 - N[(es * N[(ca * N[(ca * N[(rone$95$es * -1.0), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] * -1.0), $MachinePrecision]), $MachinePrecision] * N[(N[(rone$95$es * N[(-1.0 - N[(es * N[(ca * N[(ca * -1.0), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + -1.0), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	((rone_es * (-1)) - (((1) - (es * (ca * (ca * (rone_es * (-1)))))) * (-1))) * ((rone_es * ((-1) - (es * (ca * (ca * (-1)))))) + (-1))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(rone\_es \cdot -1 - \left(1 - es \cdot \left(ca \cdot \left(ca \cdot \left(rone\_es \cdot -1\right)\right)\right)\right) \cdot -1\right) \cdot \left(rone\_es \cdot \left(-1 - es \cdot \left(ca \cdot \left(ca \cdot -1\right)\right)\right) + -1\right)
+</pre></div></div></section><section id="target8" class="programs"><h2>Developer Target 8: <span class="subhead"><data>99.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := rone\_es \cdot \left(-1 + es \cdot \left(ca \cdot ca\right)\right)\\
+\left(t\_0 - 1\right) \cdot \left(t\_0 + 1\right)
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (* rone_es (+ -1.0 (* es (* ca ca))))))
+  (* (- t_0 1.0) (+ t_0 1.0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	double t_0 = rone_es * (-1.0 + (es * (ca * ca)));
+	return (t_0 - 1.0) * (t_0 + 1.0);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    real(8) :: t_0
+    t_0 = rone_es * ((-1.0d0) + (es * (ca * ca)))
+    code = (t_0 - 1.0d0) * (t_0 + 1.0d0)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	double t_0 = rone_es * (-1.0 + (es * (ca * ca)));
+	return (t_0 - 1.0) * (t_0 + 1.0);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	t_0 = rone_es * (-1.0 + (es * (ca * ca)))
+	return (t_0 - 1.0) * (t_0 + 1.0)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	t_0 = Float64(rone_es * Float64(-1.0 + Float64(es * Float64(ca * ca))))
+	return Float64(Float64(t_0 - 1.0) * Float64(t_0 + 1.0))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	t_0 = rone_es * (-1.0 + (es * (ca * ca)));
+	tmp = (t_0 - 1.0) * (t_0 + 1.0);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := Block[{t$95$0 = N[(rone$95$es * N[(-1.0 + N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]}, N[(N[(t$95$0 - 1.0), $MachinePrecision] * N[(t$95$0 + 1.0), $MachinePrecision]), $MachinePrecision]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	LET t_0 = (rone_es * ((-1) + (es * (ca * ca)))) IN
+	(t_0 - (1)) * (t_0 + (1))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := rone\_es \cdot \left(-1 + es \cdot \left(ca \cdot ca\right)\right)\\
+\left(t\_0 - 1\right) \cdot \left(t\_0 + 1\right)
+\end{array}
+</pre></div></div></section><section id="target9" class="programs"><h2>Developer Target 9: <span class="subhead"><data>99.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right)\\
+\left(t\_0 - 1\right) \cdot \left(t\_0 - -1\right)
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (* rone_es (- 1.0 (* es (* ca ca))))))
+  (* (- t_0 1.0) (- t_0 -1.0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	double t_0 = rone_es * (1.0 - (es * (ca * ca)));
+	return (t_0 - 1.0) * (t_0 - -1.0);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    real(8) :: t_0
+    t_0 = rone_es * (1.0d0 - (es * (ca * ca)))
+    code = (t_0 - 1.0d0) * (t_0 - (-1.0d0))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	double t_0 = rone_es * (1.0 - (es * (ca * ca)));
+	return (t_0 - 1.0) * (t_0 - -1.0);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	t_0 = rone_es * (1.0 - (es * (ca * ca)))
+	return (t_0 - 1.0) * (t_0 - -1.0)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	t_0 = Float64(rone_es * Float64(1.0 - Float64(es * Float64(ca * ca))))
+	return Float64(Float64(t_0 - 1.0) * Float64(t_0 - -1.0))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	t_0 = rone_es * (1.0 - (es * (ca * ca)));
+	tmp = (t_0 - 1.0) * (t_0 - -1.0);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := Block[{t$95$0 = N[(rone$95$es * N[(1.0 - N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]}, N[(N[(t$95$0 - 1.0), $MachinePrecision] * N[(t$95$0 - -1.0), $MachinePrecision]), $MachinePrecision]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	LET t_0 = (rone_es * ((1) - (es * (ca * ca)))) IN
+	(t_0 - (1)) * (t_0 - (-1))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right)\\
+\left(t\_0 - 1\right) \cdot \left(t\_0 - -1\right)
+\end{array}
+</pre></div></div></section><section id="target10" class="programs"><h2>Developer Target 10: <span class="subhead"><data>99.6%</data> accurate, <data>0.6×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := es \cdot \left(ca \cdot ca\right)\\
+t_1 := rone\_es \cdot \left(1 - t\_0\right) - 1\\
+t\_1 \cdot \left(rone\_es \cdot \left(-t\_0\right) + 1\right) + t\_1 \cdot rone\_es
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (* es (* ca ca))) (t_1 (- (* rone_es (- 1.0 t_0)) 1.0)))
+  (+ (* t_1 (+ (* rone_es (- t_0)) 1.0)) (* t_1 rone_es))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	double t_0 = es * (ca * ca);
+	double t_1 = (rone_es * (1.0 - t_0)) - 1.0;
+	return (t_1 * ((rone_es * -t_0) + 1.0)) + (t_1 * rone_es);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    real(8) :: t_0
+    real(8) :: t_1
+    t_0 = es * (ca * ca)
+    t_1 = (rone_es * (1.0d0 - t_0)) - 1.0d0
+    code = (t_1 * ((rone_es * -t_0) + 1.0d0)) + (t_1 * rone_es)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	double t_0 = es * (ca * ca);
+	double t_1 = (rone_es * (1.0 - t_0)) - 1.0;
+	return (t_1 * ((rone_es * -t_0) + 1.0)) + (t_1 * rone_es);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	t_0 = es * (ca * ca)
+	t_1 = (rone_es * (1.0 - t_0)) - 1.0
+	return (t_1 * ((rone_es * -t_0) + 1.0)) + (t_1 * rone_es)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	t_0 = Float64(es * Float64(ca * ca))
+	t_1 = Float64(Float64(rone_es * Float64(1.0 - t_0)) - 1.0)
+	return Float64(Float64(t_1 * Float64(Float64(rone_es * Float64(-t_0)) + 1.0)) + Float64(t_1 * rone_es))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	t_0 = es * (ca * ca);
+	t_1 = (rone_es * (1.0 - t_0)) - 1.0;
+	tmp = (t_1 * ((rone_es * -t_0) + 1.0)) + (t_1 * rone_es);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := Block[{t$95$0 = N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]}, Block[{t$95$1 = N[(N[(rone$95$es * N[(1.0 - t$95$0), $MachinePrecision]), $MachinePrecision] - 1.0), $MachinePrecision]}, N[(N[(t$95$1 * N[(N[(rone$95$es * (-t$95$0)), $MachinePrecision] + 1.0), $MachinePrecision]), $MachinePrecision] + N[(t$95$1 * rone$95$es), $MachinePrecision]), $MachinePrecision]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	LET t_0 = (es * (ca * ca)) IN
+		LET t_1 = ((rone_es * ((1) - t_0)) - (1)) IN
+	(t_1 * ((rone_es * (- t_0)) + (1))) + (t_1 * rone_es)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := es \cdot \left(ca \cdot ca\right)\\
+t_1 := rone\_es \cdot \left(1 - t\_0\right) - 1\\
+t\_1 \cdot \left(rone\_es \cdot \left(-t\_0\right) + 1\right) + t\_1 \cdot rone\_es
+\end{array}
+</pre></div></div></section><section id="target11" class="programs"><h2>Developer Target 11: <span class="subhead"><data>99.4%</data> accurate, <data>0.8×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right)\\
+\left(t\_0 - -1 \cdot -1\right) \cdot \left(t\_0 + 1\right)
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (* rone_es (- 1.0 (* es (* ca ca))))))
+  (* (- t_0 (* -1.0 -1.0)) (+ t_0 1.0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	double t_0 = rone_es * (1.0 - (es * (ca * ca)));
+	return (t_0 - (-1.0 * -1.0)) * (t_0 + 1.0);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    real(8) :: t_0
+    t_0 = rone_es * (1.0d0 - (es * (ca * ca)))
+    code = (t_0 - ((-1.0d0) * (-1.0d0))) * (t_0 + 1.0d0)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	double t_0 = rone_es * (1.0 - (es * (ca * ca)));
+	return (t_0 - (-1.0 * -1.0)) * (t_0 + 1.0);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	t_0 = rone_es * (1.0 - (es * (ca * ca)))
+	return (t_0 - (-1.0 * -1.0)) * (t_0 + 1.0)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	t_0 = Float64(rone_es * Float64(1.0 - Float64(es * Float64(ca * ca))))
+	return Float64(Float64(t_0 - Float64(-1.0 * -1.0)) * Float64(t_0 + 1.0))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	t_0 = rone_es * (1.0 - (es * (ca * ca)));
+	tmp = (t_0 - (-1.0 * -1.0)) * (t_0 + 1.0);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := Block[{t$95$0 = N[(rone$95$es * N[(1.0 - N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]}, N[(N[(t$95$0 - N[(-1.0 * -1.0), $MachinePrecision]), $MachinePrecision] * N[(t$95$0 + 1.0), $MachinePrecision]), $MachinePrecision]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	LET t_0 = (rone_es * ((1) - (es * (ca * ca)))) IN
+	(t_0 - ((-1) * (-1))) * (t_0 + (1))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right)\\
+\left(t\_0 - -1 \cdot -1\right) \cdot \left(t\_0 + 1\right)
+\end{array}
+</pre></div></div></section><section id="target12" class="programs"><h2>Developer Target 12: <span class="subhead"><data>99.4%</data> accurate, <data>0.8×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right)\\
+\left(t\_0 - 1\right) \cdot \left(t\_0 + -1 \cdot -1\right)
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (* rone_es (- 1.0 (* es (* ca ca))))))
+  (* (- t_0 1.0) (+ t_0 (* -1.0 -1.0)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	double t_0 = rone_es * (1.0 - (es * (ca * ca)));
+	return (t_0 - 1.0) * (t_0 + (-1.0 * -1.0));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    real(8) :: t_0
+    t_0 = rone_es * (1.0d0 - (es * (ca * ca)))
+    code = (t_0 - 1.0d0) * (t_0 + ((-1.0d0) * (-1.0d0)))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	double t_0 = rone_es * (1.0 - (es * (ca * ca)));
+	return (t_0 - 1.0) * (t_0 + (-1.0 * -1.0));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	t_0 = rone_es * (1.0 - (es * (ca * ca)))
+	return (t_0 - 1.0) * (t_0 + (-1.0 * -1.0))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	t_0 = Float64(rone_es * Float64(1.0 - Float64(es * Float64(ca * ca))))
+	return Float64(Float64(t_0 - 1.0) * Float64(t_0 + Float64(-1.0 * -1.0)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	t_0 = rone_es * (1.0 - (es * (ca * ca)));
+	tmp = (t_0 - 1.0) * (t_0 + (-1.0 * -1.0));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := Block[{t$95$0 = N[(rone$95$es * N[(1.0 - N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]}, N[(N[(t$95$0 - 1.0), $MachinePrecision] * N[(t$95$0 + N[(-1.0 * -1.0), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	LET t_0 = (rone_es * ((1) - (es * (ca * ca)))) IN
+	(t_0 - (1)) * (t_0 + ((-1) * (-1)))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right)\\
+\left(t\_0 - 1\right) \cdot \left(t\_0 + -1 \cdot -1\right)
+\end{array}
+</pre></div></div></section><section id="target13" class="programs"><h2>Developer Target 13: <span class="subhead"><data>99.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right) - 1\right) \cdot \left(\left(rone\_es \cdot \left(-ca \cdot \left(ca \cdot es\right)\right) + 1\right) + rone\_es\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (*
+ (- (* rone_es (- 1.0 (* es (* ca ca)))) 1.0)
+ (+ (+ (* rone_es (- (* ca (* ca es)))) 1.0) rone_es)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	return ((rone_es * (1.0 - (es * (ca * ca)))) - 1.0) * (((rone_es * -(ca * (ca * es))) + 1.0) + rone_es);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    code = ((rone_es * (1.0d0 - (es * (ca * ca)))) - 1.0d0) * (((rone_es * -(ca * (ca * es))) + 1.0d0) + rone_es)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	return ((rone_es * (1.0 - (es * (ca * ca)))) - 1.0) * (((rone_es * -(ca * (ca * es))) + 1.0) + rone_es);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	return ((rone_es * (1.0 - (es * (ca * ca)))) - 1.0) * (((rone_es * -(ca * (ca * es))) + 1.0) + rone_es)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	return Float64(Float64(Float64(rone_es * Float64(1.0 - Float64(es * Float64(ca * ca)))) - 1.0) * Float64(Float64(Float64(rone_es * Float64(-Float64(ca * Float64(ca * es)))) + 1.0) + rone_es))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	tmp = ((rone_es * (1.0 - (es * (ca * ca)))) - 1.0) * (((rone_es * -(ca * (ca * es))) + 1.0) + rone_es);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := N[(N[(N[(rone$95$es * N[(1.0 - N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - 1.0), $MachinePrecision] * N[(N[(N[(rone$95$es * (-N[(ca * N[(ca * es), $MachinePrecision]), $MachinePrecision])), $MachinePrecision] + 1.0), $MachinePrecision] + rone$95$es), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	((rone_es * ((1) - (es * (ca * ca)))) - (1)) * (((rone_es * (- (ca * (ca * es)))) + (1)) + rone_es)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right) - 1\right) \cdot \left(\left(rone\_es \cdot \left(-ca \cdot \left(ca \cdot es\right)\right) + 1\right) + rone\_es\right)
+</pre></div></div></section><section id="target14" class="programs"><h2>Developer Target 14: <span class="subhead"><data>99.4%</data> accurate, <data>0.8×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right) - 1\right) \cdot \left(\left(-rone\_es \cdot \left(-1 - es \cdot \left(ca \cdot \left(-ca\right)\right)\right)\right) + 1\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (*
+ (- (* rone_es (- 1.0 (* es (* ca ca)))) 1.0)
+ (+ (- (* rone_es (- -1.0 (* es (* ca (- ca)))))) 1.0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	return ((rone_es * (1.0 - (es * (ca * ca)))) - 1.0) * (-(rone_es * (-1.0 - (es * (ca * -ca)))) + 1.0);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    code = ((rone_es * (1.0d0 - (es * (ca * ca)))) - 1.0d0) * (-(rone_es * ((-1.0d0) - (es * (ca * -ca)))) + 1.0d0)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	return ((rone_es * (1.0 - (es * (ca * ca)))) - 1.0) * (-(rone_es * (-1.0 - (es * (ca * -ca)))) + 1.0);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	return ((rone_es * (1.0 - (es * (ca * ca)))) - 1.0) * (-(rone_es * (-1.0 - (es * (ca * -ca)))) + 1.0)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	return Float64(Float64(Float64(rone_es * Float64(1.0 - Float64(es * Float64(ca * ca)))) - 1.0) * Float64(Float64(-Float64(rone_es * Float64(-1.0 - Float64(es * Float64(ca * Float64(-ca)))))) + 1.0))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	tmp = ((rone_es * (1.0 - (es * (ca * ca)))) - 1.0) * (-(rone_es * (-1.0 - (es * (ca * -ca)))) + 1.0);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := N[(N[(N[(rone$95$es * N[(1.0 - N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - 1.0), $MachinePrecision] * N[((-N[(rone$95$es * N[(-1.0 - N[(es * N[(ca * (-ca)), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]) + 1.0), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	((rone_es * ((1) - (es * (ca * ca)))) - (1)) * ((- (rone_es * ((-1) - (es * (ca * (- ca)))))) + (1))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right) - 1\right) \cdot \left(\left(-rone\_es \cdot \left(-1 - es \cdot \left(ca \cdot \left(-ca\right)\right)\right)\right) + 1\right)
+</pre></div></div></section><section id="target15" class="programs"><h2>Developer Target 15: <span class="subhead"><data>99.4%</data> accurate, <data>0.8×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right) - 1\right) \cdot \left(rone\_es \cdot \left(-\left(-1 - es \cdot \left(ca \cdot \left(ca \cdot -1\right)\right)\right)\right) + 1\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (*
+ (- (* rone_es (- 1.0 (* es (* ca ca)))) 1.0)
+ (+ (* rone_es (- (- -1.0 (* es (* ca (* ca -1.0)))))) 1.0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	return ((rone_es * (1.0 - (es * (ca * ca)))) - 1.0) * ((rone_es * -(-1.0 - (es * (ca * (ca * -1.0))))) + 1.0);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    code = ((rone_es * (1.0d0 - (es * (ca * ca)))) - 1.0d0) * ((rone_es * -((-1.0d0) - (es * (ca * (ca * (-1.0d0)))))) + 1.0d0)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	return ((rone_es * (1.0 - (es * (ca * ca)))) - 1.0) * ((rone_es * -(-1.0 - (es * (ca * (ca * -1.0))))) + 1.0);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	return ((rone_es * (1.0 - (es * (ca * ca)))) - 1.0) * ((rone_es * -(-1.0 - (es * (ca * (ca * -1.0))))) + 1.0)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	return Float64(Float64(Float64(rone_es * Float64(1.0 - Float64(es * Float64(ca * ca)))) - 1.0) * Float64(Float64(rone_es * Float64(-Float64(-1.0 - Float64(es * Float64(ca * Float64(ca * -1.0)))))) + 1.0))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	tmp = ((rone_es * (1.0 - (es * (ca * ca)))) - 1.0) * ((rone_es * -(-1.0 - (es * (ca * (ca * -1.0))))) + 1.0);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := N[(N[(N[(rone$95$es * N[(1.0 - N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - 1.0), $MachinePrecision] * N[(N[(rone$95$es * (-N[(-1.0 - N[(es * N[(ca * N[(ca * -1.0), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision])), $MachinePrecision] + 1.0), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	((rone_es * ((1) - (es * (ca * ca)))) - (1)) * ((rone_es * (- ((-1) - (es * (ca * (ca * (-1))))))) + (1))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(rone\_es \cdot \left(1 - es \cdot \left(ca \cdot ca\right)\right) - 1\right) \cdot \left(rone\_es \cdot \left(-\left(-1 - es \cdot \left(ca \cdot \left(ca \cdot -1\right)\right)\right)\right) + 1\right)
+</pre></div></div></section><section id="target16" class="programs"><h2>Developer Target 16: <span class="subhead"><data>95.1%</data> accurate, <data>0.4×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(\left(1 - es \cdot \left(ca \cdot \left(ca \cdot \left(rone\_es \cdot \left(\left(-rone\_es\right) - es \cdot \left(ca \cdot \left(ca \cdot \left(rone\_es \cdot -1\right)\right)\right)\right)\right)\right)\right)\right) - \left(\left(-rone\_es \cdot \left(\left(-rone\_es \cdot \left(es \cdot ca\right)\right) \cdot \left(ca \cdot -1\right)\right)\right) + \left(rone\_es \cdot \left(\left(1 - rone\_es\right) \cdot -1\right) + rone\_es\right)\right)\right) \cdot -1
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (*
+ (-
+  (-
+   1.0
+   (*
+    es
+    (*
+     ca
+     (*
+      ca
+      (*
+       rone_es
+       (- (- rone_es) (* es (* ca (* ca (* rone_es -1.0))))))))))
+  (+
+   (- (* rone_es (* (- (* rone_es (* es ca))) (* ca -1.0))))
+   (+ (* rone_es (* (- 1.0 rone_es) -1.0)) rone_es)))
+ -1.0))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	return ((1.0 - (es * (ca * (ca * (rone_es * (-rone_es - (es * (ca * (ca * (rone_es * -1.0)))))))))) - (-(rone_es * (-(rone_es * (es * ca)) * (ca * -1.0))) + ((rone_es * ((1.0 - rone_es) * -1.0)) + rone_es))) * -1.0;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    code = ((1.0d0 - (es * (ca * (ca * (rone_es * (-rone_es - (es * (ca * (ca * (rone_es * (-1.0d0))))))))))) - (-(rone_es * (-(rone_es * (es * ca)) * (ca * (-1.0d0)))) + ((rone_es * ((1.0d0 - rone_es) * (-1.0d0))) + rone_es))) * (-1.0d0)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	return ((1.0 - (es * (ca * (ca * (rone_es * (-rone_es - (es * (ca * (ca * (rone_es * -1.0)))))))))) - (-(rone_es * (-(rone_es * (es * ca)) * (ca * -1.0))) + ((rone_es * ((1.0 - rone_es) * -1.0)) + rone_es))) * -1.0;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	return ((1.0 - (es * (ca * (ca * (rone_es * (-rone_es - (es * (ca * (ca * (rone_es * -1.0)))))))))) - (-(rone_es * (-(rone_es * (es * ca)) * (ca * -1.0))) + ((rone_es * ((1.0 - rone_es) * -1.0)) + rone_es))) * -1.0
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	return Float64(Float64(Float64(1.0 - Float64(es * Float64(ca * Float64(ca * Float64(rone_es * Float64(Float64(-rone_es) - Float64(es * Float64(ca * Float64(ca * Float64(rone_es * -1.0)))))))))) - Float64(Float64(-Float64(rone_es * Float64(Float64(-Float64(rone_es * Float64(es * ca))) * Float64(ca * -1.0)))) + Float64(Float64(rone_es * Float64(Float64(1.0 - rone_es) * -1.0)) + rone_es))) * -1.0)
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	tmp = ((1.0 - (es * (ca * (ca * (rone_es * (-rone_es - (es * (ca * (ca * (rone_es * -1.0)))))))))) - (-(rone_es * (-(rone_es * (es * ca)) * (ca * -1.0))) + ((rone_es * ((1.0 - rone_es) * -1.0)) + rone_es))) * -1.0;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := N[(N[(N[(1.0 - N[(es * N[(ca * N[(ca * N[(rone$95$es * N[((-rone$95$es) - N[(es * N[(ca * N[(ca * N[(rone$95$es * -1.0), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[((-N[(rone$95$es * N[((-N[(rone$95$es * N[(es * ca), $MachinePrecision]), $MachinePrecision]) * N[(ca * -1.0), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]) + N[(N[(rone$95$es * N[(N[(1.0 - rone$95$es), $MachinePrecision] * -1.0), $MachinePrecision]), $MachinePrecision] + rone$95$es), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] * -1.0), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	(((1) - (es * (ca * (ca * (rone_es * ((- rone_es) - (es * (ca * (ca * (rone_es * (-1))))))))))) - ((- (rone_es * ((- (rone_es * (es * ca))) * (ca * (-1))))) + ((rone_es * (((1) - rone_es) * (-1))) + rone_es))) * (-1)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(\left(1 - es \cdot \left(ca \cdot \left(ca \cdot \left(rone\_es \cdot \left(\left(-rone\_es\right) - es \cdot \left(ca \cdot \left(ca \cdot \left(rone\_es \cdot -1\right)\right)\right)\right)\right)\right)\right)\right) - \left(\left(-rone\_es \cdot \left(\left(-rone\_es \cdot \left(es \cdot ca\right)\right) \cdot \left(ca \cdot -1\right)\right)\right) + \left(rone\_es \cdot \left(\left(1 - rone\_es\right) \cdot -1\right) + rone\_es\right)\right)\right) \cdot -1
+</pre></div></div></section><section id="target17" class="programs"><h2>Developer Target 17: <span class="subhead"><data>93.4%</data> accurate, <data>0.3×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := es \cdot \left(ca \cdot \left(ca \cdot rone\_es\right)\right)\\
+t_1 := es \cdot \left(ca \cdot ca\right)\\
+\left(\left(rone\_es \cdot \left(1 - t\_1\right) - \left(-1 - \left(\left(-\left(\left(\left(-rone\_es\right) - rone\_es \cdot \left(-1 \cdot rone\_es\right)\right) - \left(rone\_es \cdot t\_0 - rone\_es\right)\right)\right) - rone\_es\right)\right)\right) + \left(rone\_es \cdot \left(t\_0 - t\_1 \cdot \left(rone\_es \cdot \left(ca \cdot \left(ca \cdot es\right)\right)\right)\right) - rone\_es \cdot \left(es \cdot \left(ca \cdot \left(ca \cdot -1\right)\right)\right)\right)\right) \cdot -1
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (* es (* ca (* ca rone_es)))) (t_1 (* es (* ca ca))))
+  (*
+   (+
+    (-
+     (* rone_es (- 1.0 t_1))
+     (-
+      -1.0
+      (-
+       (-
+        (-
+         (- (- rone_es) (* rone_es (* -1.0 rone_es)))
+         (- (* rone_es t_0) rone_es)))
+       rone_es)))
+    (-
+     (* rone_es (- t_0 (* t_1 (* rone_es (* ca (* ca es))))))
+     (* rone_es (* es (* ca (* ca -1.0))))))
+   -1.0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	double t_0 = es * (ca * (ca * rone_es));
+	double t_1 = es * (ca * ca);
+	return (((rone_es * (1.0 - t_1)) - (-1.0 - (-((-rone_es - (rone_es * (-1.0 * rone_es))) - ((rone_es * t_0) - rone_es)) - rone_es))) + ((rone_es * (t_0 - (t_1 * (rone_es * (ca * (ca * es)))))) - (rone_es * (es * (ca * (ca * -1.0)))))) * -1.0;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    real(8) :: t_0
+    real(8) :: t_1
+    t_0 = es * (ca * (ca * rone_es))
+    t_1 = es * (ca * ca)
+    code = (((rone_es * (1.0d0 - t_1)) - ((-1.0d0) - (-((-rone_es - (rone_es * ((-1.0d0) * rone_es))) - ((rone_es * t_0) - rone_es)) - rone_es))) + ((rone_es * (t_0 - (t_1 * (rone_es * (ca * (ca * es)))))) - (rone_es * (es * (ca * (ca * (-1.0d0))))))) * (-1.0d0)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	double t_0 = es * (ca * (ca * rone_es));
+	double t_1 = es * (ca * ca);
+	return (((rone_es * (1.0 - t_1)) - (-1.0 - (-((-rone_es - (rone_es * (-1.0 * rone_es))) - ((rone_es * t_0) - rone_es)) - rone_es))) + ((rone_es * (t_0 - (t_1 * (rone_es * (ca * (ca * es)))))) - (rone_es * (es * (ca * (ca * -1.0)))))) * -1.0;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	t_0 = es * (ca * (ca * rone_es))
+	t_1 = es * (ca * ca)
+	return (((rone_es * (1.0 - t_1)) - (-1.0 - (-((-rone_es - (rone_es * (-1.0 * rone_es))) - ((rone_es * t_0) - rone_es)) - rone_es))) + ((rone_es * (t_0 - (t_1 * (rone_es * (ca * (ca * es)))))) - (rone_es * (es * (ca * (ca * -1.0)))))) * -1.0
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	t_0 = Float64(es * Float64(ca * Float64(ca * rone_es)))
+	t_1 = Float64(es * Float64(ca * ca))
+	return Float64(Float64(Float64(Float64(rone_es * Float64(1.0 - t_1)) - Float64(-1.0 - Float64(Float64(-Float64(Float64(Float64(-rone_es) - Float64(rone_es * Float64(-1.0 * rone_es))) - Float64(Float64(rone_es * t_0) - rone_es))) - rone_es))) + Float64(Float64(rone_es * Float64(t_0 - Float64(t_1 * Float64(rone_es * Float64(ca * Float64(ca * es)))))) - Float64(rone_es * Float64(es * Float64(ca * Float64(ca * -1.0)))))) * -1.0)
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	t_0 = es * (ca * (ca * rone_es));
+	t_1 = es * (ca * ca);
+	tmp = (((rone_es * (1.0 - t_1)) - (-1.0 - (-((-rone_es - (rone_es * (-1.0 * rone_es))) - ((rone_es * t_0) - rone_es)) - rone_es))) + ((rone_es * (t_0 - (t_1 * (rone_es * (ca * (ca * es)))))) - (rone_es * (es * (ca * (ca * -1.0)))))) * -1.0;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := Block[{t$95$0 = N[(es * N[(ca * N[(ca * rone$95$es), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]}, Block[{t$95$1 = N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]}, N[(N[(N[(N[(rone$95$es * N[(1.0 - t$95$1), $MachinePrecision]), $MachinePrecision] - N[(-1.0 - N[((-N[(N[((-rone$95$es) - N[(rone$95$es * N[(-1.0 * rone$95$es), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(N[(rone$95$es * t$95$0), $MachinePrecision] - rone$95$es), $MachinePrecision]), $MachinePrecision]) - rone$95$es), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] + N[(N[(rone$95$es * N[(t$95$0 - N[(t$95$1 * N[(rone$95$es * N[(ca * N[(ca * es), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(rone$95$es * N[(es * N[(ca * N[(ca * -1.0), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] * -1.0), $MachinePrecision]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	LET t_0 = (es * (ca * (ca * rone_es))) IN
+		LET t_1 = (es * (ca * ca)) IN
+	(((rone_es * ((1) - t_1)) - ((-1) - ((- (((- rone_es) - (rone_es * ((-1) * rone_es))) - ((rone_es * t_0) - rone_es))) - rone_es))) + ((rone_es * (t_0 - (t_1 * (rone_es * (ca * (ca * es)))))) - (rone_es * (es * (ca * (ca * (-1))))))) * (-1)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := es \cdot \left(ca \cdot \left(ca \cdot rone\_es\right)\right)\\
+t_1 := es \cdot \left(ca \cdot ca\right)\\
+\left(\left(rone\_es \cdot \left(1 - t\_1\right) - \left(-1 - \left(\left(-\left(\left(\left(-rone\_es\right) - rone\_es \cdot \left(-1 \cdot rone\_es\right)\right) - \left(rone\_es \cdot t\_0 - rone\_es\right)\right)\right) - rone\_es\right)\right)\right) + \left(rone\_es \cdot \left(t\_0 - t\_1 \cdot \left(rone\_es \cdot \left(ca \cdot \left(ca \cdot es\right)\right)\right)\right) - rone\_es \cdot \left(es \cdot \left(ca \cdot \left(ca \cdot -1\right)\right)\right)\right)\right) \cdot -1
+\end{array}
+</pre></div></div></section><section id="target18" class="programs"><h2>Developer Target 18: <span class="subhead"><data>99.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := es \cdot \left(ca \cdot ca\right)\\
+\left(rone\_es \cdot \left(1 - t\_0\right) - 1\right) \cdot \left(rone\_es \cdot \left(\left(-t\_0\right) + 1\right) + 1\right)
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (* es (* ca ca))))
+  (*
+   (- (* rone_es (- 1.0 t_0)) 1.0)
+   (+ (* rone_es (+ (- t_0) 1.0)) 1.0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	double t_0 = es * (ca * ca);
+	return ((rone_es * (1.0 - t_0)) - 1.0) * ((rone_es * (-t_0 + 1.0)) + 1.0);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    real(8) :: t_0
+    t_0 = es * (ca * ca)
+    code = ((rone_es * (1.0d0 - t_0)) - 1.0d0) * ((rone_es * (-t_0 + 1.0d0)) + 1.0d0)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	double t_0 = es * (ca * ca);
+	return ((rone_es * (1.0 - t_0)) - 1.0) * ((rone_es * (-t_0 + 1.0)) + 1.0);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	t_0 = es * (ca * ca)
+	return ((rone_es * (1.0 - t_0)) - 1.0) * ((rone_es * (-t_0 + 1.0)) + 1.0)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	t_0 = Float64(es * Float64(ca * ca))
+	return Float64(Float64(Float64(rone_es * Float64(1.0 - t_0)) - 1.0) * Float64(Float64(rone_es * Float64(Float64(-t_0) + 1.0)) + 1.0))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	t_0 = es * (ca * ca);
+	tmp = ((rone_es * (1.0 - t_0)) - 1.0) * ((rone_es * (-t_0 + 1.0)) + 1.0);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := Block[{t$95$0 = N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]}, N[(N[(N[(rone$95$es * N[(1.0 - t$95$0), $MachinePrecision]), $MachinePrecision] - 1.0), $MachinePrecision] * N[(N[(rone$95$es * N[((-t$95$0) + 1.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]), $MachinePrecision]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	LET t_0 = (es * (ca * ca)) IN
+	((rone_es * ((1) - t_0)) - (1)) * ((rone_es * ((- t_0) + (1))) + (1))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := es \cdot \left(ca \cdot ca\right)\\
+\left(rone\_es \cdot \left(1 - t\_0\right) - 1\right) \cdot \left(rone\_es \cdot \left(\left(-t\_0\right) + 1\right) + 1\right)
+\end{array}
+</pre></div></div></section><section id="target19" class="programs"><h2>Developer Target 19: <span class="subhead"><data>99.4%</data> accurate, <data>0.8×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := es \cdot \left(ca \cdot ca\right)\\
+\left(rone\_es \cdot \left(1 - t\_0\right) - 1\right) \cdot \left(\left(rone\_es \cdot \left(-t\_0\right) + 1\right) - -1 \cdot rone\_es\right)
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (* es (* ca ca))))
+  (*
+   (- (* rone_es (- 1.0 t_0)) 1.0)
+   (- (+ (* rone_es (- t_0)) 1.0) (* -1.0 rone_es)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	double t_0 = es * (ca * ca);
+	return ((rone_es * (1.0 - t_0)) - 1.0) * (((rone_es * -t_0) + 1.0) - (-1.0 * rone_es));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    real(8) :: t_0
+    t_0 = es * (ca * ca)
+    code = ((rone_es * (1.0d0 - t_0)) - 1.0d0) * (((rone_es * -t_0) + 1.0d0) - ((-1.0d0) * rone_es))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	double t_0 = es * (ca * ca);
+	return ((rone_es * (1.0 - t_0)) - 1.0) * (((rone_es * -t_0) + 1.0) - (-1.0 * rone_es));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	t_0 = es * (ca * ca)
+	return ((rone_es * (1.0 - t_0)) - 1.0) * (((rone_es * -t_0) + 1.0) - (-1.0 * rone_es))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	t_0 = Float64(es * Float64(ca * ca))
+	return Float64(Float64(Float64(rone_es * Float64(1.0 - t_0)) - 1.0) * Float64(Float64(Float64(rone_es * Float64(-t_0)) + 1.0) - Float64(-1.0 * rone_es)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	t_0 = es * (ca * ca);
+	tmp = ((rone_es * (1.0 - t_0)) - 1.0) * (((rone_es * -t_0) + 1.0) - (-1.0 * rone_es));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := Block[{t$95$0 = N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]}, N[(N[(N[(rone$95$es * N[(1.0 - t$95$0), $MachinePrecision]), $MachinePrecision] - 1.0), $MachinePrecision] * N[(N[(N[(rone$95$es * (-t$95$0)), $MachinePrecision] + 1.0), $MachinePrecision] - N[(-1.0 * rone$95$es), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	LET t_0 = (es * (ca * ca)) IN
+	((rone_es * ((1) - t_0)) - (1)) * (((rone_es * (- t_0)) + (1)) - ((-1) * rone_es))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := es \cdot \left(ca \cdot ca\right)\\
+\left(rone\_es \cdot \left(1 - t\_0\right) - 1\right) \cdot \left(\left(rone\_es \cdot \left(-t\_0\right) + 1\right) - -1 \cdot rone\_es\right)
+\end{array}
+</pre></div></div></section><section id="target20" class="programs"><h2>Developer Target 20: <span class="subhead"><data>95.1%</data> accurate, <data>0.4×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := es \cdot \left(ca \cdot ca\right)\\
+t_1 := rone\_es \cdot t\_0\\
+\left(rone\_es \cdot \left(\left(1 - t\_0\right) + es \cdot \left(ca \cdot \left(ca \cdot \left(rone\_es - t\_1\right)\right)\right)\right) - \left(rone\_es - -1 \cdot \left(\left(\left(1 - -1 \cdot rone\_es\right) \cdot -1\right) \cdot \left(t\_1 - -1 \cdot \left(1 - rone\_es\right)\right)\right)\right)\right) \cdot -1
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (es ca rone_es)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (* es (* ca ca))) (t_1 (* rone_es t_0)))
+  (*
+   (-
+    (* rone_es (+ (- 1.0 t_0) (* es (* ca (* ca (- rone_es t_1))))))
+    (-
+     rone_es
+     (*
+      -1.0
+      (*
+       (* (- 1.0 (* -1.0 rone_es)) -1.0)
+       (- t_1 (* -1.0 (- 1.0 rone_es)))))))
+   -1.0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double es, double ca, double rone_es) {
+	double t_0 = es * (ca * ca);
+	double t_1 = rone_es * t_0;
+	return ((rone_es * ((1.0 - t_0) + (es * (ca * (ca * (rone_es - t_1)))))) - (rone_es - (-1.0 * (((1.0 - (-1.0 * rone_es)) * -1.0) * (t_1 - (-1.0 * (1.0 - rone_es))))))) * -1.0;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(es, ca, rone_es)
+use fmin_fmax_functions
+    real(8), intent (in) :: es
+    real(8), intent (in) :: ca
+    real(8), intent (in) :: rone_es
+    real(8) :: t_0
+    real(8) :: t_1
+    t_0 = es * (ca * ca)
+    t_1 = rone_es * t_0
+    code = ((rone_es * ((1.0d0 - t_0) + (es * (ca * (ca * (rone_es - t_1)))))) - (rone_es - ((-1.0d0) * (((1.0d0 - ((-1.0d0) * rone_es)) * (-1.0d0)) * (t_1 - ((-1.0d0) * (1.0d0 - rone_es))))))) * (-1.0d0)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double es, double ca, double rone_es) {
+	double t_0 = es * (ca * ca);
+	double t_1 = rone_es * t_0;
+	return ((rone_es * ((1.0 - t_0) + (es * (ca * (ca * (rone_es - t_1)))))) - (rone_es - (-1.0 * (((1.0 - (-1.0 * rone_es)) * -1.0) * (t_1 - (-1.0 * (1.0 - rone_es))))))) * -1.0;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(es, ca, rone_es):
+	t_0 = es * (ca * ca)
+	t_1 = rone_es * t_0
+	return ((rone_es * ((1.0 - t_0) + (es * (ca * (ca * (rone_es - t_1)))))) - (rone_es - (-1.0 * (((1.0 - (-1.0 * rone_es)) * -1.0) * (t_1 - (-1.0 * (1.0 - rone_es))))))) * -1.0
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(es, ca, rone_es)
+	t_0 = Float64(es * Float64(ca * ca))
+	t_1 = Float64(rone_es * t_0)
+	return Float64(Float64(Float64(rone_es * Float64(Float64(1.0 - t_0) + Float64(es * Float64(ca * Float64(ca * Float64(rone_es - t_1)))))) - Float64(rone_es - Float64(-1.0 * Float64(Float64(Float64(1.0 - Float64(-1.0 * rone_es)) * -1.0) * Float64(t_1 - Float64(-1.0 * Float64(1.0 - rone_es))))))) * -1.0)
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(es, ca, rone_es)
+	t_0 = es * (ca * ca);
+	t_1 = rone_es * t_0;
+	tmp = ((rone_es * ((1.0 - t_0) + (es * (ca * (ca * (rone_es - t_1)))))) - (rone_es - (-1.0 * (((1.0 - (-1.0 * rone_es)) * -1.0) * (t_1 - (-1.0 * (1.0 - rone_es))))))) * -1.0;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[es_, ca_, rone$95$es_] := Block[{t$95$0 = N[(es * N[(ca * ca), $MachinePrecision]), $MachinePrecision]}, Block[{t$95$1 = N[(rone$95$es * t$95$0), $MachinePrecision]}, N[(N[(N[(rone$95$es * N[(N[(1.0 - t$95$0), $MachinePrecision] + N[(es * N[(ca * N[(ca * N[(rone$95$es - t$95$1), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] - N[(rone$95$es - N[(-1.0 * N[(N[(N[(1.0 - N[(-1.0 * rone$95$es), $MachinePrecision]), $MachinePrecision] * -1.0), $MachinePrecision] * N[(t$95$1 - N[(-1.0 * N[(1.0 - rone$95$es), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]), $MachinePrecision] * -1.0), $MachinePrecision]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(es, ca, rone_es):
+	es in [-inf, +inf],
+	ca in [-inf, +inf],
+	rone_es in [-inf, +inf]
+code: THEORY
+BEGIN
+f(es, ca, rone_es: real): real =
+	LET t_0 = (es * (ca * ca)) IN
+		LET t_1 = (rone_es * t_0) IN
+	((rone_es * (((1) - t_0) + (es * (ca * (ca * (rone_es - t_1)))))) - (rone_es - ((-1) * ((((1) - ((-1) * rone_es)) * (-1)) * (t_1 - ((-1) * ((1) - rone_es))))))) * (-1)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := es \cdot \left(ca \cdot ca\right)\\
+t_1 := rone\_es \cdot t\_0\\
+\left(rone\_es \cdot \left(\left(1 - t\_0\right) + es \cdot \left(ca \cdot \left(ca \cdot \left(rone\_es - t\_1\right)\right)\right)\right) - \left(rone\_es - -1 \cdot \left(\left(\left(1 - -1 \cdot rone\_es\right) \cdot -1\right) \cdot \left(t\_1 - -1 \cdot \left(1 - rone\_es\right)\right)\right)\right)\right) \cdot -1
+\end{array}
+</pre></div></div></section><section id="reproduce"><details><summary><h2>Reproduce</h2><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#reproduction" target="_blank">?</a></summary><pre class="shell"><code>herbie shell --seed 1 
+(FPCore (es ca rone_es)
+  :name "som_setup_w"
+  :precision binary64
+  :pre (and (and (and (&lt;= 0 es) (&lt;= es 1/10)) (and (&lt;= -1 ca) (&lt;= ca 1))) (and (&lt;= 1 rone_es) (&lt;= rone_es 21/20)))
+
+  :alt
+  (* (- (* rone_es (- 1 (* es (* ca ca)))) 1) (+ (* rone_es (- 1 (* es (* ca ca)))) 1))
+
+  :alt
+  (* (- (* rone_es (- 1 (* es (* ca ca)))) 1) (+ (* rone_es (- 1 (* ca (* ca es)))) 1))
+
+  :alt
+  (* -1 (* (+ (* rone_es (- 1 (* es (* ca ca)))) 1) (- (* rone_es (- -1 (* es (* ca (* ca -1))))) -1)))
+
+  :alt
+  (* (- (* rone_es (* (- 1 (* es (* ca ca))) (* ca (* ca (* es rone_es))))) (- (* rone_es (- (* ca (* ca (* es rone_es))))) (- 1 (* rone_es rone_es)))) -1)
+
+  :alt
+  (* (+ (* rone_es (- 1 (* es (* ca ca)))) 1) (- (* rone_es (- 1 (* es (* ca ca)))) 1))
+
+  :alt
+  (* (- (+ (* rone_es (- 1 (* es (* ca ca)))) 1)) (+ (* rone_es (- -1 (* es (* ca (* ca -1))))) 1))
+
+  :alt
+  (* (- (* rone_es -1) (* (- 1 (* es (* ca (* ca (* rone_es -1))))) -1)) (+ (* rone_es (- -1 (* es (* ca (* ca -1))))) -1))
+
+  :alt
+  (* (- (* rone_es (+ -1 (* es (* ca ca)))) 1) (+ (* rone_es (+ -1 (* es (* ca ca)))) 1))
+
+  :alt
+  (* (- (* rone_es (- 1 (* es (* ca ca)))) 1) (- (* rone_es (- 1 (* es (* ca ca)))) -1))
+
+  :alt
+  (+ (* (- (* rone_es (- 1 (* es (* ca ca)))) 1) (+ (* rone_es (- (* es (* ca ca)))) 1)) (* (- (* rone_es (- 1 (* es (* ca ca)))) 1) rone_es))
+
+  :alt
+  (* (- (* rone_es (- 1 (* es (* ca ca)))) (* -1 -1)) (+ (* rone_es (- 1 (* es (* ca ca)))) 1))
+
+  :alt
+  (* (- (* rone_es (- 1 (* es (* ca ca)))) 1) (+ (* rone_es (- 1 (* es (* ca ca)))) (* -1 -1)))
+
+  :alt
+  (* (- (* rone_es (- 1 (* es (* ca ca)))) 1) (+ (+ (* rone_es (- (* ca (* ca es)))) 1) rone_es))
+
+  :alt
+  (* (- (* rone_es (- 1 (* es (* ca ca)))) 1) (+ (- (* rone_es (- -1 (* es (* ca (- ca)))))) 1))
+
+  :alt
+  (* (- (* rone_es (- 1 (* es (* ca ca)))) 1) (+ (* rone_es (- (- -1 (* es (* ca (* ca -1)))))) 1))
+
+  :alt
+  (* (- (- 1 (* es (* ca (* ca (* rone_es (- (- rone_es) (* es (* ca (* ca (* rone_es -1)))))))))) (+ (- (* rone_es (* (- (* rone_es (* es ca))) (* ca -1)))) (+ (* rone_es (* (- 1 rone_es) -1)) rone_es))) -1)
+
+  :alt
+  (* (+ (- (* rone_es (- 1 (* es (* ca ca)))) (- -1 (- (- (- (- (- rone_es) (* rone_es (* -1 rone_es))) (- (* rone_es (* es (* ca (* ca rone_es)))) rone_es))) rone_es))) (- (* rone_es (- (* es (* ca (* ca rone_es))) (* (* es (* ca ca)) (* rone_es (* ca (* ca es)))))) (* rone_es (* es (* ca (* ca -1)))))) -1)
+
+  :alt
+  (* (- (* rone_es (- 1 (* es (* ca ca)))) 1) (+ (* rone_es (+ (- (* es (* ca ca))) 1)) 1))
+
+  :alt
+  (* (- (* rone_es (- 1 (* es (* ca ca)))) 1) (- (+ (* rone_es (- (* es (* ca ca)))) 1) (* -1 rone_es)))
+
+  :alt
+  (* (- (* rone_es (+ (- 1 (* es (* ca ca))) (* es (* ca (* ca (- rone_es (* rone_es (* es (* ca ca))))))))) (- rone_es (* -1 (* (* (- 1 (* -1 rone_es)) -1) (- (* rone_es (* es (* ca ca))) (* -1 (- 1 rone_es))))))) -1)
+
+  (- (* (* (- 1.0 (* es (* ca ca))) rone_es) (* (- 1.0 (* es (* ca ca))) rone_es)) 1.0))
+</code></pre></details></section></body></html>

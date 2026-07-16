@@ -14,7 +14,7 @@ from base import benchmarks, paths, regions
 
 EPS = 2.0 ** -52  # double-precision ulp
 CONFIG = "abs-error = true\nrel-error = true\n"
-TIMEOUT = 120
+TIMEOUT = 600
 
 
 def fmt(v):
