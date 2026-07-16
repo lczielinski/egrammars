@@ -1,0 +1,22 @@
+{
+  "benchmark": "himmilbeau",
+  "reference": "(FPCore (x1 x2) (+ (* (- (+ (* x1 x1) x2) 11) (- (+ (* x1 x1) x2) 11)) (* (- (+ x1 (* x2 x2)) 7) (- (+ x1 (* x2 x2)) 7))))",
+  "config": {
+    "model": "openai/gpt-oss-120b",
+    "temperature": 1.0,
+    "samples": 20,
+    "saturation": 6,
+    "run": "debug7",
+    "box": {
+      "x1": [
+        -5.0,
+        5.0
+      ],
+      "x2": [
+        -5.0,
+        5.0
+      ]
+    }
+  },
+  "programs": []
+}
