@@ -1,0 +1,1015 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/><title>Result for complex_square_real</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous"/><script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js" integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6" crossorigin="anonymous"></script><script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/d3@7" defer=""></script><script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6" defer=""></script><link rel="stylesheet" type="text/css" href="../report.css"/><script src="../report.js"></script></head><body><header><h1>complex_square_real</h1><img src="../logo-car.png"/><nav><ul><li><a href="../index.html">Report</a></li><li><a href="timeline.html">Metrics</a></li></ul></nav></header><div id="large"><div>Percentage Accurate: <span class="number" title="Minimum Accuracy: 79.1% → 98.4%">98.3%<span class="unit"> → </span>99.6%</span></div><div>Time: <span class="number">501.0ms</span></div><div>Alternatives: <span class="number">4</span></div><div>Speedup: <span class="number" title="Relative speed of fastest alternative that improves accuracy.">1.1×</span></div></div><section><details id="specification" class="programs"><summary><h2>Specification</h2><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#spec" target="_blank">?</a></summary><div><div id="precondition"><div class="program math">\[\left(1 \leq re \land re \leq 2\right) \land \left(1 \leq im \land im \leq 2\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[re \cdot re - im \cdot im
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre (and (and (&lt;= 1 re) (&lt;= re 2)) (and (&lt;= 1 im) (&lt;= im 2)))
+  (- (* re re) (* im im)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return (re * re) - (im * im);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = (re * re) - (im * im)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return (re * re) - (im * im);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return (re * re) - (im * im)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(re * re) - Float64(im * im))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = (re * re) - (im * im);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(re * re), $MachinePrecision] - N[(im * im), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [1, 2],
+	im in [1, 2]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	(re * re) - (im * im)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">re \cdot re - im \cdot im
+</pre></div></div></details></section><figure id="graphs"><h2>Local Percentage Accuracy vs <span id="variables"></span><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#graph" target="_blank">?</a></h2><svg></svg><div id="functions"></div><figcaption>The average percentage accuracy by input value. Horizontal axis shows value of an input variable; the variable is choosen in the title. Vertical axis is accuracy; higher is better. Red represent the original program, while blue represents Herbie's suggestion. These can be toggled with buttons below the plot. The line is an average while dots represent individual samples.</figcaption></figure><section id="cost-accuracy" class="section" data-benchmark-name="complex_square_real"><h2>Accuracy vs Speed<a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#cost-accuracy" target="_blank">?</a></h2><div class="figure-row"><svg></svg><div><p>Herbie found 4 alternatives:</p><table><thead><tr><th>Alternative</th><th class="numeric">Accuracy</th><th class="numeric">Speedup</th></tr></thead><tbody></tbody></table></div></div><figcaption>The accuracy (vertical axis) and speed (horizontal axis) of each alternatives. Up and to the right is better. The red square shows the initial program, and each blue circle shows an alternative.The line shows the best available speed-accuracy tradeoffs.</figcaption></section><section id="initial" class="programs"><h2>Initial Program: <span class="subhead"><data>98.3%</data> accurate, <data>1.0×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(1 \leq re \land re \leq 2\right) \land \left(1 \leq im \land im \leq 2\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[re \cdot re - im \cdot im
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre (and (and (&lt;= 1 re) (&lt;= re 2)) (and (&lt;= 1 im) (&lt;= im 2)))
+  (- (* re re) (* im im)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return (re * re) - (im * im);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = (re * re) - (im * im)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return (re * re) - (im * im);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return (re * re) - (im * im)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(re * re) - Float64(im * im))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = (re * re) - (im * im);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(re * re), $MachinePrecision] - N[(im * im), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [1, 2],
+	im in [1, 2]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	(re * re) - (im * im)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">re \cdot re - im \cdot im
+</pre></div></div></section><section id="alternative1" class="programs"><h2>Alternative 1: <span class="subhead"><data>99.6%</data> accurate, <data>0.7×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(1 \leq re \land re \leq 2\right) \land \left(1 \leq im \land im \leq 2\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[\left(re - im\right) \cdot im - \left(im - re\right) \cdot re
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre (and (and (&lt;= 1 re) (&lt;= re 2)) (and (&lt;= 1 im) (&lt;= im 2)))
+  (- (* (- re im) im) (* (- im re) re)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return ((re - im) * im) - ((im - re) * re);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = ((re - im) * im) - ((im - re) * re)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return ((re - im) * im) - ((im - re) * re);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return ((re - im) * im) - ((im - re) * re)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(Float64(re - im) * im) - Float64(Float64(im - re) * re))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = ((re - im) * im) - ((im - re) * re);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(N[(re - im), $MachinePrecision] * im), $MachinePrecision] - N[(N[(im - re), $MachinePrecision] * re), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [1, 2],
+	im in [1, 2]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	((re - im) * im) - ((im - re) * re)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(re - im\right) \cdot im - \left(im - re\right) \cdot re
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">98.3%</span></p><div class="math">\[re \cdot re - im \cdot im
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.6%</span></p><div class="math">\[\leadsto \left(re - im\right) \cdot im - \left(im - re\right) \cdot re
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative2" class="programs"><h2>Alternative 2: <span class="subhead"><data>99.6%</data> accurate, <data>1.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(1 \leq re \land re \leq 2\right) \land \left(1 \leq im \land im \leq 2\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[\left(im + re\right) \cdot \left(re - im\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre (and (and (&lt;= 1 re) (&lt;= re 2)) (and (&lt;= 1 im) (&lt;= im 2)))
+  (* (+ im re) (- re im)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return (im + re) * (re - im);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = (im + re) * (re - im)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return (im + re) * (re - im);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return (im + re) * (re - im)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(im + re) * Float64(re - im))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = (im + re) * (re - im);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(im + re), $MachinePrecision] * N[(re - im), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [1, 2],
+	im in [1, 2]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	(im + re) * (re - im)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(im + re\right) \cdot \left(re - im\right)
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">98.3%</span></p><div class="math">\[re \cdot re - im \cdot im
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.6%</span></p><div class="math">\[\leadsto \left(im + re\right) \cdot \left(re - im\right)
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative3" class="programs"><h2>Alternative 3: <span class="subhead"><data>17.6%</data> accurate, <data>0.5×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(1 \leq re \land re \leq 2\right) \land \left(1 \leq im \land im \leq 2\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+\mathbf{if}\;re \cdot re - im \cdot im \leq -0.001:\\
+\;\;\;\;-im \cdot im\\
+
+\mathbf{else}:\\
+\;\;\;\;re \cdot re\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre (and (and (&lt;= 1 re) (&lt;= re 2)) (and (&lt;= 1 im) (&lt;= im 2)))
+  (if (&lt;= (- (* re re) (* im im)) -0.001) (- (* im im)) (* re re)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	double tmp;
+	if (((re * re) - (im * im)) &lt;= -0.001) {
+		tmp = -(im * im);
+	} else {
+		tmp = re * re;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    real(8) :: tmp
+    if (((re * re) - (im * im)) &lt;= (-0.001d0)) then
+        tmp = -(im * im)
+    else
+        tmp = re * re
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	double tmp;
+	if (((re * re) - (im * im)) &lt;= -0.001) {
+		tmp = -(im * im);
+	} else {
+		tmp = re * re;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	tmp = 0
+	if ((re * re) - (im * im)) &lt;= -0.001:
+		tmp = -(im * im)
+	else:
+		tmp = re * re
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	tmp = 0.0
+	if (Float64(Float64(re * re) - Float64(im * im)) &lt;= -0.001)
+		tmp = Float64(-Float64(im * im));
+	else
+		tmp = Float64(re * re);
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(re, im)
+	tmp = 0.0;
+	if (((re * re) - (im * im)) &lt;= -0.001)
+		tmp = -(im * im);
+	else
+		tmp = re * re;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := If[LessEqual[N[(N[(re * re), $MachinePrecision] - N[(im * im), $MachinePrecision]), $MachinePrecision], -0.001], (-N[(im * im), $MachinePrecision]), N[(re * re), $MachinePrecision]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [1, 2],
+	im in [1, 2]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	LET tmp = IF (((re * re) - (im * im)) &lt;= (-1000000000000000020816681711721685132943093776702880859375e-60)) THEN (- (im * im)) ELSE (re * re) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+\mathbf{if}\;re \cdot re - im \cdot im \leq -0.001:\\
+\;\;\;\;-im \cdot im\\
+
+\mathbf{else}:\\
+\;\;\;\;re \cdot re\\
+
+
+\end{array}
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li class="event">Split input into 2 regimes</li><li><h2><code>if <span class="condition"> (-.f64 (*.f64 re re) (*.f64 im im))  &lt; -1e-3</span></code></h2><ol><li><p>Initial program <span class="error">98.3%</span></p><div class="math">\[re \cdot re - im \cdot im
+\]</div></li><li><p>Taylor expanded in re around 0 to order 0</p><div class="math">\[\leadsto -1 \cdot \left(im \cdot im\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">9.6%</span></p><div class="math">\[\leadsto -1 \cdot \left(im \cdot im\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">9.6%</span></p><div class="math">\[\leadsto -im \cdot im
+\]</div></li></ol><h2><code>if <span class="condition">-1e-3 &lt;  (-.f64 (*.f64 re re) (*.f64 im im)) </span></code></h2><ol><li><p>Initial program <span class="error">98.3%</span></p><div class="math">\[re \cdot re - im \cdot im
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.6%</span></p><div class="math">\[\leadsto \left(im + re\right) \cdot \left(re - im\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">98.2%</span></p><div class="math">\[\leadsto re \cdot \left(re - im \cdot \frac{im}{re}\right)
+\]</div></li><li><p>Taylor expanded in re around 0 to order 0</p><div class="math">\[\leadsto re \cdot \left(re - \frac{im \cdot im}{re}\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">98.2%</span></p><div class="math">\[\leadsto re \cdot \left(re - \frac{im \cdot im}{re}\right)
+\]</div></li><li><p>Taylor expanded in re around inf to order 0</p><div class="math">\[\leadsto re \cdot re
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">9.6%</span></p><div class="math">\[\leadsto re \cdot re
+\]</div></li></ol></li><li class="event">Recombined 2 regimes into one program.</li><li>Add Preprocessing</li></ol></details></section><section id="alternative4" class="programs"><h2>Alternative 4: <span class="subhead"><data>9.6%</data> accurate, <data>2.7×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[\left(1 \leq re \land re \leq 2\right) \land \left(1 \leq im \land im \leq 2\right)\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[re \cdot re
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre (and (and (&lt;= 1 re) (&lt;= re 2)) (and (&lt;= 1 im) (&lt;= im 2)))
+  (* re re))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return re * re;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = re * re
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return re * re;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return re * re
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(re * re)
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = re * re;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(re * re), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [1, 2],
+	im in [1, 2]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	re * re
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">re \cdot re
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">98.3%</span></p><div class="math">\[re \cdot re - im \cdot im
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.6%</span></p><div class="math">\[\leadsto \left(im + re\right) \cdot \left(re - im\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">98.2%</span></p><div class="math">\[\leadsto re \cdot \left(re - im \cdot \frac{im}{re}\right)
+\]</div></li><li><p>Taylor expanded in re around 0 to order 0</p><div class="math">\[\leadsto re \cdot \left(re - \frac{im \cdot im}{re}\right)
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">98.2%</span></p><div class="math">\[\leadsto re \cdot \left(re - \frac{im \cdot im}{re}\right)
+\]</div></li><li><p>Taylor expanded in re around inf to order 0</p><div class="math">\[\leadsto re \cdot re
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">9.6%</span></p><div class="math">\[\leadsto re \cdot re
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="target1" class="programs"><h2>Developer Target 1: <span class="subhead"><data>99.6%</data> accurate, <data>1.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(re - im\right) \cdot \left(re + im\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (* (- re im) (+ re im)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return (re - im) * (re + im);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = (re - im) * (re + im)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return (re - im) * (re + im);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return (re - im) * (re + im)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(re - im) * Float64(re + im))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = (re - im) * (re + im);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(re - im), $MachinePrecision] * N[(re + im), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	(re - im) * (re + im)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(re - im\right) \cdot \left(re + im\right)
+</pre></div></div></section><section id="target2" class="programs"><h2>Developer Target 2: <span class="subhead"><data>99.6%</data> accurate, <data>1.1×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(re + im\right) \cdot \left(re - im\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (* (+ re im) (- re im)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return (re + im) * (re - im);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = (re + im) * (re - im)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return (re + im) * (re - im);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return (re + im) * (re - im)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(re + im) * Float64(re - im))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = (re + im) * (re - im);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(re + im), $MachinePrecision] * N[(re - im), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	(re + im) * (re - im)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(re + im\right) \cdot \left(re - im\right)
+</pre></div></div></section><section id="target3" class="programs"><h2>Developer Target 3: <span class="subhead"><data>99.6%</data> accurate, <data>0.8×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(re - \left(-im\right)\right) \cdot \left(re + \left(-im\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (* (- re (- im)) (+ re (- im))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return (re - -im) * (re + -im);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = (re - -im) * (re + -im)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return (re - -im) * (re + -im);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return (re - -im) * (re + -im)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(re - Float64(-im)) * Float64(re + Float64(-im)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = (re - -im) * (re + -im);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(re - (-im)), $MachinePrecision] * N[(re + (-im)), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	(re - (- im)) * (re + (- im))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(re - \left(-im\right)\right) \cdot \left(re + \left(-im\right)\right)
+</pre></div></div></section><section id="target4" class="programs"><h2>Developer Target 4: <span class="subhead"><data>99.6%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(re - im\right) \cdot \left(re - \left(-im\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (* (- re im) (- re (- im))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return (re - im) * (re - -im);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = (re - im) * (re - -im)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return (re - im) * (re - -im);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return (re - im) * (re - -im)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(re - im) * Float64(re - Float64(-im)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = (re - im) * (re - -im);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(re - im), $MachinePrecision] * N[(re - (-im)), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	(re - im) * (re - (- im))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(re - im\right) \cdot \left(re - \left(-im\right)\right)
+</pre></div></div></section><section id="target5" class="programs"><h2>Developer Target 5: <span class="subhead"><data>98.3%</data> accurate, <data>0.8×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[re \cdot re + \left(-im\right) \cdot im
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (+ (* re re) (* (- im) im)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return (re * re) + (-im * im);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = (re * re) + (-im * im)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return (re * re) + (-im * im);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return (re * re) + (-im * im)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(re * re) + Float64(Float64(-im) * im))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = (re * re) + (-im * im);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(re * re), $MachinePrecision] + N[((-im) * im), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	(re * re) + ((- im) * im)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">re \cdot re + \left(-im\right) \cdot im
+</pre></div></div></section><section id="target6" class="programs"><h2>Developer Target 6: <span class="subhead"><data>99.6%</data> accurate, <data>0.6×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(re - im\right) \cdot re + \left(re - im\right) \cdot im
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (+ (* (- re im) re) (* (- re im) im)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return ((re - im) * re) + ((re - im) * im);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = ((re - im) * re) + ((re - im) * im)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return ((re - im) * re) + ((re - im) * im);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return ((re - im) * re) + ((re - im) * im)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(Float64(re - im) * re) + Float64(Float64(re - im) * im))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = ((re - im) * re) + ((re - im) * im);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(N[(re - im), $MachinePrecision] * re), $MachinePrecision] + N[(N[(re - im), $MachinePrecision] * im), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	((re - im) * re) + ((re - im) * im)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(re - im\right) \cdot re + \left(re - im\right) \cdot im
+</pre></div></div></section><section id="target7" class="programs"><h2>Developer Target 7: <span class="subhead"><data>98.3%</data> accurate, <data>1.0×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[re \cdot re - im \cdot im
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (- (* re re) (* im im)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return (re * re) - (im * im);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = (re * re) - (im * im)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return (re * re) - (im * im);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return (re * re) - (im * im)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(re * re) - Float64(im * im))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = (re * re) - (im * im);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(re * re), $MachinePrecision] - N[(im * im), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	(re * re) - (im * im)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">re \cdot re - im \cdot im
+</pre></div></div></section><section id="target8" class="programs"><h2>Developer Target 8: <span class="subhead"><data>98.3%</data> accurate, <data>0.8×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[re \cdot re + \left(-im \cdot im\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (+ (* re re) (- (* im im))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return (re * re) + -(im * im);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = (re * re) + -(im * im)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return (re * re) + -(im * im);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return (re * re) + -(im * im)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(re * re) + Float64(-Float64(im * im)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = (re * re) + -(im * im);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(re * re), $MachinePrecision] + (-N[(im * im), $MachinePrecision])), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	(re * re) + (- (im * im))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">re \cdot re + \left(-im \cdot im\right)
+</pre></div></div></section><section id="target9" class="programs"><h2>Developer Target 9: <span class="subhead"><data>98.3%</data> accurate, <data>0.7×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[re \cdot re + \left(-\left(-im\right) \cdot \left(-im\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (+ (* re re) (- (* (- im) (- im)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return (re * re) + -(-im * -im);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = (re * re) + -(-im * -im)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return (re * re) + -(-im * -im);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return (re * re) + -(-im * -im)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(re * re) + Float64(-Float64(Float64(-im) * Float64(-im))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = (re * re) + -(-im * -im);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(re * re), $MachinePrecision] + (-N[((-im) * (-im)), $MachinePrecision])), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	(re * re) + (- ((- im) * (- im)))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">re \cdot re + \left(-\left(-im\right) \cdot \left(-im\right)\right)
+</pre></div></div></section><section id="target10" class="programs"><h2>Developer Target 10: <span class="subhead"><data>99.6%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(-\left(re + im\right)\right) \cdot \left(im - re\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (* (- (+ re im)) (- im re)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return -(re + im) * (im - re);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = -(re + im) * (im - re)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return -(re + im) * (im - re);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return -(re + im) * (im - re)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(-Float64(re + im)) * Float64(im - re))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = -(re + im) * (im - re);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[((-N[(re + im), $MachinePrecision]) * N[(im - re), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	(- (re + im)) * (im - re)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(-\left(re + im\right)\right) \cdot \left(im - re\right)
+</pre></div></div></section><section id="target11" class="programs"><h2>Developer Target 11: <span class="subhead"><data>99.6%</data> accurate, <data>0.4×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \left(-1\right) \cdot im\\
+\left(re - t\_0\right) \cdot \left(re + t\_0\right)
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (* (- 1.0) im))) (* (- re t_0) (+ re t_0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	double t_0 = -1.0 * im;
+	return (re - t_0) * (re + t_0);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    real(8) :: t_0
+    t_0 = -1.0d0 * im
+    code = (re - t_0) * (re + t_0)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	double t_0 = -1.0 * im;
+	return (re - t_0) * (re + t_0);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	t_0 = -1.0 * im
+	return (re - t_0) * (re + t_0)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	t_0 = Float64(Float64(-1.0) * im)
+	return Float64(Float64(re - t_0) * Float64(re + t_0))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	t_0 = -1.0 * im;
+	tmp = (re - t_0) * (re + t_0);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := Block[{t$95$0 = N[((-1.0) * im), $MachinePrecision]}, N[(N[(re - t$95$0), $MachinePrecision] * N[(re + t$95$0), $MachinePrecision]), $MachinePrecision]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	LET t_0 = ((- (1)) * im) IN
+	(re - t_0) * (re + t_0)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \left(-1\right) \cdot im\\
+\left(re - t\_0\right) \cdot \left(re + t\_0\right)
+\end{array}
+</pre></div></div></section><section id="target12" class="programs"><h2>Developer Target 12: <span class="subhead"><data>96.9%</data> accurate, <data>0.3×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(re \cdot re - im \cdot \left(-re\right)\right) + im \cdot \left(\left(-1\right) \cdot im + \left(-re\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (+ (- (* re re) (* im (- re))) (* im (+ (* (- 1.0) im) (- re)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return ((re * re) - (im * -re)) + (im * ((-1.0 * im) + -re));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = ((re * re) - (im * -re)) + (im * ((-1.0d0 * im) + -re))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return ((re * re) - (im * -re)) + (im * ((-1.0 * im) + -re));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return ((re * re) - (im * -re)) + (im * ((-1.0 * im) + -re))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(Float64(re * re) - Float64(im * Float64(-re))) + Float64(im * Float64(Float64(Float64(-1.0) * im) + Float64(-re))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = ((re * re) - (im * -re)) + (im * ((-1.0 * im) + -re));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(N[(re * re), $MachinePrecision] - N[(im * (-re)), $MachinePrecision]), $MachinePrecision] + N[(im * N[(N[((-1.0) * im), $MachinePrecision] + (-re)), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	((re * re) - (im * (- re))) + (im * (((- (1)) * im) + (- re)))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(re \cdot re - im \cdot \left(-re\right)\right) + im \cdot \left(\left(-1\right) \cdot im + \left(-re\right)\right)
+</pre></div></div></section><section id="target13" class="programs"><h2>Developer Target 13: <span class="subhead"><data>99.6%</data> accurate, <data>0.6×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(im - re\right) \cdot \left(\left(-1\right) \cdot im + \left(-re\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (* (- im re) (+ (* (- 1.0) im) (- re))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return (im - re) * ((-1.0 * im) + -re);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = (im - re) * ((-1.0d0 * im) + -re)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return (im - re) * ((-1.0 * im) + -re);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return (im - re) * ((-1.0 * im) + -re)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(im - re) * Float64(Float64(Float64(-1.0) * im) + Float64(-re)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = (im - re) * ((-1.0 * im) + -re);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(im - re), $MachinePrecision] * N[(N[((-1.0) * im), $MachinePrecision] + (-re)), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	(im - re) * (((- (1)) * im) + (- re))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(im - re\right) \cdot \left(\left(-1\right) \cdot im + \left(-re\right)\right)
+</pre></div></div></section><section id="target14" class="programs"><h2>Developer Target 14: <span class="subhead"><data>99.6%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[-\left(re + im\right) \cdot \left(im - re\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (- (* (+ re im) (- im re))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return -((re + im) * (im - re));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = -((re + im) * (im - re))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return -((re + im) * (im - re));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return -((re + im) * (im - re))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(-Float64(Float64(re + im) * Float64(im - re)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = -((re + im) * (im - re));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := (-N[(N[(re + im), $MachinePrecision] * N[(im - re), $MachinePrecision]), $MachinePrecision])
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	- ((re + im) * (im - re))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">-\left(re + im\right) \cdot \left(im - re\right)
+</pre></div></div></section><section id="target15" class="programs"><h2>Developer Target 15: <span class="subhead"><data>99.6%</data> accurate, <data>0.5×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[-\left(re - im\right) \cdot \left(\left(-1\right) \cdot im + \left(-re\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (- (* (- re im) (+ (* (- 1.0) im) (- re)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return -((re - im) * ((-1.0 * im) + -re));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = -((re - im) * ((-1.0d0 * im) + -re))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return -((re - im) * ((-1.0 * im) + -re));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return -((re - im) * ((-1.0 * im) + -re))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(-Float64(Float64(re - im) * Float64(Float64(Float64(-1.0) * im) + Float64(-re))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = -((re - im) * ((-1.0 * im) + -re));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := (-N[(N[(re - im), $MachinePrecision] * N[(N[((-1.0) * im), $MachinePrecision] + (-re)), $MachinePrecision]), $MachinePrecision])
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	- ((re - im) * (((- (1)) * im) + (- re)))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">-\left(re - im\right) \cdot \left(\left(-1\right) \cdot im + \left(-re\right)\right)
+</pre></div></div></section><section id="target16" class="programs"><h2>Developer Target 16: <span class="subhead"><data>99.6%</data> accurate, <data>0.8×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(\left(-re\right) - im\right) \cdot \left(\left(-re\right) + im\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (* (- (- re) im) (+ (- re) im)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return (-re - im) * (-re + im);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = (-re - im) * (-re + im)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return (-re - im) * (-re + im);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return (-re - im) * (-re + im)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(Float64(-re) - im) * Float64(Float64(-re) + im))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = (-re - im) * (-re + im);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[((-re) - im), $MachinePrecision] * N[((-re) + im), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	((- re) - im) * ((- re) + im)
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(\left(-re\right) - im\right) \cdot \left(\left(-re\right) + im\right)
+</pre></div></div></section><section id="target17" class="programs"><h2>Developer Target 17: <span class="subhead"><data>96.9%</data> accurate, <data>0.4×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(re + im\right) \cdot \left(-im\right) + \left(re \cdot re - im \cdot \left(-re\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (+ (* (+ re im) (- im)) (- (* re re) (* im (- re)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return ((re + im) * -im) + ((re * re) - (im * -re));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = ((re + im) * -im) + ((re * re) - (im * -re))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return ((re + im) * -im) + ((re * re) - (im * -re));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return ((re + im) * -im) + ((re * re) - (im * -re))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(Float64(re + im) * Float64(-im)) + Float64(Float64(re * re) - Float64(im * Float64(-re))))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = ((re + im) * -im) + ((re * re) - (im * -re));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(N[(re + im), $MachinePrecision] * (-im)), $MachinePrecision] + N[(N[(re * re), $MachinePrecision] - N[(im * (-re)), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	((re + im) * (- im)) + ((re * re) - (im * (- re)))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(re + im\right) \cdot \left(-im\right) + \left(re \cdot re - im \cdot \left(-re\right)\right)
+</pre></div></div></section><section id="target18" class="programs"><h2>Developer Target 18: <span class="subhead"><data>99.6%</data> accurate, <data>0.6×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(re - im\right) \cdot \left(re - \left(-1\right) \cdot im\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (* (- re im) (- re (* (- 1.0) im))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return (re - im) * (re - (-1.0 * im));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = (re - im) * (re - (-1.0d0 * im))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return (re - im) * (re - (-1.0 * im));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return (re - im) * (re - (-1.0 * im))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(re - im) * Float64(re - Float64(Float64(-1.0) * im)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = (re - im) * (re - (-1.0 * im));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(re - im), $MachinePrecision] * N[(re - N[((-1.0) * im), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	(re - im) * (re - ((- (1)) * im))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(re - im\right) \cdot \left(re - \left(-1\right) \cdot im\right)
+</pre></div></div></section><section id="target19" class="programs"><h2>Developer Target 19: <span class="subhead"><data>99.6%</data> accurate, <data>0.8×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\left(re + \left(-im\right)\right) \cdot \left(re - \left(-im\right)\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (* (+ re (- im)) (- re (- im))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return (re + -im) * (re - -im);
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = (re + -im) * (re - -im)
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return (re + -im) * (re - -im);
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return (re + -im) * (re - -im)
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(re + Float64(-im)) * Float64(re - Float64(-im)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = (re + -im) * (re - -im);
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(re + (-im)), $MachinePrecision] * N[(re - (-im)), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	(re + (- im)) * (re - (- im))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(re + \left(-im\right)\right) \cdot \left(re - \left(-im\right)\right)
+</pre></div></div></section><section id="target20" class="programs"><h2>Developer Target 20: <span class="subhead"><data>99.6%</data> accurate, <data>0.6×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[re \cdot \left(re - im\right) + im \cdot \left(re - im\right)
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (re im)
+  :precision binary64
+  :pre TRUE
+  (+ (* re (- re im)) (* im (- re im))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double re, double im) {
+	return (re * (re - im)) + (im * (re - im));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(re, im)
+use fmin_fmax_functions
+    real(8), intent (in) :: re
+    real(8), intent (in) :: im
+    code = (re * (re - im)) + (im * (re - im))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double re, double im) {
+	return (re * (re - im)) + (im * (re - im));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(re, im):
+	return (re * (re - im)) + (im * (re - im))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(re, im)
+	return Float64(Float64(re * Float64(re - im)) + Float64(im * Float64(re - im)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(re, im)
+	tmp = (re * (re - im)) + (im * (re - im));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[re_, im_] := N[(N[(re * N[(re - im), $MachinePrecision]), $MachinePrecision] + N[(im * N[(re - im), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(re, im):
+	re in [-inf, +inf],
+	im in [-inf, +inf]
+code: THEORY
+BEGIN
+f(re, im: real): real =
+	(re * (re - im)) + (im * (re - im))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">re \cdot \left(re - im\right) + im \cdot \left(re - im\right)
+</pre></div></div></section><section id="reproduce"><details><summary><h2>Reproduce</h2><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#reproduction" target="_blank">?</a></summary><pre class="shell"><code>herbie shell --seed 1 
+(FPCore (re im)
+  :name "complex_square_real"
+  :precision binary64
+  :pre (and (and (&lt;= 1 re) (&lt;= re 2)) (and (&lt;= 1 im) (&lt;= im 2)))
+
+  :alt
+  (* (- re im) (+ re im))
+
+  :alt
+  (* (+ re im) (- re im))
+
+  :alt
+  (* (- re (- im)) (+ re (- im)))
+
+  :alt
+  (* (- re im) (- re (- im)))
+
+  :alt
+  (+ (* re re) (* (- im) im))
+
+  :alt
+  (+ (* (- re im) re) (* (- re im) im))
+
+  :alt
+  (- (* re re) (* im im))
+
+  :alt
+  (+ (* re re) (- (* im im)))
+
+  :alt
+  (+ (* re re) (- (* (- im) (- im))))
+
+  :alt
+  (* (- (+ re im)) (- im re))
+
+  :alt
+  (* (- re (* (- 1) im)) (+ re (* (- 1) im)))
+
+  :alt
+  (+ (- (* re re) (* im (- re))) (* im (+ (* (- 1) im) (- re))))
+
+  :alt
+  (* (- im re) (+ (* (- 1) im) (- re)))
+
+  :alt
+  (- (* (+ re im) (- im re)))
+
+  :alt
+  (- (* (- re im) (+ (* (- 1) im) (- re))))
+
+  :alt
+  (* (- (- re) im) (+ (- re) im))
+
+  :alt
+  (+ (* (+ re im) (- im)) (- (* re re) (* im (- re))))
+
+  :alt
+  (* (- re im) (- re (* (- 1) im)))
+
+  :alt
+  (* (+ re (- im)) (- re (- im)))
+
+  :alt
+  (+ (* re (- re im)) (* im (- re im)))
+
+  (- (* re re) (* im im)))
+</code></pre></details></section></body></html>

@@ -1,0 +1,2164 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/><title>Result for cancel_sqrt_shift3</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous"/><script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js" integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6" crossorigin="anonymous"></script><script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/d3@7" defer=""></script><script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6" defer=""></script><link rel="stylesheet" type="text/css" href="../report.css"/><script src="../report.js"></script></head><body><header><h1>cancel_sqrt_shift3</h1><img src="../logo-car.png"/><nav><ul><li><a href="../index.html">Report</a></li><li><a href="timeline.html">Metrics</a></li></ul></nav></header><div id="large"><div>Percentage Accurate: <span class="number" title="Minimum Accuracy: 91.5% → 95.6%">95.4%<span class="unit"> → </span>100.0%</span></div><div>Time: <span class="number">493.0ms</span></div><div>Alternatives: <span class="number">4</span></div><div>Speedup: <span class="number" title="Relative speed of fastest alternative that improves accuracy.">16.7×</span></div></div><section><details id="specification" class="programs"><summary><h2>Specification</h2><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#spec" target="_blank">?</a></summary><div><div id="precondition"><div class="program math">\[-10 \leq x \land x \leq 10\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[\left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre (and (&lt;= -10 x) (&lt;= x 10))
+  (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	return (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    code = (x - 3.0d0) + sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	return (x - 3.0) + Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	return (x - 3.0) + math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	return Float64(Float64(x - 3.0) + sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x)
+	tmp = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := N[(N[(x - 3), $MachinePrecision] + N[Sqrt[N[(N[(N[(x - 3), $MachinePrecision] * N[(x - 3), $MachinePrecision]), $MachinePrecision] + 1), $MachinePrecision]], $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-10, 10]
+code: THEORY
+BEGIN
+f(x: real): real =
+	(x - (3)) + (sqrt((((x - (3)) * (x - (3))) + (1))))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}
+</pre></div></div></details></section><figure id="graphs"><h2>Local Percentage Accuracy vs <span id="variables"></span><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#graph" target="_blank">?</a></h2><svg></svg><div id="functions"></div><figcaption>The average percentage accuracy by input value. Horizontal axis shows value of an input variable; the variable is choosen in the title. Vertical axis is accuracy; higher is better. Red represent the original program, while blue represents Herbie's suggestion. These can be toggled with buttons below the plot. The line is an average while dots represent individual samples.</figcaption></figure><section id="cost-accuracy" class="section" data-benchmark-name="cancel_sqrt_shift3"><h2>Accuracy vs Speed<a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#cost-accuracy" target="_blank">?</a></h2><div class="figure-row"><svg></svg><div><p>Herbie found 4 alternatives:</p><table><thead><tr><th>Alternative</th><th class="numeric">Accuracy</th><th class="numeric">Speedup</th></tr></thead><tbody></tbody></table></div></div><figcaption>The accuracy (vertical axis) and speed (horizontal axis) of each alternatives. Up and to the right is better. The red square shows the initial program, and each blue circle shows an alternative.The line shows the best available speed-accuracy tradeoffs.</figcaption></section><section id="initial" class="programs"><h2>Initial Program: <span class="subhead"><data>95.4%</data> accurate, <data>1.0×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[-10 \leq x \land x \leq 10\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[\left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre (and (&lt;= -10 x) (&lt;= x 10))
+  (+ (- x 3.0) (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	return (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    code = (x - 3.0d0) + sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	return (x - 3.0) + Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	return (x - 3.0) + math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	return Float64(Float64(x - 3.0) + sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x)
+	tmp = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := N[(N[(x - 3.0), $MachinePrecision] + N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-10, 10]
+code: THEORY
+BEGIN
+f(x: real): real =
+	(x - (3)) + (sqrt((((x - (3)) * (x - (3))) + (1))))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}
+</pre></div></div></section><section id="alternative1" class="programs"><h2>Alternative 1: <span class="subhead"><data>100.0%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[-10 \leq x \land x \leq 10\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[\frac{1}{\sqrt{\left(x - 6\right) \cdot x - -10} - \left(x - 3\right)}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre (and (&lt;= -10 x) (&lt;= x 10))
+  (/ 1.0 (- (sqrt (- (* (- x 6.0) x) -10.0)) (- x 3.0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	return 1.0 / (sqrt((((x - 6.0) * x) - -10.0)) - (x - 3.0));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    code = 1.0d0 / (sqrt((((x - 6.0d0) * x) - (-10.0d0))) - (x - 3.0d0))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	return 1.0 / (Math.sqrt((((x - 6.0) * x) - -10.0)) - (x - 3.0));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	return 1.0 / (math.sqrt((((x - 6.0) * x) - -10.0)) - (x - 3.0))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	return Float64(1.0 / Float64(sqrt(Float64(Float64(Float64(x - 6.0) * x) - -10.0)) - Float64(x - 3.0)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x)
+	tmp = 1.0 / (sqrt((((x - 6.0) * x) - -10.0)) - (x - 3.0));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := N[(1.0 / N[(N[Sqrt[N[(N[(N[(x - 6.0), $MachinePrecision] * x), $MachinePrecision] - -10.0), $MachinePrecision]], $MachinePrecision] - N[(x - 3.0), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-10, 10]
+code: THEORY
+BEGIN
+f(x: real): real =
+	(1) / ((sqrt((((x - (6)) * x) - (-10)))) - (x - (3)))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\frac{1}{\sqrt{\left(x - 6\right) \cdot x - -10} - \left(x - 3\right)}
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">95.4%</span></p><div class="math">\[\left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}
+\]</div></li><li></li><li><p>Applied rewrites<span class="error">100.0%</span></p><div class="math">\[\leadsto \frac{1}{\sqrt{\left(x \cdot x - 6 \cdot x\right) - -10} - \left(x - 3\right)}
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">100.0%</span></p><div class="math">\[\leadsto \frac{1}{\sqrt{\left(x - 6\right) \cdot x - -10} - \left(x - 3\right)}
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative2" class="programs"><h2>Alternative 2: <span class="subhead"><data>99.0%</data> accurate, <data>1.0×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[-10 \leq x \land x \leq 10\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[\frac{1}{\sqrt{-6 \cdot x - -10} - \left(x - 3\right)}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre (and (&lt;= -10 x) (&lt;= x 10))
+  (/ 1.0 (- (sqrt (- (* -6.0 x) -10.0)) (- x 3.0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	return 1.0 / (sqrt(((-6.0 * x) - -10.0)) - (x - 3.0));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    code = 1.0d0 / (sqrt((((-6.0d0) * x) - (-10.0d0))) - (x - 3.0d0))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	return 1.0 / (Math.sqrt(((-6.0 * x) - -10.0)) - (x - 3.0));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	return 1.0 / (math.sqrt(((-6.0 * x) - -10.0)) - (x - 3.0))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	return Float64(1.0 / Float64(sqrt(Float64(Float64(-6.0 * x) - -10.0)) - Float64(x - 3.0)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x)
+	tmp = 1.0 / (sqrt(((-6.0 * x) - -10.0)) - (x - 3.0));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := N[(1.0 / N[(N[Sqrt[N[(N[(-6.0 * x), $MachinePrecision] - -10.0), $MachinePrecision]], $MachinePrecision] - N[(x - 3.0), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-10, 10]
+code: THEORY
+BEGIN
+f(x: real): real =
+	(1) / ((sqrt((((-6) * x) - (-10)))) - (x - (3)))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\frac{1}{\sqrt{-6 \cdot x - -10} - \left(x - 3\right)}
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">95.4%</span></p><div class="math">\[\left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}
+\]</div></li><li></li><li><p>Applied rewrites<span class="error">100.0%</span></p><div class="math">\[\leadsto \frac{1}{\sqrt{\left(x \cdot x - 6 \cdot x\right) - -10} - \left(x - 3\right)}
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">100.0%</span></p><div class="math">\[\leadsto \frac{1}{\sqrt{\left(x - 6\right) \cdot x - -10} - \left(x - 3\right)}
+\]</div></li><li><p>Taylor expanded in x around 0 to order 0</p><div class="math">\[\leadsto \frac{1}{\sqrt{-6 \cdot x - -10} - \left(x - 3\right)}
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">99.0%</span></p><div class="math">\[\leadsto \frac{1}{\sqrt{-6 \cdot x - -10} - \left(x - 3\right)}
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative3" class="programs"><h2>Alternative 3: <span class="subhead"><data>97.9%</data> accurate, <data>1.8×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[-10 \leq x \land x \leq 10\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[\frac{1}{3.1622776601683795 - \left(x - 3\right)}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre (and (&lt;= -10 x) (&lt;= x 10))
+  (/ 1.0 (- 3.1622776601683795 (- x 3.0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	return 1.0 / (3.1622776601683795 - (x - 3.0));
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    code = 1.0d0 / (3.1622776601683795d0 - (x - 3.0d0))
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	return 1.0 / (3.1622776601683795 - (x - 3.0));
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	return 1.0 / (3.1622776601683795 - (x - 3.0))
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	return Float64(1.0 / Float64(3.1622776601683795 - Float64(x - 3.0)))
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x)
+	tmp = 1.0 / (3.1622776601683795 - (x - 3.0));
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := N[(1.0 / N[(3.1622776601683795 - N[(x - 3.0), $MachinePrecision]), $MachinePrecision]), $MachinePrecision]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-10, 10]
+code: THEORY
+BEGIN
+f(x: real): real =
+	(1) / ((3162277660168379522787063251598738133907318115234375e-51) - (x - (3)))
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\frac{1}{3.1622776601683795 - \left(x - 3\right)}
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">95.4%</span></p><div class="math">\[\left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}
+\]</div></li><li></li><li><p>Applied rewrites<span class="error">100.0%</span></p><div class="math">\[\leadsto \frac{1}{\sqrt{\left(x \cdot x - 6 \cdot x\right) - -10} - \left(x - 3\right)}
+\]</div></li><li><p>Taylor expanded in x around 0 to order 0</p><div class="math">\[\leadsto \frac{1}{\sqrt{10} - \left(x - 3\right)}
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">97.9%</span></p><div class="math">\[\leadsto \frac{1}{\sqrt{10} - \left(x - 3\right)}
+\]</div></li><li><p>Evaluated real constant<span class="error">97.9%</span></p><div class="math">\[\leadsto \frac{1}{3.1622776601683795 - \left(x - 3\right)}
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="alternative4" class="programs"><h2>Alternative 4: <span class="subhead"><data>97.8%</data> accurate, <data>16.7×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#alternatives" target="_blank">?</a></h2><div><div id="precondition"><div class="program math">\[-10 \leq x \land x \leq 10\]</div></div><div class="implementation" data-language="Math"><div class="program math">\[0.16227766016837933
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre (and (&lt;= -10 x) (&lt;= x 10))
+  0.16227766016837933)</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	return 0.16227766016837933;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    code = 0.16227766016837933d0
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	return 0.16227766016837933;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	return 0.16227766016837933
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	return 0.16227766016837933
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp = code(x)
+	tmp = 0.16227766016837933;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := 0.16227766016837933
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-10, 10]
+code: THEORY
+BEGIN
+f(x: real): real =
+	1622776601683793284980339421963435597717761993408203125e-55
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">0.16227766016837933
+</pre></div></div><details><summary>Derivation</summary><ol class="history"><li><p>Initial program <span class="error">95.4%</span></p><div class="math">\[\left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}
+\]</div></li><li><p>Taylor expanded in x around 0 to order 0</p><div class="math">\[\leadsto \sqrt{10} - 3
+\]</div></li><li><div class="proof"><details><summary>Step-by-step derivation</summary><ol></ol></details></div></li><li><p>Applied rewrites<span class="error">93.4%</span></p><div class="math">\[\leadsto \sqrt{10} - 3
+\]</div></li><li><p>Evaluated real constant<span class="error">97.8%</span></p><div class="math">\[\leadsto 0.16227766016837933
+\]</div></li><li>Add Preprocessing</li></ol></details></section><section id="target1" class="programs"><h2>Developer Target 1: <span class="subhead"><data>100.0%</data> accurate, <data>0.6×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 3:\\
+\;\;\;\;\frac{-1}{\left(-1 \cdot 3 + x\right) - t\_0}\\
+
+\mathbf{else}:\\
+\;\;\;\;\left(x - 3\right) + t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0))))
+  (if (&lt; x 3.0)
+    (/ -1.0 (- (+ (* -1.0 3.0) x) t_0))
+    (+ (- x 3.0) t_0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 3.0) {
+		tmp = -1.0 / (((-1.0 * 3.0) + x) - t_0);
+	} else {
+		tmp = (x - 3.0) + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 3.0d0) then
+        tmp = (-1.0d0) / ((((-1.0d0) * 3.0d0) + x) - t_0)
+    else
+        tmp = (x - 3.0d0) + t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 3.0) {
+		tmp = -1.0 / (((-1.0 * 3.0) + x) - t_0);
+	} else {
+		tmp = (x - 3.0) + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 3.0:
+		tmp = -1.0 / (((-1.0 * 3.0) + x) - t_0)
+	else:
+		tmp = (x - 3.0) + t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0))
+	tmp = 0.0
+	if (x &lt; 3.0)
+		tmp = Float64(-1.0 / Float64(Float64(Float64(-1.0 * 3.0) + x) - t_0));
+	else
+		tmp = Float64(Float64(x - 3.0) + t_0);
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 3.0)
+		tmp = -1.0 / (((-1.0 * 3.0) + x) - t_0);
+	else
+		tmp = (x - 3.0) + t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]}, If[Less[x, 3.0], N[(-1.0 / N[(N[(N[(-1.0 * 3.0), $MachinePrecision] + x), $MachinePrecision] - t$95$0), $MachinePrecision]), $MachinePrecision], N[(N[(x - 3.0), $MachinePrecision] + t$95$0), $MachinePrecision]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = (sqrt((((x - (3)) * (x - (3))) + (1)))) IN
+		LET tmp = IF (x &lt; (3)) THEN ((-1) / ((((-1) * (3)) + x) - t_0)) ELSE ((x - (3)) + t_0) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 3:\\
+\;\;\;\;\frac{-1}{\left(-1 \cdot 3 + x\right) - t\_0}\\
+
+\mathbf{else}:\\
+\;\;\;\;\left(x - 3\right) + t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target2" class="programs"><h2>Developer Target 2: <span class="subhead"><data>100.0%</data> accurate, <data>0.7×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 3:\\
+\;\;\;\;\frac{-1}{-\left(t\_0 - \left(x - 3\right)\right)}\\
+
+\mathbf{else}:\\
+\;\;\;\;\left(x - 3\right) + t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0))))
+  (if (&lt; x 3.0) (/ -1.0 (- (- t_0 (- x 3.0)))) (+ (- x 3.0) t_0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 3.0) {
+		tmp = -1.0 / -(t_0 - (x - 3.0));
+	} else {
+		tmp = (x - 3.0) + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 3.0d0) then
+        tmp = (-1.0d0) / -(t_0 - (x - 3.0d0))
+    else
+        tmp = (x - 3.0d0) + t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 3.0) {
+		tmp = -1.0 / -(t_0 - (x - 3.0));
+	} else {
+		tmp = (x - 3.0) + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 3.0:
+		tmp = -1.0 / -(t_0 - (x - 3.0))
+	else:
+		tmp = (x - 3.0) + t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0))
+	tmp = 0.0
+	if (x &lt; 3.0)
+		tmp = Float64(-1.0 / Float64(-Float64(t_0 - Float64(x - 3.0))));
+	else
+		tmp = Float64(Float64(x - 3.0) + t_0);
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 3.0)
+		tmp = -1.0 / -(t_0 - (x - 3.0));
+	else
+		tmp = (x - 3.0) + t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]}, If[Less[x, 3.0], N[(-1.0 / (-N[(t$95$0 - N[(x - 3.0), $MachinePrecision]), $MachinePrecision])), $MachinePrecision], N[(N[(x - 3.0), $MachinePrecision] + t$95$0), $MachinePrecision]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = (sqrt((((x - (3)) * (x - (3))) + (1)))) IN
+		LET tmp = IF (x &lt; (3)) THEN ((-1) / (- (t_0 - (x - (3))))) ELSE ((x - (3)) + t_0) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 3:\\
+\;\;\;\;\frac{-1}{-\left(t\_0 - \left(x - 3\right)\right)}\\
+
+\mathbf{else}:\\
+\;\;\;\;\left(x - 3\right) + t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target3" class="programs"><h2>Developer Target 3: <span class="subhead"><data>95.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 13:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (- x 3.0) (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0)))))
+  (if (&lt; x 13.0) t_0 t_0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 13.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = (x - 3.0d0) + sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 13.0d0) then
+        tmp = t_0
+    else
+        tmp = t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = (x - 3.0) + Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 13.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = (x - 3.0) + math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 13.0:
+		tmp = t_0
+	else:
+		tmp = t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = Float64(Float64(x - 3.0) + sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0)))
+	tmp = 0.0
+	if (x &lt; 13.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 13.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[(N[(x - 3.0), $MachinePrecision] + N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]), $MachinePrecision]}, If[Less[x, 13.0], t$95$0, t$95$0]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = ((x - (3)) + (sqrt((((x - (3)) * (x - (3))) + (1))))) IN
+		LET tmp = IF (x &lt; (13)) THEN t_0 ELSE t_0 ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 13:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target4" class="programs"><h2>Developer Target 4: <span class="subhead"><data>95.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 23:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (- x 3.0) (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0)))))
+  (if (&lt; x 23.0) t_0 t_0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 23.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = (x - 3.0d0) + sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 23.0d0) then
+        tmp = t_0
+    else
+        tmp = t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = (x - 3.0) + Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 23.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = (x - 3.0) + math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 23.0:
+		tmp = t_0
+	else:
+		tmp = t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = Float64(Float64(x - 3.0) + sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0)))
+	tmp = 0.0
+	if (x &lt; 23.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 23.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[(N[(x - 3.0), $MachinePrecision] + N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]), $MachinePrecision]}, If[Less[x, 23.0], t$95$0, t$95$0]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = ((x - (3)) + (sqrt((((x - (3)) * (x - (3))) + (1))))) IN
+		LET tmp = IF (x &lt; (23)) THEN t_0 ELSE t_0 ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 23:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target5" class="programs"><h2>Developer Target 5: <span class="subhead"><data>95.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 12:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (- x 3.0) (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0)))))
+  (if (&lt; x 12.0) t_0 t_0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 12.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = (x - 3.0d0) + sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 12.0d0) then
+        tmp = t_0
+    else
+        tmp = t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = (x - 3.0) + Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 12.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = (x - 3.0) + math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 12.0:
+		tmp = t_0
+	else:
+		tmp = t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = Float64(Float64(x - 3.0) + sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0)))
+	tmp = 0.0
+	if (x &lt; 12.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 12.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[(N[(x - 3.0), $MachinePrecision] + N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]), $MachinePrecision]}, If[Less[x, 12.0], t$95$0, t$95$0]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = ((x - (3)) + (sqrt((((x - (3)) * (x - (3))) + (1))))) IN
+		LET tmp = IF (x &lt; (12)) THEN t_0 ELSE t_0 ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 12:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target6" class="programs"><h2>Developer Target 6: <span class="subhead"><data>97.7%</data> accurate, <data>0.6×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 0:\\
+\;\;\;\;\frac{-1}{-1 \cdot \left(\left(-x\right) - \left(-3\right)\right) + \left(-t\_0\right)}\\
+
+\mathbf{else}:\\
+\;\;\;\;\left(x - 3\right) + t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0))))
+  (if (&lt; x 0.0)
+    (/ -1.0 (+ (* -1.0 (- (- x) (- 3.0))) (- t_0)))
+    (+ (- x 3.0) t_0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 0.0) {
+		tmp = -1.0 / ((-1.0 * (-x - -3.0)) + -t_0);
+	} else {
+		tmp = (x - 3.0) + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 0.0d0) then
+        tmp = (-1.0d0) / (((-1.0d0) * (-x - -3.0d0)) + -t_0)
+    else
+        tmp = (x - 3.0d0) + t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 0.0) {
+		tmp = -1.0 / ((-1.0 * (-x - -3.0)) + -t_0);
+	} else {
+		tmp = (x - 3.0) + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 0.0:
+		tmp = -1.0 / ((-1.0 * (-x - -3.0)) + -t_0)
+	else:
+		tmp = (x - 3.0) + t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0))
+	tmp = 0.0
+	if (x &lt; 0.0)
+		tmp = Float64(-1.0 / Float64(Float64(-1.0 * Float64(Float64(-x) - Float64(-3.0))) + Float64(-t_0)));
+	else
+		tmp = Float64(Float64(x - 3.0) + t_0);
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 0.0)
+		tmp = -1.0 / ((-1.0 * (-x - -3.0)) + -t_0);
+	else
+		tmp = (x - 3.0) + t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]}, If[Less[x, 0.0], N[(-1.0 / N[(N[(-1.0 * N[((-x) - (-3.0)), $MachinePrecision]), $MachinePrecision] + (-t$95$0)), $MachinePrecision]), $MachinePrecision], N[(N[(x - 3.0), $MachinePrecision] + t$95$0), $MachinePrecision]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = (sqrt((((x - (3)) * (x - (3))) + (1)))) IN
+		LET tmp = IF (x &lt; (0)) THEN ((-1) / (((-1) * ((- x) - (- (3)))) + (- t_0))) ELSE ((x - (3)) + t_0) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 0:\\
+\;\;\;\;\frac{-1}{-1 \cdot \left(\left(-x\right) - \left(-3\right)\right) + \left(-t\_0\right)}\\
+
+\mathbf{else}:\\
+\;\;\;\;\left(x - 3\right) + t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target7" class="programs"><h2>Developer Target 7: <span class="subhead"><data>95.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 10:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (- x 3.0) (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0)))))
+  (if (&lt; x 10.0) t_0 t_0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 10.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = (x - 3.0d0) + sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 10.0d0) then
+        tmp = t_0
+    else
+        tmp = t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = (x - 3.0) + Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 10.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = (x - 3.0) + math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 10.0:
+		tmp = t_0
+	else:
+		tmp = t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = Float64(Float64(x - 3.0) + sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0)))
+	tmp = 0.0
+	if (x &lt; 10.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 10.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[(N[(x - 3.0), $MachinePrecision] + N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]), $MachinePrecision]}, If[Less[x, 10.0], t$95$0, t$95$0]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = ((x - (3)) + (sqrt((((x - (3)) * (x - (3))) + (1))))) IN
+		LET tmp = IF (x &lt; (10)) THEN t_0 ELSE t_0 ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 10:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target8" class="programs"><h2>Developer Target 8: <span class="subhead"><data>100.0%</data> accurate, <data>0.7×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &gt; 3:\\
+\;\;\;\;\left(x - 3\right) + t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{-1}{\left(x - 3\right) - t\_0}\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0))))
+  (if (&gt; x 3.0) (+ (- x 3.0) t_0) (/ -1.0 (- (- x 3.0) t_0)))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &gt; 3.0) {
+		tmp = (x - 3.0) + t_0;
+	} else {
+		tmp = -1.0 / ((x - 3.0) - t_0);
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &gt; 3.0d0) then
+        tmp = (x - 3.0d0) + t_0
+    else
+        tmp = (-1.0d0) / ((x - 3.0d0) - t_0)
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &gt; 3.0) {
+		tmp = (x - 3.0) + t_0;
+	} else {
+		tmp = -1.0 / ((x - 3.0) - t_0);
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &gt; 3.0:
+		tmp = (x - 3.0) + t_0
+	else:
+		tmp = -1.0 / ((x - 3.0) - t_0)
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0))
+	tmp = 0.0
+	if (x &gt; 3.0)
+		tmp = Float64(Float64(x - 3.0) + t_0);
+	else
+		tmp = Float64(-1.0 / Float64(Float64(x - 3.0) - t_0));
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &gt; 3.0)
+		tmp = (x - 3.0) + t_0;
+	else
+		tmp = -1.0 / ((x - 3.0) - t_0);
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]}, If[Greater[x, 3.0], N[(N[(x - 3.0), $MachinePrecision] + t$95$0), $MachinePrecision], N[(-1.0 / N[(N[(x - 3.0), $MachinePrecision] - t$95$0), $MachinePrecision]), $MachinePrecision]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = (sqrt((((x - (3)) * (x - (3))) + (1)))) IN
+		LET tmp = IF (x &gt; (3)) THEN ((x - (3)) + t_0) ELSE ((-1) / ((x - (3)) - t_0)) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &gt; 3:\\
+\;\;\;\;\left(x - 3\right) + t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;\frac{-1}{\left(x - 3\right) - t\_0}\\
+
+
+\end{array}
+</pre></div></div></section><section id="target9" class="programs"><h2>Developer Target 9: <span class="subhead"><data>95.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 15:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (- x 3.0) (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0)))))
+  (if (&lt; x 15.0) t_0 t_0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 15.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = (x - 3.0d0) + sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 15.0d0) then
+        tmp = t_0
+    else
+        tmp = t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = (x - 3.0) + Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 15.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = (x - 3.0) + math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 15.0:
+		tmp = t_0
+	else:
+		tmp = t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = Float64(Float64(x - 3.0) + sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0)))
+	tmp = 0.0
+	if (x &lt; 15.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 15.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[(N[(x - 3.0), $MachinePrecision] + N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]), $MachinePrecision]}, If[Less[x, 15.0], t$95$0, t$95$0]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = ((x - (3)) + (sqrt((((x - (3)) * (x - (3))) + (1))))) IN
+		LET tmp = IF (x &lt; (15)) THEN t_0 ELSE t_0 ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 15:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target10" class="programs"><h2>Developer Target 10: <span class="subhead"><data>95.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 30:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (- x 3.0) (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0)))))
+  (if (&lt; x 30.0) t_0 t_0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 30.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = (x - 3.0d0) + sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 30.0d0) then
+        tmp = t_0
+    else
+        tmp = t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = (x - 3.0) + Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 30.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = (x - 3.0) + math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 30.0:
+		tmp = t_0
+	else:
+		tmp = t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = Float64(Float64(x - 3.0) + sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0)))
+	tmp = 0.0
+	if (x &lt; 30.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 30.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[(N[(x - 3.0), $MachinePrecision] + N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]), $MachinePrecision]}, If[Less[x, 30.0], t$95$0, t$95$0]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = ((x - (3)) + (sqrt((((x - (3)) * (x - (3))) + (1))))) IN
+		LET tmp = IF (x &lt; (30)) THEN t_0 ELSE t_0 ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 30:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target11" class="programs"><h2>Developer Target 11: <span class="subhead"><data>95.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 31:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (- x 3.0) (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0)))))
+  (if (&lt; x 31.0) t_0 t_0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 31.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = (x - 3.0d0) + sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 31.0d0) then
+        tmp = t_0
+    else
+        tmp = t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = (x - 3.0) + Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 31.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = (x - 3.0) + math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 31.0:
+		tmp = t_0
+	else:
+		tmp = t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = Float64(Float64(x - 3.0) + sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0)))
+	tmp = 0.0
+	if (x &lt; 31.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 31.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[(N[(x - 3.0), $MachinePrecision] + N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]), $MachinePrecision]}, If[Less[x, 31.0], t$95$0, t$95$0]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = ((x - (3)) + (sqrt((((x - (3)) * (x - (3))) + (1))))) IN
+		LET tmp = IF (x &lt; (31)) THEN t_0 ELSE t_0 ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 31:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target12" class="programs"><h2>Developer Target 12: <span class="subhead"><data>100.0%</data> accurate, <data>0.6×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 3:\\
+\;\;\;\;-1 \cdot \frac{1}{\left(\left(-3\right) + x\right) - t\_0}\\
+
+\mathbf{else}:\\
+\;\;\;\;\left(x - 3\right) + t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0))))
+  (if (&lt; x 3.0)
+    (* -1.0 (/ 1.0 (- (+ (- 3.0) x) t_0)))
+    (+ (- x 3.0) t_0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 3.0) {
+		tmp = -1.0 * (1.0 / ((-3.0 + x) - t_0));
+	} else {
+		tmp = (x - 3.0) + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 3.0d0) then
+        tmp = (-1.0d0) * (1.0d0 / ((-3.0d0 + x) - t_0))
+    else
+        tmp = (x - 3.0d0) + t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 3.0) {
+		tmp = -1.0 * (1.0 / ((-3.0 + x) - t_0));
+	} else {
+		tmp = (x - 3.0) + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 3.0:
+		tmp = -1.0 * (1.0 / ((-3.0 + x) - t_0))
+	else:
+		tmp = (x - 3.0) + t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0))
+	tmp = 0.0
+	if (x &lt; 3.0)
+		tmp = Float64(-1.0 * Float64(1.0 / Float64(Float64(Float64(-3.0) + x) - t_0)));
+	else
+		tmp = Float64(Float64(x - 3.0) + t_0);
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 3.0)
+		tmp = -1.0 * (1.0 / ((-3.0 + x) - t_0));
+	else
+		tmp = (x - 3.0) + t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]}, If[Less[x, 3.0], N[(-1.0 * N[(1.0 / N[(N[((-3.0) + x), $MachinePrecision] - t$95$0), $MachinePrecision]), $MachinePrecision]), $MachinePrecision], N[(N[(x - 3.0), $MachinePrecision] + t$95$0), $MachinePrecision]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = (sqrt((((x - (3)) * (x - (3))) + (1)))) IN
+		LET tmp = IF (x &lt; (3)) THEN ((-1) * ((1) / (((- (3)) + x) - t_0))) ELSE ((x - (3)) + t_0) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 3:\\
+\;\;\;\;-1 \cdot \frac{1}{\left(\left(-3\right) + x\right) - t\_0}\\
+
+\mathbf{else}:\\
+\;\;\;\;\left(x - 3\right) + t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target13" class="programs"><h2>Developer Target 13: <span class="subhead"><data>100.0%</data> accurate, <data>0.6×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 3:\\
+\;\;\;\;\frac{-1}{\left(-1 \cdot 3 + x\right) - t\_0}\\
+
+\mathbf{else}:\\
+\;\;\;\;\left(x - 3\right) + t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0))))
+  (if (&lt; x 3.0)
+    (/ -1.0 (- (+ (* -1.0 3.0) x) t_0))
+    (+ (- x 3.0) t_0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 3.0) {
+		tmp = -1.0 / (((-1.0 * 3.0) + x) - t_0);
+	} else {
+		tmp = (x - 3.0) + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 3.0d0) then
+        tmp = (-1.0d0) / ((((-1.0d0) * 3.0d0) + x) - t_0)
+    else
+        tmp = (x - 3.0d0) + t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 3.0) {
+		tmp = -1.0 / (((-1.0 * 3.0) + x) - t_0);
+	} else {
+		tmp = (x - 3.0) + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 3.0:
+		tmp = -1.0 / (((-1.0 * 3.0) + x) - t_0)
+	else:
+		tmp = (x - 3.0) + t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0))
+	tmp = 0.0
+	if (x &lt; 3.0)
+		tmp = Float64(-1.0 / Float64(Float64(Float64(-1.0 * 3.0) + x) - t_0));
+	else
+		tmp = Float64(Float64(x - 3.0) + t_0);
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 3.0)
+		tmp = -1.0 / (((-1.0 * 3.0) + x) - t_0);
+	else
+		tmp = (x - 3.0) + t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]}, If[Less[x, 3.0], N[(-1.0 / N[(N[(N[(-1.0 * 3.0), $MachinePrecision] + x), $MachinePrecision] - t$95$0), $MachinePrecision]), $MachinePrecision], N[(N[(x - 3.0), $MachinePrecision] + t$95$0), $MachinePrecision]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = (sqrt((((x - (3)) * (x - (3))) + (1)))) IN
+		LET tmp = IF (x &lt; (3)) THEN ((-1) / ((((-1) * (3)) + x) - t_0)) ELSE ((x - (3)) + t_0) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 3:\\
+\;\;\;\;\frac{-1}{\left(-1 \cdot 3 + x\right) - t\_0}\\
+
+\mathbf{else}:\\
+\;\;\;\;\left(x - 3\right) + t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target14" class="programs"><h2>Developer Target 14: <span class="subhead"><data>95.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 33:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (- x 3.0) (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0)))))
+  (if (&lt; x 33.0) t_0 t_0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 33.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = (x - 3.0d0) + sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 33.0d0) then
+        tmp = t_0
+    else
+        tmp = t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = (x - 3.0) + Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 33.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = (x - 3.0) + math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 33.0:
+		tmp = t_0
+	else:
+		tmp = t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = Float64(Float64(x - 3.0) + sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0)))
+	tmp = 0.0
+	if (x &lt; 33.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 33.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[(N[(x - 3.0), $MachinePrecision] + N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]), $MachinePrecision]}, If[Less[x, 33.0], t$95$0, t$95$0]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = ((x - (3)) + (sqrt((((x - (3)) * (x - (3))) + (1))))) IN
+		LET tmp = IF (x &lt; (33)) THEN t_0 ELSE t_0 ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 33:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target15" class="programs"><h2>Developer Target 15: <span class="subhead"><data>100.0%</data> accurate, <data>0.6×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 3:\\
+\;\;\;\;\frac{-1}{-1 \cdot \left(\left(-x\right) + 3\right) - t\_0}\\
+
+\mathbf{else}:\\
+\;\;\;\;\left(x - 3\right) + t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0))))
+  (if (&lt; x 3.0)
+    (/ -1.0 (- (* -1.0 (+ (- x) 3.0)) t_0))
+    (+ (- x 3.0) t_0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 3.0) {
+		tmp = -1.0 / ((-1.0 * (-x + 3.0)) - t_0);
+	} else {
+		tmp = (x - 3.0) + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 3.0d0) then
+        tmp = (-1.0d0) / (((-1.0d0) * (-x + 3.0d0)) - t_0)
+    else
+        tmp = (x - 3.0d0) + t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 3.0) {
+		tmp = -1.0 / ((-1.0 * (-x + 3.0)) - t_0);
+	} else {
+		tmp = (x - 3.0) + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 3.0:
+		tmp = -1.0 / ((-1.0 * (-x + 3.0)) - t_0)
+	else:
+		tmp = (x - 3.0) + t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0))
+	tmp = 0.0
+	if (x &lt; 3.0)
+		tmp = Float64(-1.0 / Float64(Float64(-1.0 * Float64(Float64(-x) + 3.0)) - t_0));
+	else
+		tmp = Float64(Float64(x - 3.0) + t_0);
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 3.0)
+		tmp = -1.0 / ((-1.0 * (-x + 3.0)) - t_0);
+	else
+		tmp = (x - 3.0) + t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]}, If[Less[x, 3.0], N[(-1.0 / N[(N[(-1.0 * N[((-x) + 3.0), $MachinePrecision]), $MachinePrecision] - t$95$0), $MachinePrecision]), $MachinePrecision], N[(N[(x - 3.0), $MachinePrecision] + t$95$0), $MachinePrecision]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = (sqrt((((x - (3)) * (x - (3))) + (1)))) IN
+		LET tmp = IF (x &lt; (3)) THEN ((-1) / (((-1) * ((- x) + (3))) - t_0)) ELSE ((x - (3)) + t_0) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 3:\\
+\;\;\;\;\frac{-1}{-1 \cdot \left(\left(-x\right) + 3\right) - t\_0}\\
+
+\mathbf{else}:\\
+\;\;\;\;\left(x - 3\right) + t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target16" class="programs"><h2>Developer Target 16: <span class="subhead"><data>100.0%</data> accurate, <data>0.6×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 2.9999999999:\\
+\;\;\;\;\frac{-1}{\left(-1 \cdot 3 + x\right) - t\_0}\\
+
+\mathbf{else}:\\
+\;\;\;\;\left(x - 3\right) + t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0))))
+  (if (&lt; x 2.9999999999)
+    (/ -1.0 (- (+ (* -1.0 3.0) x) t_0))
+    (+ (- x 3.0) t_0))))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 2.9999999999) {
+		tmp = -1.0 / (((-1.0 * 3.0) + x) - t_0);
+	} else {
+		tmp = (x - 3.0) + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 2.9999999999d0) then
+        tmp = (-1.0d0) / ((((-1.0d0) * 3.0d0) + x) - t_0)
+    else
+        tmp = (x - 3.0d0) + t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 2.9999999999) {
+		tmp = -1.0 / (((-1.0 * 3.0) + x) - t_0);
+	} else {
+		tmp = (x - 3.0) + t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 2.9999999999:
+		tmp = -1.0 / (((-1.0 * 3.0) + x) - t_0)
+	else:
+		tmp = (x - 3.0) + t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0))
+	tmp = 0.0
+	if (x &lt; 2.9999999999)
+		tmp = Float64(-1.0 / Float64(Float64(Float64(-1.0 * 3.0) + x) - t_0));
+	else
+		tmp = Float64(Float64(x - 3.0) + t_0);
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 2.9999999999)
+		tmp = -1.0 / (((-1.0 * 3.0) + x) - t_0);
+	else
+		tmp = (x - 3.0) + t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]}, If[Less[x, 2.9999999999], N[(-1.0 / N[(N[(N[(-1.0 * 3.0), $MachinePrecision] + x), $MachinePrecision] - t$95$0), $MachinePrecision]), $MachinePrecision], N[(N[(x - 3.0), $MachinePrecision] + t$95$0), $MachinePrecision]]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = (sqrt((((x - (3)) * (x - (3))) + (1)))) IN
+		LET tmp = IF (x &lt; (29999999998999999917259629000909626483917236328125e-49)) THEN ((-1) / ((((-1) * (3)) + x) - t_0)) ELSE ((x - (3)) + t_0) ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 2.9999999999:\\
+\;\;\;\;\frac{-1}{\left(-1 \cdot 3 + x\right) - t\_0}\\
+
+\mathbf{else}:\\
+\;\;\;\;\left(x - 3\right) + t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target17" class="programs"><h2>Developer Target 17: <span class="subhead"><data>95.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 300:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (- x 3.0) (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0)))))
+  (if (&lt; x 300.0) t_0 t_0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 300.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = (x - 3.0d0) + sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 300.0d0) then
+        tmp = t_0
+    else
+        tmp = t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = (x - 3.0) + Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 300.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = (x - 3.0) + math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 300.0:
+		tmp = t_0
+	else:
+		tmp = t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = Float64(Float64(x - 3.0) + sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0)))
+	tmp = 0.0
+	if (x &lt; 300.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 300.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[(N[(x - 3.0), $MachinePrecision] + N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]), $MachinePrecision]}, If[Less[x, 300.0], t$95$0, t$95$0]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = ((x - (3)) + (sqrt((((x - (3)) * (x - (3))) + (1))))) IN
+		LET tmp = IF (x &lt; (300)) THEN t_0 ELSE t_0 ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 300:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target18" class="programs"><h2>Developer Target 18: <span class="subhead"><data>95.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 34:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (- x 3.0) (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0)))))
+  (if (&lt; x 34.0) t_0 t_0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 34.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = (x - 3.0d0) + sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 34.0d0) then
+        tmp = t_0
+    else
+        tmp = t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = (x - 3.0) + Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 34.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = (x - 3.0) + math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 34.0:
+		tmp = t_0
+	else:
+		tmp = t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = Float64(Float64(x - 3.0) + sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0)))
+	tmp = 0.0
+	if (x &lt; 34.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 34.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[(N[(x - 3.0), $MachinePrecision] + N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]), $MachinePrecision]}, If[Less[x, 34.0], t$95$0, t$95$0]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = ((x - (3)) + (sqrt((((x - (3)) * (x - (3))) + (1))))) IN
+		LET tmp = IF (x &lt; (34)) THEN t_0 ELSE t_0 ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 34:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target19" class="programs"><h2>Developer Target 19: <span class="subhead"><data>95.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 39:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (- x 3.0) (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0)))))
+  (if (&lt; x 39.0) t_0 t_0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 39.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = (x - 3.0d0) + sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 39.0d0) then
+        tmp = t_0
+    else
+        tmp = t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = (x - 3.0) + Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 39.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = (x - 3.0) + math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 39.0:
+		tmp = t_0
+	else:
+		tmp = t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = Float64(Float64(x - 3.0) + sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0)))
+	tmp = 0.0
+	if (x &lt; 39.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 39.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[(N[(x - 3.0), $MachinePrecision] + N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]), $MachinePrecision]}, If[Less[x, 39.0], t$95$0, t$95$0]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = ((x - (3)) + (sqrt((((x - (3)) * (x - (3))) + (1))))) IN
+		LET tmp = IF (x &lt; (39)) THEN t_0 ELSE t_0 ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 39:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="target20" class="programs"><h2>Developer Target 20: <span class="subhead"><data>95.4%</data> accurate, <data>0.9×</data> speedup</span><select><option>Math</option><option>FPCore</option><option>C</option><option>Fortran</option><option>Java</option><option>Python</option><option>Julia</option><option>MATLAB</option><option>Wolfram</option><option>ReFlow</option><option>TeX</option></select><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#target" target="_blank">?</a></h2><div><div class="implementation" data-language="Math"><div class="program math">\[\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 6:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+\]</div></div><div class="implementation" data-language="FPCore"><pre class="program">(FPCore (x)
+  :precision binary64
+  :pre TRUE
+  (let* ((t_0 (+ (- x 3.0) (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0)))))
+  (if (&lt; x 6.0) t_0 t_0)))</pre></div><div class="implementation" data-language="C"><pre class="program">double code(double x) {
+	double t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 6.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Fortran"><pre class="program">real(8) function code(x)
+use fmin_fmax_functions
+    real(8), intent (in) :: x
+    real(8) :: t_0
+    real(8) :: tmp
+    t_0 = (x - 3.0d0) + sqrt((((x - 3.0d0) * (x - 3.0d0)) + 1.0d0))
+    if (x &lt; 6.0d0) then
+        tmp = t_0
+    else
+        tmp = t_0
+    end if
+    code = tmp
+end function
+</pre></div><div class="implementation" data-language="Java"><pre class="program">public static double code(double x) {
+	double t_0 = (x - 3.0) + Math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	double tmp;
+	if (x &lt; 6.0) {
+		tmp = t_0;
+	} else {
+		tmp = t_0;
+	}
+	return tmp;
+}
+</pre></div><div class="implementation" data-language="Python"><pre class="program">def code(x):
+	t_0 = (x - 3.0) + math.sqrt((((x - 3.0) * (x - 3.0)) + 1.0))
+	tmp = 0
+	if x &lt; 6.0:
+		tmp = t_0
+	else:
+		tmp = t_0
+	return tmp
+</pre></div><div class="implementation" data-language="Julia"><pre class="program">function code(x)
+	t_0 = Float64(Float64(x - 3.0) + sqrt(Float64(Float64(Float64(x - 3.0) * Float64(x - 3.0)) + 1.0)))
+	tmp = 0.0
+	if (x &lt; 6.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	return tmp
+end
+</pre></div><div class="implementation" data-language="MATLAB"><pre class="program">function tmp_2 = code(x)
+	t_0 = (x - 3.0) + sqrt((((x - 3.0) * (x - 3.0)) + 1.0));
+	tmp = 0.0;
+	if (x &lt; 6.0)
+		tmp = t_0;
+	else
+		tmp = t_0;
+	end
+	tmp_2 = tmp;
+end
+</pre></div><div class="implementation" data-language="Wolfram"><pre class="program">code[x_] := Block[{t$95$0 = N[(N[(x - 3.0), $MachinePrecision] + N[Sqrt[N[(N[(N[(x - 3.0), $MachinePrecision] * N[(x - 3.0), $MachinePrecision]), $MachinePrecision] + 1.0), $MachinePrecision]], $MachinePrecision]), $MachinePrecision]}, If[Less[x, 6.0], t$95$0, t$95$0]]
+</pre></div><div class="implementation" data-language="ReFlow"><pre class="program">f(x):
+	x in [-inf, +inf]
+code: THEORY
+BEGIN
+f(x: real): real =
+	LET t_0 = ((x - (3)) + (sqrt((((x - (3)) * (x - (3))) + (1))))) IN
+		LET tmp = IF (x &lt; (6)) THEN t_0 ELSE t_0 ENDIF IN
+	tmp
+END code</pre></div><div class="implementation" data-language="TeX"><pre class="program">\begin{array}{l}
+t_0 := \left(x - 3\right) + \sqrt{\left(x - 3\right) \cdot \left(x - 3\right) + 1}\\
+\mathbf{if}\;x &lt; 6:\\
+\;\;\;\;t\_0\\
+
+\mathbf{else}:\\
+\;\;\;\;t\_0\\
+
+
+\end{array}
+</pre></div></div></section><section id="reproduce"><details><summary><h2>Reproduce</h2><a class="help-button float" href="https://herbie.uwplse.org/doc/2.3/report.html#reproduction" target="_blank">?</a></summary><pre class="shell"><code>herbie shell --seed 1 
+(FPCore (x)
+  :name "cancel_sqrt_shift3"
+  :precision binary64
+  :pre (and (&lt;= -10 x) (&lt;= x 10))
+
+  :alt
+  (if (&lt; x 3) (/ -1 (- (+ (* -1 3) x) (sqrt (+ (* (- x 3) (- x 3)) 1)))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&lt; x 3) (/ -1 (- (- (sqrt (+ (* (- x 3) (- x 3)) 1)) (- x 3)))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&lt; x 13) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&lt; x 23) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&lt; x 12) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&lt; x 0) (/ -1 (+ (* -1 (- (- x) (- 3))) (- (sqrt (+ (* (- x 3) (- x 3)) 1))))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&lt; x 10) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&gt; x 3) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))) (/ -1 (- (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1)))))
+
+  :alt
+  (if (&lt; x 15) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&lt; x 30) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&lt; x 31) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&lt; x 3) (* -1 (/ 1 (- (+ (- 3) x) (sqrt (+ (* (- x 3) (- x 3)) 1))))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&lt; x 3) (/ -1 (- (+ (* -1 3) x) (sqrt (+ (* (- x 3) (- x 3)) 1)))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&lt; x 33) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&lt; x 3) (/ -1 (- (* -1 (+ (- x) 3)) (sqrt (+ (* (- x 3) (- x 3)) 1)))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&lt; x 29999999999/10000000000) (/ -1 (- (+ (* -1 3) x) (sqrt (+ (* (- x 3) (- x 3)) 1)))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&lt; x 300) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&lt; x 34) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&lt; x 39) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  :alt
+  (if (&lt; x 6) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))) (+ (- x 3) (sqrt (+ (* (- x 3) (- x 3)) 1))))
+
+  (+ (- x 3.0) (sqrt (+ (* (- x 3.0) (- x 3.0)) 1.0))))
+</code></pre></details></section></body></html>
