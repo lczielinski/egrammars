@@ -64,7 +64,9 @@ class DynamicRegionRecognizer:
         self.saturation = saturation
         self.ll_tokenizer = llguidance.hf.from_tokenizer(llm.tokenizer)
         self._limits = llguidance.LLParserLimits(
-            max_items_in_row=int(os.environ.get("CASA_MAX_ITEMS_IN_ROW", "200000")))
+            max_items_in_row=int(os.environ.get("CASA_MAX_ITEMS_IN_ROW", "200000")),
+            max_grammar_size=int(os.environ.get("CASA_MAX_GRAMMAR_SIZE", "5000000")),
+            initial_lexer_fuel=int(os.environ.get("CASA_INITIAL_LEXER_FUEL", "5000000")))
         self._bitmask = llguidance.torch.allocate_token_bitmask(
             1, self.ll_tokenizer.vocab_size)
         variables = regions.variables_of(benchmarks.read_reference(benchmark))
@@ -73,9 +75,14 @@ class DynamicRegionRecognizer:
         self.reset()
 
     def _matcher(self, grammar_str):
-        return self._llg.LLMatcher(
+        m = self._llg.LLMatcher(
             self.ll_tokenizer, self._llg.grammar_from("grammar", grammar_str),
             log_level=int(os.environ.get("LLGUIDANCE_LOG_LEVEL", "1")), limits=self._limits)
+        # LLMatcher never raises: internal panics leave it in an error state
+        # that masks every token, which would decode as an empty rejection.
+        if m.is_error():
+            raise ValueError(f"Grammar error: {m.get_error()}")
+        return m
 
     def _arm_str(self, side, op, var, thr):
         key = (side, op, var, thr)
