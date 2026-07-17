@@ -1,5 +1,4 @@
-start: "(FPCore (x) " body
-body: e0 ")" | "(if " cond
+start: "(FPCore (x) " e0 ")"
 e0: "(* " e5 " " e6 ")" | "(* " e6 " " e5 ")" | "(+ " e1 " " e2 ")" | "(+ " e2 " " e1 ")" | "(- " e1 " " e7 ")" | "(- " e2 " " e8 ")" | "(- " e6 ")" | "(/ " e3 " " e4 ")"
 e1: "(sqrt " e9 ")"
 e2: "(* " e5 " " e7 ")" | "(* " e7 " " e5 ")" | "(- " e7 ")" | "(/ " e10 " " e7 ")"
@@ -17,6 +16,3 @@ e13: "(/ " e7 " " e5 ")"
 e14: "(/ " e1 " " e5 ")"
 e15: "x"
 e16: "(+ " e10 " " e5 ")" | "(+ " e5 " " e10 ")" | "(- " e10 " " e3 ")" | "(- " e5 " " e15 ")"
-cond: "(< " operand " " NUMBER ")" | "(> " operand " " NUMBER ")" | "(<= " operand " " NUMBER ")" | "(>= " operand " " NUMBER ")"
-operand: "x"
-NUMBER: /-?[0-9]+(\.[0-9]+)?/
