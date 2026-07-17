@@ -120,10 +120,10 @@ def initial_ids(llm, prompt, temperature):
 
 
 def sample_programs(llm, grammar, n_samples, temperature, base_ids):
-    """Up to `n_samples` distinct grammar-valid programs from ONE ASAP call: the
+    """Up to `n_samples` distinct grammar-valid programs from ONE ASAp call: the
     oracle trie persists, so each sample is masked out and never re-proposed."""
     import casa
-    res = casa.ASAP(llm, grammar, verbose=True, temperature=temperature).sample(
+    res = casa.ASAp(llm, grammar, verbose=True, temperature=temperature).sample(
         prompt_ids=base_ids, n_samples=n_samples)
     free_cuda()
     return [r.text.strip() for r in res]

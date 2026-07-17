@@ -1,5 +1,5 @@
-"""E-grammar: compile an e-graph of programs equivalent to a benchmark into a lark
-grammar.
+"""E-grammar: compile an e-graph of programs equivalent to a benchmark into a GBNF
+grammar (xgrammar's EBNF dialect).
 
 `build(benchmark, box)` saturates egglog with the interval analysis seeded from the
 box, strips identity/cyclic spellings, and emits a grammar whose language is the
@@ -22,11 +22,6 @@ from base import benchmarks, paths
 SATURATION_RUNS = 6
 SATURATION_BUDGET = 20.0  # seconds; skip remaining rounds past this
 NODE_CAP = 100_000
-# llguidance's Earley compiler indexes grammar symbols with a u16 and every quoted
-# literal occurrence is one symbol, so a grammar past ~65,525 literals panics the
-# parser. Guarded post-compile (saturation growth is multiplicative per round, so no
-# node cap can bound the output); build() retries with fewer rounds until it fits.
-MAX_GRAMMAR_SYMBOLS = 60_000
 START = "__start__"
 
 GRAMMAR_RULES = (paths.ROOT / "rules.egglog").read_text()
@@ -305,7 +300,7 @@ def reachable(root: str, eclasses: EClassMapping) -> list[str]:
 
 
 def intersect(root: str, eclasses: EClassMapping) -> str:
-    """Lark grammar: one nonterminal per e-class, one production per e-node."""
+    """GBNF grammar: one nonterminal per e-class, one production per e-node."""
     order = reachable(root, eclasses)
     name = {eclass: f"e{i}" for i, eclass in enumerate(order)}
 
@@ -324,10 +319,10 @@ def intersect(root: str, eclasses: EClassMapping) -> str:
     variables = sorted(
         {leaf(e.children[0]) for ec in order for e in eclasses[ec] if e.op == "Var"}
     )
-    lines = [f'start: "(FPCore ({" ".join(variables)}) " {name[root]} ")"']
+    lines = [f'root ::= "(FPCore ({" ".join(variables)}) " {name[root]} ")"']
     for eclass in order:
         productions = sorted({production(enode) for enode in eclasses[eclass]})
-        lines.append(f"{name[eclass]}: {' | '.join(productions)}")
+        lines.append(f"{name[eclass]} ::= {' | '.join(productions)}")
     return "\n".join(lines) + "\n"
 
 
@@ -335,10 +330,7 @@ def _build(benchmark: str, box, runs: int) -> str:
     seeds = interval_seeds(box) if box else ""
     root, eclasses = extract(saturate(benchmarks.read_source(benchmark), runs, seeds))
     root, eclasses = strip_identity_enodes(root, eclasses)
-    grammar = intersect(root, eclasses)
-    if grammar.count('"') // 2 + grammar.count("\n") > MAX_GRAMMAR_SYMBOLS:
-        raise ValueError(f"grammar for {benchmark!r} exceeds llguidance's symbol cap")
-    return grammar
+    return intersect(root, eclasses)
 
 
 def _build_worker(benchmark, box, runs, q) -> None:

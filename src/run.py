@@ -1,7 +1,7 @@
 """Generate numerically-accurate FPCore rewrites by grammar-constrained decoding,
 where the grammar IS the set of programs provably equivalent to the reference. The
 model reasons once, then either emits a whole-box form or opens `(if (op var
-NUMBER)`; once the threshold is known, each arm's grammar is rebuilt on the fly over
+number)`; once the threshold is known, each arm's grammar is rebuilt on the fly over
 the guard-narrowed box, so every program is equivalent by construction.
 
 Each invocation writes a fresh results/<run>/ directory holding equivalents/,
