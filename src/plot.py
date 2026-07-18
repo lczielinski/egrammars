@@ -1,9 +1,7 @@
-"""Plot a run's results: per-benchmark accuracy (reference vs our best proven program
-vs Herbie), benchmarks ordered by reference size. One chart for average accuracy
-(Herbie's bits-of-error metric), one for worst case (FPTaylor bounds; split into a
-relative-ulps panel and an absolute-error panel, which are different units).
-
-Reads <run>/herbie.json (written by herbie.py); writes PNGs to <run>/plots/.
+"""Plot a run's per-benchmark accuracy (reference vs our best proven program vs
+Herbie): one chart for average accuracy (Herbie's bits-of-error metric), one for
+worst case (FPTaylor bounds, split into relative-ulps and absolute-error panels).
+Reads <run>/herbie.json; writes PNGs to <run>/plots/.
 
     uv run src/plot.py [--run NAME]
 """
@@ -13,7 +11,6 @@ import json
 
 from base import benchmarks, paths, regions
 
-# dataviz reference palette (light mode): neutral baseline + series 1-2
 ORIGINAL, OURS, HERBIE = "#aeaca4", "#2a78d6", "#1baf7a"
 INK, INK2, SURFACE = "#0b0b0b", "#52514e", "#fcfcfb"
 SERIES = (("original", ORIGINAL), ("ours (best proven)", OURS), ("herbie", HERBIE))
@@ -62,7 +59,7 @@ def grouped_bars(ax, rows, key, log=False, floor_min=0.0):
             if v is None:
                 ax.text(x, floor if log else 0, "×", ha="center", va="bottom",
                         fontsize=5.5, color=INK2, zorder=4)
-    if log and positive:  # scale AFTER drawing: set_ylim first would freeze the top
+    if log and positive:  # scale after drawing: set_ylim first would freeze the top
         ax.set_yscale("log")
         ax.set_ylim(bottom=floor, top=max(positive) * 3)
     ax.set_xticks(range(n),
@@ -81,7 +78,6 @@ def grouped_bars(ax, rows, key, log=False, floor_min=0.0):
 def plot_average(rows, out):
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots(figsize=(15, 5.2), facecolor=SURFACE)
-    # log scale: values span 0.01..58 bits; bars under the floor are ~exact anyway
     grouped_bars(ax, rows, "avg", log=True, floor_min=0.005)
     ax.set_ylabel("average bits of error (log; lower is better)", color=INK2, fontsize=9)
     ax.set_title("Average accuracy — benchmarks ordered by reference size [ops]",

@@ -1,9 +1,8 @@
-"""Bound each harvested program's IEEE-754 double rounding error with FPTaylor
-(needs the `fptaylor` binary on PATH). A branching program is split on `if` and each
-branch bounded over the sub-box where it applies. Runs automatically after
-generation (run.py); `check` reads <run>/equivalents/<benchmark>.json and writes
-<run>/fptaylor/<benchmark>.json."""
+"""Bound each program's IEEE-754 double rounding error with FPTaylor (`fptaylor` on
+PATH). Branching programs are split on `if` and each branch bounded over its sub-box.
+`check` reads <run>/equivalents/<benchmark>.json and writes <run>/fptaylor/<benchmark>.json."""
 
+import contextlib
 import json
 import os
 import re
@@ -12,7 +11,7 @@ import tempfile
 
 from base import benchmarks, paths, regions
 
-EPS = 2.0 ** -52  # double-precision ulp
+EPS = 2.0 ** -52
 CONFIG = "abs-error = true\nrel-error = true\n"
 TIMEOUT = 600
 
@@ -26,6 +25,16 @@ def rank_key(r: dict):
     return (rel is None, rel if rel is not None else 0.0)
 
 
+@contextlib.contextmanager
+def _config():
+    with tempfile.NamedTemporaryFile("w", suffix=".cfg", delete=False) as f:
+        f.write(CONFIG)
+    try:
+        yield f.name
+    finally:
+        os.unlink(f.name)
+
+
 def to_fptaylor(n):
     if isinstance(n, str):
         return n
@@ -34,7 +43,7 @@ def to_fptaylor(n):
         return to_fptaylor(n[2])
     if head == "sqrt":
         return f"sqrt({to_fptaylor(n[1])})"
-    if head == "-" and len(n) == 2:  # unary minus
+    if head == "-" and len(n) == 2:
         return f"(-({to_fptaylor(n[1])}))"
     return f"({to_fptaylor(n[1])} {head} {to_fptaylor(n[2])})"
 
@@ -77,7 +86,7 @@ def analyze(expr: str, box: dict, cfg_path: str) -> dict:
         return {"fptaylor_expr": expr, "enclosure": [], "abs_err": None,
                 "rel_err": None, "rel_err_ulps": None, "timeout": True}
     abs_err, rel_err, encl = grab("Absolute error", out), grab("Relative error", out), bounds(out)
-    # FPTaylor often omits rel error through divisions; derive abs_err / min|value|.
+    # FPTaylor often omits rel error through divisions; derive abs_err / min|value|
     derived = False
     if rel_err is None and abs_err is not None and encl and (encl[0] > 0 or encl[1] < 0):
         rel_err = abs_err / min(abs(encl[0]), abs(encl[1]))
@@ -88,14 +97,13 @@ def analyze(expr: str, box: dict, cfg_path: str) -> dict:
 
 
 def _combine(branches: list) -> dict:
-    """Worst error across a program's branches."""
     def worst(key):
         vals = [b[key] for b in branches if b.get(key) is not None]
         return max(vals) if vals else None
 
     abs_err, rel_err = worst("abs_err"), worst("rel_err")
     if any(b.get("rel_err") is None and not b.get("timeout") for b in branches):
-        rel_err = None  # a rel bound holds only if every non-timeout branch had one
+        rel_err = None  # a rel bound needs one from every non-timeout branch
     return {"fptaylor_expr": None, "abs_err": abs_err, "rel_err": rel_err,
             "rel_err_derived": any(b.get("rel_err_derived") for b in branches),
             "rel_err_ulps": (rel_err / EPS) if rel_err is not None else None,
@@ -103,14 +111,13 @@ def _combine(branches: list) -> dict:
 
 
 def analyze_program(ast, box: dict, cfg_path: str) -> dict:
-    """Split on `if` and bound each branch over the sub-box its guards select."""
     leaves = list(regions.split_branches(regions.body_of(ast)))
     if len(leaves) == 1:
         return analyze(to_fptaylor(leaves[0][1]), box, cfg_path)
     branches = []
     for conds, expr in leaves:
         region = regions.narrow_box(box, conds)
-        if region is None:  # branch unreachable in the box
+        if region is None:
             continue
         b = analyze(to_fptaylor(expr), region, cfg_path)
         b["condition"] = " and ".join(f"{l} {op} {r}" for op, l, r in conds)
@@ -120,18 +127,11 @@ def analyze_program(ast, box: dict, cfg_path: str) -> dict:
 
 
 def bound_program(ast, box: dict) -> dict:
-    """Worst-case bounds for one program AST over `box` (standalone helper)."""
-    with tempfile.NamedTemporaryFile("w", suffix=".cfg", delete=False) as f:
-        f.write(CONFIG)
-        cfg_path = f.name
-    try:
+    with _config() as cfg_path:
         return analyze_program(ast, box, cfg_path)
-    finally:
-        os.unlink(cfg_path)
 
 
 def check(benchmark: str, run) -> None:
-    """Bound one benchmark's proven programs in run directory `run`."""
     src = paths.equivalents_path(run, benchmark)
     if not src.exists():
         raise FileNotFoundError(f"no equivalents file {src}")
@@ -140,19 +140,15 @@ def check(benchmark: str, run) -> None:
         raise KeyError(f"no interval box for {benchmark!r}")
 
     data = json.loads(src.read_text())
-    with tempfile.NamedTemporaryFile("w", suffix=".cfg", delete=False) as f:
-        f.write(CONFIG)
-        cfg_path = f.name
-    try:
-        # bound the reference too, so "did we improve on it?" is answerable offline
+    with _config() as cfg_path:
         reference_result = None
         if data.get("reference"):
             reference_result = analyze_program(
-                regions.parse(regions.tokenize(data["reference"])), box, cfg_path)
+                regions.parse_program(data["reference"]), box, cfg_path)
             reference_result["program"] = data["reference"]
         results = []
         for i, p in enumerate(data["programs"]):
-            r = analyze_program(regions.parse(regions.tokenize(p)), box, cfg_path)
+            r = analyze_program(regions.parse_program(p), box, cfg_path)
             r["program"] = p
             results.append(r)
             if r.get("timeout"):
@@ -165,8 +161,6 @@ def check(benchmark: str, run) -> None:
             for b in r.get("branches", ()):
                 print(f"       {b['condition'] or 'all inputs'}: "
                       f"abs={fmt(b['abs_err'])}  rel={fmt(b['rel_err'])}")
-    finally:
-        os.unlink(cfg_path)
 
     ranked = sorted(results, key=rank_key)
     print(f"\nranked by relative error, best first")

@@ -1,13 +1,7 @@
-"""Compare a run against Herbie, entirely inside Herbie's own harness.
-
-One `herbie report` call scores everything on the same sampled points with Herbie's
-Rival ground truth and bits-of-error metric: each benchmark becomes an FPCore whose
-body is the reference (`start` bits), with every proven program attached as an `:alt`
-(`target` bits), improved by Herbie itself (`end` bits). By default Herbie is
-restricted to this tool's operators (herbie_platform.rkt: + - * / sqrt, if) so the
-comparison is search-vs-search, not vocabulary; pass --platform default to lift that.
-When `fptaylor` is on PATH, a second table bounds the same three programs' WORST-case
-error over the box. Writes <run>/herbie.json and <run>/herbie.md.
+"""Compare a run against Herbie, inside Herbie's own harness: one `herbie report`
+scores reference (`start`), each proven program (`:alt` -> `target`), and Herbie's
+own rewrite (`end`) on the same sampled points. When `fptaylor` is on PATH, a
+second table bounds worst-case error over the box. Writes <run>/herbie.{json,md}.
 
     uv run src/herbie.py              # latest run
     uv run src/herbie.py --run NAME
@@ -35,7 +29,6 @@ def herbie_cmd() -> list[str] | None:
 
 
 def body_of_text(program: str) -> str:
-    """The body of a single-line `(FPCore (vars) body)` string."""
     return program[program.index(") ") + 2:-1]
 
 
@@ -43,7 +36,7 @@ def to_fpcore(benchmark: str, alts: list[str]) -> str:
     """The reference as an FPCore: box as :pre, each proven program as an :alt."""
     ref = benchmarks.read_reference(benchmark)
     box = benchmarks.INTERVALS.get(benchmark) or {}
-    variables = " ".join(regions.parse(regions.tokenize(ref))[1])
+    variables = " ".join(regions.parse_program(ref)[1])
     pres = [f"(<= {lo} {v} {hi})" for v, (lo, hi) in box.items()]
     lines = [f"(FPCore ({variables})", f' :name "{benchmark}"']
     if pres:
@@ -54,13 +47,13 @@ def to_fpcore(benchmark: str, alts: list[str]) -> str:
 
 
 def herbie_to_ast(output: str):
-    """Herbie's typed output expression -> our AST. Raises ValueError on an operator
-    outside the subset (possible when --platform default is used)."""
+    """Herbie's typed output expression -> our AST; ValueError on an operator
+    outside the subset."""
     output = re.sub(r"#s\(literal ([^ ]+) \w+\)", r"\1", output)
 
     def convert(node):
         if isinstance(node, str):
-            if "/" in node and re.fullmatch(r"-?\d+/\d+", node):  # rational literal
+            if "/" in node and re.fullmatch(r"-?\d+/\d+", node):
                 a, b = node.split("/")
                 return ["/", a, b]
             return node.removesuffix(".f64")
@@ -68,38 +61,36 @@ def herbie_to_ast(output: str):
         args = [convert(a) for a in node[1:]]
         if head == "neg":
             return ["-", args[0]]
-        if head in ("+", "-", "*", "/", "sqrt", "if", "<", ">", "<=", ">=") :
+        if head in ("+", "-", "*", "/", "sqrt", "if", "<", ">", "<=", ">="):
             return [head, *args]
         raise ValueError(f"operator {head!r} outside the subset")
 
-    return convert(regions.parse(regions.tokenize(output)))
+    return convert(regions.parse_program(output))
 
 
 def run_report(run, cores: list[str], timeout_each: int, platform: str) -> list[dict]:
-    """One `herbie report` over all cores; returns results.json's tests."""
     hdir = run / "herbie"
     hdir.mkdir(parents=True, exist_ok=True)
     (hdir / "input.fpcore").write_text("\n\n".join(cores) + "\n")
     cmd = herbie_cmd() + ["report", "--platform", platform, "--seed", "1",
                           "--timeout", str(timeout_each),
                           str(hdir / "input.fpcore"), str(hdir / "report")]
-    subprocess.run(cmd, timeout=(len(cores) + 2) * timeout_each)  # streams progress
+    subprocess.run(cmd, timeout=(len(cores) + 2) * timeout_each)
     return json.loads((hdir / "report" / "results.json").read_text())["tests"]
 
 
 def _worst(run, row) -> None:
-    """Attach worst-case FPTaylor bounds for reference / ours / herbie's program.
-    `ours` here is the run's worst-case CHAMPION (best bound among proven programs),
-    which may be a different program than the average-bits column's."""
+    """Attach worst-case FPTaylor bounds for reference / ours / herbie. `ours` is
+    the run's worst-case champion, which may differ from the average-bits program."""
     b = row["benchmark"]
     box = benchmarks.INTERVALS[b]
     fsrc = paths.fptaylor_path(run, b)
-    if fsrc.exists():  # reference + ours were already bounded during the run
+    if fsrc.exists():
         fd = json.loads(fsrc.read_text())
         pick = lambda r: {"abs_err": r.get("abs_err"), "rel_err_ulps": r.get("rel_err_ulps")}
         if fd.get("reference_result"):
             row["reference_worst"] = pick(fd["reference_result"])
-        for key in ("rel_err_ulps", "abs_err"):  # champion: best rel, else best abs
+        for key in ("rel_err_ulps", "abs_err"):
             scored = [r for r in fd.get("results", []) if r.get(key) is not None]
             if scored:
                 champ = min(scored, key=lambda r: r[key])
@@ -167,7 +158,7 @@ def worst_table(rows: list[dict]) -> str:
             return f"{w['abs_err']:.1e} abs"
         return "-"
 
-    def metric(a, b):  # comparable pair: rel if both have it, else abs
+    def metric(a, b):  # rel if both have it, else abs
         for key in ("rel_err_ulps", "abs_err"):
             if a and b and a.get(key) is not None and b.get(key) is not None:
                 return a[key], b[key]

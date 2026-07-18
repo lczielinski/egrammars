@@ -39,7 +39,7 @@ src/
   synth/              generation
     generate.py         prompt, reasoning handoff, ASAP sampling
     decoding.py         head/arm grammars, mid-decode grammar swapping
-    egrammar.py         e-graph -> lark grammar compiler
+    egrammar.py         e-graph -> GBNF grammar compiler
   analysis/           measurement
     fptaylor_check.py   FPTaylor error bounds (runs automatically after generation)
     summary.py          per-run results table
@@ -109,6 +109,6 @@ out transcendentals and non-integer constants).
 
 ## Requirements
 
-- casa (torch, transformers, llguidance) + egglog.
+- casa (torch, transformers, xgrammar) + egglog.
 - FPTaylor: the `fptaylor` binary on PATH with its opam env active
   (`eval $(opam env)`), else every bound comes back unbounded.

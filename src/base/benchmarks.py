@@ -1,4 +1,4 @@
-"""Benchmark data: reference terms and interval boxes."""
+"""Benchmark reference terms and interval boxes."""
 
 import json
 
@@ -10,17 +10,15 @@ def suite() -> list[str]:
 
 
 def read_reference(benchmark: str) -> str:
-    """The FPCore reference on the benchmark file's first comment line."""
+    """FPCore reference from the benchmark file's first comment line."""
     return (paths.EGGLOG / f"{benchmark}.egglog").read_text().splitlines()[0].removeprefix(";; ")
 
 
 def read_source(benchmark: str) -> str:
-    """The benchmark's egglog source (reference term as `start`)."""
     return (paths.EGGLOG / f"{benchmark}.egglog").read_text()
 
 
 def _load_intervals() -> dict:
-    """intervals.json ({var: "[lo,hi]"} strings) -> {benchmark: {var: (lo, hi)}}."""
     if not paths.INTERVALS_FILE.exists():
         return {}
     raw = json.loads(paths.INTERVALS_FILE.read_text())
@@ -29,4 +27,4 @@ def _load_intervals() -> dict:
             for b, box in raw.items()}
 
 
-INTERVALS = _load_intervals()  # benchmark -> input box
+INTERVALS = _load_intervals()

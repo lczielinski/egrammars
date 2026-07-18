@@ -1,11 +1,7 @@
 """Generate numerically-accurate FPCore rewrites by grammar-constrained decoding,
-where the grammar IS the set of programs provably equivalent to the reference. The
-model reasons once, then either emits a whole-box form or opens `(if (op var
-number)`; once the threshold is known, each arm's grammar is rebuilt on the fly over
-the guard-narrowed box, so every program is equivalent by construction.
-
-Each invocation writes a fresh results/<run>/ directory holding equivalents/,
-fptaylor/, and summary.md. `all` self-shards across every visible GPU.
+where the grammar is the set of programs provably equivalent to the reference.
+Each invocation writes a fresh results/<run>/ directory; `all` self-shards across
+every visible GPU.
 
     uv run src/run.py x_by_xy              # one benchmark
     uv run src/run.py all                  # whole suite, one shard per GPU
@@ -30,7 +26,6 @@ warnings.filterwarnings("ignore", category=FutureWarning, module="kernels")
 
 
 def run_benchmark(llm, benchmark: str, run, args, tag: str = "") -> None:
-    """Generate, bound, and write <run>/equivalents/<benchmark>.json."""
     reference = benchmarks.read_reference(benchmark)
     box = benchmarks.INTERVALS.get(benchmark)
     print(f"\n{'=' * 70}\n{benchmark}{f'  [{tag}]' if tag else ''}   "
@@ -70,8 +65,7 @@ def gpu_count() -> int:
 
 
 def run_shards(n: int, run, args) -> bool:
-    """The whole suite as N subprocesses, one per GPU, all writing into `run`.
-    Progress = completed benchmarks, counted off the run directory."""
+    """The whole suite as N subprocesses, one per GPU, all writing into `run`."""
     log_dir = run / "log"
     log_dir.mkdir(parents=True, exist_ok=True)
     base = [sys.executable, __file__, "all", "--run", run.name,
@@ -118,7 +112,7 @@ def main() -> None:
                    help="results/<NAME> (default: <timestamp>)")
     p.add_argument("--saturation", type=int, default=egrammar.SATURATION_RUNS,
                    metavar="RUNS", help="saturation rounds when compiling the e-grammar")
-    p.add_argument("--shard", metavar="I/N", help=argparse.SUPPRESS)  # internal
+    p.add_argument("--shard", metavar="I/N", help=argparse.SUPPRESS)
     args = p.parse_args()
 
     if args.summary_only:
@@ -135,7 +129,7 @@ def main() -> None:
     names = benchmarks.suite() if args.benchmark == "all" else [args.benchmark]
     if args.shard:
         i, n = (int(x) for x in args.shard.split("/"))
-        names = names[i::n]  # round-robin spreads slow cores evenly
+        names = names[i::n]
     elif args.benchmark == "all" and (n := gpu_count()) > 1:
         ok = run_shards(n, run, args)
         summary.summarize(run)
@@ -145,7 +139,7 @@ def main() -> None:
     for k, b in enumerate(names, 1):
         try:
             run_benchmark(llm, b, run, args, tag=f"{k}/{len(names)}")
-        except Exception as e:  # one bad benchmark shouldn't sink a suite run
+        except Exception as e:
             print(f"!! {b} failed: {e!r}")
 
     if not args.shard:  # shard children leave the summary to the parent

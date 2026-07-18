@@ -1,4 +1,4 @@
-"""Repository layout and per-run result directories (results/<run>/)."""
+"""Repository layout and per-run result directories."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 BENCHMARKS = ROOT / "benchmarks"
-EGGLOG = BENCHMARKS / "egglog"          # per-benchmark reference terms (<name>.egglog)
+EGGLOG = BENCHMARKS / "egglog"
 INTERVALS_FILE = BENCHMARKS / "intervals.json"
 RESULTS = ROOT / "results"
 

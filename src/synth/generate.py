@@ -80,8 +80,8 @@ def _encode(llm, prompt):
 
 
 def think_then_handoff(llm, prompt, temperature):
-    """Reason in the analysis channel until the final channel opens; return the token
-    ids so generation can continue there, or None if it never opened."""
+    """Reason in the analysis channel until the final channel opens; return the
+    token ids, or None if it never opened."""
     import torch
     from transformers import StoppingCriteria, StoppingCriteriaList, TextStreamer
 
@@ -120,8 +120,8 @@ def initial_ids(llm, prompt, temperature):
 
 
 def sample_programs(llm, grammar, n_samples, temperature, base_ids):
-    """Up to `n_samples` distinct grammar-valid programs from ONE ASAp call: the
-    oracle trie persists, so each sample is masked out and never re-proposed."""
+    """Up to `n_samples` distinct grammar-valid programs from one ASAp call
+    (the oracle trie masks out each sample so it is never re-proposed)."""
     import casa
     res = casa.ASAp(llm, grammar, verbose=True, temperature=temperature).sample(
         prompt_ids=base_ids, n_samples=n_samples)

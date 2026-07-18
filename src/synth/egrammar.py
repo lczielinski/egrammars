@@ -1,11 +1,7 @@
-"""E-grammar: compile an e-graph of programs equivalent to a benchmark into a GBNF
-grammar (xgrammar's EBNF dialect).
-
-`build(benchmark, box)` saturates egglog with the interval analysis seeded from the
-box, strips identity/cyclic spellings, and emits a grammar whose language is the
-programs provably equivalent to the reference over that box. `rules` returns just
-the e-class productions for splicing into decoding.py's head/arm grammars.
-"""
+"""Compile an e-graph of programs equivalent to a benchmark into a GBNF grammar
+(xgrammar's EBNF dialect). `build` saturates egglog with interval analysis seeded
+from the box, strips identity/cyclic spellings, and emits the grammar; `rules`
+returns just the e-class productions for splicing into decoding.py's grammars."""
 
 from __future__ import annotations
 
@@ -20,7 +16,7 @@ from dataclasses import dataclass
 from base import benchmarks, paths
 
 SATURATION_RUNS = 6
-SATURATION_BUDGET = 20.0  # seconds; skip remaining rounds past this
+SATURATION_BUDGET = 20.0  # seconds
 NODE_CAP = 100_000
 START = "__start__"
 
@@ -42,7 +38,6 @@ def quiet_stderr():
 
 
 def interval_seeds(box: dict[str, tuple[float, float]]) -> str:
-    """Interval-analysis seeds for the box."""
     return "".join(f"(set (lo {v}) {lo}) (set (hi {v}) {hi})\n" for v, (lo, hi) in box.items())
 
 
@@ -61,15 +56,12 @@ EClassMapping = dict[str, set[ENode]]
 
 def saturate(benchmark_source: str, runs: int = SATURATION_RUNS, seeds: str = "",
              node_cap: int = NODE_CAP, budget: float = SATURATION_BUDGET):
-    """Saturate with all rules fired together, one step at a time, to a fixpoint,
-    `runs`, `node_cap`, or the time `budget` (late rounds on division-heavy
-    benchmarks can cost minutes for negligible grammar gain -- and arm grammars are
-    compiled mid-decode). Extraction wants breadth; stopping early only shrinks the
-    language, never breaks soundness."""
+    """Run all rules one step at a time to a fixpoint, `runs`, `node_cap`, or
+    `budget`. Stopping early only shrinks the language, never breaks soundness."""
     from egglog.bindings import EGraph
 
     source = GRAMMAR_RULES + benchmark_source + seeds
-    source += f"\n(relation {START} (Math))\n({START} start)"  # mark the root e-class
+    source += f"\n(relation {START} (Math))\n({START} start)"
     egraph = EGraph()
     t0 = time.monotonic()
     with quiet_stderr():
@@ -79,9 +71,9 @@ def saturate(benchmark_source: str, runs: int = SATURATION_RUNS, seeds: str = ""
                 break
             r0 = time.monotonic()
             if not egraph.run_program(*egraph.parse_program("(run 1)"))[0].report.updated:
-                break  # saturated
-            # round cost grows ~5-10x per round: if this one used a big slice of the
-            # budget, the next would overshoot it many times over -- stop now
+                break
+            # round cost grows ~5-10x per round; a big slice now means the next
+            # round would overshoot the budget many times over
             if time.monotonic() - r0 > budget / 4:
                 break
     return egraph
@@ -103,7 +95,7 @@ def extract(egraph) -> tuple[str, EClassMapping]:
     root = None
     eclasses: defaultdict[str, set[ENode]] = defaultdict(set)
     for node in nodes.values():
-        op = node["op"].strip('"')  # string leaves are serialized with quotes
+        op = node["op"].strip('"')
         if node["eclass"] not in keep:
             continue
         children = tuple(nodes[child]["eclass"] for child in node["children"])
@@ -179,12 +171,11 @@ def strip_identity_enodes(root: str, eclasses: EClassMapping) -> tuple[str, ECla
 
     def find(x: str) -> str:
         while parent[x] != x:
-            parent[x] = parent[parent[x]]  # path halving
+            parent[x] = parent[parent[x]]
             x = parent[x]
         return x
 
     def reduces_to(enode: ENode) -> str | None:
-        """The operand this enode equals, or None if not an identity."""
         match enode.op, enode.children:
             case ("Mul", (a, b)):
                 return a if a in zero else b if b in zero or a in one else (
@@ -238,12 +229,9 @@ def strip_identity_enodes(root: str, eclasses: EClassMapping) -> tuple[str, ECla
         stripped[eclass] = {e for e in enodes if not is_padding(e)} or enodes
 
     # Acyclic spelling selection: order classes by (min completion size, BFS depth
-    # from root DESC, id) -- the root sorts last among ties, so it can reference
-    # everything -- and keep a spelling only if every child strictly precedes its
-    # class. The kept grammar is a DAG (no unbounded recursion, hence no monster
-    # programs) while deep-but-terminating spellings like conjugates survive. Every
-    # class keeps its minimal spelling: that spelling's children are strictly
-    # smaller, so they always precede it.
+    # from root DESC, id) and keep a spelling only if every child strictly precedes
+    # its class -- a DAG, so no unbounded recursion, while deep-but-terminating
+    # spellings survive. Every class keeps its minimal spelling.
     size = _min_sizes(stripped)
     depth = {root: 0}
     frontier = [root]
@@ -267,7 +255,7 @@ def strip_identity_enodes(root: str, eclasses: EClassMapping) -> tuple[str, ECla
 
 
 def _min_sizes(eclasses: EClassMapping) -> dict[str, float]:
-    """Size of the smallest program per e-class (fixpoint; inf on pure cycles)."""
+    """Smallest program size per e-class (fixpoint; inf on pure cycles)."""
     size = {c: float("inf") for c in eclasses}
     changed = True
     while changed:
@@ -283,7 +271,6 @@ SPELLING = {"Add": "+", "Sub": "-", "Mul": "*", "Div": "/", "Neg": "-", "Sqrt": 
 
 
 def reachable(root: str, eclasses: EClassMapping) -> list[str]:
-    """E-classes reachable from root, in BFS order."""
     order, queue = [], [root]
     seen = {root}
     while queue:
@@ -308,7 +295,6 @@ def intersect(root: str, eclasses: EClassMapping) -> str:
         (terminal,) = {enode.op for enode in eclasses[eclass]}
         return terminal
 
-    # e.g. Add(e1, e2) -> "(+ " e1 " " e2 ")"
     def production(enode: ENode) -> str:
         if enode.op in ("Var", "Num"):
             return f'"{leaf(enode.children[0])}"'
@@ -342,10 +328,9 @@ def _build_worker(benchmark, box, runs, q) -> None:
 
 def build(benchmark: str, box: dict[str, tuple[float, float]] | None = None,
           runs: int = SATURATION_RUNS) -> str:
-    """Grammar of programs equivalent to the reference over `box`; `box=None` seeds
-    no intervals (whole-domain equivalences only). Compiled in a budget-killed
-    subprocess -- a single saturation round can cost minutes (or panic egglog) on
-    division-heavy benchmarks -- retrying with fewer rounds until one fits."""
+    """Grammar of programs equivalent to the reference over `box` (None = whole
+    domain). Compiled in a budget-killed subprocess -- one saturation round can
+    cost minutes or panic egglog -- retrying with fewer rounds until one fits."""
     import multiprocessing as mp
     ctx = mp.get_context("spawn")
     for r in dict.fromkeys((runs, runs - 2, 3, 2, 1)):
@@ -370,5 +355,5 @@ def build(benchmark: str, box: dict[str, tuple[float, float]] | None = None,
 
 def rules(benchmark: str, box: dict[str, tuple[float, float]] | None = None,
           runs: int = SATURATION_RUNS) -> str:
-    """The e-class productions (root `e0`) without the FPCore-wrapper `start` rule."""
+    """The e-class productions (root `e0`) without the FPCore-wrapper rule."""
     return "\n".join(build(benchmark, box, runs).strip().split("\n")[1:])

@@ -1,12 +1,12 @@
-# Benchmark run summary — debug7
+# Benchmark run summary — 2026-07-17-155352
 
 Benchmarks with results: **1**   |   programs evaluated: **20**
 
 ## Benchmarks
-- accuracy improved over reference: **1/1 (100.0%)**
+- accuracy improved over reference: **0/1 (0.0%)**
 - valid rewrite but no accuracy gain: 0/1
 - best rewrite was worse than reference: 0/1
-- unmeasurable (box straddles zero / singularity): 0/1
+- unmeasurable (box straddles zero / singularity): 1/1
 - no program sampled: 0/1
 
 ## Per-benchmark
@@ -14,4 +14,4 @@ Benchmarks with results: **1**   |   programs evaluated: **20**
 
 | benchmark | n | best rel (ulp) | vs reference |
 |---|--:|--:|---|
-| himmilbeau | 20 | - | improved (abs) |
+| kepler2 | 20 | - | unmeasurable |

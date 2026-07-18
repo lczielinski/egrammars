@@ -1,4 +1,4 @@
-"""Interval boxes (var -> (lo, hi)) and FPCore `if`-tree guards. Pure functions."""
+"""Interval boxes (var -> (lo, hi)) and FPCore `if`-tree guards."""
 
 import re
 
@@ -20,20 +20,23 @@ def parse(toks):
     return node
 
 
+def parse_program(s: str):
+    return parse(tokenize(s))
+
+
 def variables_of(program: str) -> list[str]:
-    ast = parse(tokenize(program))
+    ast = parse_program(program)
     return ast[1] if isinstance(ast, list) and ast[:1] == ["FPCore"] else []
 
 
 def body_of(program):
-    ast = parse(tokenize(program)) if isinstance(program, str) else program
+    ast = parse_program(program) if isinstance(program, str) else program
     return ast[2] if isinstance(ast, list) and ast[:1] == ["FPCore"] else ast
 
 
 def split_branches(node):
-    """Yield (guards, leaf) per leaf: the guard down `then`, its negation down `else`.
-    A condition that isn't a simple `(op atom atom)` contributes no guard (sound:
-    narrowing by fewer guards only widens the region)."""
+    """Yield (guards, leaf) per leaf; a non-simple condition contributes no guard
+    (sound: fewer guards only widens the region)."""
     if isinstance(node, list) and node and node[0] == "if":
         _, cond, then, els = node
         simple = (isinstance(cond, list) and len(cond) == 3 and cond[0] in NEGATE
@@ -55,8 +58,8 @@ def _as_float(tok):
 
 
 def narrow_box(box: dict, conds) -> dict | None:
-    """`box` restricted to where all `conds` hold, or None if empty. A comparison that
-    doesn't pin a variable to a number is ignored (sound superset)."""
+    """`box` restricted to where all `conds` hold, or None if empty. A comparison
+    that doesn't pin a variable to a number is ignored (sound superset)."""
     iv = {v: list(b) for v, b in box.items()}
     for op, lhs, rhs in conds:
         hi_side = op in ("<", "<=")

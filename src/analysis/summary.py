@@ -6,14 +6,13 @@ from base import paths
 
 
 def _benchmark_row(b, run):
-    """Stats from a benchmark's equivalents (+ fptaylor) file in `run`, or None."""
     esrc = paths.equivalents_path(run, b)
     if not esrc.exists():
         return None
     data = json.loads(esrc.read_text())
     programs = data.get("programs", [])
     row = {"benchmark": b,
-           "samples": len(data.get("attempts") or programs),  # attempts: legacy runs
+           "samples": len(data.get("attempts") or programs),
            "best_ulp": None, "metric": None,
            "verdict": "unmeasurable" if programs else "no-valid"}
     fsrc = paths.fptaylor_path(run, b)
@@ -23,7 +22,7 @@ def _benchmark_row(b, run):
         reference = fd.get("reference_result") or {}
         row["best_ulp"] = next((r["rel_err_ulps"] for r in results
                                 if r.get("rel_err_ulps") is not None), None)
-        # compare on relative error; fall back to absolute where rel is undefined
+        # rel error first; absolute where rel is undefined
         for key, label in (("rel_err_ulps", "rel"), ("abs_err", "abs")):
             cands = [r[key] for r in results if r.get(key) is not None]
             if cands and reference.get(key) is not None:
@@ -36,7 +35,6 @@ def _benchmark_row(b, run):
 
 
 def summarize(run) -> None:
-    """`run` is a results/<name> directory."""
     rows = [r for r in (_benchmark_row(b, run) for b in paths.benchmarks_in(run)) if r]
     if not rows:
         print(f"no results found in {run}")
